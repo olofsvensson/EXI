@@ -328,8 +328,7 @@ UncollapsedDataCollectionGrid.prototype.displayPhasingTab = function(target, dat
             }
         }
         
-        var html = "";    
-         debugger
+        var html = "";             
         if (PhasingStep_method == "MR"){
             
             dust.render("mr.mxdatacollectiongrid.template",  parsed, function(err, out) {
