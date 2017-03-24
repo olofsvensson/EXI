@@ -38,6 +38,7 @@ MxDataCollectionController.prototype.init = function() {
 		EXI.addMainPanel(mainView);
         EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
+/*<<<<<<< HEAD
 
 		var onSuccessProposal = function (sender,proposal) {
 			if (proposal && proposal.length > 0) {
@@ -48,22 +49,22 @@ MxDataCollectionController.prototype.init = function() {
 		EXI.getDataAdapter({onSuccess : onSuccessProposal}).proposal.proposal.getProposalBySessionId(this.params['sessionId']);
 
 		var onSuccess = function(sender, data){            
+=======*/
+		var onSuccess = function(sender, data){
+//>>>>>>> 5de1852cc18d154891eca0bdb32288a9ab7cea6a
 		    mainView.loadCollections(data);
 			EXI.setLoadingMainPanel(false);
 		};
 		EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollection.getDataCollectionViewBySessionId(this.params['sessionId']);
 
-
 		var onSuccessEnergy = function(sender, data){
 			mainView.loadEnergyScans(data);
-			
 		};
 		/** retrieving energy scans */
 		EXI.getDataAdapter({onSuccess : onSuccessEnergy}).mx.energyscan.getEnergyScanListBySessionId(this.params['sessionId']);
 
 		var onSuccessXFE = function(sender, data){
 			mainView.loadFXEScans(data);
-			
 		};
 		/** retrieving XFE scans */
 		EXI.getDataAdapter({onSuccess : onSuccessXFE}).mx.xfescan.getXFEScanListBySessionId(this.params['sessionId']);
