@@ -12,7 +12,7 @@ function PrimaryDataMainView() {
 	this.framesGrid = new FramesGrid();
 	this.framesGrid.onSelectionChange.attach(function(sender, selections){
 		_this.selections = selections;
-		_this.selections.operation = $('input[name=optradio]:checked').val();
+		_this.selections.operation = $('input[name=optradio]:checked').val();		
 		_this.plotter.load(_this.selections);
 	});
 	
