@@ -19,6 +19,8 @@ function SessionGrid(args) {
     
     /** Array with the beamline selected to make the filter */
     this.beamlineFilter = [];
+    // Term filter value
+    this.termFilter = "";
     
 	if (args != null) {
          if (args.isHiddenLocalContact != null) {
@@ -63,28 +65,36 @@ function SessionGrid(args) {
 		}
 	}
 	this.onSelected = new Event(this);
-}
-
-
+};
 
 SessionGrid.prototype.load = function(sessions) {    
+    var _this = this;
     /** Filtering session by the beamlines of the configuration file */    
     this.sessions = _.filter(sessions, function(o){ return _.includes(EXI.credentialManager.getBeamlineNames(), o.beamLineName); });
 	this.store.loadData(this.sessions, false);
+    // Attach listener to edit the session comments
+    var attachListeners = function(grid) {
+        $("span.session-comment-edit").click(function(sender){
+            var sessionId = sender.target.id.split("-")[0];
+            _this.editComments(sessionId);
+        });
+    };
+    
+    var timer = setTimeout(attachListeners, 500, _this);
 };
 
-SessionGrid.prototype.filterByBeamline = function(beamlines) {
+SessionGrid.prototype.filterByBeamline = function(sessions, beamlines) {
     console.log(beamlines);
     if (beamlines){
         if (beamlines.length > 0){
             var filtered = [];
             for(var i = 0; i < beamlines.length; i++){
-                filtered = _.concat(filtered, (_.filter(this.sessions, {'beamLineName': beamlines[i]})));
+                filtered = _.concat(filtered, (_.filter(sessions, {'beamLineName': beamlines[i]})));
             }
-            this.store.loadData(filtered, false);
+            return filtered;
         }
         else{
-            this.store.loadData(this.sessions, false);
+            return sessions;
         }
     }
 };
@@ -97,17 +107,20 @@ SessionGrid.prototype.getToolbar = function(sessions) {
                     if (selected){
                         _this.beamlineFilter.push(a.boxLabel);
                     }
-                    else{          
-                                      
+                    else{               
                         _this.beamlineFilter =_.remove(_this.beamlineFilter, function(n) {                            
                                 return n  != a.boxLabel;
                         });
                     }
-                     
-                    _this.filterByBeamline(_this.beamlineFilter);
+
+                    var filtered = _this.filterByBeamline(_this.sessions,_this.beamlineFilter);
+                    if (_this.termFilter != ""){
+                        filtered = _this.filterByTerm(filtered,_this.termFilter);
+                    }
+                    _this.store.loadData(filtered,false);
+                    _this.panel.setTitle(filtered.length + " sessions");
     };
 
-        
     for (var i =0; i<EXI.credentialManager.getBeamlines().length; i++){
         items.push({           
                 xtype: 'checkbox',
@@ -117,18 +130,63 @@ SessionGrid.prototype.getToolbar = function(sessions) {
             
         });
     }
-	 return Ext.create('Ext.toolbar.Toolbar', {  
+
+    items.push("->",
+                {
+                    xtype    : 'textfield',
+                    name     : 'proposalFilter',
+                    width    : 300,
+                    emptyText: 'Filter by term (proposal or title) or comment',
+                    listeners : {
+                        specialkey : function(field, e) {
+                            if (e.getKey() == e.ENTER) {
+                                _this.termFilter = field.getValue();
+                                var filtered = _this.filterByTerm(_this.sessions, _this.termFilter);
+                                if (_this.beamlineFilter.length > 0) {
+                                    filtered = _this.filterByBeamline(filtered,_this.beamlineFilter);
+                                }
+                                _this.store.loadData(filtered,false);
+                                _this.panel.setTitle(filtered.length + " sessions");
+                            }
+                        } 
+                    } 
+                }
+    );
+
+    return Ext.create('Ext.toolbar.Toolbar', {  
         items: items
     });
 };
 
+SessionGrid.prototype.filterByTerm = function (sessions,term) {
+    if (term == ""){
+        return sessions;
+    } else {
+        var result = [];
+        for (var i = 0 ; i < sessions.length ; i++){
+            var proposalId = sessions[i]["Proposal_proposalCode"] +  sessions[i]["Proposal_ProposalNumber"];
+            var title = sessions[i]["Proposal_title"];
+            var comments = sessions[i].comments;
+            if (title == null){
+                title = "";
+            }
+            if (comments == null){
+                comments = "";
+            }
+            if ((comments.toUpperCase().match(term.toUpperCase())) || (proposalId.toUpperCase().match(term.toUpperCase())) ||(title.toUpperCase().match(term.toUpperCase()))){
+                result.push(sessions[i]);
+            }
+        }
+        return result;
+    }
+}
 
 SessionGrid.prototype.getPanel = function() {
 	var _this = this;
 
     var labContacts = EXI.proposalManager.getLabcontacts();
     
-    var dataCollectionHeader = "Data Collections";
+    var dataCollectionHeader = "Session synopsis";
     var technique = null;
     var beamlines = EXI.credentialManager.getBeamlineNames();
     if (beamlines.length > 0) {
@@ -147,7 +205,6 @@ SessionGrid.prototype.getPanel = function() {
 		emptyText : "No sessions",
 		data : []
 	});    
-
 
 	this.panel = Ext.create('Ext.grid.Panel', {
 		title : this.title,
@@ -195,7 +252,7 @@ SessionGrid.prototype.getPanel = function() {
                                                         location = "#/mx/datacollection/session/" + record.data.sessionId + "/main";
                                                     }
                                                     if (record.data.BLSession_startDate){                 
-                                                         return "<a href='" +  location +"'>" + moment(record.data.BLSession_startDate, 'MMMM Do YYYY, h:mm:ss a').format('YYYY-MM-DD') + "</a>"; 
+                                                         return "<a href='" +  location +"'>" + moment(record.data.BLSession_startDate, 'MMMM Do YYYY, h:mm:ss a').format('DD-MM-YYYY') + "</a>"; 
                                                     }
                             }
 		     },
@@ -302,13 +359,10 @@ SessionGrid.prototype.getPanel = function() {
                 hidden              : false,
                 flex                : 2,
                 renderer            : function(grid, a, record){    
-                                        if (record.data.comments){                
-                                            return "<div style='width:50px; wordWrap: break-word;'>" + record.data.comments + "</div>";
+                                        if (record.data.comments){
+                                            return '<div style="width:50px; wordWrap: break-word;"><a class="btn btn-xs"><span id="' + record.data.sessionId + '-edit-comments" class="glyphicon glyphicon-edit session-comment-edit"></span></a><span id="comments_' + record.data.sessionId + '"> ' + record.data.comments + '</span></div>';
                                         }
                 }
-                
-
-
 		    },
            ], 
       	   viewConfig : {
@@ -332,10 +386,25 @@ SessionGrid.prototype.getPanel = function() {
 					_this.onSelected.notify({
                        proposalCode   : record.data.Proposal_proposalCode,
                        proposalNumber : record.data.Proposal_ProposalNumber
-                        
                     });
 				}			
 			}				
-	});	
+	});
+
 	return this.panel;
+};
+
+/**
+* Opens a modal to edit a comment
+* @method editComments
+* @param Integer id The id
+*/
+SessionGrid.prototype.editComments = function (id) {
+    var comment = $("#comments_" + id).html().trim();
+    var commentEditForm = new CommentEditForm({mode : "SESSION"});
+    commentEditForm.onSave.attach(function(sender,comment) {
+        $("#comments_" + id).html(comment);
+    });
+    commentEditForm.load(id,comment);
+    commentEditForm.show();
 };
