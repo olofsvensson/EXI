@@ -38,6 +38,17 @@ MxDataCollectionController.prototype.init = function() {
 		EXI.addMainPanel(mainView);
         	EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
+
+
+		var onSuccessProposal = function (sender,proposal) {
+			if (proposal && proposal.length > 0) {
+				mainView.loadProposal(proposal[0]);
+			}
+		}
+
+		EXI.getDataAdapter({onSuccess : onSuccessProposal}).proposal.proposal.getProposalBySessionId(this.params['sessionId']);
+
+
 		var onSuccess = function(sender, data){
 		    mainView.loadCollections(data);
 		    EXI.setLoadingMainPanel(false);
