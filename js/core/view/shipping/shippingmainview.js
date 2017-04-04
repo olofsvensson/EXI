@@ -19,6 +19,12 @@ function ShippingMainView() {
 		location.hash = "#/shipping/" + shipment.shippingId + "/main";
 	});
 
+	
+	this.shipmentForm.refresh.attach(function(sender, shipmentId){		
+		_this.load(shipmentId);
+	});
+
+
     /**
 	* 
 	* @property parcelGrid
@@ -49,11 +55,7 @@ ShippingMainView.prototype.getContainer = function() {
 ShippingMainView.prototype.getShipmentPanel = function() {
 	var _this = this;
 
-	return Ext.create("Ext.panel.Panel",{
-		// cls : "border-grid",
-		// title : 'Shipping Address Card',
-		// buttons : this.getToolBar(),
-		// icon : '../images/icon/ic_email_black_24dp.png',
+	return Ext.create("Ext.panel.Panel",{	
 		items :	[
 					this.shipmentForm.getPanel(),
                     this.parcelGrid.getPanel()
@@ -61,23 +63,7 @@ ShippingMainView.prototype.getShipmentPanel = function() {
 	});
 };
 
-// ShippingMainView.prototype.getPanel = function() {
-	
-//     this.panel =  Ext.create('Ext.panel.Panel', {
-//         layout: {
-//             type: 'vbox',
-//             align: 'center'
-//         },
-// 		autoScroll : true,
-//         cls : 'border-grid',
-//         items : [
-//                     this.shipmentForm.getPanel(),
-//                     this.parcelGrid.getPanel()
-//         ]
-// 	});
 
-//     return this.panel;
-// };
 
 
 ShippingMainView.prototype.load = function(shippingId) {

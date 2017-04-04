@@ -7,11 +7,14 @@ function ShipmentPreparationMainView() {
 	var _this = this;
 	this.shipmentForm = new ShipmentForm();
 
-	this.shipmentForm.onSaved.attach(function(sender, shipment){
-		location.hash = "#/proposal/shipping/nav?nomain";
-		//_this.tabPanel.setActiveTab(1);
-		
+	this.shipmentForm.onSaved.attach(function(sender, shipment){		
+		location.hash = "#/proposal/shipping/nav?nomain";			
 	});
+
+	this.shipmentForm.refresh.attach(function(sender, shipmentId){		
+		_this.load(shipmentId);		
+	});
+
 	this.caseGrid = new CaseGrid({
 		height : 300
 	});

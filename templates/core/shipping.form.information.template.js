@@ -56,15 +56,16 @@
 
     <div class="col-md-2" style="padding:0px">
         <div class="form-group row" style="margin:5px">
-            <a id="{id}-send-button" class="btn btn-md disabled">
+            <a id="{id}-send-button" class="btn btn-md enabled">
                 <span class="glyphicon glyphicon-plane"></span> Send shipment to ESRF
             </a>
         </div>
-        <div class="form-group row" style="margin:5px">
+        {!<div class="form-group row" style="margin:5px">
             <a id="{id}-remove-button" class="btn btn-md disabled">
                 <span class="glyphicon glyphicon-remove" style="color:red"></span> Remove shipment
             </a>
         </div>
+        !}
     </div>
 
     <div class="col-md-3" style="padding:0px">

@@ -26,6 +26,7 @@ function ShipmentForm(args) {
 	});
 	
 	this.onSaved = new Event(this);
+	this.refresh = new Event(this);
 }
 
 ShipmentForm.prototype.load = function(shipment,hasExportedData) {
@@ -55,32 +56,30 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 		$("#" + _this.id + "-edit-button").unbind('click').click(function(sender){
 			_this.edit();
 		});
-		// if (!this.hasExportedData){
-		// 	$("#" + _this.id + "-remove-button").removeClass('disabled');
-		// 	$("#" + _this.id + "-remove-button").unbind('click').click(function(sender){
-		// 		alert("Not implemented");
-		// 	});
-		// }
+	
 	}
 
-	// if (shipment.shippingStatus == "opened" && shipment.dewarVOs.length > 0) {
-	// 	$("#" + _this.id + "-send-button").removeClass('disabled');
-	// 	$("#" + _this.id + "-send-button").unbind('click').click(function(sender){
-	// 		var sendShipmentForm = new SendShipmentForm();
-	// 		sendShipmentForm.onSend.attach(function(sender) {
-	// 			_this.load(_this.shipment);
-	// 		});
-	// 		sendShipmentForm.load(_this.shipment);
-	// 		sendShipmentForm.show();
-	// 	});
-	// }
+	$("#" + _this.id + "-send-button").unbind('click').click(function(sender){
+			_this.updateStatus(_this.shipment.shippingId, "Sent to ESRF");
+	});
+
 
 	$("#transport-history-" + this.id).html(this.dewarTrackingView.getPanel());
-
 	this.panel.doLayout();
-
 	this.attachCallBackAfterRender();
+};
 
+ShipmentForm.prototype.updateStatus = function(shippingId, status) {
+    var _this = this;
+    //_this.panel.setLoading("Updating shipment Status");
+    var onStatusSuccess = function(sender, dewar) { 						
+			_this.refresh.notify(_this.shipment.shippingId);
+    };
+    var onError = function(data){
+            EXI.setError(data);
+    };
+    
+    EXI.getDataAdapter({onSuccess : onStatusSuccess, onError : onError}).proposal.shipping.updateStatus(shippingId,status);
 };
 
 ShipmentForm.prototype.getPanel = function() {
