@@ -68,7 +68,8 @@ PhasingGridView.prototype.printHTML = function(target) {
                 });
                }
                
-               function getMetrics(phasingStep){                                      
+               function getMetrics(phasingStep){     
+                                                    
                     if (phasingStep.metric){                        
                             var singleMetric = phasingStep.metric.split(",");
                             var values = phasingStep.statisticsValue.split(",");                            
@@ -77,7 +78,10 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     phasingStep[singleMetric[j].replace(/ /g, '_')] = values[j];                           
                             }
                     } 
-                    if (phasingStep.png){
+                    if (phasingStep.png){                        
+                        /** It might happens that there are two PDB like:"159386,159388" */
+                        phasingStep.png = phasingStep.png.split(",")[0];
+                        
                         phasingStep.pngURL = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(phasingStep.png);
                     }
                     
