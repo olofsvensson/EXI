@@ -83,7 +83,6 @@ EditCrystalFormView.prototype.save = function () {
                     cellAlpha   :   $("#" + this.id + "-cellAlpha").val(),
                     cellBeta    :   $("#" + this.id + "-cellBeta").val(),
                     cellGamma   :   $("#" + this.id + "-cellGamma").val(),
-					name		: 	$("#" + this.id + "-name").val(),
 					comments	:	$("#" + this.id + "-comments").val()
                 };
 
@@ -96,7 +95,7 @@ EditCrystalFormView.prototype.save = function () {
 		}
 		
 		EXI.getDataAdapter({onSuccess : onSaved}).mx.crystal.save(this.crystal.proteinVO.proteinId, this.crystal.crystalId, 
-																	crystal.name, crystal.spaceGroup, crystal.cellA, crystal.cellB, crystal.cellC, 
+																	" ", crystal.spaceGroup, crystal.cellA, crystal.cellB, crystal.cellC, 
 																	crystal.cellAlpha, crystal.cellBeta, crystal.cellGamma, crystal.comments);
 	} else {
 		$("#" + this.id + "-cellsABC").notify("The values A, B and C must be filled",{className:"error"});
