@@ -13,10 +13,6 @@
                         <td class='column_parameter_value'>{crystalVO.proteinVO.acronym}</td>
                     </tr>
                     <tr>
-                        <td>Name</td>
-                        <td class='column_parameter_value'>{.name}</td>
-                    </tr>
-                    <tr>
                         <td>Comments</td>
                         <td class='column_parameter_value'>{.comments}</td>
                     </tr>
