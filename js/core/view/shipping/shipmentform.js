@@ -60,7 +60,7 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	}
 
 	$("#" + _this.id + "-send-button").unbind('click').click(function(sender){
-			_this.updateStatus(_this.shipment.shippingId, "Sent to ESRF");
+			_this.updateStatus(_this.shipment.shippingId, "Sent_to_ESRF");
 	});
 
 
