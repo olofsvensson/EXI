@@ -9,7 +9,7 @@ AuthenticationForm.prototype.show = function(){
 	    title: 'Login',
 	    height: 250,
 	    closable :  false,
-	    width: 450,
+	    width: 480,
 	    modal : true,
 	    layout: 'fit',
 	    items: [
@@ -116,7 +116,7 @@ AuthenticationForm.prototype.getPanel = function(){
     
 	return Ext.create('Ext.form.Panel', {
 	    bodyPadding: 5,
-	    width: 370,
+	    width: 400,
 	    layout: 'vbox',       
 	    defaults: {
 	        anchor: '90%'
@@ -124,15 +124,18 @@ AuthenticationForm.prototype.getPanel = function(){
 	    // The fields
 	    defaultType: 'textfield',
 	    items: [
-                        {
+				        {
                             xtype: 'container',
                             layout: 'hbox',
                             items: [
                                     this.getIconForm(),              
-                                    this.getAuthenticationForm()]
+                                    this.getAuthenticationForm()
+									]
                         }                                           
         ],
-	    buttons: [ {
+	    buttons: [ 
+		'If you are a User, please use the beamline proposal login.',
+                {
 	        text: 'Login',
 	        formBind: true,
 	        disabled: true,
@@ -149,9 +152,7 @@ AuthenticationForm.prototype.getPanel = function(){
 	        		if (ExtISPyB.sites[i].url == _this.siteURL){
 	        			properties = ExtISPyB.sites[i];
 	        		}	        		
-	        	}
-               
-                
+	        	}              
 	        	_this.onAuthenticate.notify({
 	        		user : form.getFieldValues().user, 
 	        		password : form.getFieldValues().password, 
@@ -161,7 +162,8 @@ AuthenticationForm.prototype.getPanel = function(){
 	        	});
 
 	        }
-	    }]
+	    }
+		]
 	});
 };
 
