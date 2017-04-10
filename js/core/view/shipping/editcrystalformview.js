@@ -57,6 +57,7 @@ EditCrystalFormView.prototype.render = function () {
     this.crystal.spaceGroups = ExtISPyB.spaceGroups;
 	this.crystal.id = this.id;
     var html = "";
+	var crystalName = "";
 	
     dust.render("crystal.edit.form.template", this.crystal, function(err, out){
 		html = out;
@@ -83,10 +84,18 @@ EditCrystalFormView.prototype.save = function () {
                     cellAlpha   :   $("#" + this.id + "-cellAlpha").val(),
                     cellBeta    :   $("#" + this.id + "-cellBeta").val(),
                     cellGamma   :   $("#" + this.id + "-cellGamma").val(),
-					name		: 	$("#" + this.id + "-name").val(),
 					comments	:	$("#" + this.id + "-comments").val()
                 };
 
+	if (crystal.cellAlpha == "") {
+		crystal.cellAlpha = 0;
+	}
+	if (crystal.cellBeta == "") {
+		crystal.cellBeta = 0;
+	}
+	if (crystal.cellGamma == "") {
+		crystal.cellGamma = 0;
+	}
 	if (crystal.cellA != "" && crystal.cellB != "" && crystal.cellC != "") {
 		this.panel.setLoading();
 		var onSaved = function (sender, newCrystal) {
@@ -96,7 +105,7 @@ EditCrystalFormView.prototype.save = function () {
 		}
 		
 		EXI.getDataAdapter({onSuccess : onSaved}).mx.crystal.save(this.crystal.proteinVO.proteinId, this.crystal.crystalId, 
-																	crystal.name, crystal.spaceGroup, crystal.cellA, crystal.cellB, crystal.cellC, 
+																	this.crystalName, crystal.spaceGroup, crystal.cellA, crystal.cellB, crystal.cellC, 
 																	crystal.cellAlpha, crystal.cellBeta, crystal.cellGamma, crystal.comments);
 	} else {
 		$("#" + this.id + "-cellsABC").notify("The values A, B and C must be filled",{className:"error"});

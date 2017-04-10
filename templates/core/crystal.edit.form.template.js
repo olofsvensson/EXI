@@ -1,10 +1,5 @@
 <div style="padding:20px;" class="editCrystalFormDiv">
-    <div class="form-group row">
-        <label class="col-md-2 col-form-label">Name:</label>
-        <div class="col-md-10">
-            <input id="{id}-name" class="form-control" type="text" value="{name}">
-        </div>
-    </div>
+    
     <div class="form-group row">
         <label class="col-md-2 col-form-label">Space Group:</label>
         <div class="col-md-10">
