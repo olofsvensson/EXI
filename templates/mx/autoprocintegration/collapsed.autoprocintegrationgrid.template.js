@@ -6,7 +6,7 @@
             <thead>
                <tr>
                   {!<th  ><a href="#"  data-toggle="tooltip" title="Rank is done based on the space group and lower rMerge">Rank</a></th>!}
-                  <th></th>
+                  
                   <th></th>
                   <th>Pipeline</th>
                   <th>SpaceGroup</th>
@@ -29,6 +29,7 @@
                   <th>sigAno</th>
                   <th>ISA</th>
                   <th>Download</th>
+                  <th></th>
                </tr>
             </thead>
             {#.}
@@ -43,7 +44,7 @@
                     <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" class='autoprocintegrationrow'>
                 {/label}  
             {:else}
-                <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" style='background-color:#ffddcc;' class='autoprocintegrationrow'>
+                <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" style='background-color:#ffddcc;width:25px;' class='autoprocintegrationrow'>
             {/lt}
                 <td >
                   {@eq key=v_datacollection_summary_phasing_anomalous type="boolean" value="true"}
@@ -51,18 +52,20 @@
                   {:else}
                         
                   {/eq}
-               </td>
+               
                
                
                 {?label}
                     {@eq key=label value="BEST"}
-                        <td >  <kbd style="background-color:green">{.label}</kbd></td>
+                        <br /><kbd style="background-color:green">{.label}</kbd>
                     {:else}
-                        <td  > <kbd style="background-color:orange">{.label}</kbd></td>
+                         <br /><kbd style="background-color:orange">{.label}</kbd>
                     {/eq}
                {:else}
-                    <td  >{.rank}</td>
+                    {.rank}
                {/label}
+               </td>
+
                <td >{.v_datacollection_processingPrograms}</td>
                <td >{.v_datacollection_summary_phasing_autoproc_space_group}</td>
               
@@ -142,6 +145,13 @@
                </td>
                 <td  >{.isa}</td>
                <td ><a href='{.downloadFilesUrl}' ><span style='font-size: 1.5em;' class="glyphicon glyphicon-download " ></span></a></td>
+
+                <td>
+                        <button type="button" class="btn btn-sm" data-toggle="modal"><span  id="openfiles_{.v_datacollection_summary_phasing_autoProcProgramId}" class="glyphicon glyphicon-folder-close" aria-hidden="true"></span></button>
+                       
+                </td>
+
+
             </tr>
             {/.}
          </table> 

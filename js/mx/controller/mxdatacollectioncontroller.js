@@ -36,8 +36,9 @@ MxDataCollectionController.prototype.init = function() {
 	Path.map("#/mx/datacollection/session/:sessionId/main").to(function() {
 		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId']});
 		EXI.addMainPanel(mainView);
-        EXI.hideNavigationPanel();
+        	EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
+
 
 		var onSuccessProposal = function (sender,proposal) {
 			if (proposal && proposal.length > 0) {
@@ -47,9 +48,10 @@ MxDataCollectionController.prototype.init = function() {
 
 		EXI.getDataAdapter({onSuccess : onSuccessProposal}).proposal.proposal.getProposalBySessionId(this.params['sessionId']);
 
+
 		var onSuccess = function(sender, data){
 		    mainView.loadCollections(data);
-			EXI.setLoadingMainPanel(false);
+		    EXI.setLoadingMainPanel(false);
 		};
 		EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollection.getDataCollectionViewBySessionId(this.params['sessionId']);
 

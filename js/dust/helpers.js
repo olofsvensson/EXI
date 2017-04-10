@@ -175,3 +175,19 @@ dust.helpers.uppercase = function (chunk, context, bodies, params) {
     }
     return chunk;
 }
+
+dust.helpers.wavelengthToEnergy = function (chunk, context, bodies, params) {
+    if (params.key) {
+        var value = context.current()[params.key];
+        if (value){
+            chunk.write((Number(12.398/value).toFixed(4)));
+        }
+        else{
+            chunk.write('NA');    
+        }
+    }
+    else{
+        chunk.write('NA');
+    }
+    return chunk;
+}

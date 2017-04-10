@@ -22,12 +22,12 @@
                                             {?DataCollection_undulatorGap3}{@decimal key="DataCollection_undulatorGap3" decimals=2 /} mm {/DataCollection_undulatorGap3}
         </td>
     </tr>
-    <tr>
+    {!<tr>
         <td>Slit gap Hor</td>
         <td  class='column_parameter_value'>{?DataCollection_slitGapHorizontal}{DataCollection_slitGapHorizontal} &mu;m{/DataCollection_slitGapHorizontal}</td>
     </tr>
     <tr>
         <td>Slit gap Vert</td>
         <td  class='column_parameter_value'>{?DataCollection_slitGapVertical}{DataCollection_slitGapVertical} &mu;m{/DataCollection_slitGapVertical}</td>
-    </tr>
+    </tr>!}
 </table>    

@@ -82,6 +82,7 @@ ShippingExiController.prototype.init = function() {
 		});
 		
 		Path.map("#/shipping/:shippingId/main").to(function() {
+			
 			var mainView = new ShippingMainView();
 			EXI.addMainPanel(mainView);
 			mainView.load(this.params['shippingId']);

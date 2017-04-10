@@ -3,12 +3,12 @@
         <td>Beamline name</td>
         <td  class='column_parameter_value'>{.Container_beamlineLocation}</td>
     </tr>                  
-    <tr>
+    {!<tr>
         <td>Number of passes</td>
         <td  class='column_parameter_value'> 
             {.DataCollection_numberOfPasses}
         </td>
-    </tr>
+    </tr>!}
     <tr>
         <td>Detector Distance</td>
         <td  class='column_parameter_value'>{@decimal key="DataCollection_detectorDistance" decimals=2 /} mm</td>

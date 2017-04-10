@@ -18,9 +18,9 @@
         <td>Mode</td>
         <td  class='column_parameter_value'>{.Detector_detectorMode}</td>
     </tr>
-    <tr>
+    {!<tr>
         <td>Pixel Size Hor (Vert)</td>
         <td  class='column_parameter_value'>{.Detector_detectorPixelSizeHorizontal} mm ({.Detector_detectorPixelSizeVertical} mm)</td>
-    </tr>
+    </tr>!}
 </table>       
               
