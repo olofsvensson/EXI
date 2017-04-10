@@ -5,8 +5,8 @@
         <td  class='column_parameter_value'>{.DataCollection_resolution} &#8491; ({.DataCollection_resolutionAtCorner} &#8491;)</td>
     </tr>
     <tr>
-        <td>Wavelength</td>
-        <td  class='column_parameter_value'>{@decimal key="DataCollection_wavelength" decimals=4 /} &#8491;</td>
+        <td>En. (Wave.)</td>
+        <td  class='column_parameter_value'>{@wavelengthToEnergy key="DataCollection_wavelength" /} keV ({@decimal key="DataCollection_wavelength" decimals=4 /} &#8491;)</td>
     </tr>
     <tr>
         <td>{.DataCollection_rotationAxis} range</td>
@@ -20,7 +20,7 @@
     <tr>
         <td>Exposure Time</td>
         <td  class='column_parameter_value'>{.DataCollection_exposureTime} s</td>
-    </tr>
+    </tr> 
     <tr>
       <td>Flux start</td>
       <td class='column_parameter_value'>{.DataCollection_flux} ph/sec</td>

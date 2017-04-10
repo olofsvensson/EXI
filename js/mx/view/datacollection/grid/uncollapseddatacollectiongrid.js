@@ -113,19 +113,62 @@ UncollapsedDataCollectionGrid.prototype.displayResultAutoprocessingTab = functio
     var onSuccess = function(sender, data){    
         /** Parsing data */
         var html = "";     
-        dust.render("collapsed.autoprocintegrationgrid.template",  new AutoProcIntegrationGrid().parseData(data[0]), function(err, out) {
+        var autoprocessingData =  new AutoProcIntegrationGrid().parseData(data[0]);
+        dust.render("collapsed.autoprocintegrationgrid.template", autoprocessingData, function(err, out) {
                     html = html + out;
         });
         $(target).html(html);
+
         _this.panel.doLayout();
         $(".autoprocintegrationrow").addClass("clickable-row");
         $(".autoprocintegrationrow").click(function(sender) {
+            
+            if (_.indexOf(sender.target.classList,"glyphicon-folder-close") > 0) {
+                    var autoprocProgramId = sender.target.id.split("_")[1];
+                    var selectedProcessingProgram = _.find(autoprocessingData, {'v_datacollection_summary_phasing_autoProcProgramId':Number(autoprocProgramId)});
+                    
+                    var panel = Ext.create('Ext.window.Window', {
+                        title : selectedProcessingProgram.v_datacollection_processingPrograms + " [" + selectedProcessingProgram.v_datacollection_summary_phasing_autoproc_space_group + "]",
+                        height : 450,
+                        width : 600,
+                        modal : true,
+                        layout : 'fit',
+                        items : [ {
+                                html : '<div id="' + autoprocProgramId + '">Test</div>',
+                                margin : 10
+
+                        } ],
+                        buttons : [ {
+                                text : 'Close',
+                                handler : function() {
+                                    window.close();
+                                }
+                            } ]
+                    }).show();
+
+                    var onSucessFiles = function(sender, files){  
+                        var html = "";
+                        console.log(autoprocessingData);
+                        debugger
+                         dust.render("files.collapsed.autoprocintegrationgrid.template", files[0], function(err, out) {
+                                html = html + out;
+                         });
+                          $("#" + autoprocProgramId).html(html);  
+                    };                 
+
+                    EXI.getDataAdapter({onSuccess : onSucessFiles}).mx.autoproc.getAttachmentListByautoProcProgramsIdList([autoprocProgramId])
+                    return;
+            }
+
             // Check if the click is not on the download button
             if (_.indexOf(sender.target.classList,"glyphicon-download") < 0) {
                 var dataCollectionId = sender.currentTarget.id.split("-")[0];
                 var autoProcIntegrationId = sender.currentTarget.id.split("-")[1];
                 window.open('#/autoprocintegration/datacollection/' + dataCollectionId + '/autoprocIntegration/' + autoProcIntegrationId + '/main',"_blank");
             }
+            
+             
+
         });
     };
     var onError = function(sender, msg){

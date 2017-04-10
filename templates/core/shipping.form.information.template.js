@@ -13,6 +13,10 @@
                 <td class='column_parameter_value'>Date:</td>
                 <td>{.startDate}</td>
             </tr>
+            <tr>
+                <td class='column_parameter_value'>Status:</td>
+                <td>{shipment.shippingStatus}</td>
+            </tr>
         </table> 
     </div>
 
@@ -23,7 +27,7 @@
         </div>
         <div class="form-group row" style="margin:5px">
             <label class="col-md-3 col-form-label" ><b>Return address:</b></label>
-            <label class="col-md-9" style="font-weight: normal">{?shipment.returnLabContactVO}
+            <label class="col-md-9" style="font-weight: normal">{?shipment.returnLabContactVO} 
                                         {shipment.returnLabContactVO.cardName}
                                     {:else}
                                         NO RETURN
