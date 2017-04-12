@@ -5,12 +5,12 @@
                 <thead>   
                             <tr> 
                                 <th>Phasing</th>
-                                <th><abbr title="Prepare Step">PREPARE</abbr></th>
-                                <th><abbr title="Substructure Determination Step">SUBSTRUCTURE</abbr></th>
-                                <th><abbr title="Phasing Step">PHASING</abbr></th>
-                                <th><abbr title="Model Building Step">MODEL</abbr></th>
+                                <th><abbr title="Prepare Step">PR</abbr></th>
+                                <th><abbr title="Substructure Determination Step">SU</abbr></th>
+                                <th><abbr title="Phasing Step">PH</abbr></th>
+                                <th><abbr title="Model Building Step">MO</abbr></th>
     
-                                <th>Download</th>       
+                                <th> </th>       
                                 <th style='color:gray'></th>                                                       
                                 <th style='color:gray'>Program</th>
                                 <th style='color:gray'>Method</th>
@@ -45,6 +45,10 @@
                                                 {:else}
                                                     <span style='color:red;' class="glyphicon glyphicon-remove"></span>
                                                 {/eq}
+                                                {?DSIGMA_RESOLUTION}
+                                                    <a href={.DSIGMA_RESOLUTION} data-lightbox={.DSIGMA_RESOLUTION} >
+                                                    <img src={.DSIGMA_RESOLUTION} height="35px" width="35px"/></a>
+                                                {/DSIGMA_RESOLUTION}
                                             {/eq} 
                                         </td>
                                         <td>
@@ -54,6 +58,14 @@
                                                 {:else}
                                                     <span style='color:red;' class="glyphicon glyphicon-remove"></span>
                                                 {/eq} 
+                                                {?CCALL_CCWEAK}
+                                                    <a href={.CCALL_CCWEAK} data-lightbox={.CCALL_CCWEAK} >
+                                                    <img src={.CCALL_CCWEAK} height="35px" width="35px"/></a>
+                                                {/CCALL_CCWEAK}
+                                                {?OCCUPANCY_SITENUMBER}
+                                                    <a href={.OCCUPANCY_SITENUMBER} data-lightbox={.OCCUPANCY_SITENUMBER} >
+                                                    <img src={.OCCUPANCY_SITENUMBER} height="35px" width="35px"/></a>
+                                                {/OCCUPANCY_SITENUMBER}
                                             {/eq}
                                         </td>  
                                         <td> 
@@ -72,6 +84,10 @@
                                                 {:else}
                                                     <span style='color:red;' class="glyphicon glyphicon-remove"></span>
                                                 {/eq}
+                                                {?CONTRAST_CYCLE}
+                                                    <a href={.CONTRAST_CYCLE} data-lightbox={.CONTRAST_CYCLE} >
+                                                    <img src={.CONTRAST_CYCLE} height="35px" width="35px"/></a>
+                                                {/CONTRAST_CYCLE}
                                             {/eq}
                                         </td>
                                          
