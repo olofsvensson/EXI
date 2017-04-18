@@ -1,26 +1,27 @@
+
+
+
  <div class="container-fluid" class='containerWithScroll' >
-    <div class="row">
-        <div class="col-xs-12 col-md-2" >        
-            <table class="table"  >
+    <div class="row" style="height:500px" >
+        <div class="col-xs-12 col-md-12"    >        
+            <table class="table table-condensed">
               <thead>
                 <tr>
-                    <th>Name</th>
+                    <th></th>
+                    <th>Name</th> 
                     <th>Type</th>
-                    <th>Path</th>
-                             
+                                               
                 </tr>
                 </thead>
                 
             {#.}
                 <tbody>
                     <tr>
-                        <td><a href='{.url}'>{.fileName}</a></td> 
-                        <td>{.fileType}</td> 
-                        <td>{.filePath}</td>
-                                                                                
+                    <td><a href='{.url}'><span class="glyphicon glyphicon-download" style="margin-right:10px;"></span></a></td>
+                    <td><a href='{.url}'>{.fileName}</a></td> 
+                    <td><kbd style='background-color:#207a7a;'>{.fileType}</kbd></td>                                                                                                         
                     </tr>
-                </tbody>
-               
+                </tbody>               
              {/.}    
              </table>
         </div>

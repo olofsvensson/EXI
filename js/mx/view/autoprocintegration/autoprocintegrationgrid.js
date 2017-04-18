@@ -61,19 +61,16 @@ AutoProcIntegrationGrid.prototype.parseData = function(data) {
     
     var anomalous = _.filter(data, function(o) { return o.v_datacollection_summary_phasing_anomalous; });
     var nonanomalous = _.filter(data, function(o) { return o.v_datacollection_summary_phasing_anomalous == false; });
+
+    var failed = _.filter(data, function(o) { return o.v_datacollection_processingStatus == false; });
     /**Set non anomalous first */
     anomalousdata = new AutoprocessingRanker().rank(anomalous, "v_datacollection_summary_phasing_autoproc_space_group");    
     nonanomalousdata = new AutoprocessingRanker().rank(nonanomalous, "v_datacollection_summary_phasing_autoproc_space_group");    
 
     // https://github.com/ispyb/EXI/issues/204
-    var all = _.concat(nonanomalousdata, anomalousdata);
-    if (all.length == 0){
-        return data;
-    }
-    else{
-        return all;
-    }
-     
+    debugger
+    return _.concat(_.concat(nonanomalousdata, anomalousdata), failed);
+    
 };
 
 AutoProcIntegrationGrid.prototype.load = function(data) {      
