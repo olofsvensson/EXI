@@ -1,4 +1,3 @@
-
 <table class="table">                    
     <tr>
         <td>Res. (corner)</td>
@@ -6,7 +5,7 @@
     </tr>
     <tr>
         <td>En. (Wave.)</td>
-        <td  class='column_parameter_value'>{@wavelengthToEnergy key="DataCollection_wavelength" /} keV ({@decimal key="DataCollection_wavelength" decimals=4 /} &#8491;)</td>
+        <td  class='column_parameter_value'>{@wavelengthToEnergy key="DataCollection_wavelength" /} keV ({.DataCollection_wavelength} &#8491;)</td>
     </tr>
     <tr>
         <td>{.DataCollection_rotationAxis} range</td>

@@ -37,6 +37,7 @@
                 {?label}
                     {@eq key=label value="BEST"}
                         <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" style='background-color:#e6ffe6;' class='autoprocintegrationrow'>
+
                     {:else} 
                         <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" style='background-color:#ffffff;' class='autoprocintegrationrow'>
                     {/eq}
@@ -49,9 +50,12 @@
                 <td >
                   {@eq key=v_datacollection_summary_phasing_anomalous type="boolean" value="true"}
                         <kbd style="FONT-FAMILY:helvetica, arial, verdana, sans-serif;background-color:#337ab7">ANOM</kbd>
-                  {:else}
-                        
+                  {:else}                        
                   {/eq}
+
+                  {@eq key=v_datacollection_processingStatus  type="boolean"  value="false"}
+                             <kbd style="FONT-FAMILY:helvetica, arial, verdana, sans-serif;background-color:RED">FAILED</kbd>
+                 {/eq}
                
                
                

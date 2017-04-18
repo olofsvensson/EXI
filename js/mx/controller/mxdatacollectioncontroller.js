@@ -36,7 +36,7 @@ MxDataCollectionController.prototype.init = function() {
 	Path.map("#/mx/datacollection/session/:sessionId/main").to(function() {
 		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId']});
 		EXI.addMainPanel(mainView);
-        	EXI.hideNavigationPanel();
+        EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
 
 
@@ -50,6 +50,7 @@ MxDataCollectionController.prototype.init = function() {
 
 
 		var onSuccess = function(sender, data){
+			
 		    mainView.loadCollections(data);
 		    EXI.setLoadingMainPanel(false);
 		};
@@ -70,16 +71,17 @@ MxDataCollectionController.prototype.init = function() {
 	}).enter(this.setPageBackground);
 	
     
-    	Path.map("#/mx/datacollection/datacollectionid/:datacollectionid/main").to(function() {
-		var mainView = new DataCollectionMxMainView();
-		EXI.addMainPanel(mainView);
-        	EXI.hideNavigationPanel();
-		EXI.setLoadingMainPanel(true);
-		var onSuccess = function(sender, data){
-		    mainView.loadCollections(data);
-			EXI.setLoadingMainPanel(false);
-		};
-		EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollection.getByDataCollectionId(this.params['datacollectionid']);
+    Path.map("#/mx/datacollection/datacollectionid/:datacollectionid/main").to(function() {
+			var mainView = new DataCollectionMxMainView();
+			EXI.addMainPanel(mainView);
+			EXI.hideNavigationPanel();
+			EXI.setLoadingMainPanel(true);
+			var onSuccess = function(sender, data){
+				debugger
+				mainView.loadCollections(data);
+				EXI.setLoadingMainPanel(false);
+			};
+			EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollection.getByDataCollectionId(this.params['datacollectionid']);
 	}).enter(this.setPageBackground);
     
     
