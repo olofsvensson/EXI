@@ -98,7 +98,14 @@ PhasingGridView.prototype.printHTML = function(target) {
                        var metrics = _.map(modelBuildingSteps, "metric");
                        var statisticsValues = _.map(modelBuildingSteps, "statisticsValue");
                        for (var z=0; z < modelBuildingSteps.length; z++){   
-                            var toBePushed =  modelBuildingSteps[z];                          
+                            var toBePushed =  modelBuildingSteps[z];
+                            
+                            var leaf = modelBuildingSteps[z];
+                            while (leaf.PhasingStep_previousPhasingStepId){
+                                console.log(leaf);
+                                leaf = _.find(stepsBySpaceGroup, {'PhasingStep_previousPhasingStepId':leaf.PhasingStep_previousPhasingStepId});
+                            }
+                            
                             if (modelBuildingSteps[z].metric){                                                        
                                 toBePushed = getMetrics(modelBuildingSteps[z]);
                             }  
@@ -109,6 +116,18 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     3) map2 as second map file
                                     */           
                             var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( modelBuildingSteps[z].pdb);
+                            
+                            if ( modelBuildingSteps[0].fileType != null){
+                                debugger;
+                                var types = modelBuildingSteps[0].fileType.split(",");
+                                var ids = modelBuildingSteps[0].phasingProgramAttachmentId.split(",");
+                                
+                                for (var r = 0; r < types.length; r++) {
+                                    toBePushed[types[r]] = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(ids[r]);
+                                }
+                                
+                            
+                            }
                             if ( modelBuildingSteps[0].map != null){
                                 var mapsArr = modelBuildingSteps[z].map.split(",");
                                 if (mapsArr.length == 2){
