@@ -7,7 +7,7 @@
             <table class="table table-condensed">
               <thead>
                 <tr>
-                    <th></th>
+                   
                     <th>Name</th> 
                     <th>Type</th>
                                                
@@ -17,8 +17,8 @@
             {#.}
                 <tbody>
                     <tr>
-                    <td><a href='{.url}'><span class="glyphicon glyphicon-download" style="margin-right:10px;"></span></a></td>
-                    <td><a href='{.url}'>{.fileName}</a></td> 
+                    
+                    <td><a target="_blank" href='{.url}'>{.fileName}</a></td> 
                     <td><kbd style='background-color:#207a7a;'>{.fileType}</kbd></td>                                                                                                         
                     </tr>
                 </tbody>               

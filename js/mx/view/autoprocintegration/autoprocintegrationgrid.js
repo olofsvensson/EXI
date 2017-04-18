@@ -67,8 +67,7 @@ AutoProcIntegrationGrid.prototype.parseData = function(data) {
     anomalousdata = new AutoprocessingRanker().rank(anomalous, "v_datacollection_summary_phasing_autoproc_space_group");    
     nonanomalousdata = new AutoprocessingRanker().rank(nonanomalous, "v_datacollection_summary_phasing_autoproc_space_group");    
 
-    // https://github.com/ispyb/EXI/issues/204
-    debugger
+    // https://github.com/ispyb/EXI/issues/204    
     return _.concat(_.concat(nonanomalousdata, anomalousdata), failed);
     
 };

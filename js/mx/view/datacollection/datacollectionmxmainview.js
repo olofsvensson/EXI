@@ -125,17 +125,7 @@ DataCollectionMxMainView.prototype.loadCollections = function(dataCollections) {
                 if (data[i].DataCollectionGroup_startTime != null){
                     data[i].date =  moment(data[i].DataCollectionGroup_startTime, "MMMM Do YYYY").format("MMMM Do YYYY");
                 }
-                
-                if (data[i].DataCollection_resolutionAtCorner != null){
-                    data[i].DataCollection_resolutionAtCorner = _.ceil( data[i].DataCollection_resolutionAtCorner, 2);
-                }
-                if (data[i].DataCollection_resolution != null){
-                    data[i].DataCollection_resolution = _.ceil( data[i].DataCollection_resolution, 2);
-                }
-                
-                if (data[i].DataCollection_wavelength != null){
-                    data[i].DataCollection_wavelength = _.ceil( data[i].DataCollection_wavelength, 3);
-                }
+                               
                 /** Axis  **/
                 if (data[i].DataCollection_axisEnd != null){
                     if (data[i].DataCollection_axisStart != null){

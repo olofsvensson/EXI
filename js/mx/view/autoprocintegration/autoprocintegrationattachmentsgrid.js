@@ -12,13 +12,15 @@ AutoProcIntegrationAttachmentGrid.prototype.load = function(data) {
 			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
 		});
 		//this.store.loadData(data);
-		console.log(data);
+
+		/** URL to attachment */
+		_.forEach(data, function(row){row.url = EXI.getDataAdapter().mx.autoproc.getAttachmentUrl(row.autoProcProgramAttachmentId);})
+
 		var html = "";
-		dust.render("files.autoprocintegrationgrid.template", data, function(err, out) { 
-			debugger
+		dust.render("files.autoprocintegrationgrid.template", data, function(err, out) { 			
 			html = out;
 		});
-		debugger
+		
 		$("#" + _this.id).html(html);
     }
 };
@@ -39,7 +41,7 @@ AutoProcIntegrationAttachmentGrid.prototype.getPanel = function() {
         height : 500,
 		items : [ 		
 					{
-						html : '<div id="'+ _this.id +'">testtest</div>'
+						html : '<div id="'+ _this.id +'"></div>'
 
 					}
                     /*{

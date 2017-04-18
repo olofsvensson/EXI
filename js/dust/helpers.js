@@ -177,7 +177,7 @@ dust.helpers.uppercase = function (chunk, context, bodies, params) {
 }
 
 dust.helpers.wavelengthToEnergy = function (chunk, context, bodies, params) {
-    if (params.key) {
+    if (params.key) {        
         var value = context.current()[params.key];
         if (value){
             chunk.write((Number(12.398/value).toFixed(3))); 

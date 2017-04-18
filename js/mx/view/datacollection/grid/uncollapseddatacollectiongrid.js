@@ -22,6 +22,7 @@ UncollapsedDataCollectionGrid.prototype.loadMagnifiers = DataCollectionGrid.prot
 */
 UncollapsedDataCollectionGrid.prototype.load = function(dataCollectionGroup){
     try{
+        
         var _this = this;
         this.dataCollectionGroup = dataCollectionGroup;
         this.store.loadData(dataCollectionGroup);
@@ -148,8 +149,7 @@ UncollapsedDataCollectionGrid.prototype.displayResultAutoprocessingTab = functio
 
                     var onSucessFiles = function(sender, files){  
                         var html = "";
-                        console.log(autoprocessingData);
-                        debugger
+                       
                          dust.render("files.collapsed.autoprocintegrationgrid.template", files[0], function(err, out) {
                                 html = html + out;
                          });
