@@ -21,11 +21,11 @@ PhasingGridView.prototype.load = function(dataCollectionGroupId, PhasingStep_met
 
 PhasingGridView.prototype.printHTML = function(target) {
     var _this = this;
-    debugger
+    
     var onSuccess = function(sender, data){        
         /** It filters all phasing step which method is _this.PhasingStep_method: [SAD | MR]  */
        data[0] = _.filter(data[0], {PhasingStep_method : _this.PhasingStep_method})
-       debugger
+    
        /** It gets all space groups */
        var spaceGroups = _.keyBy(data[0], "SpaceGroup_spaceGroupShortName");
        
@@ -65,13 +65,13 @@ PhasingGridView.prototype.printHTML = function(target) {
                else{
                     /** Node to be displayed for Phasing that contains several steps: [PREPARE, SUBSTRUCTUREDETERMINATION, PHASING, MODELBUILDING] */
                     node = ({
-                        spaceGroup       : spaceGroup,
+                        spaceGroup          : spaceGroup,
                         hasPrepare          : _.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "PREPARE"}) != null,
                         hasSub              : _.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "SUBSTRUCTUREDETERMINATION"}) != null,
                         hasPhasing          : _.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "PHASING"}) != null,                    
                         hasModel            : _.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "MODELBUILDING"}) != null,
-                        downloadCSV      : EXI.getDataAdapter().mx.phasing.getCSVPhasingFilesByPhasingAttachmentIdURL(getCSV(stepsBySpaceGroup)),
-                        downloadFilesUrl : EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(getStepId(stepsBySpaceGroup))
+                        downloadCSV         : EXI.getDataAdapter().mx.phasing.getCSVPhasingFilesByPhasingAttachmentIdURL(getCSV(stepsBySpaceGroup)),
+                        downloadFilesUrl    : EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(getStepId(stepsBySpaceGroup))
                         
                     });
                }
@@ -115,19 +115,26 @@ PhasingGridView.prototype.printHTML = function(target) {
                         }
                }
 
+                function parseDownloadAttachments(leaf){
+                       var fileAttachmentsId = [];
+                       while (leaf != null){                             
+                                fileAttachmentsId.push(leaf.PhasingStep_phasingStepId);
+                                leaf = _.find(stepsBySpaceGroup, {'PhasingStep_phasingStepId':leaf.PhasingStep_previousPhasingStepId});
+                       }
+                       return fileAttachmentsId;
+               }
 
                function getNodeByPhasingStep(node, stepsBySpaceGroup, step){                                      
                    var steps = _.filter(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : step});
                    node["metrics"] = [];
-                   if (steps){
-                       debugger
+                   if (steps){                       
                        var metrics = _.map(steps, "metric");
                        var statisticsValues = _.map(steps, "statisticsValue");
                        for (var z=0; z < steps.length; z++){   
                             var toBePushed =  steps[z];
                             
                             /**
-                             * This adds the phasing plots into the dictionary
+                             * This adds the phasing plots into the dictionary looking for them from the previous steps
                              */
                             var leaf = steps[z];                           
                             while (leaf != null){                             
@@ -154,7 +161,8 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     toBePushed["uglymol"] = '../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2;
                                 }
                             }  
-                            toBePushed["downloadFilesUrl"] = node.downloadFilesUrl;                                                                            
+                            /** It will add only the files coming from these steps */
+                            toBePushed["downloadFilesUrl"] = EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(parseDownloadAttachments(steps[z]));                                                                            
                             node["metrics"].push(toBePushed);                         
                        }                                            
                    }     
@@ -192,19 +200,19 @@ PhasingGridView.prototype.printHTML = function(target) {
                
                /** This will be used to sort */
                var count = 0;
-               if (node.prepare){
+               if (node.hasPrepare){
                    count = count + 1;
                }
-               if (node.sub){
+               if (node.hasSub){
                    count = count + 1;
                }
-               if (node.phasing){
+               if (node.hasPhasing){
                    count = count + 1;
                }
-               if (node.model){
+               if (node.hasModel){
                    count = count + 1;
                }
-                if (node.refinement){
+                if (node.hasRefinement){
                    count = count + 1;
                }
                
@@ -214,15 +222,15 @@ PhasingGridView.prototype.printHTML = function(target) {
        }
        
         parsed.sort(function(a,b){return a.count < b.count;});
-        /** Parsing the metrics */
+        /** Parsing the metrics */    
         for(var i =0; i< parsed.length; i++){
             if (parsed[i]){
                 if (parsed[i].metrics){
                     parsed[i].metrics.sort(function(a,b){   
-                        try{                                             
-                            return parseFloat(a._CC_of_partial_model) < parseFloat(b._CC_of_partial_model);
+                        try{                                      
+                            return  parseFloat(b._CC_of_partial_model) - parseFloat(a._CC_of_partial_model);
                         }
-                        catch(e){
+                        catch(e){                            
                             return false;
                         }
                     });
@@ -231,7 +239,7 @@ PhasingGridView.prototype.printHTML = function(target) {
         }
         
         var html = "";
-        console.log(parsed);
+       
         if (_this.PhasingStep_method == "MR"){
             
             dust.render("mr.mxdatacollectiongrid.template",  {parsed : parsed, hasScroll : _this.hasScroll}, function(err, out) {

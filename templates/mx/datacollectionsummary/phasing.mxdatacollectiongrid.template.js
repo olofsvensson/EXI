@@ -17,8 +17,7 @@
                                
                                
     
-                                   
-                                <th style='color:gray'></th>                                                       
+                                                                               
                                 <th style='color:gray'>Program</th>
                                 <th style='color:gray'>Method</th>
                                 <th style='color:gray'>Resolution</th>
@@ -42,7 +41,10 @@
                                  {/eq}                                                                                                      
                                         <td>
                                             {@eq key=$idx value=0}
-                                                <a href='#/phasing/autoprocintegrationId/{.autoProcIntegrationId}/main'> {.SpaceGroup_spaceGroupShortName}</a>
+                                                
+                                                {.SpaceGroup_spaceGroupShortName}<br /> <kbd style="background-color:green">BEST</kbd>
+                                            {:else}
+                                                 <span style='color:gray'>{.SpaceGroup_spaceGroupShortName}</span>
                                             {/eq}                                        
                                         </td>
 
@@ -92,14 +94,11 @@
                                               
 
                                         </td>  
-                                          <td>
-                                         
-                                          
+                                        <td>                                                                                   
                                                 {?OCCUPANCY_SITENUMBER}
                                                     <a href={.OCCUPANCY_SITENUMBER} data-lightbox={.OCCUPANCY_SITENUMBER} >
                                                     <img src={.OCCUPANCY_SITENUMBER} height="50px" width="50px"/></a>
                                                 {/OCCUPANCY_SITENUMBER}
-
                                         </td>  
                                        
                                         <td>                                            
@@ -109,21 +108,15 @@
                                             {/CONTRAST_CYCLE}
 
                                         </td>
-                                         
-                                        <td >   
-                                            {@eq key=$idx value=0}                     
-                                                <a href='{.downloadFilesUrl}' ><span style='font-size: 1.5em;' class="glyphicon glyphicon-download " ></span></a>
-                                             {/eq}                                                                                                                
-                                        </td>                                                                 
+                                                                                                      
                                     
                            
-                                        <td>
-                                            {@eq key=$idx value=0}
-                                                <kbd style="background-color:green">BEST</kbd>
-                                            {/eq}  
-                                        </td>
+                                      
                             
-                                        <td>{.PhasingProgramRun_phasingPrograms} </td>
+                                        <td>{.PhasingProgramRun_phasingPrograms}  
+                                                                                          
+                                                <br /><a href='{.downloadFilesUrl}' ><span style='font-size: 1.5em;' class="glyphicon glyphicon-download " ></span></a>                                         
+                                        </td>
                                         <td>{.PhasingStep_method} </td>
                                         <td>{.PhasingStep_highRes} - {.PhasingStep_lowRes} </td>
                                         <td>{.PhasingStep_solventContent} </td>                                                               
