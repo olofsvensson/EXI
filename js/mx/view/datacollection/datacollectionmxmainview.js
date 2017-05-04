@@ -128,7 +128,7 @@ DataCollectionMxMainView.prototype.loadCollections = function(dataCollections) {
                                
                 /** Axis  **/
                 if (data[i].DataCollection_axisEnd != null){
-                    if (data[i].DataCollection_axisStart != null){
+                    if (data[i].DataCollection_axisStart != null){                        
                         data[i].DataCollection_axisTotal = _.ceil(data[i].DataCollection_axisEnd - data[i].DataCollection_axisStart, 2);
                     }
                 }
