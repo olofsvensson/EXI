@@ -73,18 +73,22 @@
                                                         <td> <div class='summary_datacollection_success'></div></td> 
                                                          <td>Space Group</td> <td class='column_parameter_value'>{.ScreeningOutputLattice_spaceGroup}</td>                                                        
                                                         <tr>
-                                                            <td>Rank. Res.</td> <td class='column_parameter_value'>{.ScreeningOutput_rankingResolution} &#8491;</td>
-                                                            <td>Exp. Time</td> <td class='column_parameter_value'>{.ScreeningStrategySubWedge_exposureTime} s</td>
+                                                            <td>Rank. Res.</td> <td class='column_parameter_value'>{.ScreeningOutput_rankingResolution} &#8491;</td>                                                            
+                                                            <td>Osc. start (total)</td> <td class='column_parameter_value'>{.ScreeningStrategySubWedge_axisStart} &deg; ({.ScreeningOutput_totalRotationRange} &deg;)</td>
+
+                                                           
                                                         </tr>                                                               
                                                         <tr>
                                                              <td>Images</td> <td class='column_parameter_value'>{.ScreeningStrategySubWedge_numberOfImages}</td>
-                                                            <td>Osc. range</td> <td class='column_parameter_value'>{.ScreeningStrategySubWedge_oscillationRange} &deg;</td>
+                                                             <td>Osc. range</td> <td class='column_parameter_value'>{.ScreeningStrategySubWedge_oscillationRange} &deg;</td>
+
+
                                                         </tr>  
                                                         <tr>
                                                              <td>Transmission</td> <td class='column_parameter_value'>{@decimal key="ScreeningStrategySubWedge_transmission" decimals=1 /} %</td>
-                                                             <td>Total rotation</td> <td class='column_parameter_value'>{.ScreeningOutput_totalRotationRange} &deg;</td>
+                                                             <td>Exp. Time</td> <td class='column_parameter_value'>{.ScreeningStrategySubWedge_exposureTime} s</td>
                                                             
-                                                        </tr>     
+                                                        </tr>      
                                                         
                                                     {:else}
                                                         <td><div class='summary_datacollection_failed'></div></td>
@@ -105,7 +109,7 @@
                   </div>
                   <div class="col-xs-12 col-md-2">
                      <a href="{.url}" data-lightbox='{.url}' data-title="#{.runNumber} {.folder}"> 
-                     <img alt="Image not found" class="img-responsive lazy"  data-src="{.urlThumbnail}" />
+                        <img alt="Image not found" class="img-responsive lazy"  data-src="{.urlThumbnail}" />
                      </a>                           
                   </div>
 
@@ -121,7 +125,9 @@
                   </div>
                 
                   <div class="col-xs-6 col-md-2"> 
-                     <a href="{.indicator}" data-lightbox='{.indicator}' data-title="#{.runNumber} {.folder}"> <img  alt="Image not found" class="img-responsive lazy"  data-src="{.indicator}"/></a> 
+                     <a href="{.indicator}" data-lightbox='{.indicator}' data-title="#{.runNumber} {.folder}">
+                        <img  alt="Image not found" class="img-responsive lazy"  data-src="{.indicator}"/>
+                      </a> 
                   </div>
                 
                </div>

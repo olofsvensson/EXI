@@ -4,8 +4,20 @@
     <div class="panel with-nav-tabs panel-default">
         <div class="panel-heading clearfix">
             <div class="pull-left">
-                <h1 class="panel-title" style='color:#337ab7;'>
-                <span style='font-size:12px;'>   {.startTime}</span>
+
+              <span style='font-size:12px;color:blue;' >
+                        <kbd style='background-color:#CCCCCC;color:blue;'>
+                            Fluorescence Spectra
+                        </kbd> 
+                        <span style='color:blue;'>
+                        {@formatDate date=.startTime format="DD-MM-YYYY HH:mm:ss" /}
+                        </span>                                   
+                    </span>
+                <p><b>{.filename}</b></p>   
+               
+
+
+               
             </h1>
             </div>
             <div class="pull-right">
@@ -25,25 +37,32 @@
                         <div class="col-xs-6 col-md-6">
                             <table class="table table-condensed">
 
-                                <tr>      
-                                    <td >Start Time</td>
-                                    <td class='column_parameter_value'>{.startTime}</td>        
+                              
+                                 <tr>
+                                    <td>Protein</td>
+                                    <td class='column_parameter_value'>{.acronym}</td>
                                 </tr>
-                                
+                                <tr>
+                                    <td>Sample</td>
+                                    <td class='column_parameter_value'>{.name}</td>
+                                </tr>
+
+                               
                                 
                                 <tr>
                                     <td >Filename</td>
                                     <td class='column_parameter_value'>{.filename}</td>
                                 </tr>
                                 
-                                
+                               
+
                                 <tr>
                                     <td >Fluorescence Detector</td>
                                     <td class='column_parameter_value'></td>
                                 </tr>
                                 <tr>
                                     <td >Energy</td>
-                                    <td class='column_parameter_value'> {.energy} keV</td>
+                                    <td class='column_parameter_value'>{@decimal key="energy" decimals=3 /} keV</td>
 
                                 </tr>
                                 
@@ -71,17 +90,15 @@
                                     <td >Exposure Time</td>
                                     <td class='column_parameter_value'>{.exposureTime} s</td>                                    
                                 </tr>
-                                 <tr>                                
-                                    <td >Directory</td>
-                                    <td class='column_parameter_value'>{.workingDirectory}</td>                                    
-                                </tr>
+                               
                             </table>
                             
                     </div>
                     <div class="col-xs-2 col-md-2">
-                             <div id='{.containerId}'></div>
-                             <br />
-                             <a href='#/mx/xfe/{.xfeFluorescenceSpectrumId}/main' type="button" class="btn btn-default">Open</a>
+                              
+                               <a href="#/mx/xfe/{.xfeFluorescenceSpectrumId}/main" target="_blank" data-title=""> 
+                                    <img alt="Image not found"  src="{.url}" />                    
+                                </a>
                     </div>        
                 </div>
             </div>

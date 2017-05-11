@@ -96,17 +96,17 @@ XFEScanGrid.prototype.getColumns = function() {
 
                 record.data["xfeFluorescenceSpectrumId"] = record.data.xfeFluorescenceSpectrumId;
                 record.data["containerId"] = containerId;
-
-
+debugger
+                record.data["url"] = EXI.getDataAdapter().mx.xfescan.getXFEJpegByScanId(record.data.xfeFluorescenceSpectrumId);
                 dust.render("xfescangrid.template", record.data, function(err, out) {
                     html = out;
                 });
                 return html;
 
             }
-        },
+        }
 
-        {
+       /* {
             header: '',
             dataIndex: 'dataCollectionGroup',
             name: 'dataCollectionGroup',
@@ -114,11 +114,11 @@ XFEScanGrid.prototype.getColumns = function() {
             flex: 2,
             renderer: function(grid, e, record) {
 
-                return _this._getHTMLZoomImage(EXI.getDataAdapter().mx.xfescan.getXFEJpegByScanId(record.data.xfeFluorescenceSpectrumId));
+                return _this._getHTMLZoomImage();
 
 
             }
-        }
+        }*/
         /* ,
         {
             header: 'PyMca Results',

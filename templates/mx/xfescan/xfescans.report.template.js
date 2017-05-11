@@ -12,16 +12,20 @@
                 <table class="table table-condensed">
 
                     <tr>      
-                        <td >Start Time</td>
+                        <td >Start Time</td> 
                         <td class='column_parameter_value'>{.startTime}</td>        
                     </tr>
                     
-                    
-                    <tr>
+                    <tr>                                
+                        <td >Directory</td>
+                        <td class='column_parameter_value'>{.workingDirectory}</td>                                    
+                    </tr>
+
+                    <tr> 
                         <td >Filename</td>
                         <td class='column_parameter_value'>{.filename}</td>
                     </tr>
-                    
+                     
                     
                     <tr>
                         <td >Fluorescence Detector</td>
@@ -57,10 +61,7 @@
                         <td >Exposure Time</td>
                         <td class='column_parameter_value'>{.exposureTime} s</td>                                    
                     </tr>
-                        <tr>                                
-                        <td >Directory</td>
-                        <td class='column_parameter_value'>{.workingDirectory}</td>                                    
-                    </tr>
+                    
                 </table>
             </td>
 
