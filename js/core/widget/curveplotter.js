@@ -232,7 +232,7 @@ AutoProcIntegrationCurvePlotter.prototype.render = function(labels, data) {
             labelsDiv : this.labelsDiv,
             labelsDivStyles : " { 'fontSize': 6 } ",
             strokeWidth : this.strokeWidth,
-            //valueRange : this.valueRange,
+            valueRange : this.valueRange,
             highlightCallback : highlightCallback,
             colors : colors,
             
