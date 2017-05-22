@@ -49,6 +49,20 @@ If you want to build a version where the javascript will be not minified for dev
 ```bash
 grunt dev
 ```
+Running in dev mode
+===================
+
+Globally install http-server in case you haven't done this before
+```bash
+npm i -g http-server
+```
+
+Start the http-server.  Http-server will display the URL to open EXI in your favourite browser.
+```bash
+http-server
+```
+
+See [http-server on Github](https://github.com/indexzero/http-server) for configuration options.
 
 Update a package
 ===================
