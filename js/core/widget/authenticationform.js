@@ -19,23 +19,21 @@ AuthenticationForm.prototype.show = function(){
 	this.window.show();
 };
 
-AuthenticationForm.prototype.getAuthenticationForm = function(){         
+AuthenticationForm.prototype.getAuthenticationForm = function(){   
+    
+    var _this = this;
+    var margin =  '30 0 0 10';
      if (ExtISPyB.sites){
         if (ExtISPyB.sites.length > 1){
-             var sites = Ext.create('Ext.data.Store', {
-                fields: ['name', 'url', 'exiUrl'],
-                data : ExtISPyB.sites
-            });
-            
-            return    {
-                        xtype: 'container',
-                        layout: 'vbox',
-                        items: [
-                        {
+            margin = '10 0 0 10';
+        }
+     }
+
+    var items =  [{
                             xtype: 'textfield',
                             fieldLabel: 'User',
                             name: 'user',
-                            margin : '10 0 0 10',
+                            margin :margin,
                             allowBlank: false
                         }, 
                         {
@@ -44,8 +42,26 @@ AuthenticationForm.prototype.getAuthenticationForm = function(){
                             margin : '10 0 0 10',
                             name: 'password',
                             allowBlank: false,
-                            inputType : 'password'
-                        },{
+                            inputType : 'password',
+                            enableKeyEvents : true,
+                            listeners: {
+                                specialkey: function (field, e) {
+                                    if (field.getValue() != 'null') {
+                                        if (e.getKey() === e.ENTER) {
+                                        _this.authenticate(this.up('form').getForm());
+                                        }
+                                    }
+                                }
+                            }
+      }];  
+     if (ExtISPyB.sites){
+        if (ExtISPyB.sites.length > 1){
+            var sites = Ext.create('Ext.data.Store', {
+                fields: ['name', 'url', 'exiUrl'],
+                data : ExtISPyB.sites
+            });
+
+            items.push({
                             xtype : 'combo',
                             fieldLabel: 'Choose site',
                             name: 'site',
@@ -53,37 +69,21 @@ AuthenticationForm.prototype.getAuthenticationForm = function(){
                             allowBlank: false,
                             valueField : 'url',
                             displayField : 'name',
-                            margin : '10 0 0 10'
-	                    }    
-                        ]
-                    }
+                            margin : '10 0 0 10',
+                            listeners: {
+                                select: function (field, e) {                                                                         
+                                            _this.authenticate(this.up('form').getForm());                                                                          
+                                }
+                            }
+	                    } );           
         }
      }
-    
-    
-     
-    return    {
-                xtype: 'container',
-                layout: 'vbox',
-                items: [
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'User',
-                    name: 'user',
-                    margin : '30 0 0 10',
-                    allowBlank: false
-                }, 
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Password',
-                    margin : '10 0 0 10',
-                    name: 'password',
-                    allowBlank: false,
-                    inputType : 'password'
-                }    
-                ]
-  };                  
-     
+             
+     return    {
+                        xtype: 'container',
+                        layout: 'vbox',                      
+                        items: items
+     };                 
 };
 
 
@@ -99,6 +99,29 @@ AuthenticationForm.prototype.getIconForm = function(){
                         };
 };
 
+AuthenticationForm.prototype.authenticate = function(form){
+            var _this = this;
+            var exiUrl;
+            var properties = null;
+            
+            if (!this.singleSite){
+                this.siteURL = form.getFieldValues().site;
+            }
+            
+            for (var i =0; i< ExtISPyB.sites.length; i++){
+                if (ExtISPyB.sites[i].url == this.siteURL){
+                    properties = ExtISPyB.sites[i];
+                }	        		
+            }           
+            debugger   
+            this.onAuthenticate.notify({
+                user : form.getFieldValues().user, 
+                password : form.getFieldValues().password, 
+                site : this.siteURL,
+                exiUrl : properties.exiUrl,
+                properties : properties
+            });
+};
 
 AuthenticationForm.prototype.getPanel = function(){
 	var _this = this;
@@ -133,35 +156,16 @@ AuthenticationForm.prototype.getPanel = function(){
 									]
                         }                                           
         ],
+       
 	    buttons: [ 
-		'If you are a User, please use the beamline proposal login.',
+		        'If you are a User, please use the beamline proposal login.',
                 {
-	        text: 'Login',
-	        formBind: true,
-	        disabled: true,
-	        handler: function() {
-	        	var form = this.up('form').getForm();	        	
-	        	var exiUrl;
-	        	var properties = null;
-                
-                 if (!_this.singleSite){
-                    _this.siteURL = form.getFieldValues().site;
-                }
-                
-	        	for (var i =0; i< ExtISPyB.sites.length; i++){
-	        		if (ExtISPyB.sites[i].url == _this.siteURL){
-	        			properties = ExtISPyB.sites[i];
-	        		}	        		
-	        	}              
-	        	_this.onAuthenticate.notify({
-	        		user : form.getFieldValues().user, 
-	        		password : form.getFieldValues().password, 
-	        		site : _this.siteURL,
-	        		exiUrl : properties.exiUrl,
-	        		properties : properties
-	        	});
-
-	        }
+                    text: 'Login',
+                    formBind: true,
+                    disabled: true,
+                    handler: function() {                             	
+                        _this.authenticate(this.up('form').getForm());
+	            }
 	    }
 		]
 	});
