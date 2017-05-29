@@ -3,15 +3,14 @@ function AutoProcIntegrationAttachmentGrid(args) {
 	this.maxHeight = 300;
 }
 
-AutoProcIntegrationAttachmentGrid.prototype.load = function(data) {
+AutoProcIntegrationAttachmentGrid.prototype.load = function(data) {	
 	var _this = this;
     if (data){
 		data.sort(function(a, b) {
 			var textA = a.fileName.toUpperCase();
 			var textB = b.fileName.toUpperCase();
 			return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
-		});
-		//this.store.loadData(data);
+		});	
 
 		/** URL to attachment */
 		_.forEach(data, function(row){row.url = EXI.getDataAdapter().mx.autoproc.getAttachmentUrl(row.autoProcProgramAttachmentId);})
@@ -41,33 +40,13 @@ AutoProcIntegrationAttachmentGrid.prototype.getPanel = function() {
         height : 500,
 		items : [ 		
 					{
-						html : '<div id="'+ _this.id +'"></div>'
+						html : '<div style="height:500px;" id="'+ _this.id +'"></div>'
 
-					}
-                    /*{
-                        text : 'fileName',
-                        dataIndex : 'fileName',
-                        flex : 10,
-						renderer : function(grid, opt, val, val2, val3){
-                            var url = EXI.getDataAdapter().mx.autoproc.getDownloadAttachmentUrl(val.data.autoProcProgramAttachmentId);
-							var displayURL = EXI.getDataAdapter().mx.autoproc.getAttachmentUrl(val.data.autoProcProgramAttachmentId);
-                            return '<a href="'+ url + '"><span class="glyphicon glyphicon-download" style="margin-right:10px;"></span></a><a href="' + url + '" target="_blank">' + val.data.fileName + '</a>';				
-                        }
-                    }*/
+					}                   
 		],
-		flex : 1,
-		viewConfig : {
-			stripeRows : true
-		}
+		flex : 1
 	});
 
 	return this.panel;
 };
 
-AutoProcIntegrationAttachmentGrid.prototype.hide = function(bool) {
-	if (bool){
-		//Ext.getCmp(this.id).hide();
-	} else {
-		//Ext.getCmp(this.id).show();
-	}
-}

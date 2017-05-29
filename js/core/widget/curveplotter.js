@@ -167,14 +167,25 @@ AutoProcIntegrationCurvePlotter.prototype.getLabels = CurvePlotter.prototype.get
 
 AutoProcIntegrationCurvePlotter.prototype.toCSV = function(labels, data) {
     var csv = labels.toString() + "\n";
+    this.axisXKey = {};
+    debugger
+    //data = data.reverse();
     for (var i = 0; i< data.length; i++){
+         
         for (var j = 0; j< data[i].length; j++){
-            csv = csv +  data[i][j] + "," ;
+              if (j == 0){
+                this.axisXKey[i] = data[i][j];                  
+                csv = csv +  i + "," ;
+                //csv = csv +  data[i][j] + "," ;
+              }
+              else{
+                csv = csv +  data[i][j] + "," ;
+              }
+           
         }
         /** Removing last , */
         csv = csv.substring(0, csv.length - 1);
-        csv = csv + "\n";
-        
+        csv = csv + "\n";        
     }
     return csv;
 };
@@ -207,6 +218,7 @@ AutoProcIntegrationCurvePlotter.prototype.render = function(labels, data) {
     }
 
     /** Plotting */
+    console.log(this.toCSV(labels, data));
     var g = new Dygraph(
         document.getElementById(this.targetId),
         this.toCSV(labels, data),
@@ -230,11 +242,12 @@ AutoProcIntegrationCurvePlotter.prototype.render = function(labels, data) {
             },
             axes : {
                 x: {
-                    axisLabelFormatter: function(d, gran, opts) {
-                        return Number(_this.xRange[0] + _this.xRange[1] - d).toFixed(2);                        
+                    axisLabelFormatter: function(d, gran, opts) {                                                
+                        return _this.axisXKey[d];
+                       // return Number(_this.xRange[0] + _this.xRange[1] - d).toFixed(2);                        
                     },
                     valueFormatter: function (x, opts, seriesName, g, row, col) {
-                        return seriesName + " " + Number(_this.xRange[0] + _this.xRange[1] - x).toFixed(2);
+                       return _this.axisXKey[x];                                            
                     }
                 },
                 y : {
@@ -336,14 +349,15 @@ AutoProcIntegrationCurvePlotter.prototype.loadUrl = function(url) {
                 };
 
                 lines = lines.reverse();
+                
                 /** Parsing data it means remove labels, split by , and convert to number */
                 this.data.data = _.map(_.slice(lines, 1, lines.length - 1), convertToNumber);
-                this.xRange = [_.min(this.xLabels),_.max(this.xLabels)];
+                //this.xRange = [_.min(this.xLabels),_.max(this.xLabels)];
                 // Mirror the x-axis
-                for (var i = 0 ; i < this.data.data.length ; i++) {
+                /*for (var i = 0 ; i < this.data.data.length ; i++) {
                     var data = this.data.data[i];
                     data[0] = Number(_this.xRange[0] + _this.xRange[1] - data[0]).toFixed(2);
-                }
+                }*/
                 try {
                     if (this.data.data.length > 0){
                         // Manage the case when there are more values than labels

@@ -2,14 +2,23 @@
     <div class="panel with-nav-tabs panel-default">
         <div class="panel-heading clearfix">
             <div class="pull-left">
-                <h1 class="panel-title" style='color:#337ab7;'>
-                <span style='font-size:12px;'>   {.startTime}</span>
-            </h1>
+
+                <span style='font-size:12px;color:blue;' >
+                        <kbd style='background-color:#CCCCCC;color:blue;'>
+                            Energy Scan
+                        </kbd> 
+                        <span style='color:blue;'>
+                        {@formatDate date=.startTime format="DD-MM-YYYY HH:mm:ss" /}
+                        </span>                                   
+                    </span>
+                <p><b>{.scanFileFullPath}</b></p>   
+               
             </div>
             <div class="pull-right">
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#datacollection_{DataCollection_dataCollectionId}">Summary </a>
                     </li>
+
 
                 </ul>
             </div>
@@ -24,10 +33,7 @@
                         </div>
                         <div class="col-xs-3 col-md-3">
                             <table class="table table-condensed">
-                                <tr>
-                                    <td>Start Time</td>
-                                    <td class='column_parameter_value'>{.startTime}</td>
-                                </tr>
+                             
                                 <tr>
                                     <td>Protein</td>
                                     <td class='column_parameter_value'>{.acronym}</td>
@@ -36,6 +42,14 @@
                                     <td>Sample</td>
                                     <td class='column_parameter_value'>{.name}</td>
                                 </tr>
+
+                                
+                                <tr>
+                                    <td >Filename</td>
+                                    <td class='column_parameter_value'>{.filename}</td>
+                                </tr>
+
+
                                 <tr>
                                     <td>Fluorescence Detector</td>
                                     <td class='column_parameter_value'>{.fluorescenceDetector}</td>
@@ -69,10 +83,7 @@
                                     <td>Exposure Time</td>
                                     <td class='column_parameter_value'>{@decimal key="exposureTime" decimals=3 /} s</td>
                                 </tr>
-                                <tr>
-                                    <td>Filename</td>
-                                    <td class='column_parameter_value'>{.filename}</td>
-                                </tr>
+
                             </table>
                         </div>
 
@@ -84,13 +95,13 @@
                                     <td class='column_parameter_value'>{@decimal key="peakEnergy" decimals=3 /} keV</td>
                                 </tr>
                                 <tr>
-                                    <td >Pk f'</td>
-                                    <td class='column_parameter_value'>{@decimal key="peakFPrime" decimals=2 /} &#275;</td>
+                                    <td >Pk f'</td> 
+                                    <td class='column_parameter_value'>{@decimal key="peakFPrime" decimals=2 /} e<sup>-</sup></td>
                                 </tr>
 
                                 <tr>
                                     <td >Pk f''</td>
-                                    <td class='column_parameter_value'>{@decimal key="peakFDoublePrime" decimals=2 /} &#275;</td>
+                                    <td class='column_parameter_value'>{@decimal key="peakFDoublePrime" decimals=2 /}e<sup>-</sup></td>
                                 </tr>
 
                                 <tr>
@@ -99,21 +110,21 @@
                                 </tr>
                                 <tr>
                                     <td >Ip f'</td>
-                                    <td class='column_parameter_value'>{@decimal key="inflectionFPrime" decimals=2 /} &#275; </td>
+                                    <td class='column_parameter_value'>{@decimal key="inflectionFPrime" decimals=2 /} e<sup>-</sup> </td>
                                 </tr>
                                 <tr>
                                     <td >Ip f''</td>
-                                    <td class='column_parameter_value'>{@decimal key="inflectionFDoublePrime" decimals=2 /} &#275; </td>
+                                    <td class='column_parameter_value'>{@decimal key="inflectionFDoublePrime" decimals=2 /} e<sup>-</sup></td>
                                 </tr>
 
 
                             </table>
                         </div>
 
-                       <div class="col-xs-3 col-md-3">
-                            <a href='{.choochURL}' data-lightbox='{.choochURL}' data-title="Chooch"><img class="lazy"  data-src='{.choochURL}' src='{.choochURL}' /> </a>
+                        <div class="col-xs-3 col-md-3">
+                            <a href='{.choochURL}' data-lightbox='{.choochURL}' data-title="Chooch"><img class="lazy" data-src='{.choochURL}' src='{.choochURL}' /> </a>
                         </div>
-                    
+
 
                     </div>
                 </div>

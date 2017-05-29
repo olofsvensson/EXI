@@ -72,7 +72,7 @@ AutoprocIntegrationController.prototype.init = function() {
         var listPanel = new AutoProcIntegrationListView();        
         EXI.addNavigationPanel(listPanel);
         
-        listPanel.onSelect.attach(function(sender, selected){      
+        listPanel.onSelect.attach(function(sender, selected){                  
             mainView.load(selected);            
         });
          /** Load view for autoprocessing */
