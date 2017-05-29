@@ -92,7 +92,7 @@ var ExtISPyB ={
                },
                { 
                    name : "ID30A-3",
-                   sampleChangerType : 'SC3'
+                   sampleChangerType : 'FlexHCD'
                },
                { 
                    name : "ID30B",
