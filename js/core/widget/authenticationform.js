@@ -113,7 +113,7 @@ AuthenticationForm.prototype.authenticate = function(form){
                     properties = ExtISPyB.sites[i];
                 }	        		
             }           
-            debugger   
+               
             this.onAuthenticate.notify({
                 user : form.getFieldValues().user, 
                 password : form.getFieldValues().password, 

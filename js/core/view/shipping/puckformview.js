@@ -6,10 +6,18 @@
 **/
 function PuckFormView(args) {
 	this.id = BUI.id();
+
+	/**  puckformview.template contains two information panels which id are the stored in the next variables. This is done because we want to use notify based in the ID **/
+	this.specialCharacterInfoPanelId = this.id + "_specialCharacterInfoPanelId";
+    this.uniquenessInfoPanelId = this.id + "_uniquenessInfoPanelId";
+
 	this.height = 500;
 	this.width = 500;
 	this.unsavedChanges = false;
 	
+	/** When getPanel it will load all the samples for this proposal */
+	this.proposalSamples = [];
+
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -62,11 +70,8 @@ PuckFormView.prototype.load = function(containerId, shippingId, shippingStatus) 
             Ext.getCmp(_this.id + "puck_sampleChangerLocation").setValue(_this.puck.sampleChangerLocation);
             Ext.getCmp(_this.id + "puck_status").setValue(_this.puck.containerStatus);                
         }
-
 		_this.fillSamplesGrid(puck);
-
     };
-
     EXI.getDataAdapter({onSuccess : onSuccess}).proposal.shipping.getContainerById(this.containerId,this.containerId,this.containerId);
 
 };
@@ -106,6 +111,32 @@ PuckFormView.prototype.fillSamplesGrid = function (puck) {
 PuckFormView.prototype.getPanel = function() {
 	var _this =this;
 
+    /** Retrieve samples for the proposal in order to check that the protein + sample name are unique */
+	var onSuccess = function(sender, data){		
+		console.log(data);
+		
+		_this.proposalSamples = data;
+		$.notify("Retrieved " + data.length + " samples for selected proposal" , "info");
+
+	};
+	var onError = function(sender, data){
+		console.log("Error was produced when getSampleInfoByProposalId");
+	};
+
+	EXI.getDataAdapter({onSuccess: onSuccess, onError:onError}).mx.sample.getSampleInfoByProposalId();
+
+
+    var html = "";
+	dust.render("puckformview.template", 
+					{
+								specialCharacterInfoPanelId: this.specialCharacterInfoPanelId,
+								uniquenessInfoPanelId:this.uniquenessInfoPanelId
+					}, 
+					function(err, out) {
+                    	html = out;
+    				}
+	);
+	
 	this.panel = Ext.create('Ext.panel.Panel', {
 		autoScroll 	: true,
 		buttons : this.getToolBar(),
@@ -114,58 +145,49 @@ PuckFormView.prototype.getPanel = function() {
 							xtype : 'container',
 							margin : '5 0 2 5',
 							layout : 'hbox',
-							items : [
-										
-										
-								         {
-								        	 xtype : 'container',
-											margin : '12 0 2 0',
-											layout : 'hbox',
-											items : [ 
-							         				   {
-																xtype: 'requiredtextfield',
-																id : this.id + 'puck_name',
-																fieldLabel : 'Name',
-																name : 'name',
-																width : 250,
-																margin : '5 5 5 5',
-																labelWidth : 100,
-														},
-														this.capacityCombo.getPanel(),
-                                                        {
-																xtype: 'textfield',
-																id : this.id + 'puck_beamline',
-																fieldLabel : 'Beamline',
-																width : 250,
-                                                                disabled : true,
-																margin : '5 5 5 10',
-																labelWidth : 100
-														},
-                                                        {
-																xtype: 'textfield',
-																id : this.id + 'puck_sampleChangerLocation',
-																fieldLabel : '#Sample Changer',
-																width : 300,
-                                                                disabled : true,
-																margin : '5 5 5 5',
-																labelWidth : 150
-														},                                                       
-                                                        {
-																xtype: 'textfield',
-																id : this.id + 'puck_status',
-																fieldLabel : 'Status',
-																width : 250,
-                                                                disabled : true,
-																margin : '5 5 5 5',
-																labelWidth : 100
-														}
-													]
-								         },
-                                         // this.puckLayout.getPanel()
-							         ]
+							items : [																												        
+										{
+												xtype: 'requiredtextfield',
+												id : this.id + 'puck_name',
+												fieldLabel : 'Name',
+												name : 'name',
+												width : 250,
+												margin : '5 5 5 5',
+												labelWidth : 50,
+										},
+										this.capacityCombo.getPanel(),
+										{
+												xtype: 'textfield',
+												id : this.id + 'puck_beamline',
+												fieldLabel : 'Beamline',
+												width : 250,
+												disabled : true,
+												margin : '5 5 5 10',
+												labelWidth : 75
+										},
+										{
+												xtype: 'textfield',
+												id : this.id + 'puck_sampleChangerLocation',
+												fieldLabel : '#Sample Changer',
+												width : 300,
+												disabled : true,
+												margin : '5 5 5 5',
+												labelWidth :150
+										},                                                       
+										{
+												xtype: 'textfield',
+												id : this.id + 'puck_status',
+												fieldLabel : 'Status',
+												width : 250,
+												disabled : true,
+												margin : '5 5 5 5',
+												labelWidth : 50
+										}
+									]
+						
 		         },
 				 {
-					 html : "<div class='container-fluid'><span style='font-size: 12px;color: #666;'>Special characters are not allowed for the sample name field</span></div>"
+					 html : html
 				 }
 				 ,
 		         this.containerSpreadSheet.getPanel(),
@@ -229,8 +251,7 @@ PuckFormView.prototype.removePuck = function() {
 	this.panel.setLoading();
 	var onSuccess = function(sender, data){
 		_this.panel.setLoading(false);
-        location.href = "#/shipping/" + _this.shippingId + "/main";
-        // _this.onRemoved.notify(containerId);
+        location.href = "#/shipping/" + _this.shippingId + "/main";      
 	};
 	EXI.getDataAdapter({onSuccess: onSuccess}).proposal.shipping.removeContainerById(this.containerId,this.containerId,this.containerId );
 	
@@ -248,25 +269,83 @@ PuckFormView.prototype.returnToShipment = function(){
 	}
 }
 
+PuckFormView.prototype.displaySpecialCharacterWarning = function(message) {	
+	$("#" + this.specialCharacterInfoPanelId).notify(message, { position:"right" });
+	$("#" + this.specialCharacterInfoPanelId).fadeIn().fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
+};
+
+PuckFormView.prototype.displayUniquenessWarning = function(message) {	
+	$("#" + this.uniquenessInfoPanelId).notify(message, { position:"right" });
+	$("#" + this.uniquenessInfoPanelId).fadeIn().fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
+};
+
+/**
+* Check the uniqueness of proteinId + sampleName with the already created samples
+* If containerId is the same then protein + sampleName + containerId should match
+*
+* @method checkSampleNames
+* @param {Array} sampleNames Array with the sample names from table
+* @param {Array} proteinIds Array with the proteinIds from table
+*/
+PuckFormView.prototype.checkSampleNames = function(sampleNames, proteinIds, containerId) {	
+ 	//_.map(_this.proposalSamples, "BLSample_name")
+	 var conflicts = [];
+
+	  /** Sample from proposal 
+	 var proposalSampleNames = _.map(_this.proposalSamples, "");
+	 var proposalProteinIds = _.map(_this.proposalSamples, "Protein_proteinId");
+Container_containerId*/
+
+	 for(var i=0; i < sampleNames.length; i++){		
+		 var conflict = _.find(this.proposalSamples, {BLSample_name:  sampleNames[i], Protein_proteinId:  proteinIds[i] });
+
+		 if (conflict){
+			 /** Are the same samples, same container Id? */
+			 if (conflict.Container_containerId != containerId){			 
+			 	conflicts.push(sampleNames[i]);
+			 }
+		 }
+	 }
+	
+	 return conflicts;
+	
+};
+
 /**
 * Saves the container
 *
 * @method save
 * @param {Boolean} returnToShipment True if you want to return to shipment after the save
 */
-PuckFormView.prototype.save = function(returnToShipment) {
-	debugger
+PuckFormView.prototype.save = function(returnToShipment) {	
 	var _this = this;
 
+
 	var puck = this.containerSpreadSheet.getPuck();
+
+	
 	/** Check if all samples have name */
 	if (puck.sampleVOs && puck.sampleVOs.length > 0) {
 		var sampleNames = _.map(puck.sampleVOs,"name");
 		if(sampleNames.indexOf(null) >= 0 || sampleNames.indexOf("") >= 0) {
-			$.notify("There are samples without a Sample Name", "error");
+			_this.displaySpecialCharacterWarning("There are samples without a Sample Name");
 			return;
 		}
 	}
+
+	/** Check if protein + sample name is unique */
+	if (puck.sampleVOs && puck.sampleVOs.length > 0) {
+		var sampleNames = _.map(puck.sampleVOs,"name");
+		var proteinIds = _.map(puck.sampleVOs,"crystalVO.proteinVO.proteinId");
+		
+		var conflicts = _this.checkSampleNames(sampleNames, proteinIds, puck.containerId);
+		if (conflicts.length > 0){
+			_this.displayUniquenessWarning("Sample names are not unique for the proposal. Please change: " + conflicts);
+			return;
+		}
+	}
+
+
 	/** Updating general parameters **/
 	puck.code = Ext.getCmp(_this.id + 'puck_name').getValue();
 	puck.capacity = _this.capacityCombo.getSelectedCapacity();
@@ -274,11 +353,15 @@ PuckFormView.prototype.save = function(returnToShipment) {
 
 	// Check if sample names have special characters
 	var hasSpecialCharacter = false;
+	var specialCharacter = [];
+	var specialCharacterRow = [];
 	var format = /[ ~`!@#$%^&*()+\=\[\]{};':"\\|,.<>\/?]/;
 	for (var i = 0 ; i < puck.sampleVOs.length ; i++) {
 		if(format.test(puck.sampleVOs[i].name)) {
 			hasSpecialCharacter = true
-			break;
+			specialCharacter.push(puck.sampleVOs[i].name);
+			specialCharacterRow.push(i + 1);
+			
 		}
 	}
 
@@ -300,7 +383,8 @@ PuckFormView.prototype.save = function(returnToShipment) {
 		this.panel.setLoading("Saving Puck");
 		EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.shipping.saveContainer(this.containerId, this.containerId, this.containerId, puck);
 	} else {
-		$.notify("There are special characters in some of the sample names","error");
+		_this.displaySpecialCharacterWarning(specialCharacter +  " contains special characters. Rows:  #" + specialCharacterRow);				
+		
 	}
 };
 
