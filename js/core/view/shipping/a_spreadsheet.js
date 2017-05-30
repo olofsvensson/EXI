@@ -26,7 +26,7 @@ SpreadSheet.prototype.getPanel = function(){
 		items : [ 
 				  {
 						html 		: '<div  style="overflow: auto;overflow-y: hidden; border:1px solid gray;background-color:white;height:500px;width:' + (_this.width - 20) +'px"; id="' + this.id + '_samples"; ></div>',
-						margin 		: '20 0 20 10',
+						margin 		: '0 0 20 10',
 						height 		: this.height,
 						width 		: this.width,
 						autoScroll 	: true,
@@ -126,6 +126,7 @@ SpreadSheet.prototype.parseTableData = function() {
 	}
 	return curated;
 };
+
 
 SpreadSheet.prototype.load = function(data){
 	var _this = this;

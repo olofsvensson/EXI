@@ -96,7 +96,6 @@ XFEScanGrid.prototype.getColumns = function() {
 
                 record.data["xfeFluorescenceSpectrumId"] = record.data.xfeFluorescenceSpectrumId;
                 record.data["containerId"] = containerId;
-debugger
                 record.data["url"] = EXI.getDataAdapter().mx.xfescan.getXFEJpegByScanId(record.data.xfeFluorescenceSpectrumId);
                 dust.render("xfescangrid.template", record.data, function(err, out) {
                     html = out;
