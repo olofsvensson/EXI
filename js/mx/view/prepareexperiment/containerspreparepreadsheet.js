@@ -52,9 +52,7 @@ ContainerPrepareSpreadSheet.prototype.getPanel = function() {
                                 style: {
                                     background: '#444444',
                                 },
-                                handler : function(){
-                                    // EXI.getDataAdapter().proposal.dewar.updateSampleLocation(_.map(_this.containers,"containerId"), ["null"], [""]);
-
+                                handler : function(){                                   
                                     var onSuccess = function (sender,c) {
                                         _this.onUnloadAllButtonClicked.notify();
                                         _this.loadProcessingDewars(_this.sampleChangerWidget);
@@ -68,17 +66,7 @@ ContainerPrepareSpreadSheet.prototype.getPanel = function() {
         height  : this.height,
         width  : this.width,
         flex    : 0.5,
-        columns: [
-            // {
-            //     dataIndex: 'rowIndex',
-            //     sortable : false,
-            //     autoSizeColumn: true,
-            //     // other config you need..
-            //     renderer : function(value, metaData, record, rowIndex)
-            //     {
-            //         return rowIndex+1;
-            //     }
-            // },
+        columns: [          
             {
                 header: 'Shipment',
                 dataIndex: 'shippingName',
@@ -340,10 +328,11 @@ ContainerPrepareSpreadSheet.prototype.load = function(containers, sampleChangerW
                 containerType = "Spinepuck";
                 container.capacity = 10;
             }
+
             data.push({
                 shippingName : container.shippingName,
                 shippingId : container.shippingId,
-                parcelName : container.containerCode,
+                parcelName : container.dewarCode,
                 barCode : container.barCode,
                 containerCode : container.containerCode,
                 containerType : containerType,
