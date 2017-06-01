@@ -154,6 +154,12 @@ SpreadSheet.prototype.loadData = function (data) {
 }
 
 SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
+	if ((this.getData()[rowIndex][columnIndex] == null)&&(value == "")){
+		return;
+	}
+	if (this.getData()[rowIndex][columnIndex] == value){
+		return;
+	}
 	this.spreadSheet.setDataAtCell(rowIndex, columnIndex, value);
 }
 
