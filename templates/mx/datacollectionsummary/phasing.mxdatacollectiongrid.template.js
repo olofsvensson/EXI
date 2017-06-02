@@ -10,10 +10,10 @@
                                 <th  style='width:15px;'><abbr title="Phasing Step">PH</abbr></th>
                                 <th  style='width:15px;'><abbr title="Model Building Step">MO</abbr></th>
 
-                                <th style='width:20px;'><abbr title="DSIGMA_RESOLUTION"><span style='font-size:8px;'>DSIGMA<br />RESOLUCION</span></abbr></th>
-                                <th style='width:20px;'> <abbr title="CCALL_CCWEAK"><span style='font-size:8px;'>CCALL <br /> CCWEAK</span></abbr></th>
-                                <th style='width:20px;'><abbr title="OCCUPANCY_SITENUMBER"><span style='font-size:8px;'>OCCUPANCY <br />  SITENUMBER</span></abbr></th>                                
-                                 <th style='width:20px;'><abbr title="OCCUPANCY_SITENUMBER"><span style='font-size:8px;'>CONTRAST <br />  CYCLE</span></abbr></th>
+                                <th style='width:20px;'><abbr title="Anomalous signal vs resolution - from SHELXC">DSIGMA<br />RESOLUTION</span></abbr></th>
+                                <th style='width:20px;'> <abbr title="CCall vs CCweak - from SHELXD">CCALL <br /> CCWEAK</span></abbr></th>
+                                <th style='width:20px;'><abbr title="Site occupancy vs peak number - from SHELXE">OCCUPANCY <br />  SITENUMBER</span></abbr></th>                                
+                                <th style='width:20px;'><abbr title="Contrast between solvent and non-solvent regions per cycle - from SHELXE">CONTRAST <br />  CYCLE</span></abbr></th>
                                
                                
     
