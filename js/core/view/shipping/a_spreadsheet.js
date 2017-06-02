@@ -4,6 +4,7 @@ function SpreadSheet(args){
 	this.width = 500;
 	this.containerType = "OTHER";
 	
+	this.acronyms;
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -41,12 +42,10 @@ SpreadSheet.prototype.setLoading = function (bool) {
 }
 
 SpreadSheet.prototype.getAcronyms = function() {
-	var proteins = EXI.proposalManager.getProteins();
-	var acronyms = [];
-	for (var i = 0; i < proteins.length; i++) {
-		acronyms.push(proteins[i].acronym);
+	if (this.acronyms == null){		
+		this.acronyms = _.map(EXI.proposalManager.getProteins(), 'acronym').sort();;	
 	}
-	return acronyms;
+	return this.acronyms;
 };
 
 SpreadSheet.prototype.setContainerType = function(containerType) {
@@ -54,39 +53,20 @@ SpreadSheet.prototype.setContainerType = function(containerType) {
 };
 
 SpreadSheet.prototype.getHeaderWidth = function() {
-	var header = this.getHeader();
-	var text = [];
-	for (var i =0; i < header.length; i++){
-		text.push(header[i].column.with);
-	}
-	return text;
+	return _.map(this.getHeader(), 'column.width');
 };
 
 SpreadSheet.prototype.getHeaderId = function(containerType) {
-	var header = this.getHeader(containerType);
-	var text = [];
-	for (var i =0; i < header.length; i++){
-		text.push(header[i].id);
-	}
-	return text;
+	return _.map(this.getHeader(), 'id');
 };
 
 SpreadSheet.prototype.getHeaderText = function() {
-	var header = this.getHeader();
-	var text = [];
-	for (var i =0; i < header.length; i++){
-		text.push(header[i].text);
-	}
-	return text;
+	return _.map(this.getHeader(), 'text');
 };
 
 
 SpreadSheet.prototype.getColumns = function() {
-	var columns = [];
-	for (var i = 0; i < this.getHeader().length; i++) {
-		columns.push(this.getHeader()[i].column);
-	}
-	return columns;
+	return _.map(this.getHeader(), 'column');
 };
 
 /**
