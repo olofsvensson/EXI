@@ -95,11 +95,8 @@ ContainerSpreadSheet.prototype.load = function(puck){
 	  				if (this.lockAfterChange){							  					 
 						  return ;
 					}
-					_this.count = _this.count +1;
-					if (changes){
-						
-						console.log(_this.count + " row: " + changes[0][0] + " column: " + changes[0][1] + " previous: " + changes[0][2]+ " new: " + changes[0][3] );
-					}
+					
+					
                     $(".htInvalid").removeClass("htInvalid");
 					$(".edit-crystal-button").click(function(sender){
 								var row = sender.target.id.split("-")[2];
@@ -564,43 +561,33 @@ ContainerSpreadSheet.prototype.manageChange = function (change, source, directio
 	var rowIndex = change[0];
 	var prevValue = change[3];
 
-	//console.log("manageChange row: " + change[0] + " column: " + change[1] + " source:" + source );   
-    console.time('manageChange');
 	switch (change[1]) { //Column Index
 
 		/** If crystal form has changed */
 		case this.crystalFormIndex : {
-			console.time('crystalFormIndex');
-			console.time('parseCrystalFormColumn');
+		
 			var parsed = this.parseCrystalFormColumn(prevValue,rowIndex);
-			console.timeEnd('parseCrystalFormColumn'); 
+			
 			if (parsed.spaceGroup != undefined){
 				if (parsed.spaceGroup == "NEW"){
 					this.showEditForm(parsed, rowIndex);
-				} else {
-					console.time('this.isCrystalFormAvailable(');
-					
-					if (this.isCrystalFormAvailable(parsed,this.getData()[rowIndex][this.getColumnIndex("Protein Acronym")])){
-						console.time('1');
-						this.updateCrystalGroup(rowIndex,parsed);
-						console.timeEnd('1');
-					} else {
-						console.time('2');
-						this.resetCrystalGroup(rowIndex);
-						console.timeEnd('2');
+				} else {									
+					if (this.isCrystalFormAvailable(parsed,this.getData()[rowIndex][this.getColumnIndex("Protein Acronym")])){					
+						this.updateCrystalGroup(rowIndex,parsed);					
+					} else {						
+						this.resetCrystalGroup(rowIndex);						
 					}
-					console.timeEnd('this.isCrystalFormAvailable(');
+					
 				}
 			} else {
 				this.resetCrystalGroup(rowIndex);
 			}
-			console.timeEnd('crystalFormIndex');
+			
 			break;
 		}
 
 	    /** If acronym form has changed */
-		case this.getColumnIndex("Protein Acronym") : {
-			console.time('Protein Acronym');
+		case this.getColumnIndex("Protein Acronym") : {		
             if (prevValue == ""){
 				this.emptyRow(rowIndex);
             } else {
@@ -620,42 +607,32 @@ ContainerSpreadSheet.prototype.manageChange = function (change, source, directio
 				}
 				/**Manage the crystal form column */
                 var parsed = this.parseCrystalFormColumn(this.getData()[rowIndex][this.crystalFormIndex],rowIndex); // parseCrystalFormColumn(dataAtCrystalFormColumn,row)
-                if (!this.isCrystalFormAvailable(parsed,prevValue)){
-					console.time('isCrystalFormAvailable');
-					console.log('-> isCrystalFormAvailable');
+                if (!this.isCrystalFormAvailable(parsed,prevValue)){				
                     this.resetCrystalGroup(rowIndex);
 					var crystal = this.getCrystalByProtein(prevValue);
                     if (crystal){
                             this.updateCrystalGroup(rowIndex,crystal);
-					}
-                        
-                    
-					console.timeEnd('isCrystalFormAvailable');
-					console.log('->-> isCrystalFormAvailable');
+					}                 
                 }
-            }
-			console.timeEnd('Protein Acronym');
+            }			
 			break;
 		}
 
 		 /** If sample name form has changed */
-		case this.getColumnIndex("Sample Name") : {
-			console.time("Sample Name");
-            if (source == "autofill" && prevValue != ""){
+		case this.getColumnIndex("Sample Name") : {		
+            if (source == "autofill" && prevValue != ""){				
 				var autoincremented = this.autoIncrement(this.spreadSheet.getDataAtCell(rowIndex - direction, change[1]), direction);
 				if (autoincremented != "") {
 					this.setDataAtCell(rowIndex,change[1],autoincremented);
 				}
-            }
-			console.timeEnd("Sample Name");
+            }			
 			break;
 		}
 	}
 	if (change[1] != this.getColumnIndex("editCrystalForm")){
 		this.onModified.notify(change);
 	}
-	$(".htInvalid").removeClass("htInvalid");
-	 console.timeEnd('manageChange');
+	$(".htInvalid").removeClass("htInvalid");	
 };
 
 /**
@@ -665,18 +642,20 @@ ContainerSpreadSheet.prototype.manageChange = function (change, source, directio
 * @param {String} value The string to be incremented
 * @param {Integer} direction The direction on which the string is going to be incremented
 */
-ContainerSpreadSheet.prototype.autoIncrement = function (value, direction) {
-	var autoincremented = "";
+ContainerSpreadSheet.prototype.autoIncrement = function (value, direction) {	
 	var regex = /(\d+)/g;
-	var numbers = value.match(regex);
+	var numbers = value.match(regex);	
 	if (numbers) {
 		var lastNumber = numbers[numbers.length - 1];
 		/**Check if there are any other characters after the last number */
 		if (value.lastIndexOf(lastNumber) == value.length - lastNumber.length) {
-			autoincremented = value.substring(0,value.length - lastNumber.length) + (parseInt(lastNumber) + direction);
+			value = value.substring(0,value.length - lastNumber.length) + (parseInt(lastNumber) + direction);
 		}
 	}
-	return autoincremented;
+	else{
+		value = value + "1";
+	}
+	return value;
 }
 
 /**
@@ -686,10 +665,8 @@ ContainerSpreadSheet.prototype.autoIncrement = function (value, direction) {
 * @param {Object} parsedCrystalForm A parsed crystal form object
 * @param {String} proteinAcronym The proteinAcronym
 */
-ContainerSpreadSheet.prototype.isCrystalFormAvailable = function (parsedCrystalForm, proteinAcronym) {
-
-	var crystalsBySpaceGroupAndAcronym = _.filter(_.filter(EXI.proposalManager.getCrystals(),{"spaceGroup":parsedCrystalForm.spaceGroup}),function(o){return o.proteinVO.acronym == proteinAcronym})
-	
+ContainerSpreadSheet.prototype.isCrystalFormAvailable = function (parsedCrystalForm, proteinAcronym) { 
+	var crystalsBySpaceGroupAndAcronym = _.filter(EXI.proposalManager.getCrystals(),function(o){return (o.proteinVO.acronym == proteinAcronym) && (o.spaceGroup == parsedCrystalForm.spaceGroup)});
 	if (crystalsBySpaceGroupAndAcronym.length > 0) {
         for (var i = 0 ; i < crystalsBySpaceGroupAndAcronym.length ; i++) {
             var crystal = crystalsBySpaceGroupAndAcronym[i];
