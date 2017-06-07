@@ -280,7 +280,7 @@ PuckFormView.prototype.displayUniquenessWarning = function(message) {
 };
 
 /**
-* Check the uniqueness of proteinId + sampleName with the already created samples
+* Check the uniqueness of proteinId + sampleName with the already created samples or within the shipment
 * If containerId is the same then protein + sampleName + containerId should match
 *
 * @method checkSampleNames
@@ -288,17 +288,24 @@ PuckFormView.prototype.displayUniquenessWarning = function(message) {
 * @param {Array} proteinIds Array with the proteinIds from table
 */
 PuckFormView.prototype.checkSampleNames = function(sampleNames, proteinIds, containerId) {	
- 	//_.map(_this.proposalSamples, "BLSample_name")
 	 var conflicts = [];
 
-	  /** Sample from proposal 
-	 var proposalSampleNames = _.map(_this.proposalSamples, "");
-	 var proposalProteinIds = _.map(_this.proposalSamples, "Protein_proteinId");
-Container_containerId*/
+	 /** Add a conflict if two samples have got the same name and the same proteinId within the shipment */
+	 var samples = [];
+	 for(var i=0; i < sampleNames.length; i++){		
+		 samples.push({name : sampleNames[i], proteinId: proteinIds[i]});
+	 }
 
 	 for(var i=0; i < sampleNames.length; i++){		
+		var sameSampleName = (_.filter(samples, { 'name': samples[i].name, 'proteinId': samples[i].proteinId }));
+		if (sameSampleName.length > 1){			
+			conflicts = conflicts.concat(sameSampleName[0].name);
+			break;
+		}
+	 }
+	 
+	 for(var i=0; i < sampleNames.length; i++){		
 		 var conflict = _.find(this.proposalSamples, {BLSample_name:  sampleNames[i], Protein_proteinId:  proteinIds[i] });
-
 		 if (conflict){
 			 /** Are the same samples, same container Id? */
 			 if (conflict.Container_containerId != containerId){			 
@@ -324,16 +331,20 @@ PuckFormView.prototype.save = function(returnToShipment) {
 	var puck = this.containerSpreadSheet.getPuck();
 
 	
-	/** Check if all samples have name */
+	/** Check if all samples have got a name */
 	if (puck.sampleVOs && puck.sampleVOs.length > 0) {
 		var sampleNames = _.map(puck.sampleVOs,"name");
-		if(sampleNames.indexOf(null) >= 0 || sampleNames.indexOf("") >= 0) {
-			_this.displaySpecialCharacterWarning("There are samples without a Sample Name");
-			return;
+		for (var i in sampleNames){
+			if ((sampleNames[i] == undefined) ||  (sampleNames[i] == '')){
+				_this.displaySpecialCharacterWarning("There are samples without a Sample Name");
+				return;
+			}
 		}
+		
 	}
 
-	/** Check if protein + sample name is unique */
+
+	/** Check if protein + sample name is unique for the proposal or within the shipment*/
 	if (puck.sampleVOs && puck.sampleVOs.length > 0) {
 		var sampleNames = _.map(puck.sampleVOs,"name");
 		var proteinIds = _.map(puck.sampleVOs,"crystalVO.proteinVO.proteinId");
