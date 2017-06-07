@@ -10,23 +10,23 @@
         </tr>
         
         <tr>
-        <td valign="top">Overall</td>
+        <td valign="top">Overall</td> 
         <td>
                 <div class="progress">
                         {@gte key=overall.completeness value=50}
                             {@gte key=overall.completeness value=90}                            
-                            <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.overall.completeness}" aria-valuemin="0" aria-valuemax="100" style="width:{.overall.completeness}%">{.overall.completeness}%</div>
+                            <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.overall.completeness}" aria-valuemin="0" aria-valuemax="100" style="width:{.overall.completeness}%">{@decimal key="overall.completeness" decimals=0}{/decimal}%</div>
                             {:else}
-                                <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.overall.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#f0ad4e;width:{.overall.completeness}%">{.overall.completeness}%</div>
+                                <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.overall.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#f0ad4e;width:{.overall.completeness}%">{@decimal key="overall.completeness" decimals=0}{/decimal}%</div>
                             {/gte}
                         {:else}    
-                            <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.overall.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#d9534f;width:{.overall.completeness}%">{.overall.completeness}%</div>
+                            <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.overall.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#d9534f;width:{.overall.completeness}%">{@decimal key="overall.completeness" decimals=0}{/decimal}%</div>
                         {/gte}
 
                     
                 </div>
         </td>
-        <td valign="top"  style='padding:0 15px 0 15px;'>{.overall.resolutionsLimitLow}-{.overall.resolutionsLimitHigh}</td>
+        <td valign="top"  style='padding:0 15px 0 15px;'>{@decimal key="overall.resolutionsLimitLow" decimals=1}{/decimal}-{@decimal key="overall.resolutionsLimitHigh" decimals=1}{/decimal}</td> 
         <td valign="top">{.overall.rMerge}</td>
         </tr>
 
@@ -37,19 +37,19 @@
 
                     {@gte key=innerShell.completeness value=50}
                         {@gte key=innerShell.completeness value=90}                            
-                            <div class="progress-bar progress-bar"  role="progressbar" aria-valuenow="{.innerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="width:{.innerShell.completeness}%">{.innerShell.completeness}%</div>
+                            <div class="progress-bar progress-bar"  role="progressbar" aria-valuenow="{.innerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="width:{.innerShell.completeness}%">{@decimal key="innerShell.completeness" decimals=0}{/decimal}%</div>
                         {:else}
-                            <div class="progress-bar progress-bar"  role="progressbar" aria-valuenow="{.innerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#f0ad4e;width:{.innerShell.completeness}%">{.innerShell.completeness}%</div>
+                            <div class="progress-bar progress-bar"  role="progressbar" aria-valuenow="{.innerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#f0ad4e;width:{.innerShell.completeness}%">{@decimal key="innerShell.completeness" decimals=0}{/decimal}%</div>
                         {/gte}
                     {:else}    
-                        <div class="progress-bar progress-bar"  role="progressbar" aria-valuenow="{.innerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#d9534f;width:{.innerShell.completeness}%">{.innerShell.completeness}%</div>
+                        <div class="progress-bar progress-bar"  role="progressbar" aria-valuenow="{.innerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#d9534f;width:{.innerShell.completeness}%">{@decimal key="innerShell.completeness" decimals=0}{/decimal}%</div>
                     {/gte}
 
 
                         
                     </div>
             </td>
-            <td valign="top" style='padding:0 15px 0 15px;'>{.innerShell.resolutionsLimitLow}-{.innerShell.resolutionsLimitHigh}</td>
+            <td valign="top" style='padding:0 15px 0 15px;'>{@decimal key="innerShell.resolutionsLimitLow" decimals=1}{/decimal}-{@decimal key="innerShell.resolutionsLimitHigh" decimals=1}{/decimal}</td>
             <td valign="top">{.innerShell.rMerge}</td>
         </tr> 
         <tr>
@@ -59,19 +59,19 @@
 
                      {@gte key=outerShell.completeness value=50}
                         {@gte key=outerShell.completeness value=90}                            
-                        <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.outerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="width:{.outerShell.completeness}%">{.outerShell.completeness}%</div>
+                        <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.outerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="width:{.outerShell.completeness}%">{@decimal key="outerShell.completeness" decimals=0}{/decimal}%</div>
                         {:else}
-                            <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.outerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#f0ad4e;width:{.outerShell.completeness}%">{.outerShell.completeness}%</div>
+                            <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.outerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#f0ad4e;width:{.outerShell.completeness}%">{@decimal key="outerShell.completeness" decimals=0}{/decimal}%</div>
                         {/gte}
                     {:else}    
-                        <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.outerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#d9534f;width:{.outerShell.completeness}%">{.outerShell.completeness}%</div>
+                        <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.outerShell.completeness}" aria-valuemin="0" aria-valuemax="100" style="background-color:#d9534f;width:{.outerShell.completeness}%">{@decimal key="outerShell.completeness" decimals=0}{/decimal}%</div>
                     {/gte}
 
 
                         
                     </div>
             </td>
-            <td valign="top" style='padding:0 15px 0 15px;'>{.outerShell.resolutionsLimitLow}-{.outerShell.resolutionsLimitHigh}</td>
+             <td valign="top" style='padding:0 15px 0 15px;'>{@decimal key="outerShell.resolutionsLimitLow" decimals=2}{/decimal}-{@decimal key="outerShell.resolutionsLimitHigh" decimals=2}{/decimal}</td>
             <td valign="top">{.outerShell.rMerge}</td>
         </tr>
         
