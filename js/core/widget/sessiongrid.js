@@ -353,6 +353,20 @@ SessionGrid.prototype.getPanel = function() {
                                         return record.data.BLSession_endDate;
                 }
 		   },
+
+           
+
+            {
+			    text                : 'A-form',
+			    dataIndex           : 'comments',
+                hidden              : false,
+                flex                : 0.5,
+                renderer            : function(grid, a, record){    
+                                        if (record.data.expSessionPk){
+                                            return '<a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk='+ record.data.expSessionPk +'" class="btn btn-xs"><span class="glyphicon glyphicon-list-alt"></span></a>';
+                                        }
+                }
+		    },
            {
 			    text                : 'Comments',
 			    dataIndex           : 'comments',
@@ -363,7 +377,7 @@ SessionGrid.prototype.getPanel = function() {
                                             return '<div style="width:50px; wordWrap: break-word;"><a class="btn btn-xs"><span id="' + record.data.sessionId + '-edit-comments" class="glyphicon glyphicon-edit session-comment-edit"></span></a><span id="comments_' + record.data.sessionId + '"> ' + record.data.comments + '</span></div>';
                                         }
                 }
-		    },
+		    }
            ], 
       	   viewConfig : {
                 stripeRows : true,
