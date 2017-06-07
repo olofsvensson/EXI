@@ -34,7 +34,7 @@ CommentEditForm.prototype.show = function(){
 };
 
 
-CommentEditForm.prototype.load = function (targetId, comments) {
+CommentEditForm.prototype.load = function (targetId, comments) {    
     this.targetId = targetId;
     this.templateData.comments = comments;
 }
@@ -50,7 +50,7 @@ CommentEditForm.prototype.save = function(){
         EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollectionGroup.saveComments(this.targetId,comment);
     } else if (this.mode == "DATACOLLECTION") {
         EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollection.saveComments(this.targetId,comment);
-    } else if (this.mode == "SESSION") {
-        $.notify("Not implemented yet");
+    } else if (this.mode == "SESSION") {                
+        EXI.getDataAdapter({onSuccess : onSuccess}).proposal.session.saveComments(this.targetId,comment);
     }
 }
