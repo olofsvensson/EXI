@@ -2,6 +2,14 @@ function ContainerSpreadSheet(args){
 	this.id = BUI.id();
 	SpreadSheet.call(this, args);
 
+    /** Cache to store crystal indexed by protein acronym this.crystals["acroynm"] -> last crystal */
+    this.crystals = {};
+
+	/** Cache of proteins of the sessions */
+	this.proteins = {};
+	/** Array of arrays with the list of crystal form by protein acronym */
+    this.crystalFormList = {};
+
     this.renderCrystalFormColumn = false;
 
     if (args != null) {
@@ -18,6 +26,7 @@ function ContainerSpreadSheet(args){
 	
 	this.onModified = new Event(this);
 
+	this.count = 0;
 }
 
 ContainerSpreadSheet.prototype.getPanel = SpreadSheet.prototype.getPanel;
@@ -82,12 +91,19 @@ ContainerSpreadSheet.prototype.load = function(puck){
 					lastChange = changes;
 				},
 				afterChange: function (changes, source) {
+					
+	  				if (this.lockAfterChange){							  					 
+						  return ;
+					}
+					
+					
                     $(".htInvalid").removeClass("htInvalid");
 					$(".edit-crystal-button").click(function(sender){
 								var row = sender.target.id.split("-")[2];
 								var crystal = _this.parseCrystalFormColumn(_this.getData()[row][_this.crystalFormIndex],row);
 								_this.showEditForm(crystal,row);
 							});
+							
 					if (source == "edit") {
 						if (changes) {
 							for (var i = 0 ; i < changes.length ; i++) {
@@ -99,6 +115,7 @@ ContainerSpreadSheet.prototype.load = function(puck){
 						}
 					} else if (source == "autofill") {
 						if (changes){
+							this.lockAfterChange = true;
 							/**Get the direction of the autofill and manage the change following that direction*/
 							var direction = Math.sign(changes[0][0] - _this.spreadSheet.getSelected()[0]);
 							if (direction == 1){
@@ -116,6 +133,7 @@ ContainerSpreadSheet.prototype.load = function(puck){
 									}
 								}
 							}
+							this.lockAfterChange = false;
 						}
 					}
 				},
@@ -317,6 +335,14 @@ ContainerSpreadSheet.prototype.getPuck = function() {
 ContainerSpreadSheet.prototype.setRenderCrystalFormColumn = function(bool) {
 	this.renderCrystalFormColumn = bool;
 };
+
+ContainerSpreadSheet.prototype.getProteinsByAcronym = function(acronym) {
+	if (this.proteins[acronym] == null){
+		this.proteins[acronym] = EXI.proposalManager.getProteinByAcronym(acronym);
+	}
+	return this.proteins[acronym];
+};
+
 /**
 * Returns an object containing the crystal information given the value at the crystal form column
 *
@@ -335,7 +361,8 @@ ContainerSpreadSheet.prototype.parseCrystalFormColumn = function (dataAtCrystalF
 					cellGamma	: null
 				};
 	if (dataAtCrystalFormColumn != "" && dataAtCrystalFormColumn != null){
-		var proteins = EXI.proposalManager.getProteinByAcronym(this.spreadSheet.getDataAtCell(row,this.getColumnIndex("Protein Acronym")));
+		
+		var proteins =this.getProteinsByAcronym(this.spreadSheet.getDataAtCell(row,this.getColumnIndex("Protein Acronym")));
 		if (proteins && proteins.length > 0) {
 			parsed.proteinVO = proteins[0];
 		}
@@ -458,29 +485,42 @@ ContainerSpreadSheet.prototype.showEditForm = function (crystal, row) {
 ContainerSpreadSheet.prototype.addEditCrystalFormButton = function (row, column) {
 	if (!column) {
 		column = this.getColumnIndex("editCrystalForm");
-	}
+	}	
 	var button = "<a id='edit-button-" + row + "' class='btn btn-xs edit-crystal-button'><span class='glyphicon glyphicon-edit'></span> Edit Crystal Form</a>";
-	this.setDataAtCell(row,column,button);
+	this.populateCrystalFormButton(row, column, button);
+	
+	
+};
+
+ContainerSpreadSheet.prototype.populateCrystalFormButton = function (row, column, html) {
+	if (column != -1){
+		this.setDataAtCell(row,column,html);
+	}
 };
 
 ContainerSpreadSheet.prototype.updateCrystalGroup = function (row, crystal) {
+    console.log("updateCrystalGroup");
     if (crystal) {
-        this.setDataAtCell(row,this.crystalFormIndex,this.getCrystalInfo(crystal));
-        // this.setDataAtCell(row,this.unitCellIndex,this.getUnitCellInfo(crystal));
-        this.setDataAtCell(row,this.spaceGroupIndex,crystal.spaceGroup);
-        // this.setDataAtCell(row,0,crystal.crystalId); //crystal Id column
+        this.setDataAtCell(row,this.crystalFormIndex,this.getCrystalInfo(crystal));        
+        this.setDataAtCell(row,this.spaceGroupIndex,crystal.spaceGroup);        
         this.addEditCrystalFormButton(row);
     } else {
         this.resetCrystalGroup(row);
     }
+	console.log("-->updateCrystalGroup");
 };
 
 ContainerSpreadSheet.prototype.resetCrystalGroup = function (row) {
+	console.log("resetCrystalGroup");
+	
 	this.setDataAtCell(row,this.crystalFormIndex,"");
 	// this.setDataAtCell(row,this.unitCellIndex,"");
 	this.setDataAtCell(row,this.spaceGroupIndex,"");
 	// this.setDataAtCell(row,0,"");
-	this.setDataAtCell(row,this.getColumnIndex("editCrystalForm"),"");
+	
+	this.populateCrystalFormButton(row,this.getColumnIndex("editCrystalForm"),"");
+	console.log("->resetCrystalGroup");
+	
 };
 
 ContainerSpreadSheet.prototype.disableAll = function () {
@@ -489,6 +529,26 @@ ContainerSpreadSheet.prototype.disableAll = function () {
 				});
 };
 
+ContainerSpreadSheet.prototype.getCrystalsByProteinId = function (proteinId){
+	if (this.crystals[proteinId] == null){
+		this.crystals[proteinId] = _.filter(EXI.proposalManager.getCrystals(),function(o) {return o.proteinVO.proteinId == proteinId;});
+	}
+	return this.crystals[proteinId];
+};
+
+ContainerSpreadSheet.prototype.getCrystalByProtein = function (acronym){
+	if (this.crystals[acronym] == null){
+		var proteins = EXI.proposalManager.getProteinByAcronym(acronym);
+		if (proteins && proteins.length > 0) {
+			var crystalsByProteinId = this.getCrystalsByProteinId(proteins[0].proteinId);
+			if (crystalsByProteinId && crystalsByProteinId.length > 0){
+				this.crystals[acronym] = _.maxBy(crystalsByProteinId,"crystalId");							
+			}
+		}
+	}
+
+	return this.crystals[acronym];
+};
 /**
 * Method executed when a change is made on the spreadSheet. It manages the process when the crystal form or the protein acronym are changed
 *
@@ -498,72 +558,81 @@ ContainerSpreadSheet.prototype.disableAll = function () {
 * @param {Integer} direction In case of the source being autofill, this parameter indicates the direction of it
 */
 ContainerSpreadSheet.prototype.manageChange = function (change, source, direction){
+	var rowIndex = change[0];
+	var prevValue = change[3];
+
 	switch (change[1]) { //Column Index
+
+		/** If crystal form has changed */
 		case this.crystalFormIndex : {
-			var parsed = this.parseCrystalFormColumn(change[3],change[0]); // parseCrystalFormColumn(dataAtCrystalFormColumn,row)
+		
+			var parsed = this.parseCrystalFormColumn(prevValue,rowIndex);
+			
 			if (parsed.spaceGroup != undefined){
 				if (parsed.spaceGroup == "NEW"){
-					this.showEditForm(parsed, change[0]);
-				} else {
-					if (this.isCrystalFormAvailable(parsed,this.getData()[change[0]][this.getColumnIndex("Protein Acronym")])){
-						this.updateCrystalGroup(change[0],parsed);
-					} else {
-						this.resetCrystalGroup(change[0]);
+					this.showEditForm(parsed, rowIndex);
+				} else {									
+					if (this.isCrystalFormAvailable(parsed,this.getData()[rowIndex][this.getColumnIndex("Protein Acronym")])){					
+						this.updateCrystalGroup(rowIndex,parsed);					
+					} else {						
+						this.resetCrystalGroup(rowIndex);						
 					}
+					
 				}
 			} else {
-				this.resetCrystalGroup(change[0]);
+				this.resetCrystalGroup(rowIndex);
 			}
+			
 			break;
 		}
-		case this.getColumnIndex("Protein Acronym") : {
-            if (change[3] == ""){
-				this.emptyRow(change[0]);
+
+	    /** If acronym form has changed */
+		case this.getColumnIndex("Protein Acronym") : {		
+            if (prevValue == ""){
+				this.emptyRow(rowIndex);
             } else {
-				/**Manage the sample name column */
-				if (change[0] > 0){
+				/**Manage the sample name column */				
+				if (rowIndex > 0){
 					var colIdx = this.getColumnIndex("Sample Name");
-					var currentName = this.spreadSheet.getDataAtCell(change[0],colIdx);
+					var currentName = this.spreadSheet.getDataAtCell(rowIndex,colIdx);
 					if (currentName == undefined || currentName == "") {
-						var nameSampleAbove = this.spreadSheet.getDataAtCell(change[0] - 1, colIdx);
+						var nameSampleAbove = this.spreadSheet.getDataAtCell(rowIndex - 1, colIdx);
 						if (nameSampleAbove != null && nameSampleAbove != "") {
 							var autoincremented = this.autoIncrement(nameSampleAbove, 1);
 							if (autoincremented != "") {
-								this.setDataAtCell(change[0],colIdx,autoincremented);
+								this.setDataAtCell(rowIndex,colIdx,autoincremented);
 							}
 						}
 					}
 				}
 				/**Manage the crystal form column */
-                var parsed = this.parseCrystalFormColumn(this.getData()[change[0]][this.crystalFormIndex],change[0]); // parseCrystalFormColumn(dataAtCrystalFormColumn,row)
-                if (!this.isCrystalFormAvailable(parsed,change[3])){
-                    this.resetCrystalGroup(change[0]);
-                    var proteins = EXI.proposalManager.getProteinByAcronym(change[3]);
-                    if (proteins && proteins.length > 0) {
-                        var crystalsByProteinId = _.filter(EXI.proposalManager.getCrystals(),function(o) {return o.proteinVO.proteinId == proteins[0].proteinId;});
-                        if (crystalsByProteinId && crystalsByProteinId.length > 0){
-                            var crystal = _.maxBy(crystalsByProteinId,"crystalId");
-                            this.updateCrystalGroup(change[0],crystal);
-                        }
-                    }
+                var parsed = this.parseCrystalFormColumn(this.getData()[rowIndex][this.crystalFormIndex],rowIndex); // parseCrystalFormColumn(dataAtCrystalFormColumn,row)
+                if (!this.isCrystalFormAvailable(parsed,prevValue)){				
+                    this.resetCrystalGroup(rowIndex);
+					var crystal = this.getCrystalByProtein(prevValue);
+                    if (crystal){
+                            this.updateCrystalGroup(rowIndex,crystal);
+					}                 
                 }
-            }
+            }			
 			break;
 		}
-		case this.getColumnIndex("Sample Name") : {
-            if (source == "autofill" && change[3] != ""){
-				var autoincremented = this.autoIncrement(this.spreadSheet.getDataAtCell(change[0] - direction, change[1]), direction);
+
+		 /** If sample name form has changed */
+		case this.getColumnIndex("Sample Name") : {		
+            if (source == "autofill" && prevValue != ""){				
+				var autoincremented = this.autoIncrement(this.spreadSheet.getDataAtCell(rowIndex - direction, change[1]), direction);
 				if (autoincremented != "") {
-					this.setDataAtCell(change[0],change[1],autoincremented);
+					this.setDataAtCell(rowIndex,change[1],autoincremented);
 				}
-            }
+            }			
 			break;
 		}
 	}
 	if (change[1] != this.getColumnIndex("editCrystalForm")){
 		this.onModified.notify(change);
 	}
-	$(".htInvalid").removeClass("htInvalid");
+	$(".htInvalid").removeClass("htInvalid");	
 };
 
 /**
@@ -573,18 +642,20 @@ ContainerSpreadSheet.prototype.manageChange = function (change, source, directio
 * @param {String} value The string to be incremented
 * @param {Integer} direction The direction on which the string is going to be incremented
 */
-ContainerSpreadSheet.prototype.autoIncrement = function (value, direction) {
-	var autoincremented = "";
+ContainerSpreadSheet.prototype.autoIncrement = function (value, direction) {	
 	var regex = /(\d+)/g;
-	var numbers = value.match(regex);
+	var numbers = value.match(regex);	
 	if (numbers) {
 		var lastNumber = numbers[numbers.length - 1];
 		/**Check if there are any other characters after the last number */
 		if (value.lastIndexOf(lastNumber) == value.length - lastNumber.length) {
-			autoincremented = value.substring(0,value.length - lastNumber.length) + (parseInt(lastNumber) + direction);
+			value = value.substring(0,value.length - lastNumber.length) + (parseInt(lastNumber) + direction);
 		}
 	}
-	return autoincremented;
+	else{
+		value = value + "1";
+	}
+	return value;
 }
 
 /**
@@ -594,12 +665,13 @@ ContainerSpreadSheet.prototype.autoIncrement = function (value, direction) {
 * @param {Object} parsedCrystalForm A parsed crystal form object
 * @param {String} proteinAcronym The proteinAcronym
 */
-ContainerSpreadSheet.prototype.isCrystalFormAvailable = function (parsedCrystalForm, proteinAcronym) {
-	var crystalsBySpaceGroupAndAcronym = _.filter(_.filter(EXI.proposalManager.getCrystals(),{"spaceGroup":parsedCrystalForm.spaceGroup}),function(o){return o.proteinVO.acronym == proteinAcronym})
+ContainerSpreadSheet.prototype.isCrystalFormAvailable = function (parsedCrystalForm, proteinAcronym) { 
+	var crystalsBySpaceGroupAndAcronym = _.filter(EXI.proposalManager.getCrystals(),function(o){return (o.proteinVO.acronym == proteinAcronym) && (o.spaceGroup == parsedCrystalForm.spaceGroup)});
 	if (crystalsBySpaceGroupAndAcronym.length > 0) {
         for (var i = 0 ; i < crystalsBySpaceGroupAndAcronym.length ; i++) {
             var crystal = crystalsBySpaceGroupAndAcronym[i];
             if (crystal.cellA == parsedCrystalForm.cellA && crystal.cellB == parsedCrystalForm.cellB && crystal.cellC == parsedCrystalForm.cellC && crystal.cellAlpha == parsedCrystalForm.cellAlpha && crystal.cellBeta == parsedCrystalForm.cellBeta && crystal.cellGamma == parsedCrystalForm.cellGamma) {
+				
                 return true;
             }
         }
@@ -614,17 +686,20 @@ ContainerSpreadSheet.prototype.isCrystalFormAvailable = function (parsedCrystalF
 * @param {Object} protein The protein the crystals must be linked to
 * @return {Array} Returns an array of strings with the crystal info to be loaded on the Crystal Form column
 */
-ContainerSpreadSheet.prototype.getCrystalInfoByProtein = function (protein) {
-	var src = [];
-	if (protein){
-		var crystalsByProteinId = _.filter(EXI.proposalManager.getCrystals(),function(o) {return o.proteinVO.proteinId == protein.proteinId;});
-		if (crystalsByProteinId) {
-			for (var i = 0 ; i < crystalsByProteinId.length ; i++){
-				var crystalInfo = this.getCrystalInfo(crystalsByProteinId[i]);
-				this.crystalInfoToIdMap[crystalInfo] = crystalsByProteinId[i].crystalId;
-				src.push(crystalInfo);
+ContainerSpreadSheet.prototype.getCrystalInfoByProtein = function (protein) {	
+	if (this.crystalFormList[protein.acronym] == null){
+		var src = [];
+		if (protein){
+			var crystalsByProteinId = this.getCrystalsByProteinId(protein.proteinId);
+			if (crystalsByProteinId) {
+				for (var i = 0 ; i < crystalsByProteinId.length ; i++){
+					var crystalInfo = this.getCrystalInfo(crystalsByProteinId[i]);
+					this.crystalInfoToIdMap[crystalInfo] = crystalsByProteinId[i].crystalId;
+					src.push(crystalInfo);
+				}
 			}
-		}
+		}		
+		this.crystalFormList[protein.acronym] = _.union(src,["NEW"]);
 	}
-	return _.union(src,["NEW"]);
+	return this.crystalFormList[protein.acronym];
 };
