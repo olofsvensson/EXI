@@ -469,10 +469,8 @@ GraphCanvas.prototype._startDragging = function(evt) {
 		this.nMouseOffsetY = p.y - parseInt(evt.target.getAttribute("dragy"));
 
 		if (this.isVertex(evt.target)) {
-			this.dragStartX = parseInt(this.draggingElement.getAttribute("dragx")) * this.getFormatter().getZoomScale()
-					+ parseFloat(DOM.select(this.id).getAttribute("dragx"));
-			this.dragStartY = parseInt(this.draggingElement.getAttribute("dragy")) * this.getFormatter().getZoomScale()
-					+ parseFloat(DOM.select(this.id).getAttribute("dragy"));
+			this.dragStartX = parseInt(this.draggingElement.getAttribute("dragx")) * this.getFormatter().getZoomScale() + parseFloat(DOM.select(this.id).getAttribute("dragx"));
+			this.dragStartY = parseInt(this.draggingElement.getAttribute("dragy")) * this.getFormatter().getZoomScale() + parseFloat(DOM.select(this.id).getAttribute("dragy"));
 		} else {
 			this.dragStartX = p.x - parseInt(this.draggingElement.getAttribute("dragx"));// + parseFloat(DOM.select(this.id).getAttribute("dragx"));
 			this.dragStartY = p.y - parseInt(this.draggingElement.getAttribute("dragy"));// + parseFloat(DOM.select(this.id).getAttribute("dragy"));
@@ -598,33 +596,6 @@ GraphCanvas.prototype.init = function() {
 		_this.mouseUp(event, _this);
 	}, false);
 };
-
-/*
- GraphCanvas.prototype.backgroungToSVG = function(){
- var _this = this;
- var canvas = document.createElement('canvas');
- canvas.setAttribute("id", "canvas");
- canvas.width = this.formatter.getWidth();
- canvas.height = this.formatter.getHeight();
-
- this._svg.parentNode.parentNode.appendChild(canvas);
- var ctx = document.getElementById('canvas').getContext('2d');
- var img = new Image();
-
- img.src = this.formatter.getBackgroundImage();
- ctx.drawImage(img,0,0 ,_this.formatter.getWidth(), _this.formatter.getHeight()); 
-
-
- img.onload  = function() { 
- canvas.parentNode.removeChild(canvas);
- }
-
- this.NodeSVGbackgroundImage.setAttribute("xlink:href", document.getElementById("canvas").toDataURL());
- this.NodeSVGbackgroundImage.removeAttribute("href");
-
- //
-
- };*/
 
 GraphCanvas.prototype.setBackgroundImage = function() {
 	if (this.NodeSVGbackgroundImage != null) {
@@ -1036,12 +1007,6 @@ GraphCanvas.prototype.selectNodes = function(idNodes) {
 		this.selectNode(idNodes[i]);
 	}
 
-	//	for ( var vertex in this.args.isVertexSelected) {
-	//		if (this.args.isVertexSelected[vertex] > index){
-	//			this.args.isVertexSelected[vertex] = this.args.isVertexSelected[vertex] - 1;
-	//		}
-	//	}
-
 };
 
 GraphCanvas.prototype.changeVertexFormat = function(nodeId, format) {
@@ -1105,10 +1070,6 @@ GraphCanvas.prototype.renderNode = function(nodeId) {
 	svgAttributesNode.dragy = Math.ceil(this.getLayout().getNodeById(nodeId).y * this.getFormatter().getHeight());
 	svgAttributesNode.transform = "translate(" + svgAttributesNode.dragx + "," + svgAttributesNode.dragy + ")";
 	svgAttributesNode.id = this.getSVGNodeId(nodeId);
-	/*svgAttributesNode["stroke-width"] = 3 ;
-	svgAttributesNode["stroke-opacity"] = 1 ;
-	svgAttributesNode["fill-opacity"] = svgAttributesNode["opacity"] ;
-	svgAttributesNode["opacity"] = 1 ;*/
 	this.circleDefaultRadius = this.getFormatter().getVertexById(nodeId).getDefault().getSize();
 	var nodeSVG;
 
@@ -1190,7 +1151,7 @@ GraphCanvas.prototype.removeSelectedNode = function() {
 	var selected = JSON.parse(JSON.stringify(this.getSelectedVertices()));
 	this.deselectNodes();
 	var sorted = selected.sort(function(a, b) {
-		return a - b
+		return a - b;
 	});
 	for ( var i = 0; i < sorted.length; i++) {
 		if (this.getDataset().getVertexById(sorted[i]) != null) {
@@ -1282,12 +1243,19 @@ GraphCanvas.prototype.renderEdge = function(edgeId) {
 	svgAttributesEdge.id = this.getSVGEdgeId(edge.getId()) + "_shadow";
 
 	var svgEdge = null;
+	var coordenateSourceX = null;
+	var coordenateSourceY = null;
+	var coordenateTargetX = null;
+	var coordenateTargetY = null;
+	var angle = null;
+	var point = null;
+	var offset = null;
 
 	if (this.getFormatter().getEdgeById(edgeId) instanceof LineEdgeGraphFormatter) {
-		var coordenateSourceX = svgNodeSource.getAttribute("dragx");
-		var coordenateSourceY = svgNodeSource.getAttribute("dragy");
-		var coordenateTargetX = svgNodeTarget.getAttribute("dragx");
-		var coordenateTargetY = svgNodeTarget.getAttribute("dragy");
+		coordenateSourceX = svgNodeSource.getAttribute("dragx");
+		coordenateSourceY = svgNodeSource.getAttribute("dragy");
+		coordenateTargetX = svgNodeTarget.getAttribute("dragx");
+		coordenateTargetY = svgNodeTarget.getAttribute("dragy");
 
 		SVG.drawLine(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, this.GraphEdgeGroup, svgAttributesEdge);
 		var attributesShadow = {};
@@ -1307,22 +1275,21 @@ GraphCanvas.prototype.renderEdge = function(edgeId) {
 		var d = this.calculateCoordenatesBezier(nodeSize, svgNodeSource.getAttribute("dragx"), svgNodeSource.getAttribute("dragy"));
 		svgEdge = SVG.drawPath(d, this.GraphEdgeGroup, svgAttributesEdge);
 	}
-	;
 
 	if ((this.getFormatter().getEdgeById(edgeId) instanceof DirectedLineEdgeGraphFormatter)
 			|| (this.getFormatter().getEdgeById(edgeId) instanceof CutDirectedLineEdgeGraphFormatter)
 			|| (this.getFormatter().getEdgeById(edgeId) instanceof DotDirectedLineEdgeGraphFormatter)
 			|| (this.getFormatter().getEdgeById(edgeId) instanceof OdotDirectedLineEdgeGraphFormatter)
 			|| (this.getFormatter().getEdgeById(edgeId) instanceof OdirectedLineEdgeGraphFormatter)) {
-		var coordenateSourceX = svgNodeSource.getAttribute("dragx");
-		var coordenateSourceY = svgNodeSource.getAttribute("dragy");
-		var coordenateTargetX = svgNodeTarget.getAttribute("dragx");
-		var coordenateTargetY = svgNodeTarget.getAttribute("dragy");
+		coordenateSourceX = svgNodeSource.getAttribute("dragx");
+		coordenateSourceY = svgNodeSource.getAttribute("dragy");
+		coordenateTargetX = svgNodeTarget.getAttribute("dragx");
+		coordenateTargetY = svgNodeTarget.getAttribute("dragy");
 
-		var offset = parseFloat(this.getFormatter().getVertexById(this.getDataset().getEdgeById(edgeId).getNodeTarget().getId()).getDefault()
+		offset = parseFloat(this.getFormatter().getVertexById(this.getDataset().getEdgeById(edgeId).getNodeTarget().getId()).getDefault()
 				.getSize()
 				* this.circleDefaultRadius);
-		var point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
+		point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
 		coordenateTargetX = point.x;
 		coordenateTargetY = point.y;
 		SVG.drawLine(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, this.GraphEdgeGroup, svgAttributesEdge);
@@ -1337,16 +1304,16 @@ GraphCanvas.prototype.renderEdge = function(edgeId) {
 
 	if (this.getFormatter().getEdgeById(edgeId) instanceof DirectedLineEdgeGraphFormatter
 			|| (this.getFormatter().getEdgeById(edgeId) instanceof OdirectedLineEdgeGraphFormatter)) {
-		var coordenateSourceX = svgNodeSource.getAttribute("dragx");
-		var coordenateSourceY = svgNodeSource.getAttribute("dragy");
-		var coordenateTargetX = svgNodeTarget.getAttribute("dragx");
-		var coordenateTargetY = svgNodeTarget.getAttribute("dragy");
+		coordenateSourceX = svgNodeSource.getAttribute("dragx");
+		coordenateSourceY = svgNodeSource.getAttribute("dragy");
+		coordenateTargetX = svgNodeTarget.getAttribute("dragx");
+		coordenateTargetY = svgNodeTarget.getAttribute("dragy");
 
-		var point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
+		point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
 		coordenateTargetX = point.x;
 		coordenateTargetY = point.y;
 
-		var angle = Geometry.toDegree(point.angle) + 90;
+		angle = Geometry.toDegree(point.angle) + 90;
 		this.arrowDefaultSize = this.getFormatter().getEdgeById(edgeId).getArrowSize(); //getDefault().getArrowSize();
 		var d = "-" + this.arrowDefaultSize + ",0 0,-" + parseFloat(this.arrowDefaultSize) * 2 + " " + this.arrowDefaultSize + ",0";
 
@@ -1365,19 +1332,18 @@ GraphCanvas.prototype.renderEdge = function(edgeId) {
 		var flechaSVGNode = SVG.drawPoligon(d, this.GraphEdgeGroup, attributes);//, ["transform", "rotate("+angle+"), translate(0,0)"]]);
 		flechaSVGNode.setAttribute("transform", " translate(" + coordenateTargetX + ", " + coordenateTargetY + "), rotate(" + angle + ")");
 	}
-	;
 
 	if (this.getFormatter().getEdgeById(edgeId) instanceof CutDirectedLineEdgeGraphFormatter) {
-		var coordenateSourceX = svgNodeSource.getAttribute("dragx");
-		var coordenateSourceY = svgNodeSource.getAttribute("dragy");
-		var coordenateTargetX = svgNodeTarget.getAttribute("dragx");
-		var coordenateTargetY = svgNodeTarget.getAttribute("dragy");
+		coordenateSourceX = svgNodeSource.getAttribute("dragx");
+		coordenateSourceY = svgNodeSource.getAttribute("dragy");
+		coordenateTargetX = svgNodeTarget.getAttribute("dragx");
+		coordenateTargetY = svgNodeTarget.getAttribute("dragy");
 
-		var point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
+		point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
 		coordenateTargetX = point.x;
 		coordenateTargetY = point.y;
 
-		var angle = Geometry.toDegree(point.angle) + 90;
+		angle = Geometry.toDegree(point.angle) + 90;
 
 		//this.arrowDefaultSize = 2; //getDefault().getArrowSize();
 		var d = "-4,0 4,0 4,-2 -4,-2";
@@ -1391,14 +1357,14 @@ GraphCanvas.prototype.renderEdge = function(edgeId) {
 
 	if ((this.getFormatter().getEdgeById(edgeId) instanceof DotDirectedLineEdgeGraphFormatter)
 			|| (this.getFormatter().getEdgeById(edgeId) instanceof OdotDirectedLineEdgeGraphFormatter)) {
-		var coordenateSourceX = svgNodeSource.getAttribute("dragx");
-		var coordenateSourceY = svgNodeSource.getAttribute("dragy");
-		var coordenateTargetX = svgNodeTarget.getAttribute("dragx");
-		var coordenateTargetY = svgNodeTarget.getAttribute("dragy");
-		var point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
+		coordenateSourceX = svgNodeSource.getAttribute("dragx");
+		coordenateSourceY = svgNodeSource.getAttribute("dragy");
+		coordenateTargetX = svgNodeTarget.getAttribute("dragx");
+		coordenateTargetY = svgNodeTarget.getAttribute("dragy");
+		point = this._calculateEdgePointerPosition(coordenateSourceX, coordenateSourceY, coordenateTargetX, coordenateTargetY, offset);
 		coordenateTargetX = point.x;
 		coordenateTargetY = point.y;
-		var angle = Geometry.toDegree(point.angle) + 90;
+		angle = Geometry.toDegree(point.angle) + 90;
 		//	this.arrowDefaultSize = this.formatter.getEdgeById(edgeId).getArrowSize(); //getDefault().getArrowSize();
 		var attributes = [];
 		if (this.getFormatter().getEdgeById(edgeId) instanceof OdotDirectedLineEdgeGraphFormatter) {
@@ -1412,8 +1378,7 @@ GraphCanvas.prototype.renderEdge = function(edgeId) {
 		}
 		var flechaSVGNode = SVG.drawCircle(0, 0, 4, this.GraphEdgeGroup, attributes);
 		flechaSVGNode.setAttribute("transform", " translate(" + coordenateTargetX + ", " + coordenateTargetY + "), rotate(" + angle + ")");
-	}
-	;
+	}	
 
 	var _this = this;
 	/** Events for the SVG edge **/
@@ -1491,13 +1456,6 @@ GraphCanvas.prototype.getLastSelectedNode = function() {
 	}
 	return node;
 };
-/*
- GraphCanvas.prototype.getNodeByNameAndIndex = function(node, index){
- var nodeId = this.getDataset().verticesIndex[node][index];
- var nodeItem = this.getDataset().getVertexById(nodeId);
- return nodeItem;
- };
- */
 
 GraphCanvas.prototype.setDataset = function(dataset) {
 	this.dataset = dataset;
@@ -1536,11 +1494,6 @@ GraphCanvas.prototype.removeVertex = function(vertexId) {
 GraphCanvas.prototype.addEdge = function(edgeName, nodeSourceId, nodeTargetId, args) {
 	this.getDataset().addEdge(edgeName, nodeSourceId, nodeTargetId, args);
 };
-/*
- GraphCanvas.prototype.removeEdge = function(edgeId){
- this.getDataset().getEdgeById(edgeId).remove();
- };
- */
 
 /** API FORMATTER **/
 GraphCanvas.prototype.getWidth = function() {
@@ -1555,10 +1508,6 @@ GraphCanvas.prototype.getBackgroundImage = function() {
 	return this.getFormatter().getBackgroundImage();
 };
 
-//GraphCanvas.prototype.setBackgroundImage = function(value){
-//	this.getFormatter().setBackgroundImage(value); 
-//};
-
 GraphCanvas.prototype.getBackgroundColor = function() {
 	return this.getFormatter().getBackgroundColor();
 };
@@ -1566,14 +1515,6 @@ GraphCanvas.prototype.getBackgroundColor = function() {
 GraphCanvas.prototype.setBackgroundColor = function() {
 	this.getFormatter().setBackgroundColor(value);
 };
-
-//GraphCanvas.prototype.setEdgeFill = function(edgeId, value){
-//	this.getFormatter().getEdgeById(edgeId).getDefault().setFill(value);
-//};
-//
-//GraphCanvas.prototype.getEdgeFill = function(edgeId){
-//	return this.getFormatter().getEdgeById(edgeId).getDefault().getFill();
-//};
 
 /** VERTICES FORMATTER **/
 GraphCanvas.prototype.setVertexSize = function(vertexId, value) {
