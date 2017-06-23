@@ -75,8 +75,7 @@ MxDataCollectionController.prototype.init = function() {
 			EXI.addMainPanel(mainView);
 			EXI.hideNavigationPanel();
 			EXI.setLoadingMainPanel(true);
-			var onSuccess = function(sender, data){
-				debugger
+			var onSuccess = function(sender, data){				
 				mainView.loadCollections(data);
 				EXI.setLoadingMainPanel(false);
 			};
