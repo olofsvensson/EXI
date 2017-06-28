@@ -120,7 +120,7 @@ UncollapsedDataCollectionGrid.prototype.displayResultAutoprocessingTab = functio
         });
         $(target).html(html);
 
-        _this.panel.doLayout();
+        //_this.panel.doLayout();
         $(".autoprocintegrationrow").addClass("clickable-row");
         $(".autoprocintegrationrow").click(function(sender) {
             
@@ -148,8 +148,7 @@ UncollapsedDataCollectionGrid.prototype.displayResultAutoprocessingTab = functio
                     }).show();
 
                     var onSucessFiles = function(sender, files){  
-                        var html = "";
-                       
+                        var html = "";                       
                          dust.render("files.collapsed.autoprocintegrationgrid.template", files[0], function(err, out) {
                                 html = html + out;
                          });
@@ -157,15 +156,15 @@ UncollapsedDataCollectionGrid.prototype.displayResultAutoprocessingTab = functio
                     };                 
 
                     EXI.getDataAdapter({onSuccess : onSucessFiles}).mx.autoproc.getAttachmentListByautoProcProgramsIdList([autoprocProgramId])
-                    return;
+                  
             }
 
             // Check if the click is not on the download button
-            if (_.indexOf(sender.target.classList,"glyphicon-download") < 0) {
+            /*if (_.indexOf(sender.target.classList,"glyphicon-download") < 0) {
                 var dataCollectionId = sender.currentTarget.id.split("-")[0];
                 var autoProcIntegrationId = sender.currentTarget.id.split("-")[1];
                 window.open('#/autoprocintegration/datacollection/' + dataCollectionId + '/autoprocIntegration/' + autoProcIntegrationId + '/main',"_blank");
-            }
+            }*/
             
              
 
