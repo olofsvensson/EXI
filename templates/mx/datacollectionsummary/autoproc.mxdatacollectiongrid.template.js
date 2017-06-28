@@ -1,9 +1,5 @@
-{#.onlineresults[0]}  
-    {@gte key=innerShell.rMerge value=10}     
-        <div style='color:gray;'>
-    {:else}
-        <div>
-     {/gte}
+{#.onlineresults[0]}      
+      <div>
             {>"completeness.autoproc.mxdatacollectiongrid.template"  /}
             <br />                    
             {>"unitcell.autoproc.mxdatacollectiongrid.template"  /}         
