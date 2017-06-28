@@ -373,9 +373,10 @@ SessionGrid.prototype.getPanel = function() {
                 hidden              : false,
                 flex                : 2,
                 renderer            : function(grid, a, record){    
-                                        if (record.data.comments){
-                                            return '<div style="width:50px; wordWrap: break-word;"><a class="btn btn-xs"><span id="' + record.data.sessionId + '-edit-comments" class="glyphicon glyphicon-edit session-comment-edit"></span></a><span id="comments_' + record.data.sessionId + '"> ' + record.data.comments + '</span></div>';
+                                        if (!record.data.comments){
+                                           record.data.comments = "";
                                         }
+                                        return '<div style="width:50px; wordWrap: break-word;"><a class="btn btn-xs"><span id="' + record.data.sessionId + '-edit-comments" class="glyphicon glyphicon-edit session-comment-edit"></span></a><span id="comments_' + record.data.sessionId + '"> ' + record.data.comments + '</span></div>';
                 }
 		    }
            ], 
