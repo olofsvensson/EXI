@@ -24,7 +24,7 @@
                   <th>Rmeas</th> 
                   <th>Rmerge</th>
                   <th>Rpim</th>
-                  <th>cc(1/2)</th>
+                  <th>cc(1/2)</th> 
                   <th>ccAno</th>
                   <th>sigAno</th>
                   <th>ISA</th>
@@ -42,21 +42,19 @@
                         <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" style='background-color:#ffffff;' class='autoprocintegrationrow'>
                     {/eq}
                 {:else}    
-                    <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" class='autoprocintegrationrow'>
+                    <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}"  class='autoprocintegrationrow'>
                 {/label}  
             {:else}
-                <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" style='background-color:#ffddcc;width:25px;' class='autoprocintegrationrow'>
+                <tr id="{.AutoProcIntegration_dataCollectionId}-{.AutoProcIntegration_autoProcIntegrationId}" style='background-color:#ffe6e6;width:25px;' class='autoprocintegrationrow'>
             {/lt}
                 <td >
                   {@eq key=v_datacollection_summary_phasing_anomalous type="boolean" value="true"}
                         <kbd style="FONT-FAMILY:helvetica, arial, verdana, sans-serif;background-color:#337ab7">ANOM</kbd>
+                        <BR />
                   {:else}                        
                   {/eq}
-
-                  {@eq key=v_datacollection_processingStatus  type="boolean"  value="false"}
-                             <kbd style="FONT-FAMILY:helvetica, arial, verdana, sans-serif;background-color:RED">FAILED</kbd>
-                 {/eq}
-               
+                 
+                
                
                
                 {?label}
@@ -70,7 +68,18 @@
                {/label}
                </td>
 
-               <td >{.v_datacollection_processingPrograms}</td>
+               <td >
+                        <a href='#/autoprocintegration/datacollection/{.AutoProcIntegration_dataCollectionId}/autoprocIntegration/{.AutoProcIntegration_autoProcIntegrationId}/main' target='_blank'> {.v_datacollection_processingPrograms}</a>
+                        <br />
+                          {?v_datacollection_processingStatus}
+                            {@eq key=v_datacollection_processingStatus  value="FAILED"}
+                                        <kbd style="FONT-FAMILY:helvetica, arial, verdana, sans-serif;background-color:RED">{.v_datacollection_processingStatus}</kbd>
+                            {:else}    
+                                        <kbd style="FONT-FAMILY:helvetica, arial, verdana, sans-serif;background-color:gray">{.v_datacollection_processingStatus}</kbd>
+                            {/eq}
+                        {/v_datacollection_processingStatus}  
+               
+               </td>
                <td >{.v_datacollection_summary_phasing_autoproc_space_group}</td>
               
                <td >{@decimal key="v_datacollection_summary_phasing_cell_a" decimals=1}{/decimal}</td>
@@ -148,7 +157,11 @@
                     <span class='outershell'>{.outerShell.sigAno}</span>    
                </td>
                 <td  >{.isa}</td>
-               <td ><a href='{.downloadFilesUrl}' ><span style='font-size: 1.5em;' class="glyphicon glyphicon-download " ></span></a></td>
+               <td >
+                        {?downloadFilesUrl}
+                            <a href='{.downloadFilesUrl}' ><span style='font-size: 1.5em;' class="glyphicon glyphicon-download " ></span></a>
+                        {/downloadFilesUrl}
+                </td>
 
                 <td>
                         <button type="button" class="btn btn-sm" data-toggle="modal"><span  id="openfiles_{.v_datacollection_summary_phasing_autoProcProgramId}" class="glyphicon glyphicon-folder-close" aria-hidden="true"></span></button>
