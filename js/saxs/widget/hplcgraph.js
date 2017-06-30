@@ -284,14 +284,14 @@ HPLCGraph.prototype.loadData = function(data,experimentId) {
 				id : 'main_field_start',
 				fieldLabel : 'Range from',
 				width : 200,
-				labelWidth : 100,
+				labelWidth :60,
 				value : 0,
 				minValue : 0 }, {
 				xtype : 'numberfield',
 				id : 'main_field_end',
 				fieldLabel : 'to',
-				width : 130,
-				labelWidth : 30,
+				width : 140,
+				labelWidth : 20,
 				value : 0,
 				minValue : 0 }, {
 				xtype : 'button',
