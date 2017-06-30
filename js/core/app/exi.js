@@ -77,17 +77,24 @@ function Exi(args) {
 		authenticationManager.onSuccess.attach(function(sender, data){
             
 			/** This user has been authenticated **/           
+			
 			_this.credentialManager.addCredential(data.user, data.roles, data.token, args.site, args.exiUrl, args.properties);
 			_this.authenticationForm.window.close();			
 			var credential = EXI.credentialManager.getCredentialByUserName(data.user);
 			
-			if (credential.isManager()||credential.isLocalContact()){
-				location.hash = "/welcome/manager/" + data.user + "/main";
+			if (!_this.authenticationForm.isRedirected){
+				if (credential.isManager()||credential.isLocalContact()){
+					location.hash = "/welcome/manager/" + data.user + "/main";
+				}
+				else{
+					location.hash = "/welcome/user/" + data.user + "/main";        
+				}
 			}
 			else{
-				location.hash = "/welcome/user/" + data.user + "/main";        
+				
+				EXI.credentialManager.setActiveProposal(data.user, "XXXX");
+				location.reload();
 			}
-			
             
 			/** Authenticating EXI in the offline system**/            
 			_this.getDataAdapter().exi.offline.authenticate();
@@ -183,14 +190,22 @@ Exi.prototype.loadSelected = function(selected) {
  * @param clearTimers if timers should be removed
  */
 Exi.prototype.addMainPanel = function(mainView) {
-	if (!this.keepTabs){
-		Ext.getCmp('main_panel').removeAll();
+	debugger
+	if (EXI.credentialManager.getConnections().length > 0){
+		if (!this.keepTabs){
+			Ext.getCmp('main_panel').removeAll();
+		}
+		Ext.getCmp('main_panel').add(mainView.getPanel());
+		Ext.getCmp('main_panel').setActiveTab(Ext.getCmp('main_panel').items.length - 1);
+		
+		this.clearTimers();
 	}
-	Ext.getCmp('main_panel').add(mainView.getPanel());
-	Ext.getCmp('main_panel').setActiveTab(Ext.getCmp('main_panel').items.length - 1);
-    
-  
-    this.clearTimers();
+	else{
+		
+		this.authenticationForm.isRedirected = true;
+		this.authenticationForm.setRedirection(location.hash);
+		this.authenticationForm.show();
+	}
     
 };
 

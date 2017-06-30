@@ -2,8 +2,23 @@ function AuthenticationForm(){
     this.singleSite =false;
     this.siteURL = null;
     this.icon = null;
+    this.__isRedirection = null;
+    this.isRedirected = false;
 	this.onAuthenticate = new Event(this);
 }
+
+AuthenticationForm.prototype.setRedirection = function(url){
+    this.isRedirected = true;
+    this.__isRedirection = url;
+};
+
+AuthenticationForm.prototype.getRedirection = function(url){
+    var url = this.__isRedirection;
+    this.isRedirected = false;
+    this.__isRedirection = null;
+    return url;
+};
+
 AuthenticationForm.prototype.show = function(){
 	this.window = Ext.create('Ext.window.Window', {
 	    title: 'Login',

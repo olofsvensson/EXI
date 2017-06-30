@@ -22,7 +22,7 @@ MxDataCollectionController.prototype.notFound = ExiGenericController.prototype.n
 MxDataCollectionController.prototype.init = function() {
 	var _this = this;
 	var listView;	
-
+    
 	Path.map("#/mx/datacollection/protein_acronym/:acronmys/main").to(function() {
 		var mainView = new DataCollectionMxMainView();
 		EXI.addMainPanel(mainView);
@@ -70,7 +70,7 @@ MxDataCollectionController.prototype.init = function() {
 	}).enter(this.setPageBackground);
 	
     
-    Path.map("#/mx/datacollection/datacollectionid/:datacollectionid/main").to(function() {
+    Path.map("#/mx/datacollection/datacollectionid/:datacollectionid/main").to(function() {		
 			var mainView = new DataCollectionMxMainView();
 			EXI.addMainPanel(mainView);
 			EXI.hideNavigationPanel();
