@@ -43,7 +43,7 @@ function AutoProcIntegrationGrid(args) {
 }
 
 AutoProcIntegrationGrid.prototype.parseData = function(data) {
-    
+    debugger
      /** Adding stats */
     for(var i = 0; i < data.length; i++){
          try{             
@@ -63,7 +63,7 @@ AutoProcIntegrationGrid.prototype.parseData = function(data) {
     
     var anomalous = _.filter(data, function(o) { return o.v_datacollection_summary_phasing_anomalous; });
     var nonanomalous = _.filter(data, function(o) { return o.v_datacollection_summary_phasing_anomalous == false; });
-    var nonfinished = _.filter(data, function(o) { return o.v_datacollection_summary_phasing_anomalous == null; });
+    var nonfinished = _.filter(data, function(o) { return ((o.v_datacollection_summary_phasing_anomalous == null) || (o.v_datacollection_processingStatus != "FAILED")); });
 
     var failed = _.filter(data, function(o) { return o.v_datacollection_processingStatus == "FAILED"; });
     /**Set non anomalous first */
