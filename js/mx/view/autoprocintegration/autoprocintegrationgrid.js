@@ -42,9 +42,9 @@ function AutoProcIntegrationGrid(args) {
 	this.onSelected = new Event(this);
 }
 
-AutoProcIntegrationGrid.prototype.parseData = function(data) {
-    debugger
+AutoProcIntegrationGrid.prototype.parseData = function(data) {    
      /** Adding stats */
+     
     for(var i = 0; i < data.length; i++){
          try{             
             data[i].statistics = this.getStatistics(data[i]);
@@ -55,23 +55,22 @@ AutoProcIntegrationGrid.prototype.parseData = function(data) {
             }
                                              
          }
-         catch(e){
-             
+         catch(e){             
              console.log(e);
          }  
     }
     
-    var anomalous = _.filter(data, function(o) { return o.v_datacollection_summary_phasing_anomalous; });
-    var nonanomalous = _.filter(data, function(o) { return o.v_datacollection_summary_phasing_anomalous == false; });
-    var nonfinished = _.filter(data, function(o) { return ((o.v_datacollection_summary_phasing_anomalous == null) || (o.v_datacollection_processingStatus != "FAILED")); });
-
+    var anomalous = _.filter(data, function(o) { return (o.v_datacollection_summary_phasing_anomalous && o.v_datacollection_processingStatus == "SUCCESS")});
+    var nonanomalous = _.filter(data, function(o) { return (o.v_datacollection_summary_phasing_anomalous == false && o.v_datacollection_processingStatus == "SUCCESS")});
+    var running = _.filter(data, function(o) { return o.v_datacollection_processingStatus == "RUNNING";});
     var failed = _.filter(data, function(o) { return o.v_datacollection_processingStatus == "FAILED"; });
+
     /**Set non anomalous first */
     anomalousdata = new AutoprocessingRanker().rank(anomalous, "v_datacollection_summary_phasing_autoproc_space_group");    
     nonanomalousdata = new AutoprocessingRanker().rank(nonanomalous, "v_datacollection_summary_phasing_autoproc_space_group");    
 
     // https://github.com/ispyb/EXI/issues/204    
-    return _.concat(nonanomalousdata, anomalousdata, nonfinished,failed);
+    return _.concat(nonanomalousdata, anomalousdata, running,failed);
     
 };
 
