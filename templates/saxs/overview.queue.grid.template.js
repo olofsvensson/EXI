@@ -76,6 +76,7 @@
                             <b>{.Macromolecule_acronym} </b>                                    
                             <br /> {@decimal key="Specimen_concentration" decimals=3 /} <span style='font-size:9px;color:gray'>  mg/ml</span>
                             <br /> {.Run_exposureTemperature} C 
+                             <br />{.Measurement_volumeToLoad} &#181;l
                         {:else}
                             {.Buffer_acronym}
                         {/.Macromolecule_macromoleculeId}

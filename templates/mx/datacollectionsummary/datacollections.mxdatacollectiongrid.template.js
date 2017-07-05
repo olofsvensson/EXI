@@ -35,7 +35,7 @@
                     <td ><span class="badge" style='background-color:#337ab7;'>{.numberOfImages}</span></td>
                     <td >{.exposureTime} s</td>
                     <td >{@decimal key="resolution" decimals=1}{/decimal} &#8491; ({@decimal key="resolutionAtCorner" decimals=1}{/decimal} &#8491;)</td>
-                    <td > {@decimal key="wavelength" decimals=1}{/decimal} &#8491;</td>
+                    <td > {@decimal key="wavelength" decimals=3}{/decimal} &#8491;</td>
                     <td>{@decimal key="transmission" decimals=2 intIfPossible="true" /}%</td>
                     <td>
                         <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#myModal{.dataCollectionId}"><span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span></button>

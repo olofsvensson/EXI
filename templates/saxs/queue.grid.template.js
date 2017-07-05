@@ -118,6 +118,8 @@
                                             <tr><td><b>{.macromoleculeAcronym}</b></td></tr>
                                             <tr><td>{.concentration} <span style='font-size:9px;color:gray'>  mg/ml</span></td></tr>
                                             <tr><td>{.expTemp} C</td></tr>
+                                            
+                                            
                                         </tbody>
                                     </table>
                                 </div> 
