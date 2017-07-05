@@ -2,8 +2,10 @@ function AuthenticationForm(){
     this.singleSite =false;
     this.siteURL = null;
     this.icon = null;
+   
 	this.onAuthenticate = new Event(this);
 }
+
 AuthenticationForm.prototype.show = function(){
 	this.window = Ext.create('Ext.window.Window', {
 	    title: 'Login',
@@ -100,27 +102,27 @@ AuthenticationForm.prototype.getIconForm = function(){
 };
 
 AuthenticationForm.prototype.authenticate = function(form){
-            var _this = this;
-            var exiUrl;
-            var properties = null;
-            
-            if (!this.singleSite){
-                this.siteURL = form.getFieldValues().site;
-            }
-            
-            for (var i =0; i< ExtISPyB.sites.length; i++){
-                if (ExtISPyB.sites[i].url == this.siteURL){
-                    properties = ExtISPyB.sites[i];
-                }	        		
-            }           
-               
-            this.onAuthenticate.notify({
-                user : form.getFieldValues().user, 
-                password : form.getFieldValues().password, 
-                site : this.siteURL,
-                exiUrl : properties.exiUrl,
-                properties : properties
-            });
+    var _this = this;
+    var exiUrl;
+    var properties = null;
+    
+    if (!this.singleSite){
+        this.siteURL = form.getFieldValues().site;
+    }
+    
+    for (var i =0; i< ExtISPyB.sites.length; i++){
+        if (ExtISPyB.sites[i].url == this.siteURL){
+            properties = ExtISPyB.sites[i];
+        }	        		
+    }           
+        
+    this.onAuthenticate.notify({
+        user : form.getFieldValues().user, 
+        password : form.getFieldValues().password, 
+        site : this.siteURL,
+        exiUrl : properties.exiUrl,
+        properties : properties
+    });
 };
 
 AuthenticationForm.prototype.getPanel = function(){

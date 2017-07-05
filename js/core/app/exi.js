@@ -69,51 +69,59 @@ function Exi(args) {
 		_this.mainMenu.populateCredentialsMenu();
 	});
 	
+
+
 	/** AUTHENTICATION FORM **/
 	this.authenticationForm = new AuthenticationForm();
-	this.authenticationForm.onAuthenticate.attach(function(sender, args){
-		var authenticationManager = new AuthenticationManager();
-        
-		authenticationManager.onSuccess.attach(function(sender, data){
-            
-			/** This user has been authenticated **/           
-			_this.credentialManager.addCredential(data.user, data.roles, data.token, args.site, args.exiUrl, args.properties);
-			_this.authenticationForm.window.close();			
-			var credential = EXI.credentialManager.getCredentialByUserName(data.user);
-			
-			if (credential.isManager()||credential.isLocalContact()){
-				location.hash = "/welcome/manager/" + data.user + "/main";
-			}
-			else{
-				location.hash = "/welcome/user/" + data.user + "/main";        
-			}
-			
-            
-			/** Authenticating EXI in the offline system**/            
-			_this.getDataAdapter().exi.offline.authenticate();
-			
-		});
-		authenticationManager.onError.attach(function(sender, data){
-			alert("error");
-		});
-		authenticationManager.login(args.user, args.password, args.site);
+	this.authenticationForm.onAuthenticate.attach(function(sender, args){						
+		 _this.authenticate(args.user, args.password, args.site, args.exiUrl, args.properties, _this.openWelcomePage);				
+		 
 	});
 	
 	this.onAfterRender = new Event(this);
 }
 
+/**
+ * This method will authenticate user/password with site
+ */
+Exi.prototype.authenticate = function(user, password, site, exiURL, properties, doAction) {
+	var _this = this;
+	var authenticationManager = new AuthenticationManager();
+        
+	authenticationManager.onSuccess.attach(function(sender, data){		
+		_this.credentialManager.addCredential(data.user, data.roles, data.token, site, exiURL, properties);			
+	    doAction(user);									
+	});
+	authenticationManager.onError.attach(function(sender, data){
+		alert("error");
+	});
+	authenticationManager.login(user, password, site);
+};
+
+Exi.prototype.openWelcomePage = function(user) {
+	debugger
+	EXI.authenticationForm.window.close();
+	var credential = EXI.credentialManager.getCredentialByUserName(user);
+				
+	if (credential.isManager()||credential.isLocalContact()){
+		location.hash = "/welcome/manager/" + user + "/main";
+	}
+	else{
+		location.hash = "/welcome/user/" + user + "/main";        
+	}
+};
+
 
 Exi.prototype.addTimer = function(timer) {
     this.timers.push(timer);
-    console.log(this.timers);
+    
 };
 
 Exi.prototype.clearTimers = function() {
     for (var i = 0; i < this.timers.length; i++) {
         clearTimeout(this.timers[i]);        
     }   
-    this.timers = [];
-    console.log(this.timers);
+    this.timers = [];    
 }
 /**
  * This method append to args the values of the active connection: url, token and proposal
@@ -188,9 +196,9 @@ Exi.prototype.addMainPanel = function(mainView) {
 	}
 	Ext.getCmp('main_panel').add(mainView.getPanel());
 	Ext.getCmp('main_panel').setActiveTab(Ext.getCmp('main_panel').items.length - 1);
-    
-  
-    this.clearTimers();
+	
+	this.clearTimers();
+
     
 };
 

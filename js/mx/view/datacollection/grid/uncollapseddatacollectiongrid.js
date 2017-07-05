@@ -111,7 +111,7 @@ UncollapsedDataCollectionGrid.prototype.displayDataCollectionTab = function(targ
 */
 UncollapsedDataCollectionGrid.prototype.displayResultAutoprocessingTab = function(target, dataCollectionId) {
     var _this = this;
-    var onSuccess = function(sender, data){    
+    var onSuccess = function(sender, data){            
         /** Parsing data */
         var html = "";     
         var autoprocessingData =  new AutoProcIntegrationGrid().parseData(data[0]);

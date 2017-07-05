@@ -29,6 +29,8 @@ ExiSAXS.prototype.addTimer = Exi.prototype.addTimer;
 ExiSAXS.prototype.clearTimers = Exi.prototype.clearTimers;
 ExiSAXS.prototype.addMainPanelWithTimer = Exi.prototype.addMainPanelWithTimer;
 ExiSAXS.prototype.addNavigationPanelWithTimer = Exi.prototype.addNavigationPanelWithTimer;
+ExiSAXS.prototype.authenticate = Exi.prototype.authenticate;
+ExiSAXS.prototype.openWelcomePage = Exi.prototype.openWelcomePage;
 
 ExiSAXS.prototype.getHeader = function(){
     var html = "";

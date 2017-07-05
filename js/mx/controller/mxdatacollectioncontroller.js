@@ -11,6 +11,7 @@ function MxDataCollectionController() {
 MxDataCollectionController.prototype.setPageBackground = ExiGenericController.prototype.setPageBackground;
 MxDataCollectionController.prototype.notFound = ExiGenericController.prototype.notFound;
 
+
 /**
 * Inits the controller for the puck related objects
 * Paths accepted:
@@ -22,7 +23,7 @@ MxDataCollectionController.prototype.notFound = ExiGenericController.prototype.n
 MxDataCollectionController.prototype.init = function() {
 	var _this = this;
 	var listView;	
-
+    
 	Path.map("#/mx/datacollection/protein_acronym/:acronmys/main").to(function() {
 		var mainView = new DataCollectionMxMainView();
 		EXI.addMainPanel(mainView);
@@ -33,21 +34,31 @@ MxDataCollectionController.prototype.init = function() {
 		EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollection.getByAcronymList(this.params['acronmys']);
 	}).enter(this.setPageBackground);
     
-	Path.map("#/mx/datacollection/session/:sessionId/main").to(function() {
+	/** This URL is supposed to be included in automatic emails **/
+	Path.map("#/mx/proposal/:proposal/datacollection/session/:sessionId/main").to(function() {			
+		var redirection = "#/mx/datacollection/session/" + this.params['sessionId'] +"/main";				
+		/** Are we logged in yet? */
+		if (EXI.credentialManager.getConnections().length > 0){			
+			ExiGenericController.prototype.redirect( this.params['proposal'], redirection);
+		}
+		else{			
+			ExiGenericController.prototype.authenticateAndRedirect(this.params['proposal'], redirection);
+		}
+
+	}).enter(this.setPageBackground);
+
+
+	Path.map("#/mx/datacollection/session/:sessionId/main").to(function() {		
 		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId']});
 		EXI.addMainPanel(mainView);
         EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
-
-
 		var onSuccessProposal = function (sender,proposal) {
 			if (proposal && proposal.length > 0) {
 				mainView.loadProposal(proposal[0]);
 			}
 		}
-
 		EXI.getDataAdapter({onSuccess : onSuccessProposal}).proposal.proposal.getProposalBySessionId(this.params['sessionId']);
-
 
 		var onSuccess = function(sender, data){			
 		    mainView.loadCollections(data);
@@ -70,7 +81,21 @@ MxDataCollectionController.prototype.init = function() {
 	}).enter(this.setPageBackground);
 	
     
-    Path.map("#/mx/datacollection/datacollectionid/:datacollectionid/main").to(function() {
+
+ 	Path.map("#/mx/proposal/:proposal/datacollection/datacollectionid/:datacollectionid/main").to(function() {		
+		var redirection = "#/mx/datacollection/datacollectionid/" + this.params['datacollectionid'] + "/main";			
+		/** Are we logged in yet? */
+		if (EXI.credentialManager.getConnections().length > 0){
+			ExiGenericController.prototype.redirect(this.params['proposal'], redirection);			
+		}
+		else{			
+			ExiGenericController.prototype.authenticateAndRedirect(this.params['proposal'], redirection);
+		}
+	}).enter(this.setPageBackground);
+
+
+    Path.map("#/mx/datacollection/datacollectionid/:datacollectionid/main").to(function() {		
+		
 			var mainView = new DataCollectionMxMainView();
 			EXI.addMainPanel(mainView);
 			EXI.hideNavigationPanel();
