@@ -73,7 +73,10 @@ function HPLCMainView() {
                 
                 
                 
+<<<<<<< HEAD
                _this.populateSummary(_this.summary);
+=======
+>>>>>>> 84e30b31f3025ae019593087e41ff43e63b8fb94
                
                 
 			} 
@@ -87,7 +90,10 @@ function HPLCMainView() {
 		_this.hplcGraph.dygraphObject.dygraph.setAnnotations([]);
 		_this.summary = [];
 		_this.plotter.loadHPLCFrame(_this.experimentId, []);
+<<<<<<< HEAD
 		_this.populateSummary([]);
+=======
+>>>>>>> 84e30b31f3025ae019593087e41ff43e63b8fb94
 
 	});
 
