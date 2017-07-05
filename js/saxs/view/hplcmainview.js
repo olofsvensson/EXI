@@ -73,13 +73,11 @@ function HPLCMainView() {
                 
                 
                 
+<<<<<<< HEAD
+               _this.populateSummary(_this.summary);
+=======
+>>>>>>> 84e30b31f3025ae019593087e41ff43e63b8fb94
                
-                var html = "";
-                dust.render("summary.hplcmainview.template", _this.summary, function(err, out) {
-                                                                                                                                       
-                    html = html + out;
-                });
-                $('#' + _this.id + "summary").html(html);
                 
 			} 
         } 
@@ -92,6 +90,10 @@ function HPLCMainView() {
 		_this.hplcGraph.dygraphObject.dygraph.setAnnotations([]);
 		_this.summary = [];
 		_this.plotter.loadHPLCFrame(_this.experimentId, []);
+<<<<<<< HEAD
+		_this.populateSummary([]);
+=======
+>>>>>>> 84e30b31f3025ae019593087e41ff43e63b8fb94
 
 	});
 
@@ -106,6 +108,13 @@ function HPLCMainView() {
 
 HPLCMainView.prototype.getPanel = MainView.prototype.getPanel;
 
+HPLCMainView.prototype.populateSummary = function(summary) {
+	 var html = "";
+	dust.render("summary.hplcmainview.template", summary, function(err, out) {                                                                                                                                       
+		html = html + out;
+	});
+	$('#' + this.id + "summary").html(html);
+};
 
 HPLCMainView.prototype.getHeader = function(beamlineName, startDate) {
 	return "<span class='item'>" + beamlineName + "</span><span class='item_description'>" + startDate + "</span>";
