@@ -85,9 +85,11 @@ function HPLCMainView() {
     });
 
 	this.hplcGraph.onClearSelection.attach(function(sender) {
+		
 		_this.annotations = [];
 		_this.selectedFrameNumber = [];
 		_this.hplcGraph.dygraphObject.dygraph.setAnnotations([]);
+		_this.plotter.loadHPLCFrame(_this.experimentId, []);
 	});
 
 	this.plotter = new CurvePlotter({
