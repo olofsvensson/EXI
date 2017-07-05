@@ -49,6 +49,8 @@ ExiMX.prototype.addTimer = Exi.prototype.addTimer;
 ExiMX.prototype.clearTimers = Exi.prototype.clearTimers;
 ExiMX.prototype.addMainPanelWithTimer = Exi.prototype.addMainPanelWithTimer;
 ExiMX.prototype.addNavigationPanelWithTimer = Exi.prototype.addNavigationPanelWithTimer;
+ExiMX.prototype.authenticate = Exi.prototype.authenticate;
+ExiMX.prototype.openWelcomePage = Exi.prototype.openWelcomePage;
  
 
 ExiMX.prototype.getHeader = function(){
