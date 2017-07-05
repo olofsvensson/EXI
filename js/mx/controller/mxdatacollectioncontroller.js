@@ -35,13 +35,14 @@ MxDataCollectionController.prototype.init = function() {
 	}).enter(this.setPageBackground);
     
 	/** This URL is supposed to be included in automatic emails **/
-	Path.map("#/mx/proposal/:proposal/datacollection/session/:sessionId/main").to(function() {					
+	Path.map("#/mx/proposal/:proposal/datacollection/session/:sessionId/main").to(function() {			
+		var redirection = "#/mx/datacollection/session/" + this.params['sessionId'] +"/main";				
 		/** Are we logged in yet? */
-		if (EXI.credentialManager.getConnections().length > 0){
-			location.hash = "#/mx/datacollection/session/" + this.params['sessionId'] +"/main";
+		if (EXI.credentialManager.getConnections().length > 0){			
+			ExiGenericController.prototype.redirect( this.params['proposal'], redirection);
 		}
 		else{			
-			ExiGenericController.prototype.authenticateAndRedirect(this.params['proposal'], "#/mx/datacollection/session/" + this.params['sessionId'] +"/main");
+			ExiGenericController.prototype.authenticateAndRedirect(this.params['proposal'], redirection);
 		}
 
 	}).enter(this.setPageBackground);
@@ -85,7 +86,7 @@ MxDataCollectionController.prototype.init = function() {
 		var redirection = "#/mx/datacollection/datacollectionid/" + this.params['datacollectionid'] + "/main";			
 		/** Are we logged in yet? */
 		if (EXI.credentialManager.getConnections().length > 0){
-			location.hash = redirection;
+			ExiGenericController.prototype.redirect(this.params['proposal'], redirection);			
 		}
 		else{			
 			ExiGenericController.prototype.authenticateAndRedirect(this.params['proposal'], redirection);

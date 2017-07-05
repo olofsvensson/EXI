@@ -25,6 +25,12 @@ ExiGenericController.prototype.authenticateAndRedirect = function(proposal, redi
 	authenticationForm.show();
 };
 
+ExiGenericController.prototype.redirect = function(proposal, redirection) {	
+	EXI.credentialManager.setActiveProposal(EXI.credentialManager.getCredentials()[0].username, proposal);	
+	location.hash = redirection;
+};
+
+
 ExiGenericController.prototype.setPageBackground = function() {
 
 };
