@@ -72,7 +72,7 @@ function HPLCMainView() {
 				});
                 
                 
-                debugger
+                
                
                 var html = "";
                 dust.render("summary.hplcmainview.template", _this.summary, function(err, out) {
@@ -86,10 +86,13 @@ function HPLCMainView() {
     });
 
 	this.hplcGraph.onClearSelection.attach(function(sender) {
+		
 		_this.annotations = [];
 		_this.selectedFrameNumber = [];
 		_this.hplcGraph.dygraphObject.dygraph.setAnnotations([]);
 		_this.summary = [];
+		_this.plotter.loadHPLCFrame(_this.experimentId, []);
+
 	});
 
 	this.plotter = new CurvePlotter({
