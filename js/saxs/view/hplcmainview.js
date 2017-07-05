@@ -23,6 +23,7 @@ function HPLCMainView() {
 	var _this = this;
 	_this.annotations = [];
 	_this.selectedFrameNumber = [];
+	_this.summary = [];
 	this.hplcGraph = new HPLCGraph({
 		title : 'I0',
 		width : 300,
@@ -59,22 +60,22 @@ function HPLCMainView() {
 				g.setAnnotations(_this.annotations);
                 
                 /** Summary Panel */
-                var summary = {
-                        frame :  _this.selectedFrameNumber,
-                        quality : _.find(_this.hplcGraph.hplcData, {param : 'quality'}).data[_this.selectedFrameNumber],
-                        Qr : _.find(_this.hplcGraph.hplcData, {param : 'Qr'}).data[_this.selectedFrameNumber],
-                        Vc : _.find(_this.hplcGraph.hplcData, {param : 'Vc'}).data[_this.selectedFrameNumber],
-                        Mass : _.find(_this.hplcGraph.hplcData, {param : 'Mass'}).data[_this.selectedFrameNumber],
-                        Rg : _.find(_this.hplcGraph.hplcData, {param : 'Rg'}).data[_this.selectedFrameNumber],
-                        I0 : _.find(_this.hplcGraph.hplcData, {param : 'I0'}).data[_this.selectedFrameNumber],
-                        downloadURL : EXI.getDataAdapter().saxs.hplc.getDownloadHDF5FramesURL(_this.experimentId, _this.selectedFrameNumber, _this.selectedFrameNumber)
-                }
+                _this.summary.push({
+                        frame :  g.lastx_,
+                        quality : _.find(_this.hplcGraph.hplcData, {param : 'quality'}).data[g.lastx_],
+                        Qr : _.find(_this.hplcGraph.hplcData, {param : 'Qr'}).data[g.lastx_],
+                        Vc : _.find(_this.hplcGraph.hplcData, {param : 'Vc'}).data[g.lastx_],
+                        Mass : _.find(_this.hplcGraph.hplcData, {param : 'Mass'}).data[g.lastx_],
+                        Rg : _.find(_this.hplcGraph.hplcData, {param : 'Rg'}).data[g.lastx_],
+                        I0 : _.find(_this.hplcGraph.hplcData, {param : 'I0'}).data[g.lastx_],
+                        downloadURL : EXI.getDataAdapter().saxs.hplc.getDownloadHDF5FramesURL(_this.experimentId, g.lastx_,g.lastx_)
+				});
                 
                 
-                
+                debugger
                
                 var html = "";
-                dust.render("summary.hplcmainview.template", [summary], function(err, out) {
+                dust.render("summary.hplcmainview.template", _this.summary, function(err, out) {
                                                                                                                                        
                     html = html + out;
                 });
@@ -88,6 +89,7 @@ function HPLCMainView() {
 		_this.annotations = [];
 		_this.selectedFrameNumber = [];
 		_this.hplcGraph.dygraphObject.dygraph.setAnnotations([]);
+		_this.summary = [];
 	});
 
 	this.plotter = new CurvePlotter({
