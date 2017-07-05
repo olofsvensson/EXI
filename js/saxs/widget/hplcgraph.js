@@ -97,11 +97,14 @@ HPLCGraph.prototype.getMenu = function() {
 		} });
 
 	actions.push("->");
-	actions.push({
+	/** Dygraph.export is needed */
+	/*actions.push({
 		text : "Save",
+		disabled : true,
 		scope : this,
 		icon : 'images/icon/ic_get_app_black_24dp.png',
 		handler : function(item, pressed) {
+			debugger
 			var largeImage = document.createElement("img");
 			largeImage.style.display = 'block';
 			largeImage.style.width = 200 + "px";
@@ -109,7 +112,7 @@ HPLCGraph.prototype.getMenu = function() {
 			largeImage.setAttribute('src', Dygraph.Export.asCanvas(this.dygraphObject.dygraph).toDataURL());
 			window.open(Dygraph.Export.asCanvas(this.dygraphObject.dygraph).toDataURL(), 'Image', '');
 		} });
-
+	*/
 	return actions;
 };
 
