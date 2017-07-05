@@ -35,10 +35,10 @@ function HPLCMainView() {
 		scaled : true,
 		interactionModel : {
 			'dblclick' : function(event, g, context) {
-				//_this.selectedFrameNumber.push(g.lastx_);
-                _this.selectedFrameNumber = [g.lastx_];
+				_this.selectedFrameNumber.push(g.lastx_);
+                //_this.selectedFrameNumber = [g.lastx_];
 				_this.plotter.loadHPLCFrame(_this.experimentId, _this.selectedFrameNumber);
-				/*_this.annotations.push({
+				_this.annotations.push({
 					series : g.selPoints_[0].name,
 					x : g.lastx_,
 					width : 30,
@@ -46,8 +46,8 @@ function HPLCMainView() {
 					tickHeight : 2,
 					shortText : g.lastx_,
 					text : g.lastx_,
-					attachAtBottom : true });*/
-                    _this.annotations= [({
+					attachAtBottom : true });
+                    /*_this.annotations= [({
 					series : g.selPoints_[0].name,
 					x : g.lastx_,
 					width : 30,
@@ -55,7 +55,7 @@ function HPLCMainView() {
 					tickHeight : 2,
 					shortText : g.lastx_,
 					text : g.lastx_,
-					attachAtBottom : true })];
+					attachAtBottom : true })];*/
 				g.setAnnotations(_this.annotations);
                 
                 /** Summary Panel */
