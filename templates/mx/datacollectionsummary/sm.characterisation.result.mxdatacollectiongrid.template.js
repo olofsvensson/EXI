@@ -35,7 +35,7 @@
             {:else}
                  <td style='padding:0 15px 0 15px;'><div class='summary_datacollection_failed'></div></td>
                  {@eq key=.ScreeningOutput_indexingSuccess type="boolean" value="true"}
-                 <td style='padding:0 15px 0 15px;'>Mosaicity</td> <td style='padding:0 15px 0 15px;' class='column_parameter_value'>{.ScreeningOutput_mosaicity}</td>
+                 <td style='padding:0 15px 0 15px;'>Mosaicity</td> <td style='padding:0 15px 0 15px;' class='column_parameter_value'>{@decimal key="ScreeningOutput_mosaicity" decimals=2}{/decimal}</td>
                  {:else}
                  <td style='padding:0 15px 0 15px; width:60px;'></td> 
                  <td style='padding:0 15px 0 15px; width:60px;'></td> 
