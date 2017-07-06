@@ -37,11 +37,11 @@
                </tr>
                <tr>
                   <td  style='padding:0 15px 0 15px;'>Res. (corner)</td>
-                  <td  style='padding:0 15px 0 15px;' class='column_parameter_value'>{.DataCollection_resolution} &#8491; ({.DataCollection_resolutionAtCorner} &#8491;)</td>
+                  <td  style='padding:0 15px 0 15px;' class='column_parameter_value'>{@decimal key="DataCollection_resolution" decimals=2}{/decimal} &#8491; ({@decimal key="DataCollection_resolutionAtCorner" decimals=2}{/decimal} &#8491;)</td>
                </tr>
                <tr>
                   <td  style='padding:0 15px 0 15px;'>Wavelength</td>
-                  <td  style='padding:0 15px 0 15px;' class='column_parameter_value'>{.DataCollection_wavelength} &#8491;</td>
+                  <td  style='padding:0 15px 0 15px;' class='column_parameter_value'>{@decimal key="DataCollection_wavelength" decimals=4}{/decimal} &#8491;</td>
                </tr>
             </tbody>
          </table>
