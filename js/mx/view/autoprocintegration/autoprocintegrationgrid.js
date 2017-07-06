@@ -43,8 +43,7 @@ function AutoProcIntegrationGrid(args) {
 }
 
 AutoProcIntegrationGrid.prototype.parseData = function(data) {    
-     /** Adding stats */
-     
+     /** Adding stats */     
     for(var i = 0; i < data.length; i++){
          try{             
             data[i].statistics = this.getStatistics(data[i]);
@@ -52,19 +51,18 @@ AutoProcIntegrationGrid.prototype.parseData = function(data) {
             data[i].phasing = this.getPhasing(data[i]);    
             if (data[i].v_datacollection_summary_phasing_autoProcProgramId){
                 data[i].downloadFilesUrl = EXI.getDataAdapter().mx.autoproc.downloadAttachmentListByautoProcProgramsIdList(data[i].v_datacollection_summary_phasing_autoProcProgramId);
-            }
-                                             
+            }                                             
          }
          catch(e){             
              console.log(e);
          }  
     }
     
-    var anomalous = _.filter(data, function(o) { return (o.v_datacollection_summary_phasing_anomalous && o.v_datacollection_processingStatus == "SUCCESS")});
-    var nonanomalous = _.filter(data, function(o) { return (o.v_datacollection_summary_phasing_anomalous == false && o.v_datacollection_processingStatus == "SUCCESS")});
+    var anomalous = _.filter(data, function(o) { return (o.v_datacollection_summary_phasing_anomalous && (o.v_datacollection_processingStatus == "SUCCESS" || (o.v_datacollection_processingStatus == 1)))});    
+    var nonanomalous = _.filter(data, function(o) { return (o.v_datacollection_summary_phasing_anomalous == false && (o.v_datacollection_processingStatus == "SUCCESS" || (o.v_datacollection_processingStatus == 1 )))});
     var running = _.filter(data, function(o) { return o.v_datacollection_processingStatus == "RUNNING";});
-    var failed = _.filter(data, function(o) { return o.v_datacollection_processingStatus == "FAILED"; });
-
+    var failed = _.filter(data, function(o) { return o.v_datacollection_processingStatus == "FAILED" || (o.v_datacollection_processingStatus == 0 ); });
+   
     /**Set non anomalous first */
     anomalousdata = new AutoprocessingRanker().rank(anomalous, "v_datacollection_summary_phasing_autoproc_space_group");    
     nonanomalousdata = new AutoprocessingRanker().rank(nonanomalous, "v_datacollection_summary_phasing_autoproc_space_group");    

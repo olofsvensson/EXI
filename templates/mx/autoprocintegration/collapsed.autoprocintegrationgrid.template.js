@@ -29,19 +29,18 @@
                   <th>Download</th>
                   <th></th>
                </tr>
-            </thead>
+            </thead> 
             {#.}
-		{@eq key=v_datacollection_processingStatus value="SUCCESS"}
-			{>"success.collapsed.autoprocintegrationgrid.template"  /}
-		{:else}    
-			{@eq key=v_datacollection_processingStatus value="RUNNING"}
-				{>"running.collapsed.autoprocintegrationgrid.template"  /}				   	
-			{:else}    
-				{>"failed.collapsed.autoprocintegrationgrid.template"  /}	    				
-			{/eq}
-		{/eq}		 
+                  {@select key=v_datacollection_processingStatus}
+                        {@eq value="SUCCESS"} {>"success.collapsed.autoprocintegrationgrid.template" /}  {/eq}
+                        {@eq value="RUNNING"} {>"running.collapsed.autoprocintegrationgrid.template" /} {/eq}
+                        {@eq value="FAILED"} {>"failed.collapsed.autoprocintegrationgrid.template" /} {/eq}
+                        {@eq value="1"} {>"success.collapsed.autoprocintegrationgrid.template" /} {/eq}
+                        {@eq value="0"} {>"failed.collapsed.autoprocintegrationgrid.template" /} {/eq}
+                  {/select}
+
             {/.}
-         </table> 
+         </table>  
         
       </div>
    </div>
