@@ -48,11 +48,20 @@ AutoProcIntegrationGrid.prototype.parseData = function(data) {
          try{             
             data[i].statistics = this.getStatistics(data[i]);
             data[i].collapsed = this.getCollapseStatistics(data[i]);
-            data[i].phasing = this.getPhasing(data[i]);    
-            if (data[i].v_datacollection_summary_phasing_autoProcProgramId){
-                data[i].downloadFilesUrl = EXI.getDataAdapter().mx.autoproc.downloadAttachmentListByautoProcProgramsIdList(data[i].v_datacollection_summary_phasing_autoProcProgramId);
+            data[i].phasing = this.getPhasing(data[i]);              
+            if (data[i].v_datacollection_summary_phasing_autoProcProgramId){                
+                var fileName = data[i].DataCollection_imagePrefix;                         
+                if (data[i].v_datacollection_summary_phasing_anomalous){
+                    fileName = fileName +  "_anomalous";
+                }
+                if (data[i].v_datacollection_summary_phasing_autoproc_space_group){
+                    fileName = fileName +  "_" + data[i].v_datacollection_summary_phasing_autoproc_space_group.replace(/\s+/g, '');
+                }
+                fileName = fileName + "_" +  data[i].v_datacollection_processingPrograms + ".zip"; 
+
+                data[i].downloadFilesUrl = EXI.getDataAdapter().mx.autoproc.downloadAttachmentListByautoProcProgramsIdList(data[i].v_datacollection_summary_phasing_autoProcProgramId, fileName);
             }                                             
-         }
+         }       
          catch(e){             
              console.log(e);
          }  

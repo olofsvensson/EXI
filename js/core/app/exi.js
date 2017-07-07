@@ -98,8 +98,7 @@ Exi.prototype.authenticate = function(user, password, site, exiURL, properties, 
 	authenticationManager.login(user, password, site);
 };
 
-Exi.prototype.openWelcomePage = function(user) {
-	debugger
+Exi.prototype.openWelcomePage = function(user) {	
 	EXI.authenticationForm.window.close();
 	var credential = EXI.credentialManager.getCredentialByUserName(user);
 				
