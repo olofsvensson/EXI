@@ -26,7 +26,7 @@ CollapsedDataCollectionGrid.prototype.onBoxReady = function () {
                 
                 if (data) {
                     if (data.length > 0) {                        
-                        var  fileName = data[0].DataCollection_imagePrefix + "_online_analysis.zip";                                   
+                        var  fileName = data[0].DataCollection_imagePrefix+ "_" +  data[0].DataCollection_dataCollectionNumber  + "_online_analysis.zip";                                   
                         var url = EXI.getDataAdapter().mx.autoproc.downloadAttachmentListByautoProcProgramsIdList(_.map(data,"v_datacollection_summary_phasing_autoProcProgramId").toString(), fileName);
                         window.open(url,"_blank");
                     }
