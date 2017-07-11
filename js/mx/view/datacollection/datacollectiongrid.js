@@ -230,6 +230,7 @@ DataCollectionGrid.prototype.getColumns = function() {
                     data.workflows = [];
                 }
                 
+                
                 dust.render(_this.template, data, function(err, out) {                                                                       
                     html = html + out;
                 });

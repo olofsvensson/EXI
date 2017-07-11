@@ -20,20 +20,19 @@ CollapsedDataCollectionGrid.prototype.onBoxReady = function () {
     var setClickListeners = function() {
         $(".download-results").click(function(sender){
             var dataCollectionId = sender.target.id.split("-")[0];
-
             var onSuccess = function (sender,data) {
+                var data = data[0];
                 if (data) {
-                    if (data[0].length > 0) {
-                        var url = EXI.getDataAdapter().mx.autoproc.downloadAttachmentListByautoProcProgramsIdList(_.map(data[0],"v_datacollection_summary_phasing_autoProcProgramId").toString());
+                    if (data.length > 0) {                        
+                        var  fileName = data[0].DataCollection_imagePrefix+ "_" +  data[0].DataCollection_dataCollectionNumber  + "_online_analysis.zip";                                   
+                        var url = EXI.getDataAdapter().mx.autoproc.downloadAttachmentListByautoProcProgramsIdList(_.map(data,"v_datacollection_summary_phasing_autoProcProgramId").toString(), fileName);
                         window.open(url,"_blank");
                     }
                 }
             }
-
             EXI.getDataAdapter({onSuccess : onSuccess}).mx.autoproc.getViewByDataCollectionId(dataCollectionId);
 
         });
     };
-
     var timer = setTimeout(setClickListeners, 500, this);
 };
