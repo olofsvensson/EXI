@@ -20,10 +20,8 @@ CollapsedDataCollectionGrid.prototype.onBoxReady = function () {
     var setClickListeners = function() {
         $(".download-results").click(function(sender){
             var dataCollectionId = sender.target.id.split("-")[0];
-
             var onSuccess = function (sender,data) {
                 var data = data[0];
-                
                 if (data) {
                     if (data.length > 0) {                        
                         var  fileName = data[0].DataCollection_imagePrefix+ "_" +  data[0].DataCollection_dataCollectionNumber  + "_online_analysis.zip";                                   
@@ -32,11 +30,9 @@ CollapsedDataCollectionGrid.prototype.onBoxReady = function () {
                     }
                 }
             }
-
             EXI.getDataAdapter({onSuccess : onSuccess}).mx.autoproc.getViewByDataCollectionId(dataCollectionId);
 
         });
     };
-
     var timer = setTimeout(setClickListeners, 500, this);
 };
