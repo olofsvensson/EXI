@@ -58,7 +58,6 @@ AutoProcIntegrationGrid.prototype.parseData = function(data) {
                     fileName = fileName +  "_" + data[i].v_datacollection_summary_phasing_autoproc_space_group.replace(/\s+/g, '');
                 }
                 fileName = fileName + "_" +  data[i].v_datacollection_processingPrograms + ".zip"; 
-
                 data[i].downloadFilesUrl = EXI.getDataAdapter().mx.autoproc.downloadAttachmentListByautoProcProgramsIdList(data[i].v_datacollection_summary_phasing_autoProcProgramId, fileName);
             }                                             
          }       

@@ -39,16 +39,18 @@
                 </div>
             </div>
         </div> 
-        <div class="col-sm-2 queue-border-right-columns" >
+        <div class="col-sm-1 queue-border-right-columns" >
             <div>&nbsp;</div>
             Status
             <div>&nbsp;</div>
         </div>
-        <div class="col-sm-2 queue-border-right-columns" >
+        <div class="col-sm-3 queue-border-right-columns" >
             <div>&nbsp;</div>
-            Time
+            Average File
             <div>&nbsp;</div>
         </div>
+        
+       
     </div>  
 </div>  
 
@@ -91,12 +93,14 @@
                     </div>
                 </div>
             </div> 
-            <div class="col-sm-2 ">
+            <div class="col-sm-1 ">
                 <span style='font-weight: bold;'>{?Run_runId}DONE{/Run_runId}</span>
             </div>
-            <div class="col-sm-2 ">
-                
+            <div class="col-sm-3 ">
+                <span style='font-weight: bold;'>{.Merge_averageFilePath}</span>
             </div>
+            
+           
         </div>  
     </div>
     {/.}
