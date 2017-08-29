@@ -52,7 +52,7 @@ var ExtISPyB ={
                },
                { 
                    name : "BM30A",
-                   sampleChangerType : 'FlexHCD'
+                   sampleChangerType : 'FlexHCDDual'
                }                                             
             ]
          }
@@ -70,13 +70,13 @@ var ExtISPyB ={
              
             ],
             MX:[
-               { 
+                { 
                    name : "ID23-1",
                    sampleChangerType : 'FlexHCDDual'
                },
                { 
                    name : "ID23-2",
-                   sampleChangerType : 'SC3'
+                   sampleChangerType : 'FlexHCDUnipuckPlate'
                },
                { 
                    name : "ID29",
@@ -84,7 +84,7 @@ var ExtISPyB ={
                },
                { 
                    name : "ID30A-1",
-                   sampleChangerType : 'RoboDiff'
+                   sampleChangerType : 'RoboDiffHCDSC3'
                },
                { 
                    name : "ID30A-2",
@@ -104,8 +104,8 @@ var ExtISPyB ={
                },
                { 
                    name : "BM30A",
-                   sampleChangerType : 'FlexHCD'
-               }                                             
+                   sampleChangerType : 'FlexHCDDual'
+               }                                           
             ]
          }
       },    
