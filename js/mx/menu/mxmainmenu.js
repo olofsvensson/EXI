@@ -44,11 +44,24 @@ MXMainMenu.prototype.getMenuItems = function() {
             disabled : true,
 			menu : this.getOnlineDataAnalisysMenu() 
 		}, 
+		
 		{
-			text : this._convertToHTMLWhiteSpan("Help"),
+			text : this._convertToHTMLWhiteSpan("Synch SMIS"),
 			cls : 'ExiSAXSMenuToolBar',
-             disabled : true,
-			menu : this.getHelpMenu() 
+			icon : '../images/icon/refresh.png',
+			handler : function(){
+				EXI.setLoadingMainPanel("Synch is running");
+				var onSuccess = function(sender, data){					
+					EXI.setLoadingMainPanel(false);
+				}
+				var onError = function(sender,data){	
+					EXI.setError("There was an error with the Synchonization")
+					EXI.setLoadingMainPanel(false);
+				}
+				
+				EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.proposal.synchSMIS();
+				
+			}
 		}, 
 		'->',
 		{
@@ -82,36 +95,7 @@ MXMainMenu.prototype.getOnlineDataAnalisysMenu = function() {
 
 	return Ext.create('Ext.menu.Menu', {
 		items : [
-//		{
-//		    text: 'Radio Options',
-//		    menu: {        // <-- submenu by nested config object
-//		        items: [
-//		            // stick any markup in a menu
-//		            '<b class="menu-title">Choose a Theme</b>',
-//		            {
-//		                text: 'Aero Glass',
-//		                checked: true,
-//		                group: 'theme',
-//		                checkHandler: onItemCheck
-//		            }, {
-//		                text: 'Vista Black',
-//		                checked: false,
-//		                group: 'theme',
-//		                checkHandler: onItemCheck
-//		            }, {
-//		                text: 'Gray Theme',
-//		                checked: false,
-//		                group: 'theme',
-//		                checkHandler: onItemCheck
-//		            }, {
-//		                text: 'Default Theme',
-//		                checked: false,
-//		                group: 'theme',
-//		                checkHandler: onItemCheck
-//		            }
-//		        ]
-//		    }
-//		},
+
 		{
 			text : 'Dimple',
 			checked : false,

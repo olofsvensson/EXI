@@ -38,12 +38,7 @@ MXManagerMenu.prototype.getMenuItems = function() {
 				hidden : this.isHidden,
 				menu : this.getDataExplorerMenu() 
 		},
-//		{
-//			text : '<span style="color:white">Offline Data Analysis</span>',
-//			cls : 'ExiSAXSMenuToolBar',
-//			hidden : this.isHidden,
-//			menu : this.getOnlineDataAnalisysMenu() 
-//		}, 
+
         {
 			text : this._convertToHTMLWhiteSpan("Manager"),
 			cls : 'ExiSAXSMenuToolBar',
@@ -53,7 +48,27 @@ MXManagerMenu.prototype.getMenuItems = function() {
 			text : this._convertToHTMLWhiteSpan("Help"),
 			cls : 'ExiSAXSMenuToolBar',
 			menu : this.getHelpMenu() 
-		}, 
+		}, 		 
+		
+		{
+			text : this._convertToHTMLWhiteSpan("Synch SMIS"),
+			cls : 'ExiSAXSMenuToolBar',
+			icon : '../images/icon/refresh.png',
+			handler : function(){
+				EXI.setLoadingMainPanel("Synch is running");
+				var onSuccess = function(sender, data){					
+					EXI.setLoadingMainPanel(false);
+				}
+				var onError = function(sender,data){	
+					debugger
+					EXI.setError("There was an error with the Synchonization")
+					EXI.setLoadingMainPanel(false);
+				}
+				
+				EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.proposal.synchSMIS();
+				
+			}
+		},
 		'->', 
 		{
 			xtype : 'textfield',
