@@ -237,7 +237,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                         }
                                                                     }
                                                                 }, 
-            { text :'Exp.<br /> Type', id : 'Experiment Type', column : {
+            { text :'<a href="http://www.esrf.eu/MXPressE" target="_blank" title="Click on link for full documentation of different experiment types.">Exp.<br /> Type</a>', id : 'Experiment Type', column : {
                                                                         width : 80,  
                                                                         type: 'dropdown',
                                                                         source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM" ]
