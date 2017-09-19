@@ -47,6 +47,7 @@ ContainerSpreadSheet.prototype.updateNumberOfRows  = SpreadSheet.prototype.updat
 ContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
 
 ContainerSpreadSheet.prototype.load = function(puck){
+	
 	var _this = this;
 	this.puck = puck;
 	var container = document.getElementById(this.id + '_samples');
@@ -225,11 +226,11 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                                     }
             }, 
             { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}}, 
-            { text :'Crystal<br /> Form', id : 'Crystal Form',column : {
+            { text :'Crystal Form', id : 'Crystal Form',column : {
                                                                         width : 250,
                                                                         type: 'dropdown',
                                                                         source: function(query, process) {
-                                                                            var colIndex = _this.getColumnIndex("Protein Acronym");
+                                                                            var colIndex = _this.getColumnIndex("Protein Acronym");																			
                                                                             var protein = EXI.proposalManager.getProteinByAcronym(this.instance.getDataAtCell(this.row,colIndex));
 																			
                                                                             if (protein.length > 0){
@@ -360,6 +361,7 @@ ContainerSpreadSheet.prototype.getProteinsByAcronym = function(acronym) {
 * @param {Integer} row The corresponding row
 */
 ContainerSpreadSheet.prototype.parseCrystalFormColumn = function (dataAtCrystalFormColumn,row) {
+	
 	var parsed = {
 					spaceGroup 	: null,
 					cellA		: null,
@@ -414,6 +416,7 @@ ContainerSpreadSheet.prototype.parseCrystalFormColumn = function (dataAtCrystalF
 			}
 		}
 	}
+	
 	return parsed;
 };
 
@@ -691,6 +694,7 @@ ContainerSpreadSheet.prototype.isCrystalFormAvailable = function (parsedCrystalF
 * @return {Array} Returns an array of strings with the crystal info to be loaded on the Crystal Form column
 */
 ContainerSpreadSheet.prototype.getCrystalInfoByProtein = function (protein) {	
+		
 	if (this.crystalFormList[protein.acronym] == null){
 		var src = [];
 		if (protein){
@@ -703,7 +707,9 @@ ContainerSpreadSheet.prototype.getCrystalInfoByProtein = function (protein) {
 				}
 			}
 		}		
-		this.crystalFormList[protein.acronym] = _.union(src,["NEW"]);
+		
+		this.crystalFormList[protein.acronym] = _.union(["NEW"], src.sort());
 	}
+
 	return this.crystalFormList[protein.acronym];
 };
