@@ -227,7 +227,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
             }, 
             { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}}, 
             { text :'Crystal Form', id : 'Crystal Form',column : {
-                                                                        width : 250,
+                                                                        width : 230,
                                                                         type: 'dropdown',
                                                                         source: function(query, process) {
                                                                             var colIndex = _this.getColumnIndex("Protein Acronym");																			
@@ -242,7 +242,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                     }
                                                                 }, 
             { text :'Exp.<br /> Type', id : 'Experiment Type', column : {
-                                                                        width : 80,  
+                                                                        width : 100,  
                                                                         type: 'dropdown',
                                                                         source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
