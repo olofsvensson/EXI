@@ -51,17 +51,14 @@ MXManagerMenu.prototype.getMenuItems = function() {
 		}, 		 
 		
 		{
-			text : this._convertToHTMLWhiteSpan("Synch SMIS"),
-			cls : 'ExiSAXSMenuToolBar',
-			icon : '../images/icon/refresh.png',
+			text : this._convertToHTMLWhiteSpan("<button type='button' class='btn btn-default'> <span class='glyphicon glyphicon-refresh'></span> ISPyB</button>"),
+			cls : 'ExiSAXSMenuToolBar',			
 			handler : function(){
 				EXI.setLoadingMainPanel("Synch is running");
 				var onSuccess = function(sender, data){					
 					EXI.setLoadingMainPanel(false);
 				}
-				var onError = function(sender,data){	
-					
-					//EXI.setError("There was an error with the Synchonization")
+				var onError = function(sender,data){										
 					EXI.setLoadingMainPanel(false);
 				}
 				
