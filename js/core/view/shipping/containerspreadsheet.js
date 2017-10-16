@@ -232,8 +232,8 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                         source: function(query, process) {
                                                                             var colIndex = _this.getColumnIndex("Protein Acronym");																			
                                                                             var protein = EXI.proposalManager.getProteinByAcronym(this.instance.getDataAtCell(this.row,colIndex));
-																			
-                                                                            if (protein.length > 0){
+
+                                                                            if (protein.length > 0){																				
                                                                                 process(_this.getCrystalInfoByProtein(protein[0]));
                                                                             } else {
                                                                                 process([]);
@@ -253,6 +253,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
             { text :'Beam <br />Diameter', id :'Pref. Diameter',column : {width : 60}}, 
             { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 80}}, 
             { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 80}}, 
+
             { text :'Required<br /> multiplicity', id :'Required multiplicity', column : {width : 60}}, 
             { text :'Required<br /> Completeness', id :'Required Completeness', column : {width : 80}},            
             
@@ -262,6 +263,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }
             }, 
+
             { text :'Smiles', id :'Smiles', column : {width : 140}}, 
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
