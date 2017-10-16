@@ -86,7 +86,8 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
         labels : ["Resolution"].concat(spaceGroups),
         targetId : " anno",
         labelsDiv : " anno_legend",
-        strokeWidth : 2.0
+        strokeWidth : 2.0,
+        valueRange : [-50,110]     
     });
     $("#anno").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer();
@@ -102,7 +103,8 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
         labels : ["Resolution"].concat(spaceGroups),
         targetId : " sigmaAnno",
         labelsDiv : " sigmaAnno_legend",
-        strokeWidth : 2.0
+        strokeWidth : 2.0,
+        valueRange : [0,null] 
     });
     $("#sigmaAnno").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer();
@@ -135,7 +137,8 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
                         labels : ["Resolution"].concat(spaceGroups),
                         targetId : " rfactor",
                         labelsDiv : " rfactor_legend",
-                        strokeWidth : 2.0
+                        strokeWidth : 2.0,
+                        valueRange : [0,null]  
                     });                             
     $("#rfactor").html(rFactorPlotter.getHTML());
     $("#rfactor").unbind('click').click(function(sender){
@@ -152,7 +155,8 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
         labels : ["Resolution"].concat(spaceGroups),
         targetId : " completeness",
         labelsDiv : " completeness_legend",
-        strokeWidth : 2.0
+        strokeWidth : 2.0,
+        valueRange : [0,110]  
     });                             
     $("#completeness").html(completenessPlotter.getHTML());
     $("#completeness").unbind('click').click(function(sender){
@@ -168,7 +172,8 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
         labels : ["Resolution"].concat(spaceGroups),
         targetId : " sigmaI",
         labelsDiv : " sigmaI_legend",
-        strokeWidth : 2.0
+        strokeWidth : 2.0,
+        valueRange : [0,null]
     });
     $("#sigmaI").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer();
