@@ -108,7 +108,7 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
                 anomalous: anomalous[i]
             };
         }
-        debugger
+        
         data[autoProcIds[i]][scalingStatisticsTypes[i]] = ({
             autoProcId: autoProcIds[i],
             scalingStatisticsType: scalingStatisticsTypes[i],
