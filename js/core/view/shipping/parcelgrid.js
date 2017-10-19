@@ -83,9 +83,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 	var _this = this;
 	$("#" + tabName + "-" + this.id).html("");
-	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {
-															// cls 		: 'border-grid',
-															// width 		: this.width,
+	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {															
 															autoScroll	:true,
 															autoHeight 	:true,
 															maxHeight	: this.height,

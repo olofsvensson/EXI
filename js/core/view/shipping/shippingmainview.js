@@ -14,8 +14,7 @@ function ShippingMainView() {
 	* @property shipmentForm
 	*/
     this.shipmentForm = new ShipmentForm({width : Ext.getBody().getWidth() - 200});
-	this.shipmentForm.onSaved.attach(function(sender, shipment){
-		// location.hash = "#/proposal/shipping/nav?nomain";
+	this.shipmentForm.onSaved.attach(function(sender, shipment){		
 		location.hash = "#/shipping/" + shipment.shippingId + "/main";
 	});
 
