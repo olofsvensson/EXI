@@ -14,11 +14,11 @@
                   <th>&#x3B1; (&deg)</th>
                   <th>&beta; (&deg)</th>
                   <th>&gamma; (&deg)</th>
-                  <th>Shell</th>
+                  <th>Shell</th> 
                   <th>Resolution (&#197;)</th>
                   <th>Multiplicity</th>
                   <th>Completeness %</th> 
-                  <th>&#60;I/Sigma&#62;</th>
+                  <th>I/Sigma (I)</th>
                   <th>Rmeas</th> 
                   <th>Rmerge</th>
                   <th>Rpim</th>
