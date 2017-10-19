@@ -24,7 +24,7 @@ DataCollectionMxMainView.prototype.getPanel = MainView.prototype.getPanel;
 
 DataCollectionMxMainView.prototype.getContainer = function() {
     var _this = this;
-    debugger
+    
     this.container = Ext.create('Ext.tab.Panel', {   
     minHeight : 900,    
     padding : "5 40 0 5",
