@@ -8,15 +8,15 @@
 function ParcelPanel(args) {
 	var _this = this;
 	
-	this.test="A";
+	
 	this.id = BUI.id();
 	this.height = 500;
 	this.width = 500;
 	this.index = 0;
-	this.containersPanelHeight = 400;
+	this.containersPanelHeight = 450;
 	this.containersPanelWidth = this.width*9/12 - 30;
 	this.containersParcelWidth = 2*this.containersPanelHeight*0.9/2 + 20;
-	// this.containersParcelWidth = 2*this.containersPanelHeight*0.2 + 20;
+	
 	this.shippingId = 0;
 	this.shippingStatus = "";
 	this.containersPanel = null;
@@ -30,6 +30,7 @@ function ParcelPanel(args) {
 			this.height = args.height;
 			this.containersPanelHeight = this.height*0.9;
 			this.containersParcelWidth = 2*this.containersPanelHeight*0.9/2 + 20;
+			
 		}
 		if (args.width != null) {
 			this.width = args.width;
@@ -73,7 +74,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	});
 	
 	/** Setting click listeners **/		
-	$('#' + this.id).hide().html(html).fadeIn("fast");
+	$('#' + this.id).html(html);
 	this.panel.doLayout();
 
 	if (this.shippingStatus != "processing"){
@@ -182,8 +183,6 @@ ParcelPanel.prototype.renderPucks = function (dewar) {
 			for (var i = 0 ; i < rows ; i++) {
 				var containerRow = Ext.create('Ext.panel.Panel', {
 					layout      : 'hbox',
-					// cls 		: "border-grid",
-					// margin		: this.height*0.05 + ' 0 0 0',
 					width       : this.containersPanelWidth,
 					height    	: this.containersPanelHeight/rows,
 					autoScroll 	: false,
@@ -385,8 +384,6 @@ ParcelPanel.prototype.getPanel = function() {
 		layout 		: 'fit',
 		cls 		: "border-grid-light",
 		margin 		: 10,
-		// height 		: this.height,
-		// width 		: this.width,
 		autoScroll	: false,
 		items :	[{
 					html : '<div id="' + this.id + '"></div>',

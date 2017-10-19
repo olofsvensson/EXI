@@ -8,10 +8,10 @@
                 <button id="{id}-add-button" type="button" style="margin-left:15px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-plus-sign"></span> Add Parcel
                 </button>
-                 <button id="{id}-import" type="button" style="margin-left:15px;" class="btn btn-default disabled">
-                    <span class="glyphicon glyphicon-import"></span> Import from CSV
+                 <button id="{id}-import" type="button" style="margin-left:5px;" class="btn btn-default">
+                    <a style='color:black' href='#/shipping/{.shippingId}/import/csv' target='_blank'><span class="glyphicon glyphicon-import"></span> Import from CSV</a>
                 </button>
-                <button id="{id}-export" type="button" style="margin-left:15px;" class="btn btn-default disabled">
+                <button id="{id}-export" type="button" style="margin-left:5px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-export"></span> Export PDF View
                 </button>
             </div> 

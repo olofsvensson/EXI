@@ -190,7 +190,7 @@ PuckFormView.prototype.getPanel = function() {
 					 html : html
 				 }
 				 ,
-		         this.containerSpreadSheet.getPanel(),
+		         this.containerSpreadSheet.getPanel()
                 
 	         ] 
 		} 

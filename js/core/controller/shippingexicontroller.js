@@ -108,8 +108,8 @@ ShippingExiController.prototype.init = function() {
 		}).enter(this.setPageBackground);
 
 
-		Path.map("#/shipping/:shippingId/:shippingStatus/csv/import").to(function() {
-			var mainView = new PuckFormView();
+		Path.map("#/shipping/:shippingId/import/csv").to(function() {
+			var mainView = new CSVImportMainView();
 			EXI.addMainPanel(mainView);
 			mainView.load(this.params['containerId'],this.params['shippingId'],this.params['shippingStatus']);
 		}).enter(this.setPageBackground);

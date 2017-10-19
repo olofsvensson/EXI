@@ -69,15 +69,19 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	if (nSamples > 0) {
 		$("#" + this.id + "-export").removeClass("disabled");
 		$("#" + this.id + "-export").unbind('click').click(function(sender){
-			var exportForm = new ExportPDFForm();
-			exportForm.load(_this.shipment);
-			exportForm.show();
+		       
 		});
 	}
 
-	this.fillTab("content", this.dewars);
 
-	this.attachCallBackAfterRender();
+    var html = "";    
+	dust.render("parcel.grid.template",{id : this.id, shippingId: _this.shipment.shippingId},function (err,out){		
+		$('#' + _this.id).html(out);
+		_this.fillTab("content", _this.dewars);
+	    _this.attachCallBackAfterRender();
+	})
+
+
 };
 
 ParcelGrid.prototype.fillTab = function (tabName, dewars) {
@@ -165,22 +169,15 @@ ParcelGrid.prototype.edit = function(dewar) {
 
 ParcelGrid.prototype.getPanel = function() {
 
-	var html = "";
-
-	dust.render("parcel.grid.template",{id : this.id},function (err,out){
-		html = out;
-	})
+	
 
 	this.panel =  Ext.create('Ext.panel.Panel', {
-		layout : 'fit',
-		// cls	: 'overflowed',
+		layout : 'fit',		
 		items : {
-					// cls	: 'border-grid',
-					html : '<div id="' + this.id + '">' + html + '</div>',
-					// width : this.width,
+					
+					html : '<div id="' + this.id + '"></div>',				
 					autoScroll:false,
-					autoHeight :true,
-					// maxHeight: this.height,
+					autoHeight :true,					
 					padding : this.padding
 				}
 	});
