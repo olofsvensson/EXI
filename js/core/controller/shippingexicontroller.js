@@ -107,6 +107,16 @@ ShippingExiController.prototype.init = function() {
 			mainView.load(this.params['containerId'],this.params['sampleId'],this.params['shippingId']);
 		}).enter(this.setPageBackground);
 
+
+		Path.map("#/shipping/:shippingId/:shippingStatus/csv/import").to(function() {
+			var mainView = new PuckFormView();
+			EXI.addMainPanel(mainView);
+			mainView.load(this.params['containerId'],this.params['shippingId'],this.params['shippingStatus']);
+		}).enter(this.setPageBackground);
+
+
+
+
 		// Path.map("#/shipping/edv").to(function() {
 		// 	var mainView = new ElectronDensityViewer();
 		// 	EXI.addMainPanel(mainView);
