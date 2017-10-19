@@ -87,7 +87,7 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
         targetId : " anno",
         labelsDiv : " anno_legend",
         strokeWidth : 2.0,
-        valueRange : [-50,110]     
+        valueRange : [-5,110]     
     });
     $("#anno").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer();
