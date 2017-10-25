@@ -1,36 +1,47 @@
-<div class="container-fluid" style="padding:0px;">
-    <div class="row">
-        <div class="col-md-12" >
-            <div style="text-align:center;border-bottom:1px solid #ccc;">
-                Session synopsis
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-2" style="padding:0px;">
-            <div style="text-align:center;border-right:1px solid #ccc">
-                En. scans
-            </div>
-        </div>
-         <div class="col-md-2" style="padding:0px;">
-            <div style="text-align:center;border-right:1px solid #ccc">
-                XRF spectra
-            </div>
-        </div>
-        <div class="col-md-2" style="padding:0px;">
-            <div style="text-align:center;border-right:1px solid #ccc">
-                Samples
-            </div>
-        </div>
-        <div class="col-md-3" style="padding:0px;">
-            <div style="text-align:center;border-right:1px solid #ccc">
-                Tests
-            </div>
-        </div>
-        <div class="col-md-3" style="padding:0px;">
-            <div style="text-align:center;border-right:1px solid #ccc">
-                Collects
-            </div>
-        </div>
-    </div>
-</div>
+<table class="table table-responsive" style="height:20px;">
+  <thead>
+    <tr>
+      
+      <th colspan="5" class="text-center">
+        MX
+      </th>
+       <th colspan="2" class="text-center">
+        BioSAXS
+      </th>
+       <th colspan="2" class="text-center">
+        EM
+      </th>
+      
+    </tr>
+     <tr>
+      
+      <th class="text-center">
+       1
+      </th>
+      <th class="text-center">
+       2
+      </th>
+      <th class="text-center">
+       3
+      </th>
+      <th class="text-center">
+       4
+      </th>
+      <th class="text-center">
+       5
+      </th>
+      <th class="text-center">
+       SC
+      </th>
+      <th class="text-center">
+       HPLC
+      </th>
+      <th class="text-center">
+       Grid
+      </th>
+      <th class="text-center">
+       Movie
+      </th>     
+    </tr>
+  </thead>
+  </table>

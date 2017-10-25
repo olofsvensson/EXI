@@ -66,12 +66,17 @@ var ExtISPyB ={
          exiUrl:'https://wwws.esrf.fr/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
-              
+             
 
             ],
+            
             MX:[
                { 
                    name : "ID23-1",
+                   sampleChangerType : 'FlexHCDDual'
+               },
+               { 
+                   name : "CM01",
                    sampleChangerType : 'FlexHCDDual'
                },
                { 
@@ -169,14 +174,23 @@ var ExtISPyB ={
 		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
-
+               {
+		          name : 'BM29',
+		          sampleChangerType : ''
+   	           }
              
             ],
-            MX:[
+            EM :[
+                   { 
+                      name : "CM01"
+                   }
+            ],
+            MX:[                
                { 
                    name : "ID23-1",
                    sampleChangerType : 'FlexHCD'
                },
+               
                { 
                    name : "ID23-2",
                    sampleChangerType : 'SC3'

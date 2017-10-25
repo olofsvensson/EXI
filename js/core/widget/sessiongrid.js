@@ -69,7 +69,7 @@ function SessionGrid(args) {
 
 SessionGrid.prototype.load = function(sessions) {    
     var _this = this;
-    /** Filtering session by the beamlines of the configuration file */    
+    /** Filtering session by the beamlines of the configuration file */        
     this.sessions = _.filter(sessions, function(o){ return _.includes(EXI.credentialManager.getBeamlineNames(), o.beamLineName); });
 	this.store.loadData(this.sessions, false);
     // Attach listener to edit the session comments
@@ -84,7 +84,6 @@ SessionGrid.prototype.load = function(sessions) {
 };
 
 SessionGrid.prototype.filterByBeamline = function(sessions, beamlines) {
-    console.log(beamlines);
     if (beamlines){
         if (beamlines.length > 0){
             var filtered = [];
@@ -186,19 +185,22 @@ SessionGrid.prototype.getPanel = function() {
 
     var labContacts = EXI.proposalManager.getLabcontacts();
     
-    var dataCollectionHeader = "Session synopsis";
+    var MXdataCollectionHeader = "Session synopsis";
+    var EMdataCollectionHeader = "Session synopsis";
     var technique = null;
     var beamlines = EXI.credentialManager.getBeamlineNames();
     if (beamlines.length > 0) {
         technique = EXI.credentialManager.getTechniqueByBeamline(beamlines[0]);
     }
-    if (technique){
-        dust.render("session.grid." + technique.toLowerCase() + ".datacollection.header.template",[],function(err,out){
-            dataCollectionHeader = out;
-        });
-    } else {
-        techniche = "MX";
-    }
+   
+    dust.render("session.grid.mx.datacollection.header.template",[],function(err,out){
+            MXdataCollectionHeader = out;
+    });
+   
+    dust.render("session.grid.em.datacollection.header.template",[],function(err,out){
+            EMdataCollectionHeader = out;
+    });
+
    
     this.store = Ext.create('Ext.data.Store', {
 		fields : ['Proposal_ProposalNumber', 'beamLineName', 'beamLineOperator', 'Proposal_title', 'Person_emailAddress', 'Person_familyName', 'Person_givenName', 'nbShifts', 'comments'],
@@ -240,7 +242,7 @@ SessionGrid.prototype.getPanel = function() {
               {
                             text              : 'Start',
                             dataIndex         : 'BLSession_startDate',
-                            flex              : 1,
+                             width               : 100,
                             hidden            : false,
                             renderer          : function(grid, a, record){                                 
                                                      
@@ -259,7 +261,7 @@ SessionGrid.prototype.getPanel = function() {
              {
                     text : 'Beamline',
                     dataIndex : 'beamLineName',
-                    width : 125,
+                    width               : 100,
                     hidden : false,
                     renderer : function(grid, a, record){
                             var location = "#";
@@ -275,7 +277,7 @@ SessionGrid.prototype.getPanel = function() {
             {
                 text : 'Proposal',
                 dataIndex : 'Proposal_ProposalNumber',
-                flex : 1,
+                width               : 100,
                 hidden : false,
                 renderer : function(grid, a, record){
                     var proposal = record.data.Proposal_proposalCode + record.data.Proposal_ProposalNumber;
@@ -286,7 +288,8 @@ SessionGrid.prototype.getPanel = function() {
 			    text                : 'Shifts',
 			    dataIndex           : 'nbShifts',
                 hidden              : this.isHiddenNumberOfShifts,
-                flex                : 0.5
+                flex                : 0.5,
+                hidden              : true
 		    },
            {
 			    text                : 'Local Contact',
@@ -331,18 +334,31 @@ SessionGrid.prototype.getPanel = function() {
                 flex               : 1
 		    },
            {
-                text                : dataCollectionHeader,
-			    dataIndex           : 'Person_emailAddress',
+                text                : MXdataCollectionHeader,
+			    dataIndex           : 'synapsis',
                  flex               : 3,
                 renderer : function(grid, a, record){                    
                     var html = "";
-                    dust.render("session.grid." + technique.toLowerCase() + ".datacollection.values.template",record.data,function(err,out){
+                    dust.render("session.grid.mx.datacollection.values.template",record.data,function(err,out){
                         html = out;
                     });                                                   
                     return html;
                  }
                
            },
+       /*   {
+                text                : EMdataCollectionHeader,
+			    dataIndex           : 'EMsynapsis',
+                 flex               : 0.5,
+                renderer : function(grid, a, record){                    
+                    var html = "";
+                    dust.render("session.grid.em.datacollection.values.template",record.data,function(err,out){
+                        html = out;
+                    });                                                   
+                    return html;
+                 }
+               
+           },*/
      
             {
                 text              : 'End',
@@ -353,14 +369,12 @@ SessionGrid.prototype.getPanel = function() {
                                         return record.data.BLSession_endDate;
                 }
 		   },
-
            
-
             {
 			    text                : 'A-form',
 			    dataIndex           : 'comments',
                 hidden              : false,
-                flex                : 0.5,
+                width                : 50,
                 renderer            : function(grid, a, record){    
                                         if (record.data.expSessionPk){
                                             return '<a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk='+ record.data.expSessionPk +'" class="btn btn-xs"><span class="glyphicon glyphicon-list-alt"></span></a>';

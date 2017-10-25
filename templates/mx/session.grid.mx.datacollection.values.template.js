@@ -34,7 +34,9 @@
         <div class="col-md-3" style="padding:0px;">
             <div style="text-align:center;">
                 {@gt key=dataCollectionGroupCount value=0} 
-                    <span style="background-color:#207a7a;" class="badge">{.dataCollectionGroupCount}</span>
+                    {@eq key=EMdataCollectionGroupCount value=0}             
+                        <span style="background-color:#207a7a;" class="badge">{.dataCollectionGroupCount}</span>
+                    {/eq}
                 {/gt}
             </div>
         </div>
