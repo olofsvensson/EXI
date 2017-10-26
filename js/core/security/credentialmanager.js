@@ -59,7 +59,7 @@ CredentialManager.prototype.getBeamlineNames = function(){
 	var connections = this.getConnections();
     var beamlines = [];
 	for (var i = 0; i < connections.length; i++) {		
-		for (var technique in connections[i].beamlines){
+		for (var technique in connections[i].beamlines){			
 			beamlines = _.concat(beamlines,  _.keys(_.keyBy(connections[i].beamlines[technique], "name")));
 
 		}
@@ -79,7 +79,8 @@ CredentialManager.prototype.getBeamlines = function(){
 	var connections = this.getConnections();
     var beamlines = [];
 	for (var i = 0; i < connections.length; i++) {
-      beamlines =_.concat(connections[i].beamlines.SAXS, connections[i].beamlines.MX, connections[i].beamlines.EM);     
+      beamlines = _.filter(_.concat(connections[i].beamlines.SAXS, connections[i].beamlines.MX, connections[i].beamlines.EM), function(o){return o!=null;});
+	  
 	}
 	return beamlines;
 };

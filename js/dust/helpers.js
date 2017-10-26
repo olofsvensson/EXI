@@ -187,8 +187,7 @@ dust.helpers.fileName = function (chunk, context, bodies, params) {
 }
 
 dust.helpers.formatDate = function (chunk, context, bodies, params) {
-    if (params.date) {
-        if (params.date){
+    if (params.date) {       
             if (params.format != null) {
                 try {
                     formatted = moment(new Date(params.date)).format(params.format);
@@ -199,7 +198,7 @@ dust.helpers.formatDate = function (chunk, context, bodies, params) {
             } else {
                 chunk.write(params.date);
             }
-        }
+        
     }
     return chunk;
 }

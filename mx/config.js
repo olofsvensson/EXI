@@ -14,7 +14,9 @@ var ExtISPyB ={
          exiUrl:'https://wwws.esrf.fr/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
-              
+              { 
+                   name : "BM29"                   
+               }
 
             ],
             MX:[
