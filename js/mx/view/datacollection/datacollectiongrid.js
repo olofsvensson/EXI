@@ -233,7 +233,9 @@ DataCollectionGrid.prototype.getColumns = function() {
                     data.workflows = [];
                 }
                 
-                
+                /** EM technique */
+                data = _this.parseEMData(record.data);
+
                 dust.render(_this.template, data, function(err, out) {                                                                       
                     html = html + out;
                 });
@@ -260,4 +262,45 @@ DataCollectionGrid.prototype.getColumns = function() {
     ];
 
     return columns;
+};
+
+DataCollectionGrid.prototype.parseEMData =  function(data){
+   var gridSquares = [];
+   if (data.DataCollectionGroup_experimentType == 'EM'){
+        try{
+            var moviesCount = [];
+            var motionCorrectionsCount = [];
+            var ctfsCount = [];
+            
+            if (data.movieCount){
+                moviesCount = data.movieCount.split(",");
+            }
+             if (data.motionCorrectionCount){
+                motionCorrectionsCount = data.motionCorrectionCount.split(",");
+            }
+            if (data.CTFCount){
+                ctfsCount = data.CTFCount.split(",");
+            }
+           
+
+            
+             /** Parsing grid squares */
+            for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
+                gridSquares.push({
+                    name : i,
+                    movieCount : moviesCount[i],
+                    motionCorrectionCount : motionCorrectionsCount[i],
+                    ctfCount : ctfsCount[i],
+                    DataCollection_dataCollectionId : data.DataCollection_dataCollectionId
+
+                });
+            }
+
+        }
+        catch(e){
+           console.log(e);
+        }
+   }
+   data.gridSquares = gridSquares;   
+   return data;
 };

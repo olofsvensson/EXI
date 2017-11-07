@@ -170,10 +170,10 @@ var ExtISPyB ={
       },    
 
       {
-         name:'ESRF localhost',
-         url:'http://localhost:8080/ispyb/ispyb-ws/rest',
+         name:'ESRF lindemaria',
+         url:'http://lindemaria:8080/ispyb/ispyb-ws/rest',
          icon : '../images/site/dev.esrf.png',
-		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
+		 exiUrl:'http://lindemaria:8080/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
                {

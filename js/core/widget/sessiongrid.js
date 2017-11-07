@@ -17,6 +17,8 @@ function SessionGrid(args) {
     
     this.layout = 'fit';
     
+    this.dataCollectionCountKey = ['energyScanCount', 'xrfSpectrumCount','testDataCollectionGroupCount','dataCollectionGroupCount',  'imagesCount', 'calibrationCount', 'hplcCount', 'sampleChangerCount']
+
     /** Array with the beamline selected to make the filter */
     this.beamlineFilter = [];
     // Term filter value
@@ -37,14 +39,33 @@ function SessionGrid(args) {
 		}
 	
 	}
-	this.onSelected = new Event(this);
+
 };
 
 SessionGrid.prototype.getDataCollectionURL = function(session) {   
      if (EXI.credentialManager.getTechniqueByBeamline(session.beamLineName) == "SAXS"){
-         return "#/session/nav/" + session.sessionId + "/session";
+         return "#/saxs/proposal/" + session.Proposal_proposalCode + session.Proposal_ProposalNumber +"/session/nav/" + session.sessionId + "/session";
      }           
      return "#/mx/proposal/" + session.Proposal_proposalCode + session.Proposal_ProposalNumber +"/datacollection/session/" + session.sessionId + "/main";     
+};
+
+
+SessionGrid.prototype.renderHTML = function(sessions) {              
+    var _this = this;
+    dust.render("session.grid.mx.datacollection.template", sessions,function(err,out){ 
+          $('#' + _this.id +'_main').html(out);
+    });      
+};
+
+SessionGrid.prototype.getSumDataCollections = function(session) {   
+    var sum = 0;
+    for (var i in this.dataCollectionCountKey){        
+        var key = this.dataCollectionCountKey[i];
+        if (session[key]){
+            sum = sum + parseInt(session[key]);
+        }
+    }
+    return sum;
 };
 
 SessionGrid.prototype.load = function(sessions) {    
@@ -56,10 +77,12 @@ SessionGrid.prototype.load = function(sessions) {
     /** Parsing data */
     for(var i=0; i < this.sessions.length; i++){
         this.sessions[i].dataCollectionURL = this.getDataCollectionURL(this.sessions[i]);
+        this.sessions[i].totalDataCollectionCount = this.getSumDataCollections(this.sessions[i]);
     }
+   
 
-    this.store.loadData([{ sessions : this.sessions}], false);
-
+    this.sessions = this.sessions.sort(function(a,b){return new Date(a.BLSession_startDate) - new Date(a.BLSession_startDate);});
+    this.renderHTML(this.sessions);
 
     // Attach listener to edit the session comments
     var attachListeners = function(grid) {
@@ -106,7 +129,9 @@ SessionGrid.prototype.getToolbar = function(sessions) {
                         filtered = _this.filterByTerm(filtered,_this.termFilter);
                     }
                     _this.store.loadData([{ sessions: filtered}],false);
-                    _this.panel.setTitle(filtered.length + " sessions");
+                    //_this.panel.setTitle(filtered.length + " sessions");
+                    
+                     _this.renderHTML(filtered);
     };
     
     for (var i =0; i<EXI.credentialManager.getBeamlines().length; i++){        
@@ -184,28 +209,19 @@ SessionGrid.prototype.getPanel = function() {
 
     
    
-	this.panel = Ext.create('Ext.grid.Panel', {		
-		store : this.store,
+	this.panel = Ext.create('Ext.panel.Panel', {				
         tbar : this.getToolbar(),				
 		cls : 'border-grid',
 		minHeight: 300,                
         width : this.width,
         height : this.height,
-		margin : this.margin,
-     
+		margin : this.margin,     
 		layout : this.layout,
-		columns : [             
-           { 
-                dataIndex           : 'synapsis',
-                flex               : 3,
-                renderer : function(grid, a, record){   
-                    var html = "";                 
-                    dust.render("session.grid.mx.datacollection.header.template",record.data.sessions,function(err,out){
-                       html = out;
-                    });  
-                    return html;                                                                                                           
-                 }               
-           }
+		items : [   
+                  {
+                       html : '<div style="overflow: auto;height:100%;" id="' + this.id +'_main"></div>'
+
+                  }
            ]			
 	});
 

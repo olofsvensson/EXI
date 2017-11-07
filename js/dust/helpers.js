@@ -253,3 +253,19 @@ dust.helpers.getIndexByCommaSeparator = function (chunk, context, bodies, params
     }
     return chunk;
 }
+
+
+dust.helpers.getFileName = function (chunk, context, bodies, params) {
+    
+    if (params.key) {        
+        var value = context.current()[params.key];
+        if (value){           
+           chunk.write(value.replace(/^.*[\\\/]/, ''));            
+        }
+       
+    }
+    else{
+        chunk.write('NA');
+    }
+    return chunk;
+}
