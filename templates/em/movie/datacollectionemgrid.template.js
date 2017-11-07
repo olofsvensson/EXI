@@ -1,5 +1,5 @@
 
-<div class="container-fluid" >
+
  {#.}  
    
    <div class="panel with-nav-tabs panel-default">
@@ -14,12 +14,14 @@
        </div>
    
 
+ <div class="tab-content">
+<div class="container-fluid" >
    <div class="row">
-          <div class="col-sm-2 text-center" style='border-bottom:1px solid gray'>Movie
+          <div class="col-sm-2 text-center" > Movie
           </div>
-           <div class="col-sm-4 text-center">Motion Correction
+           <div class="col-sm-6 text-center" >Motion Correction
           </div>
-           <div class="col-sm-3 text-center">CTF
+           <div class="col-sm-2 text-center"  >CTF
           </div>
 
    </div>
@@ -48,7 +50,7 @@
          </table> 
       </div>
        <div class="col-sm-1">
-               <img src="{.micrographThumbnailURL}" class="img-thumbnail">
+               <img  class="img-thumbnail img-responsive" data-src="{.micrographThumbnailURL}" data-zoom-image="{.micrographThumbnailURL}"  alt="Image not found">
        </div>
       
        
@@ -83,13 +85,14 @@
 
        <div class="col-sm-1">
             {?MotionCorrection_motionCorrectionId}
-               <img src="{.motionCorrectionDriftURL}" class="img-thumbnail">
+               <img  class="img-thumbnail  img-responsive"  data-src="{.motionCorrectionDriftURL}" data-zoom-image="{.motionCorrectionDriftURL}"  alt="Image not found">
             {/MotionCorrection_motionCorrectionId}
                             
        </div>
         <div class="col-sm-1">              
             {?MotionCorrection_motionCorrectionId}
-               <img src="{.motionCorrectionThumbnailURL}" class="img-thumbnail">               
+              
+               <img  class="img-thumbnail"  data-src="{.motionCorrectionThumbnailURL}" data-zoom-image="{.motionCorrectionThumbnailURL}"  alt="Image not found">              
              {/MotionCorrection_motionCorrectionId}
        </div>
 
@@ -132,6 +135,8 @@
       
    </div>
    </div>
+   </div>
+
    </div>
    {/.} 
 

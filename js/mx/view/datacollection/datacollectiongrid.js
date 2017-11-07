@@ -34,6 +34,7 @@ DataCollectionGrid.prototype.loadMagnifiers = function(dataCollectionGroup){
 */
 DataCollectionGrid.prototype.load = function(dataCollectionGroup){
     try{        
+        
         this.store.loadData(dataCollectionGroup);
         this.loadMagnifiers(dataCollectionGroup);
     }
@@ -156,6 +157,10 @@ DataCollectionGrid.prototype.getColumns = function() {
 
                 var data = record.data;                              
                 var html = "";                               
+xx
+                /** DataCollectionGroup */
+                debugger
+                //data.xtalShapShot = EXI.getDataAdapter().mx.dataCollectionGroup.getXtalThumbnail(data.DataCollectionGroup_dataCollectionGroupId);
 
                 /** For thumbnail */
                 data.urlThumbnail = EXI.getDataAdapter().mx.dataCollection.getThumbNailById(data.lastImageId);
@@ -182,6 +187,7 @@ DataCollectionGrid.prototype.getColumns = function() {
                 data.xtal2 = EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(record.data.DataCollection_dataCollectionId, 2);
                 data.xtal3 = EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(record.data.DataCollection_dataCollectionId, 3);
                 data.xtal4 = EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(record.data.DataCollection_dataCollectionId, 4);
+
 
                 /** Image quality indicator **/
                 data.indicator = EXI.getDataAdapter().mx.dataCollection.getQualityIndicatorPlot(record.data.DataCollection_dataCollectionId);                              

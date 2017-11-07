@@ -51,8 +51,27 @@ DataCollectionEmMainView.prototype.loadCollections = function(dataCollections) {
        dataCollections[i].motionCorrectionDriftURL = EXI.getDataAdapter().em.dataCollection.getMotionCorrectionDriftURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);
        dataCollections[i].motionCorrectionThumbnailURL = EXI.getDataAdapter().em.dataCollection.getMotionCorrectionThumbnailURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);
        dataCollections[i].ctfSpectraURL = EXI.getDataAdapter().em.dataCollection.geCTFThumbnailURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);       
+       
     }
     dust.render("datacollectionemgrid.template", dataCollections,function(err,out){         
           $('#' + _this.id +'_main').html(out);
-    }); 
+    });
+    var node = document.getElementById(_this.id +'_main');
+    console.log(node);
+    var lazy = {
+            bind: 'event',
+            /** !!IMPORTANT this is the parent node which contains the scroll **/
+            appendScroll: node,
+            beforeLoad: function(element) {
+                console.log('image "' + (element.data('src')) + '" is about to be loaded');
+               
+            },           
+            onFinishedAll: function() {
+                EXI.mainStatusBar.showReady();
+            }
+    };
+
+
+    var timer1 = setTimeout(function() {  $('.img-responsive').lazy(lazy);}, 500);
+    var timer2 = setTimeout(function() {  $('.smalllazy').lazy(lazy);}, 500);  
 };
