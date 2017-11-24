@@ -146,6 +146,7 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
 
 DataCollectionGrid.prototype.getColumns = function() {
     var _this = this;
+
     var columns = [
         {
 
@@ -157,10 +158,10 @@ DataCollectionGrid.prototype.getColumns = function() {
 
                 var data = record.data;                              
                 var html = "";                               
-xx
+
                 /** DataCollectionGroup */
-                debugger
-                //data.xtalShapShot = EXI.getDataAdapter().mx.dataCollectionGroup.getXtalThumbnail(data.DataCollectionGroup_dataCollectionGroupId);
+                
+                data.xtalShapShot = EXI.getDataAdapter().mx.dataCollectionGroup.getXtalThumbnail(data.DataCollectionGroup_dataCollectionGroupId);
 
                 /** For thumbnail */
                 data.urlThumbnail = EXI.getDataAdapter().mx.dataCollection.getThumbNailById(data.lastImageId);
@@ -258,6 +259,7 @@ xx
             hidden: true,
             renderer: function(grid, e, record) {
                 var html = "";
+                
                 dust.render("ids.mxdatacollectiongrid.template", record.data, function(err, out) {
                     html = out;
                 });
@@ -293,11 +295,12 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
              /** Parsing grid squares */
             for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
                 gridSquares.push({
-                    name : i,
+                    name : i + 1,
                     movieCount : moviesCount[i],
                     motionCorrectionCount : motionCorrectionsCount[i],
                     ctfCount : ctfsCount[i],
-                    DataCollection_dataCollectionId : data.DataCollection_dataCollectionId
+                    DataCollection_dataCollectionId : data.DataCollection_dataCollectionId,
+                    snapshot : EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(data.DataCollection_dataCollectionId, 1)
 
                 });
             }

@@ -18,6 +18,7 @@ function DataCollectionMxMainView(args) {
     this.genericDataCollectionPanel = new MXDataCollectionGrid();
     this.energyScanGrid = new EnergyScanGrid();
     this.xfeScanGrid = new XFEScanGrid();
+   
 }
 
 DataCollectionMxMainView.prototype.getPanel = MainView.prototype.getPanel;
@@ -52,7 +53,7 @@ DataCollectionMxMainView.prototype.getContainer = function() {
                     items:[
                         this.xfeScanGrid.getPanel()
                     ]
-            },
+            }
         ],
         listeners: {
             afterrender: function(panel){

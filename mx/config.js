@@ -19,6 +19,11 @@ var ExtISPyB ={
                }
 
             ],
+             EM :[
+                   { 
+                      name : "CM01"
+                   }
+            ],
             MX:[
                { 
                    name : "ID23-1",
@@ -125,8 +130,16 @@ var ExtISPyB ={
 		 exiUrl:'http://ispyvalid.esrf.fr:8080/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
-
+               {
+		          name : 'BM29',
+		          sampleChangerType : ''
+   	           }
              
+            ],
+            EM :[
+                   { 
+                      name : "CM01"
+                   }
             ],
             MX:[
                 { 

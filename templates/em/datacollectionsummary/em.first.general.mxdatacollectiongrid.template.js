@@ -8,27 +8,27 @@
     <tr>
       <td>Grid Squares</td>
       <td class='column_parameter_value'>{@decimal key="numberOfGridSquares" decimals=0 /}</td>
-   </tr>
+   </tr> 
    <tr>
       <td>Voltage</td>
-      <td class='column_parameter_value'>{.DataCollection_imagePrefix}</td>
+      <td class='column_parameter_value'>{.DataCollection_voltage}</td>
    </tr>
    <tr>
-      <td>Spherical Abberation</td>
-      <td class='column_parameter_value'>{.DataCollection_dataCollectionNumber}</td>
+      <td>Spherical Aberration</td>
+      <td class='column_parameter_value'>2.7</td>
    </tr>
    <tr>
-      <td># Images</td>
+      <td># Frames</td>
       <td class='column_parameter_value'>{.DataCollection_numberOfImages}</td>
    </tr>
    <tr>
       <td>Amplitude Contrast</td>
-      <td class='column_parameter_value'>{@decimal key="transmission" decimals=1 /}</td>
+      <td class='column_parameter_value'>10%</td>
    </tr>
 
      <tr>
       <td>Scanned Pixel Size</td>
-      <td class='column_parameter_value'>{@decimal key="transmission" decimals=1 /} %</td>
+      <td class='column_parameter_value'></td>
    </tr>
 
     

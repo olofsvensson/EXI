@@ -15,19 +15,19 @@ function DataCollectionEmMainView(args) {
         }
     }
 }
+DataCollectionEmMainView.prototype.getPanel = MainView.prototype.getPanel;
 
-DataCollectionEmMainView.prototype.getPanel =  function() {
+DataCollectionEmMainView.prototype.getContainer =  function() {
     var _this = this;
     
-    this.container = Ext.create('Ext.panel.Panel', {   
-    layout : 'fit',    
-    padding : "5 40 0 5",
-    items: [ 
+     this.container = Ext.create('Ext.panel.Panel', {    
+     //minHeight: 900,
+     padding: '5 5 5 5',
+     items: [ 
         {
-             html : '<div style="overflow: auto;height:100%;" id="' + this.id +'_main"></div>'
+             html : '<div style="overflow: scroll;height:800px" id="' + this.id +'_main"></div>'
         }
-        ]
-        
+      ]        
     });
     return this.container;
 };
@@ -48,6 +48,8 @@ DataCollectionEmMainView.prototype.loadCollections = function(dataCollections) {
     for(var i = 0; i < dataCollections.length; i++){
        dataCollections[i].micrographThumbnailURL = EXI.getDataAdapter().em.dataCollection.getMicrographThumbnailURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);
        dataCollections[i].metadataXMLURL = EXI.getDataAdapter().em.dataCollection.getMovieMetadataXMLURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);
+       dataCollections[i].mrcURL = EXI.getDataAdapter().em.dataCollection.getMRCURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);
+      
        dataCollections[i].motionCorrectionDriftURL = EXI.getDataAdapter().em.dataCollection.getMotionCorrectionDriftURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);
        dataCollections[i].motionCorrectionThumbnailURL = EXI.getDataAdapter().em.dataCollection.getMotionCorrectionThumbnailURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);
        dataCollections[i].ctfSpectraURL = EXI.getDataAdapter().em.dataCollection.geCTFThumbnailURL(dataCollections[i].Movie_dataCollectionId, dataCollections[i].Movie_movieId);       
@@ -58,10 +60,12 @@ DataCollectionEmMainView.prototype.loadCollections = function(dataCollections) {
     });
     var node = document.getElementById(_this.id +'_main');
     console.log(node);
+    
     var lazy = {
             bind: 'event',
             /** !!IMPORTANT this is the parent node which contains the scroll **/
             appendScroll: node,
+            //appendScroll: node,
             beforeLoad: function(element) {
                 console.log('image "' + (element.data('src')) + '" is about to be loaded');
                
@@ -73,5 +77,5 @@ DataCollectionEmMainView.prototype.loadCollections = function(dataCollections) {
 
 
     var timer1 = setTimeout(function() {  $('.img-responsive').lazy(lazy);}, 500);
-    var timer2 = setTimeout(function() {  $('.smalllazy').lazy(lazy);}, 500);  
+    //var timer2 = setTimeout(function() {  $('.smalllazy').lazy(lazy);}, 500);  
 };
