@@ -1,6 +1,6 @@
 {
   "name": "exi-ui",
-  "version": "5.1.0",
+  "version": "5.4.0",
   "homepage": "https://github.com/ispyb/EXI",
   "description": "Extended ISPyB User Interface",
   "main": "mx/index.html",
@@ -31,7 +31,7 @@
     "jquery-lazy": "~0.6.1",
     "dygraphs": "1.1.1",
     "qunit": "~1.22.0",
-    "ispyb-js-api": "5.1.0",
+    "ispyb-js-api": "5.4.0",
     "vis": "^4.15.0",
     "Snap.svg": "snap.svg#^0.4.1",
     "pathjs-amd": "^0.10.0",
