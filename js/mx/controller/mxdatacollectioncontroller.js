@@ -24,6 +24,19 @@ MxDataCollectionController.prototype.init = function() {
 	var _this = this;
 	var listView;	
     
+	Path.map("#/em/datacollection/:datacollectionId/main").to(function() {
+		var mainView = new DataCollectionEmMainView();
+		EXI.addMainPanel(mainView);
+        EXI.hideNavigationPanel();
+		var onSuccess = function(sender, data){
+			
+			mainView.loadCollections(data);
+		};
+		
+		EXI.getDataAdapter({onSuccess : onSuccess}).em.dataCollection.getMoviesDataByDataCollectionId(this.params['datacollectionId']);
+	}).enter(this.setPageBackground);
+    
+
 	Path.map("#/mx/datacollection/protein_acronym/:acronmys/main").to(function() {
 		var mainView = new DataCollectionMxMainView();
 		EXI.addMainPanel(mainView);
