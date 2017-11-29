@@ -8,6 +8,8 @@ function ContainersDataCollectionGrid(args) {
     this.legend = new PuckLegend({width : 300, height : 50, cy : "12.5%", tOffset : "17%"});
 }
 
+ContainersDataCollectionGrid.prototype.parseEMData = DataCollectionGrid.prototype.parseEMData;
+
 ContainersDataCollectionGrid.prototype.getPanel = function (dataCollectionGroup) {
     var _this = this;
     this.store = Ext.create('Ext.data.Store', {
