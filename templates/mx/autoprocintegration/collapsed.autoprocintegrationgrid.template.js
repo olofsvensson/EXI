@@ -18,7 +18,7 @@
                   <th>Resolution (&#197;)</th>
                   <th>Multiplicity</th>
                   <th>Completeness %</th> 
-                  <th>I/Sigma (I)</th>
+                  <th>&#60;I/Sigma&#62;</th>
                   <th>Rmeas</th> 
                   <th>Rmerge</th>
                   <th>Rpim</th>
@@ -29,7 +29,7 @@
                   <th>Download</th>
                   <th></th>
                </tr>
-            </thead> 
+            </thead>  
             {#.}
                   {@select key=v_datacollection_processingStatus}
                         {@eq value="SUCCESS"} {>"success.collapsed.autoprocintegrationgrid.template" /}  {/eq}
