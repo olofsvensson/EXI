@@ -33,7 +33,7 @@ MXDataCollectionGrid.prototype.getPanel = function(dataCollectionGroup) {
 MXDataCollectionGrid.prototype.getToolBar = function() {
     var _this = this;
 
-    function onMenuClicked(widget) {
+    function onMenuClicked(widget) {        
         if (_this.activePanel != widget) {
             _this.activePanel = widget;
             if (Ext.getCmp(_this.id + "_search").getValue() != "") {
@@ -80,7 +80,7 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                         handler: function() {
                             _this.renderingType = "DATACOLLECTION_COLLAPSED";
                             Ext.getCmp('DataCollectionListViewBtn').toggle(false);
-                            Ext.getCmp('ContainerViewBtn').toggle(false);
+                            Ext.getCmp('ContainerViewBtn').toggle(false);                            
                             onMenuClicked(_this.collapsedDataCollectionGrid);
                         }
 

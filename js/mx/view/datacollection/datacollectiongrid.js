@@ -241,9 +241,10 @@ DataCollectionGrid.prototype.getColumns = function() {
                 }
                 
                 /** EM technique */
+                
                 data = _this.parseEMData(record.data);
 
-                dust.render(_this.template, data, function(err, out) {                                                                       
+                dust.render(_this.template, data, function(err, out) {                                                                                           
                     html = html + out;
                 });
                 
@@ -274,6 +275,7 @@ DataCollectionGrid.prototype.getColumns = function() {
 
 DataCollectionGrid.prototype.parseEMData =  function(data){
    var gridSquares = [];
+   
    if (data.DataCollectionGroup_experimentType == 'EM'){
         try{
             var moviesCount = [];
