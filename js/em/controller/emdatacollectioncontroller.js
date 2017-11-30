@@ -23,7 +23,7 @@ EMDataCollectionController.prototype.notFound = ExiGenericController.prototype.n
 EMDataCollectionController.prototype.init = function() {
 	var _this = this;
 	var listView;	
-    /*
+    
 	Path.map("#/em/datacollection/:datacollectionId/main").to(function() {
 		var mainView = new DataCollectionEmMainView();
 		EXI.addMainPanel(mainView);
@@ -35,9 +35,5 @@ EMDataCollectionController.prototype.init = function() {
 		
 		EXI.getDataAdapter({onSuccess : onSuccess}).em.dataCollection.getMoviesDataByDataCollectionId(this.params['datacollectionId']);
 	}).enter(this.setPageBackground);
-    
-	*/
-
-
 
 };
