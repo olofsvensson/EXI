@@ -276,23 +276,38 @@ DataCollectionGrid.prototype.getColumns = function() {
 DataCollectionGrid.prototype.parseEMData =  function(data){
    var gridSquares = [];
    
-   if (data.DataCollectionGroup_experimentType == 'EM'){
-        try{
-            var moviesCount = [];
-            var motionCorrectionsCount = [];
-            var ctfsCount = [];
-            
-            if (data.movieCount){
-                moviesCount = data.movieCount.split(",");
-            }
-             if (data.motionCorrectionCount){
-                motionCorrectionsCount = data.motionCorrectionCount.split(",");
-            }
-            if (data.CTFCount){
-                ctfsCount = data.CTFCount.split(",");
-            }
-           
+   function getArray(data, key){
+       if (data[key]){
+           return data[key].split(",");
+       }
+       return [];
+   }
 
+   function getPercentrage(count, total){
+       try{
+       if (count){
+           if(total){
+               return count/total*100;
+           }
+       }
+       }
+       catch(e){
+       }
+       return 0;
+   }
+
+   if (data.DataCollectionGroup_experimentType == 'EM'){
+        try{            
+            var moviesCount = getArray(data, "movieCount");
+            var motionCorrectionsCount = getArray(data, "motionCorrectionCount");
+            var ctfsCount = getArray(data, "CTFCount");            
+            var imageDirectoryList = getArray(data, "imageDirectoryList");
+            var startTimeList = getArray(data, "startTimeList");
+            var magnificationList = getArray(data, "magnificationList");
+            var voltageList = getArray(data, "voltageList");
+            var dataCollectionList = getArray(data, "dataCollectionIdList");                                               
+
+           
             
              /** Parsing grid squares */
             for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
@@ -301,8 +316,14 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
                     movieCount : moviesCount[i],
                     motionCorrectionCount : motionCorrectionsCount[i],
                     ctfCount : ctfsCount[i],
-                    DataCollection_dataCollectionId : data.DataCollection_dataCollectionId,
-                    snapshot : EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(data.DataCollection_dataCollectionId, 1)
+                    dataCollectionId : dataCollectionList[i],
+                    snapshot : EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(dataCollectionList[i], 1),
+                    imageDirectory : imageDirectoryList[i],
+                    magnification : magnificationList[i],
+                    voltage : voltageList[i],
+                    startTime : startTimeList[i],
+                    motionPercentage : getPercentrage(motionCorrectionsCount[i], moviesCount[i]),
+                    ctfPercentage : getPercentrage(ctfsCount[i], moviesCount[i])
 
                 });
             }
@@ -312,6 +333,7 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
            console.log(e);
         }
    }
-   data.gridSquares = gridSquares;   
+   
+   data.gridSquares = gridSquares.reverse();   
    return data;
 };

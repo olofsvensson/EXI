@@ -1,6 +1,4 @@
-<table class="table">
-  
- 
+<table class="table">   
    <tr>
       <td>Sample</td>
       <td class='column_parameter_value'>{.BLSample_name}</td>
@@ -29,7 +27,5 @@
      <tr>
       <td>Scanned Pixel Size</td>
       <td class='column_parameter_value'></td>
-   </tr>
-
-    
+   </tr>    
 </table>
