@@ -298,34 +298,49 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
 
    if (data.DataCollectionGroup_experimentType == 'EM'){
         try{            
+            
             var moviesCount = getArray(data, "movieCount");
             var motionCorrectionsCount = getArray(data, "motionCorrectionCount");
-            var ctfsCount = getArray(data, "CTFCount");            
+            var motionCorrectionDataCollectionIds = getArray(data, "motionCorrectionDataCollectionIds");
+            var ctfsCount = getArray(data, "CTFCount");        
+            var ctfDataCollectionIds = getArray(data, "CTFdataCollectionIds");            
             var imageDirectoryList = getArray(data, "imageDirectoryList");
             var startTimeList = getArray(data, "startTimeList");
             var magnificationList = getArray(data, "magnificationList");
             var voltageList = getArray(data, "voltageList");
             var dataCollectionList = getArray(data, "dataCollectionIdList");                                               
 
-           
+            function getMotionCorrectionByDataCollectionId(dataCollectionId, counts, ids ){  
+                              
+                var index = _.findIndex(ids, function(o) { return o == dataCollectionId });
+                if (index > -1){
+                    return counts[index];
+                }
+                return 0;
+            }
             
              /** Parsing grid squares */
             for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
+                
+                var motionCount =  getMotionCorrectionByDataCollectionId(dataCollectionList[i], motionCorrectionsCount, motionCorrectionDataCollectionIds);
+                var ctfCount =  getMotionCorrectionByDataCollectionId(dataCollectionList[i], ctfsCount, ctfDataCollectionIds);
+                debugger
                 gridSquares.push({
                     name : i + 1,
                     movieCount : moviesCount[i],
-                    motionCorrectionCount : motionCorrectionsCount[i],
-                    ctfCount : ctfsCount[i],
+                    motionCorrectionCount : motionCount,
+                    ctfCount : ctfCount,
                     dataCollectionId : dataCollectionList[i],
                     snapshot : EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(dataCollectionList[i], 1),
                     imageDirectory : imageDirectoryList[i],
                     magnification : magnificationList[i],
                     voltage : voltageList[i],
                     startTime : startTimeList[i],
-                    motionPercentage : getPercentrage(motionCorrectionsCount[i], moviesCount[i]),
-                    ctfPercentage : getPercentrage(ctfsCount[i], moviesCount[i])
+                    motionPercentage : getPercentrage(motionCount, moviesCount[i]),
+                    ctfPercentage : getPercentrage(ctfCount, moviesCount[i])
 
                 });
+
             }
 
         }
