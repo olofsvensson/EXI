@@ -58,8 +58,7 @@ DataCollectionEmMainView.prototype.loadCollections = function(dataCollections) {
     dust.render("datacollectionemgrid.template", dataCollections,function(err,out){         
           $('#' + _this.id +'_main').html(out);
     });
-    var node = document.getElementById(_this.id +'_main');
-    console.log(node);
+    var node = document.getElementById(_this.id +'_main');   
     
     var lazy = {
             bind: 'event',

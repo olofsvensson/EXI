@@ -41,7 +41,7 @@ UncollapsedDataCollectionGrid.prototype.getPanel = function(){
         border: 1,        
         store: this.store,  
         id: this.id,     
-         minHeight : 900,
+        minHeight : 900,
         disableSelection: true,
         columns: this.getColumns(),
         viewConfig: {
