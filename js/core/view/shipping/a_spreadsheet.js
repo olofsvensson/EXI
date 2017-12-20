@@ -1,14 +1,14 @@
 function SpreadSheet(args){
 	this.id = BUI.id();
-	this.height = 380;
+    this.height = 440;
 	this.width = 500;
 	this.containerType = "OTHER";
 	
 	this.acronyms;
 	if (args != null) {
-		if (args.height != null) {
-			this.height = args.height;
-		}
+		//if (args.height != null) {
+		//	this.height = args.height;
+		//}
 		if (args.width != null) {
 			this.width = args.width;
 		}
@@ -23,11 +23,11 @@ SpreadSheet.prototype.getPanel = function(){
 	var _this = this;
 	this.panel = Ext.create('Ext.panel.Panel', {
 		layout : 'vbox',
-		height 		: this.height+ 50,
+		//height 		: this.height+ 50,
 		items : [ 
 				  {
-						html 		: '<div  style="overflow: auto;overflow-y: hidden; border:1px solid gray;background-color:white;height:500px;width:' + (_this.width - 20) +'px"; id="' + this.id + '_samples"; ></div>',
-						margin 		: '0 0 20 10',
+						html 		: '<div  style="overflow: auto;overflow-y: hidden; border:1px solid gray;background-color:white;height:100px;"; id="' + this.id + '_samples"; ></div>',
+						//margin 		: '0 0 20 10',
 						height 		: this.height,
 						width 		: this.width,
 						autoScroll 	: true,
@@ -115,7 +115,7 @@ SpreadSheet.prototype.load = function(data){
 
 	this.spreadSheet = new Handsontable(container, {
 			data: data,
-			height : this.height,
+			//height : this.height,
 			width : this.width,
 			manualColumnResize: true,
 			colWidths: this.getHeaderWidth(),

@@ -92,6 +92,7 @@ ContainerSpreadSheet.prototype.loadData = function(data){
 					
                     $(".htInvalid").removeClass("htInvalid");
 					$(".edit-crystal-button").click(function(sender){
+						debugger
 								var row = sender.target.id.split("-")[2];
 								var crystal = _this.parseCrystalFormColumn(_this.getData()[row][_this.crystalFormIndex],row);
 								_this.showEditForm(crystal,row);
@@ -149,6 +150,7 @@ ContainerSpreadSheet.prototype.load = function(puck){
 	this.crystalFormIndex = this.getColumnIndex('Crystal Form');
 	// this.unitCellIndex = this.getColumnIndex('Unit cell');
 	this.spaceGroupIndex = this.getColumnIndex("Space Group");
+	
 	this.loadData(this.getSamplesData(puck));    	
 };
 
@@ -177,7 +179,7 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
     }
 		
     for (var i = 0; i < puck.capacity; i++) {	
-		debugger	
+			
         var sample = getSampleByLocation(samples, i + 1);
         if (sample!= null){
                 var crystal = sample.crystalVO;
@@ -214,7 +216,10 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
                 );
         }
         else{
-            data.push([(i+1)]);
+            data.push(["parcel",
+						puck.code,
+						puck.containerType,
+                        (i+1)]);
         }
     }
 	return data;
@@ -262,6 +267,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                         }
                                                                     }
                                                                 }, 
+			{ text :'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>', id :'editCrystalForm', column : {width : 30, renderer: editCrystalFormRenderer, editor : false, readOnly: true}},
             { text :'Exp.<br /> Type', id : 'Experiment Type', column : {
                                                                         width : 100,  
                                                                         type: 'dropdown',
@@ -289,9 +295,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
 
-    if (this.renderCrystalFormColumn) {
-        header.push({ text :'Edit Crystal Form', id :'editCrystalForm', column : {width : 200, renderer: editCrystalFormRenderer, editor : false, readOnly: true}});
-    }
+    
 
     return header;
 };
@@ -521,7 +525,7 @@ ContainerSpreadSheet.prototype.addEditCrystalFormButton = function (row, column)
 	if (!column) {
 		column = this.getColumnIndex("editCrystalForm");
 	}	
-	var button = "<a id='edit-button-" + row + "' class='btn btn-xs edit-crystal-button'><span class='glyphicon glyphicon-edit'></span> Edit Crystal Form</a>";
+	var button = "<span style='color:blue;cursor: pointer;' id='edit-glyphicon-" + row + "'class='glyphicon glyphicon-edit edit-crystal-button'></span>";
 	this.populateCrystalFormButton(row, column, button);
 	
 	

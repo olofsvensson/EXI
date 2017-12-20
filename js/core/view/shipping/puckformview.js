@@ -323,7 +323,7 @@ PuckFormView.prototype.checkSampleNames = function(sampleNames, proteinIds, cont
 * @method save
 * @param {Boolean} returnToShipment True if you want to return to shipment after the save
 */
-PuckFormView.prototype.save = function(returnToShipment) {	
+PuckFormView.prototype.save = function(returnToShipment) {		
 	var _this = this;
 
 	var puck = this.containerSpreadSheet.getPuck();
@@ -385,7 +385,7 @@ PuckFormView.prototype.save = function(returnToShipment) {
 			_this.panel.setLoading(false);
 			if (returnToShipment){
 				location.href = "#/shipping/" + _this.shippingId + "/main";
-			} else {
+			} else {				
 				_this.load(_this.containerId, _this.shippingId);
 			}
 		};
