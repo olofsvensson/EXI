@@ -36,7 +36,6 @@ ContainerSpreadSheet.prototype.getHeaderWidth = SpreadSheet.prototype.getHeaderW
 ContainerSpreadSheet.prototype.getHeaderId = SpreadSheet.prototype.getHeaderId;
 ContainerSpreadSheet.prototype.getHeaderText = SpreadSheet.prototype.getHeaderText;
 ContainerSpreadSheet.prototype.getColumns = SpreadSheet.prototype.getColumns;
-ContainerSpreadSheet.prototype.parseTableData = SpreadSheet.prototype.parseTableData;
 ContainerSpreadSheet.prototype.getData = SpreadSheet.prototype.getData;
 ContainerSpreadSheet.prototype.loadData = SpreadSheet.prototype.loadData;
 ContainerSpreadSheet.prototype.setDataAtCell = SpreadSheet.prototype.setDataAtCell;
@@ -45,6 +44,48 @@ ContainerSpreadSheet.prototype.disableAll = SpreadSheet.prototype.disableAll;
 ContainerSpreadSheet.prototype.setContainerType  = SpreadSheet.prototype.setContainerType;
 ContainerSpreadSheet.prototype.updateNumberOfRows  = SpreadSheet.prototype.updateNumberOfRows;
 ContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
+
+
+
+/**
+* Returns an array of objects for each row in the grid where at least the protein acronym column is filled
+*
+* @method parseTableData
+*/
+ContainerSpreadSheet.prototype.parseTableData = function() {
+	
+	var parsed = [];
+	var data = this.spreadSheet.getData();
+	// var columnIds = this.getHeaderId();
+	if (data != null && data.length > 0){
+		var columnIds = this.getHeaderId();
+		for (var j = 0; j < data.length; j++) {
+			if (data[j].length > 1){
+				var row = {};
+				row["location"] = j + 1;
+				for (var k = 0 ; k < columnIds.length ; k++) {
+					var key = columnIds[k];
+					var value = data[j][this.getColumnIndex(key)];
+					row[key] = value;
+				}
+				if (row["Protein Acronym"]){
+					if (row["Protein Acronym"].length > 0){
+						parsed.push(row);
+					}
+				}
+			}
+		}
+	}
+	/** Curated contains the whole-data rows * */
+	var curated = [];
+	for (var i = 0; i < parsed.length; i++) {
+		if (parsed[i]["Protein Acronym"] != null){
+			curated.push(parsed[i]);
+		}
+	}
+	return curated;
+};
+
 
 ContainerSpreadSheet.prototype.loadData = function(data){
 
@@ -199,9 +240,11 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
                         (i+1), 
                         protein.acronym, 
 						sample.name, 
-						this.getCrystalInfo(crystal), 
-						diffraction.experimentKind, 
 						sample.BLSample_code ,  
+						this.getCrystalInfo(crystal), 
+						"",
+						diffraction.forcedSpaceGroup, 
+						diffraction.experimentKind, 
 						getValue(diffraction["observedResolution"]),  
 						diffraction.requiredResolution, 
 						diffraction.preferredBeamDiameter, 
@@ -209,7 +252,6 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
 						diffraction.radiationSensitivity, 
 						diffraction.requiredMultiplicity, 
 						diffraction.requiredCompleteness,						
-						diffraction.forcedSpaceGroup, 
 						sample.smiles, 
 						sample.comments
                     ]
@@ -252,6 +294,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                                     }
             }, 
             { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}}, 
+            { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},  
             { text :'Crystal Form', id : 'Crystal Form',column : {
                                                                         width : 230,
                                                                         type: 'dropdown',
@@ -268,13 +311,19 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                     }
                                                                 }, 
 			{ text :'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>', id :'editCrystalForm', column : {width : 30, renderer: editCrystalFormRenderer, editor : false, readOnly: true}},
+			
+            { text :'Forced <br /> Space G.', id : 'Space Group', column : {
+                                                                        width : 55,  
+                                                                        type: 'dropdown',
+																		source: _.concat([""], ExtISPyB.spaceGroups)
+                                                                    }
+            }, 
             { text :'Exp.<br /> Type', id : 'Experiment Type', column : {
                                                                         width : 100,  
                                                                         type: 'dropdown',
                                                                         source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
             }, 
-            { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},  
             { text :'Pre-observed <br />resolution', id : 'Pre-observed resolution', column : {width : 80}}, 
             { text :'Needed<br /> resolution',  id :'Needed resolution', column : {width : 60}}, 
             { text :'Beam <br />Diameter', id :'Pref. Diameter',column : {width : 60}}, 
@@ -283,13 +332,6 @@ ContainerSpreadSheet.prototype.getHeader = function() {
 
             { text :'Required<br /> multiplicity', id :'Required multiplicity', column : {width : 60}}, 
             { text :'Required<br /> Completeness', id :'Required Completeness', column : {width : 80}},            
-            
-			  { text :'Forced <br /> Space G.', id : 'Space Group', column : {
-                                                                        width : 55,  
-                                                                        type: 'dropdown',
-																		source: _.concat([""], ExtISPyB.spaceGroups)
-                                                                    }
-            }, 
 
             { text :'Smiles', id :'Smiles', column : {width : 140}}, 
             { text :'Comments', id :'Comments', column : {width : 200}}
@@ -307,6 +349,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
 */
 ContainerSpreadSheet.prototype.getPuck = function() {
 	var myPuck = JSON.parse(JSON.stringify(this.puck));
+	
 	var rows = this.parseTableData();
     
     var aux = [];
@@ -314,6 +357,7 @@ ContainerSpreadSheet.prototype.getPuck = function() {
     function filterByLocation(samples){
         return _.filter(samples, function(b){return b.location == rows[i].location;} );
     }
+	
 	for (var i = 0; i < rows.length; i++) {
         var sample = {};
         var sampleByLocation = filterByLocation(myPuck.sampleVOs);

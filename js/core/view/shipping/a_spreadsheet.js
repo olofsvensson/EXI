@@ -69,44 +69,6 @@ SpreadSheet.prototype.getColumns = function() {
 	return _.map(this.getHeader(), 'column');
 };
 
-/**
-* Returns an array of objects for each row in the grid where at least the protein acronym column is filled
-*
-* @method parseTableData
-*/
-SpreadSheet.prototype.parseTableData = function() {
-	var parsed = [];
-	var data = this.spreadSheet.getData();
-	// var columnIds = this.getHeaderId();
-	if (data != null && data.length > 0){
-		var columnIds = this.getHeaderId();
-		for (var j = 0; j < data.length; j++) {
-			if (data[j].length > 1){
-				var row = {};
-				row["location"] = j + 1;
-				for (var k = 0 ; k < columnIds.length ; k++) {
-					var key = columnIds[k];
-					var value = data[j][this.getColumnIndex(key)];
-					row[key] = value;
-				}
-				if (row["Protein Acronym"]){
-					if (row["Protein Acronym"].length > 0){
-						parsed.push(row);
-					}
-				}
-			}
-		}
-	}
-	/** Curated contains the whole-data rows * */
-	var curated = [];
-	for (var i = 0; i < parsed.length; i++) {
-		if (parsed[i]["Protein Acronym"] != null){
-			curated.push(parsed[i]);
-		}
-	}
-	return curated;
-};
-
 
 SpreadSheet.prototype.load = function(data){
 	var _this = this;
