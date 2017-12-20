@@ -9,7 +9,10 @@ function CSVImportMainView() {
 
     this.id = BUI.id();
 
-
+    this.containerSpreadSheet = new ContainerSpreadSheet({
+        width: Ext.getBody().getWidth() - 100,
+        height: 600
+    });
 
 }
 
@@ -22,21 +25,25 @@ CSVImportMainView.prototype.getContainer = function() {
     }, function(err, out) {
         html = out;
     });
-    return Ext.create('Ext.container.Container', {
-        layout: {
-            type: 'fit'
-        },
 
-        margin: 15,
-        border: 1,
-        items: [{
-            html: html
 
-        }]
+    this.panel = Ext.create('Ext.panel.Panel', {
+        autoScroll: true,
+        //buttons : this.getToolBar(),
+        layout: 'vbox',
+        items: [
+
+            {
+                html: html,
+                height: 50,
+                margin : 20
+            },
+            this.containerSpreadSheet.getPanel()
+        ]
     });
+    return this.panel;
+
 };
-
-
 
 
 CSVImportMainView.prototype.load = function(shippingId) {
@@ -44,11 +51,13 @@ CSVImportMainView.prototype.load = function(shippingId) {
     this.panel.setTitle("Import CSV");
     this.shippingId = shippingId;
 
+    var data = JSON.parse("[[1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16]]");
+    this.containerSpreadSheet.loadData(data);
 
-
-    function attachListeners() {       
+    function attachListeners() {
 
         function handleFileSelect(evt) {
+            debugger
             var files = evt.target.files; // FileList object            
             var output = [];
             for (var i = 0, f; f = files[i]; i++) {
@@ -57,8 +66,8 @@ CSVImportMainView.prototype.load = function(shippingId) {
         }
         /** Add listener to change */
         document.getElementById("file_" + _this.id).addEventListener('change', handleFileSelect, false);
-		/** Make button active */
-		document.getElementById("file_" + _this.id).disabled = false;
+        /** Make button active */
+        document.getElementById("file_" + _this.id).disabled = false;
     };
 
     var timer = setTimeout(attachListeners, 1000);

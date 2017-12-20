@@ -46,16 +46,9 @@ ContainerSpreadSheet.prototype.setContainerType  = SpreadSheet.prototype.setCont
 ContainerSpreadSheet.prototype.updateNumberOfRows  = SpreadSheet.prototype.updateNumberOfRows;
 ContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
 
-ContainerSpreadSheet.prototype.load = function(puck){
-	
-	var _this = this;
-	this.puck = puck;
-	var container = document.getElementById(this.id + '_samples');
-	this.crystalFormIndex = this.getColumnIndex('Crystal Form');
-	// this.unitCellIndex = this.getColumnIndex('Unit cell');
-	this.spaceGroupIndex = this.getColumnIndex("Space Group");
-	var data = this.getSamplesData(puck);
-    
+ContainerSpreadSheet.prototype.loadData = function(data){
+
+      var _this = this;
 	  function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
 	    Handsontable.renderers.TextRenderer.apply(this, arguments);
 	    td.style.fontWeight = 'bold';
@@ -80,11 +73,10 @@ ContainerSpreadSheet.prototype.load = function(puck){
 			td.style.background = '#EEE';
 		}
 	  }
-
-	  
+	  	  
 	  // maps function to lookup string
 	  Handsontable.renderers.registerRenderer('ValueRenderer', ValueRenderer);
-	  this.spreadSheet = new Handsontable(container, {
+	  this.spreadSheet = new Handsontable(document.getElementById(this.id + '_samples'), {
 		  		afterCreateRow: function (index, numberOfRows) {
                     data.splice(index, numberOfRows);
                 },
@@ -147,6 +139,17 @@ ContainerSpreadSheet.prototype.load = function(puck){
 				stretchH: 'last',
 				columns: this.getColumns(),
 		});
+}
+
+ContainerSpreadSheet.prototype.load = function(puck){
+	
+	var _this = this;
+	this.puck = puck;
+	
+	this.crystalFormIndex = this.getColumnIndex('Crystal Form');
+	// this.unitCellIndex = this.getColumnIndex('Unit cell');
+	this.spaceGroupIndex = this.getColumnIndex("Space Group");
+	this.loadData(this.getSamplesData(puck));    	
 };
 
 /**
@@ -173,7 +176,8 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
         return value;
     }
 		
-    for (var i = 0; i < puck.capacity; i++) {
+    for (var i = 0; i < puck.capacity; i++) {	
+		debugger	
         var sample = getSampleByLocation(samples, i + 1);
         if (sample!= null){
                 var crystal = sample.crystalVO;
@@ -187,11 +191,25 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
                 data.push(
                     [
                         // crystal.crystalId,
+						"parcel",
+						puck.code,
+						puck.containerType,
                         (i+1), 
-                        protein.acronym, sample.name, this.getCrystalInfo(crystal), diffraction.experimentKind, sample.BLSample_code ,  getValue(diffraction["observedResolution"]),  diffraction.requiredResolution, diffraction.preferredBeamDiameter, 
-                        diffraction.numberOfPositions, diffraction.radiationSensitivity, diffraction.requiredMultiplicity, diffraction.requiredCompleteness,
-						// this.getUnitCellInfo(crystal),
-						diffraction.forcedSpaceGroup, sample.smiles, sample.comments
+                        protein.acronym, 
+						sample.name, 
+						this.getCrystalInfo(crystal), 
+						diffraction.experimentKind, 
+						sample.BLSample_code ,  
+						getValue(diffraction["observedResolution"]),  
+						diffraction.requiredResolution, 
+						diffraction.preferredBeamDiameter, 
+                        diffraction.numberOfPositions, 
+						diffraction.radiationSensitivity, 
+						diffraction.requiredMultiplicity, 
+						diffraction.requiredCompleteness,						
+						diffraction.forcedSpaceGroup, 
+						sample.smiles, 
+						sample.comments
                     ]
                 );
         }
@@ -218,7 +236,10 @@ ContainerSpreadSheet.prototype.getHeader = function() {
 	}
     header = [
             // { text :'', id :'crystalId', column : {width : 100}}, 
-            { text : '#', 	id: 'position', column : {width : 20}}, 
+            { text : 'Parcel', 	id: 'parcel', column : {width : 40}}, 
+			{ text : 'Container', 	id: 'position', column : {width : 40}}, 
+			{ text : 'Type', 	id: 'position', column : {width : 40}}, 
+			{ text : '#', 	id: 'position', column : {width : 20}}, 
             { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
                                                                                         width : 80,
                                                                                         type: 'dropdown',
