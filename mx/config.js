@@ -3,6 +3,8 @@
 
 EXI is just another user interface for ISPyB and supports: MX, BioSAXS and EM. It connects to ISPyB via RESTful webservices.
 
+
+
 ## Overview
 1. [Install EXI](#install-exi)
     * [Requirements](#requirements)
@@ -13,6 +15,8 @@ EXI is just another user interface for ISPyB and supports: MX, BioSAXS and EM. I
     * [Run](#run)
     * [Update a JS dependency](#update-a-js-dependency)
     * [DUST](#dust)
+    * [Demo Application](#demo-application)
+         * [Controller](#controller)
 
 
 ## Install EXI
@@ -204,6 +208,20 @@ dustjs: {
 	    }
 	  }
 ```
+
+### Demo Application
+
+EXI contains a demo application called test in order to understand how EXI is done. You can access by typing:
+```
+http://myserver:8082/EXI/test/dev.html#
+```
+This will open a website with a menu bar similar to:
+![alt text](https://raw.githubusercontent.com/antolinos/EXI/issue_347/readme/example-menu.png "Test App")
+
+
+#### Controller
+
+EXI controllers uses PATHJS to make an action based on the url. Demo application user TestController class that is written in  [testcontroller.js](https://github.com/antolinos/EXI/blob/issue_347/js/test/controller/testcontroller.js).
 
 
 
