@@ -84,7 +84,7 @@ The format of the file is JSON and it looks like this
                 { 
                    name : "BM29"                   
                }
-            ],
+            ], 
             EM :[
                    { 
                       name : "CM01"
