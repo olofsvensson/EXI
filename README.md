@@ -220,7 +220,7 @@ This will open a website with a menu bar similar to:
 
 
 #### Controller
-
+ 
 EXI controllers uses PATHJS to make an action based on the url. Demo application user TestController class that is written in  [testcontroller.js](https://github.com/antolinos/EXI/blob/issue_347/js/test/controller/testcontroller.js).
 This is an example how an action is defined:
 ```javascript
