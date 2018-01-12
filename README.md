@@ -82,30 +82,30 @@ The format of the file is JSON and it looks like this
          "beamlines":{
             "SAXS":[
                 { 
-                   name : "BM29"                   
+                   "name" : "BM29"                   
                }
-            ], 
-            EM :[
+            ],
+            "EM" :[
                    { 
-                      name : "CM01"
+                      "name" : "CM01"
                    }
             ],
             "MX":[
               { 
-                   name : "ID23-1",
-                   sampleChangerType : 'FlexHCDDual'
+                   "name" : "ID23-1",
+                   "sampleChangerType" : 'FlexHCDDual'
                },
                { 
-                   name : "ID23-2",
-                   sampleChangerType : 'FlexHCDUnipuckPlate'
+                   "name" : "ID23-2",
+                   "sampleChangerType" : 'FlexHCDUnipuckPlate'
                },
                { 
-                   name : "ID29",
-                   sampleChangerType : 'FlexHCDDual'
+                   "name" : "ID29",
+                   "sampleChangerType" : 'FlexHCDDual'
                },
                { 
-                   name : "ID30A-1",
-                   sampleChangerType : 'RoboDiffHCDSC3'
+                   "name" : "ID30A-1",
+                   "sampleChangerType" : 'RoboDiffHCDSC3'
                },
             ]
          }
@@ -222,7 +222,15 @@ This will open a website with a menu bar similar to:
 #### Controller
 
 EXI controllers uses PATHJS to make an action based on the url. Demo application user TestController class that is written in  [testcontroller.js](https://github.com/antolinos/EXI/blob/issue_347/js/test/controller/testcontroller.js).
+This is an example how an action is defined:
+```javascript
+Path.map("#/:name/main").to(function() {
+		var name = this.params['name'];
+		var mainView = new TestMainView();
+		EXI.addMainPanel(mainView);	
+		mainView.load( name);
+	}).enter(this.setPageBackground);
+```
 
 
 
- 
