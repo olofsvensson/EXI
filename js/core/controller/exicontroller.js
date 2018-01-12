@@ -36,8 +36,7 @@ ExiController.prototype.init = function(){
 	}
 
 	/** Welcome Page **/
-	Path.map("#/").to(function() {   
-          
+	Path.map("#/").to(function() {             
 		location.hash = '/welcome';
 	}).enter(setPageBackground);
 	
@@ -49,10 +48,7 @@ ExiController.prototype.init = function(){
 	
 	
 	Path.map("#/welcome").to(function() {
-       
-		//EXI.addMainPanel(new WelcomeMainView());
-        //location.hash = '/login';
-         EXI.credentialManager.logout();
+        EXI.credentialManager.logout();
         EXI.authenticationForm.show();
 	}).enter(setPageBackground);
 	

@@ -125,7 +125,7 @@ var ExtISPyB ={
 
       {
          name:'ESRF TEST',
-         url:'http://ispyvalid:8080/ispyb/ispyb-ws/rest',
+         url:'https://ispyb-valid.esrf.fr/ispyb/ispyb-ws/rest',        
          icon : '../images/site/dev.esrf.png',
 		 exiUrl:'http://ispyvalid.esrf.fr:8080/ispyb/ispyb-ws/rest',
          beamlines:{

@@ -1,17 +1,29 @@
-[EXI](http://exi.embl.fr/saxs) —  EXtended ISPyB
-==================================================
+# 
+# EXI
+---
+
+[Install EXI](#install-exi)
+    - [Requirements](#Requirements)
+    - [EXI Build](#exi-build)
+    
+[Development](#development)  
+    - [Run](#run)
+    - [Update a JS dependency](update-a-js-dependency)
+    - [DUST](#dust)
 
 
-What you need to build your own EXI
+## Install EXI
+### Requirements
 --------------------------------------
 
 In order to build EXI, you need to have:
 - The latest npm and git 1.7 or later. Earlier versions might work, but are not supported. 
 - Bower (installable from npm)
 - Grunt version v0.4.5 or later (http://gruntjs.com/)
+- npm
 
 
-How to build your own EXI
+### EXI Build
 --------------------------------------
 
 Clone a copy of the main EXI git repo by running:
@@ -37,21 +49,19 @@ If you want to see which dependencies EXI needs run:
 bower list
 ```
 
-
 Build EXI by running Grunt, the javascript task runner
 
 ```bash
 grunt
 ```
 
+## Development
+### Running in dev mode
 If you want to build a version where the javascript will be not minified for developing then use the profile dev
 
 ```bash
 grunt dev
 ```
-Running in dev mode
-===================
-
 Globally install http-server in case you haven't done this before
 ```bash
 npm i -g http-server
@@ -64,7 +74,7 @@ http-server
 
 See [http-server on Github](https://github.com/indexzero/http-server) for configuration options.
 
-Update a package
+### Update a JS dependency
 ===================
 
 Using bower one can update a package by typing:
@@ -73,8 +83,8 @@ bower update ispyb-js-api
 ```
 
 
-Using dust (Template Engine)
-===============================
+### DUST
+
 EXI makes an intensive use of HTML templates. Dustjs has been chosen as engine because:
 1. High integration with Grunt
 2. Easy to use
@@ -149,51 +159,7 @@ The format of the file is JSON and it looks like this
 
 ```json
 {
-   "detectors" : {
-
-	"Pilatus3_2M" : {
-				"pixelSize": {
-						"x" : 1475,
-						"y" : 1679
-				},
-				"sensitiveArea" : {
-						"x" : 253.7,
-						"y" : 288.8
-				},
-				"pixelSizeHorizontal" : 0.172,
-				"img" : "https://www.dectris.com/tl_files/root/products/PILATUS%20S%20Serie/Systems/PILATUS3_S_2M.png"
-
-	},
-	"Pilatus_6M_F" : {
-				"pixelSize": {
-						"x" : 2463,
-						"y" : 2527
-				},
-				"sensitiveArea" : {
-						"x" : 423.6,
-						"y" : 434.6
-				},
-				"pixelSizeHorizontal" : 0.172,
-				"img" : "https://www.dectris.com/tl_files/root/products/PILATUS%20S%20Serie/Systems/PILATUS3_S_6M.png"
-
-	},
-	"Pilatus3_6M" : {
-				"pixelSize": {
-						"x" : 2463,
-						"y" : 2527
-				},
-				"sensitiveArea" : {
-						"x" : 423.6,
-						"y" : 434.6
-				},
-				"pixelSizeHorizontal" : 0.172,
-				"img" : "https://www.dectris.com/tl_files/root/products/PILATUS%20S%20Serie/Systems/PILATUS3_S_6M.png"
-
-	}
-
-
-
-   },
+  
    "sites":[
       {
          "name":"ESRF",
