@@ -2,14 +2,14 @@
 # EXI
 ---
 
-[Install EXI](#install-exi)
-    - [Requirements](#requirements)
-    - [Build](#build)
+1. [Install EXI](#install-exi)
+    * [Requirements](#requirements)
+    * [Build](#build)
     
-[Development](#development)  
-    - [Run](#run)
-    - [Update a JS dependency](#update-a-js-dependency)
-    - [DUST](#dust)
+2. [Development](#development)  
+    * [Run](#run)
+    * [Update a JS dependency](#update-a-js-dependency)
+    * [DUST](#dust)
 
 
 ## Install EXI
@@ -54,7 +54,7 @@ grunt
 ```
 
 ## Development
-### Running in dev mode
+### Run
 If you want to build a version where the javascript will be not minified for developing then use the profile dev
 
 ```bash
