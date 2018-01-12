@@ -218,6 +218,13 @@ http://myserver:8082/EXI/test/dev.html#
 This will open a website with a menu bar similar to:
 ![alt text](https://raw.githubusercontent.com/antolinos/EXI/issue_347/readme/example-menu.png "Test App")
 
+Demo app is composed basically by few files under js/test folder:
+- testcontroller.js
+- exitest.js
+- testmainview.js
+- testlistview.js
+- testlistview.template.js
+- testmainmenu
 
 #### Controller
  
