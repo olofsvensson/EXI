@@ -3,18 +3,17 @@
 ---
 
 [Install EXI](#install-exi)
-    - [Requirements](#Requirements)
-    - [EXI Build](#exi-build)
+    - [Requirements](#requirements)
+    - [Build](#build)
     
 [Development](#development)  
     - [Run](#run)
-    - [Update a JS dependency](update-a-js-dependency)
+    - [Update a JS dependency](#update-a-js-dependency)
     - [DUST](#dust)
 
 
 ## Install EXI
 ### Requirements
---------------------------------------
 
 In order to build EXI, you need to have:
 - The latest npm and git 1.7 or later. Earlier versions might work, but are not supported. 
@@ -23,8 +22,7 @@ In order to build EXI, you need to have:
 - npm
 
 
-### EXI Build
---------------------------------------
+### Build
 
 Clone a copy of the main EXI git repo by running:
 
@@ -75,7 +73,7 @@ http-server
 See [http-server on Github](https://github.com/indexzero/http-server) for configuration options.
 
 ### Update a JS dependency
-===================
+
 
 Using bower one can update a package by typing:
 ```
@@ -159,7 +157,6 @@ The format of the file is JSON and it looks like this
 
 ```json
 {
-  
    "sites":[
       {
          "name":"ESRF",
