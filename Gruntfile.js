@@ -197,6 +197,9 @@ module.exports = function(grunt) {
                             'mx/dev.html' : 'mx/index.tpl.html'
                         }, {
                             'tracking/dev.html' : 'tracking/index.tpl.html'
+                        },
+                        {
+                            'test/dev.html' : 'test/index.tpl.html'
                         } ]
                     }
                 },
@@ -212,7 +215,7 @@ module.exports = function(grunt) {
                 wiredep : {
                     target : {
                         src : [ 'mx/dev.html', 'saxs/dev.html',
-                                'tracking/dev.html' ], // point to your HTML
+                                'tracking/dev.html', 'test/dev.html' ], // point to your HTML
                                                         // file.
                     }
                 },

@@ -283,6 +283,19 @@ Exi.prototype.getHeader = function(error) {
 	return '<img class="titleImage" src="images/logo_EMBL.png"><span class="title">Extended ISPyB</span>';
 };
 
+Exi.prototype.afterRender = function() {
+	var _this = this;
+	_this.mainMenu.populateCredentialsMenu();
+	_this.onAfterRender.notify();
+															/** If there is a user login then we show the menu **/
+	if (_this.credentialManager.getCredentials() == 0){
+		_this.setAnonymousMenu();
+	}
+	else{
+		var credential = _this.credentialManager.getCredentials()[0];
+		_this.manageMenu(credential);
+	}
+};
 Exi.prototype.show = function() {
 	var _this = this;
 	Ext.application({
@@ -354,17 +367,7 @@ Exi.prototype.show = function() {
 													],
 										listeners : {
 											afterrender : function(component, eOpts) {
-														_this.mainMenu.populateCredentialsMenu();
-														_this.onAfterRender.notify();
-														
-//														/** If there is a user login then we show the menu **/
-														if (_this.credentialManager.getCredentials() == 0){
-															_this.setAnonymousMenu();
-														}
-														else{
-															var credential = _this.credentialManager.getCredentials()[0];
-															_this.manageMenu(credential);
-														}
+														_this.afterRender();
 											} } });
 				}
 

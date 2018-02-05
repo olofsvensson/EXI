@@ -10,7 +10,7 @@ AuthenticationForm.prototype.show = function(){
 	this.window = Ext.create('Ext.window.Window', {
 	    title: 'Login',
 	    height: 250,
-	    closable :  false,
+	    closable :  true,
 	    width: 480,
 	    modal : true,
 	    layout: 'fit',

@@ -38,61 +38,61 @@ TestController.prototype.init = function() {
 		_this.notFound();
 	}
 
-	Path.map("#/test/test1").to(function() {
+	Path.map("#/navigation").to(function() {		
+				
 		EXI.clearNavigationPanel();
 		EXI.hideNavigationPanel();
         /** Creates an instance of a Test Panel **/		
-		var panel = new TestListView();
+		var myWidget = new TestListView();
 		/** Add panel to the left navigation panel **/		
-		EXI.addNavigationPanel(panel);
+		EXI.addNavigationPanel(myWidget);
 		EXI.setLoadingNavigationPanel("Loading my data");
 		/** Loads data into the panel **/		
-		panel.load([
+		myWidget.load([
 			{ 'name': 'Lisa',  "email":"lisa@simpsons.com",  "phone":"555-111-1224"  },
 			{ 'name': 'Bart',  "email":"bart@simpsons.com",  "phone":"555-222-1234" },
 			{ 'name': 'Homer', "email":"homer@simpsons.com",  "phone":"555-222-1244"  },
 			{ 'name': 'Marge', "email":"marge@simpsons.com", "phone":"555-222-1254"  }
 			]);
+
+		myWidget.onSelect.attach(function(sender, selected) {
+			location.hash = "/" + selected[0].name + "/main";
+		});
+
 		EXI.setLoadingNavigationPanel(false);
 	}).enter(this.setPageBackground);
-	
-		
-	Path.map("#/test/test2").to(function() {
-		EXI.clearNavigationPanel();
-		EXI.clearMainPanel();
-		EXI.setLoadingNavigationPanel(true);
-		listView = new TestListView();
-		listView.onSelect.attach(function(sender, selected) {
-			location.hash = "/test/test3/" + selected[0].BLSample_crystalId + "/main";
-		});
-		
-		EXI.addNavigationPanel(listView);
-		adapter = _this.loadNavigationPanel(listView);
-		adapter.mx.sample.getSampleInfoByProposalId();
-	
-	
-		
-	}).enter(this.setPageBackground);
-		
-	Path.map("#/test/test3/:crystalId/main").to(function() {
+					
+	Path.map("#/main").to(function() {
 		var mainView = new TestMainView(this.params['crystalId']);
-		EXI.addMainPanel(mainView);
-		console.log(this.params['crystalId']);
+		EXI.addMainPanel(mainView);	
 		mainView.load(this.params['crystalId']);
 	}).enter(this.setPageBackground);
 	
-	Path.map("#/test/test4").to(function() {		
-		EXI.clearNavigationPanel();
-	    var mainView = new PuckWidgetView();
-		EXI.addMainPanel(mainView);
-		
-		var onSuccess = function(sender, data){
-			mainView.load(data);
-		};		
-		EXI.getDataAdapter({onSuccess : onSuccess}).proposal.shipping.getContainerById(333486,333486,333486);
+
+	Path.map("#/:name/main").to(function() {
+		var name = this.params['name'];
+		var mainView = new TestMainView();
+		EXI.addMainPanel(mainView);	
+		mainView.load( name);
+	}).enter(this.setPageBackground);
+
+	
+	Path.map("#/navigation/clear").to(function() {		
+		EXI.clearNavigationPanel();	  
+	}).enter(this.setPageBackground);
+
+	Path.map("#/main/clear").to(function() {		
+		EXI.clearMainPanel();	  
 	}).enter(this.setPageBackground);
 	
-	
+	Path.map("#/main/setloading").to(function() {			
+		EXI.setLoadingMainPanel("I am busy now");	  
+	}).enter(this.setPageBackground);
+
+	Path.map("#/main/removeloading").to(function() {			
+		EXI.setLoadingMainPanel(false);	  
+	}).enter(this.setPageBackground);
+
 
 	Path.rescue(this.notFound);
 };

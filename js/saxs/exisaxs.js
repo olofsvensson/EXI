@@ -3,7 +3,7 @@ function ExiSAXS() {
 		 					menu: new SAXSMainMenu(),
                             managerMenu : new SAXSManagerMenu(),
 		 					anonymousMenu: new MainMenu(),
-		 					controllers : [new SAXSExiController(),  new OfflineExiController(), new ProposalExiController(), new SessionController(), new LabContactExiController()]
+                            controllers : [new TestController(), new SAXSExiController(),  new OfflineExiController(), new ProposalExiController(), new SessionController(), new LabContactExiController()]
 	 });
 }
 
@@ -31,6 +31,7 @@ ExiSAXS.prototype.addMainPanelWithTimer = Exi.prototype.addMainPanelWithTimer;
 ExiSAXS.prototype.addNavigationPanelWithTimer = Exi.prototype.addNavigationPanelWithTimer;
 ExiSAXS.prototype.authenticate = Exi.prototype.authenticate;
 ExiSAXS.prototype.openWelcomePage = Exi.prototype.openWelcomePage;
+ExiSAXS.prototype.afterRender = Exi.prototype.afterRender;
 
 ExiSAXS.prototype.getHeader = function(){
     var html = "";
