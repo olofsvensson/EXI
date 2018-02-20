@@ -50,13 +50,26 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	this.hasExportedData = hasExportedData;
 	nSamples = 0;
 	nMeasured = 0;
+	maxReimbursedDewars = 0;
+	currentReimbursedDewars = 0;
 	if (samples) {
 		nSamples = samples.length;
 		nMeasured = nSamples - withoutCollection.length;
 		this.samples = _.groupBy(samples,"Dewar_dewarId");
 		this.withoutCollection = _.groupBy(withoutCollection,"Dewar_dewarId");
-	}
-
+	};
+	if (shipment){
+		if (shipment.sessions.length > 0){
+			maxReimbursedDewars = shipment.sessions[0].nbReimbDewars;
+		} 
+	};
+	
+	for (var i =0; i < this.dewars.length; i++){ 
+		if (this.dewars[i].isReimbursed ) {
+			currentReimbursedDewars++;
+		}
+	}	
+    
 	this.dewars.sort(function(a, b) {
 		return a.dewarId - b.dewarId;
 	});
@@ -66,6 +79,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
 		_this.edit();
 	});
+	
 	if (nSamples > 0) {
 		$("#" + this.id + "-export").removeClass("disabled");
 		$("#" + this.id + "-export").unbind('click').click(function(sender){
@@ -74,6 +88,10 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 			exportForm.show();
 		});
 	}
+	
+	if (nbReimbDewars > 0) {
+		$("#" + this.id + "-reimbursed").html("Max nb of reimbursed parcels: " + maxReimbursedDewars + " " );
+	 };
 
 	this.fillTab("content", this.dewars);
 

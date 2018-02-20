@@ -67,6 +67,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			this.dewar.beamlineName = shipment.sessions[0].beamlineName;
+			this.dewar.nbReimbDewars = shipment.sessions[0].nbReimbDewars;
 		}
 	}
 	this.samples = samples;

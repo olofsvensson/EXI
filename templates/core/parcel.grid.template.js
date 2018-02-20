@@ -8,9 +8,12 @@
                 <button id="{id}-add-button" type="button" style="margin-left:15px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-plus-sign"></span> Add
                 </button>
-                <button id="{id}-export" type="button" style="margin-left:100px;" class="btn btn-default disabled">
+                <button id="{id}-export" type="button" style="margin-left:60px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-export"></span> Export PDF View
                 </button>
+				<span id="{id}-reimbursed" style='font-size:15px;color:orange;font-weight:700;margin-left:60px;"' >
+                    Reimbursed (0 Parcels)
+                </span>
             </div>
             
             <div class="pull-right">

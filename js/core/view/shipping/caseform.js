@@ -43,6 +43,7 @@ CaseForm.prototype.getDewar = function() {
 	this.dewar.isReimbursed = Ext.getCmp(this.id + "dewar_isReimbursed").getValue();
 	this.dewar.storageLocation = this.storageLocationComboBox.getValue();
 	//this.dewar.firstExperimentId = this.sessionsCombo.getValue();
+
 	return this.dewar;
 };
 
@@ -66,6 +67,13 @@ CaseForm.prototype.setDewar = function(dewar) {
 	/*if (this.dewar.sessionVO != null) {
 		this.sessionsCombo.setValue(this.dewar.sessionVO.sessionId);
 	}*/
+	
+	if (dewar.isReimbursed){
+		this.isSelectedForReimb = " (R)";
+	} else {
+		this.isSelectedForReimb = "";
+	}
+	
 };
 
 /*
@@ -108,15 +116,6 @@ CaseForm.prototype.getPanel = function(dewar) {
 						labelWidth : 200,
 						width : 500
 					},
-					 {
-						xtype : 'textfield',
-						fieldLabel : 'isReimbursed',
-						allowBlank : true,
-						name : 'isReimbursed',
-						id : this.id + 'dewar_isReimbursed',
-						labelWidth : 200,
-						width : 500
-					}
 					]
 					}, 
 					this.getStorageLocationCombo(),
@@ -138,17 +137,19 @@ CaseForm.prototype.getPanel = function(dewar) {
 						height : 100,
 						id : this.id + 'dewar_comments'
 					},
-				//{           
-				//	xtype: 'checkbox',
-				//	boxLabel : 'isReimbursed',
-				//	name : 'isReimbursed',
-				//	id : this.id + 'dewar_isReimbursed'
-            
-				//}
-			
-			]}]
-			
+					{           
+						xtype: 'checkbox',
+						fieldLabel : 'By setting this dewar to reimbursed, the labels that will be generated for the sending will contain the fedex account that you should use to send your dewars.Please note that you MUST NOT use this account to ship more than the allowed number of dewars.In case of abuse, your proposal will no more be able to benefit from the dewar reimbursement. Click on the following checkbox if you agree with these conditions and you want to have this dewar automatically reimbursed.',
+						labelWidth : 500,
+						name : 'isReimbursed',
+						id : this.id + 'dewar_isReimbursed',
+						trueText: 'true',
+						falseText: 'false' ,
+						hidden : false //'{4 < 3}'
+					},
+			]}]			
 		});
+
 	this.refresh(dewar);
 	return this.panel;
 };
