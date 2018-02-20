@@ -240,6 +240,56 @@ var ExtISPyB ={
                }                                             
             ]
          }
+      },
+	       {
+         name:'ESRF localhost',
+         url:'http://localhost:8080/ispyb/ispyb-ws/rest',
+         icon : '../images/site/dev.esrf.png',
+		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
+         beamlines:{
+            SAXS:[
+
+             
+            ],
+            MX:[
+               { 
+                   name : "ID23-1",
+                   sampleChangerType : 'FlexHCD'
+               },
+               { 
+                   name : "ID23-2",
+                   sampleChangerType : 'SC3'
+               },
+               { 
+                   name : "ID29",
+                   sampleChangerType : 'FlexHCD'
+               },
+               { 
+                   name : "ID30A-1",
+                   sampleChangerType : 'RoboDiff'
+               },
+               { 
+                   name : "ID30A-2",
+                   sampleChangerType : 'SC3'
+               },
+               { 
+                   name : "ID30A-3",
+                   sampleChangerType : 'SC3'
+               },
+               { 
+                   name : "ID30B",
+                   sampleChangerType : 'FlexHCD'
+               },
+               { 
+                   name : "BM14U",
+                   sampleChangerType : 'FlexHCD'
+               },
+               { 
+                   name : "BM30A",
+                   sampleChangerType : 'FlexHCD'
+               }                                             
+            ]
+         }
       }
    ]
 };

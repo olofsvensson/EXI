@@ -58,6 +58,12 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	this.dewar = dewar;
 	this.dewar.index = this.index;
 	this.shipment = shipment;
+	
+	if (dewar.isReimbursed){
+		this.isSelectedForReimb = " (R)";
+	} else {
+		this.isSelectedForReimb = "";
+	}
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			this.dewar.beamlineName = shipment.sessions[0].beamlineName;
@@ -121,7 +127,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 
 ParcelPanel.prototype.renderDewarParameters = function (dewar) {
 	var html = "";
-	dust.render("parcel.panel.parameter.table.template", {id : this.id, dewar : dewar, height : this.height}, function(err, out){
+	dust.render("parcel.panel.parameter.table.template", {id : this.id, dewar : dewar, height : this.height, isSelectedForReimb : this.isSelectedForReimb}, function(err, out){
 		html = out;
 	});
 	$('#' + this.id + "-parameters-div").hide().html(html).fadeIn("fast");

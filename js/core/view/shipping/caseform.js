@@ -40,7 +40,7 @@ CaseForm.prototype.getDewar = function() {
 	this.dewar.code = Ext.getCmp(this.id + "dewar_code").getValue();
 	this.dewar.comments = Ext.getCmp(this.id + "dewar_comments").getValue();
 	this.dewar.transportValue = Ext.getCmp(this.id + "dewar_transportValue").getValue();
-//	this.dewar.storageLocation = Ext.getCmp("dewar_storageLocation").getValue();
+	this.dewar.isReimbursed = Ext.getCmp(this.id + "dewar_isReimbursed").getValue();
 	this.dewar.storageLocation = this.storageLocationComboBox.getValue();
 	//this.dewar.firstExperimentId = this.sessionsCombo.getValue();
 	return this.dewar;
@@ -54,13 +54,14 @@ CaseForm.prototype.setDewar = function(dewar) {
 		this.dewar["code"] = "";
 		this.dewar["transportValue"] = "";
 		this.dewar["storageLocation"] = "";
+		this.dewar["isReimbursed"] = "";
 		this.dewar["comments"] = "";
 	}
 	
 	Ext.getCmp(this.id + "dewar_code").setValue(this.dewar.code);
 	Ext.getCmp(this.id + "dewar_comments").setValue(this.dewar.comments);
 	Ext.getCmp(this.id + "dewar_transportValue").setValue(this.dewar.transportValue);
-//	Ext.getCmp("dewar_storageLocation").setValue(this.dewar.storageLocation);
+	Ext.getCmp(this.id + "dewar_isReimbursed").setValue(this.dewar.isReimbursed);
 	this.storageLocationComboBox.setValue(this.dewar.storageLocation);
 	/*if (this.dewar.sessionVO != null) {
 		this.sessionsCombo.setValue(this.dewar.sessionVO.sessionId);
@@ -106,29 +107,47 @@ CaseForm.prototype.getPanel = function(dewar) {
 						id : this.id + 'dewar_code',
 						labelWidth : 200,
 						width : 500
+					},
+					 {
+						xtype : 'textfield',
+						fieldLabel : 'isReimbursed',
+						allowBlank : true,
+						name : 'isReimbursed',
+						id : this.id + 'dewar_isReimbursed',
+						labelWidth : 200,
+						width : 500
 					}
 					]
-				}, 
-				this.getStorageLocationCombo(),
-				{
-					xtype : 'numberfield',
-					width : 500,
-					labelWidth : 200,
-					margin : '10 0 0 0',
-					fieldLabel : 'Transport Value',
-					id : this.id + 'dewar_transportValue'
-				},
-				{
-					xtype : 'textareafield',
-					name : 'comments',
-					fieldLabel : 'Comments',
-					labelWidth : 200,
-					width : 500,
-					margin : '10 0 0 0',
-					height : 100,
-					id : this.id + 'dewar_comments'
-				} ]
-			} ]
+					}, 
+					this.getStorageLocationCombo(),
+					{
+						xtype : 'numberfield',
+						width : 500,
+						labelWidth : 200,
+						margin : '10 0 0 0',
+						fieldLabel : 'Transport Value',
+						id : this.id + 'dewar_transportValue'
+					},
+					{
+						xtype : 'textareafield',
+						name : 'comments',
+						fieldLabel : 'Comments',
+						labelWidth : 200,
+						width : 500,
+						margin : '10 0 0 0',
+						height : 100,
+						id : this.id + 'dewar_comments'
+					},
+				//{           
+				//	xtype: 'checkbox',
+				//	boxLabel : 'isReimbursed',
+				//	name : 'isReimbursed',
+				//	id : this.id + 'dewar_isReimbursed'
+            
+				//}
+			
+			]}]
+			
 		});
 	this.refresh(dewar);
 	return this.panel;
