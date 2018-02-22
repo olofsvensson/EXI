@@ -8,6 +8,8 @@ function ContainersDataCollectionGrid(args) {
     this.legend = new PuckLegend({width : 300, height : 50, cy : "12.5%", tOffset : "17%"});
 }
 
+ContainersDataCollectionGrid.prototype.parseEMData = DataCollectionGrid.prototype.parseEMData;
+
 ContainersDataCollectionGrid.prototype.getPanel = function (dataCollectionGroup) {
     var _this = this;
     this.store = Ext.create('Ext.data.Store', {
@@ -113,6 +115,7 @@ ContainersDataCollectionGrid.prototype.getColumns = function() {
                                     if (dataCollectionIds != null && dataCollectionIds.length > 0){
                                         state = "COLLECTED";
                                     }
+                                    
                                     cells.push(
                                             {
                                                 location : sample.BLSample_location,
@@ -124,7 +127,11 @@ ContainersDataCollectionGrid.prototype.getColumns = function() {
                                                 containerId : sample.Container_containerId,
                                                 container_code : sample.Container_code,
                                                 dewarId : sample.Dewar_dewarId,
-                                                dataCollectionIds : dataCollectionIds
+                                                dataCollectionIds : dataCollectionIds,                                                  
+                                                sampleChangerLocation : sample.Container_sampleChangerLocation,
+                                                beamline : sample.BLSession_beamLineName,
+                                                startDate : sample.BLSession_startDate
+
                                             }
                                     );
                                     puck.load(cells);
@@ -140,49 +147,7 @@ ContainersDataCollectionGrid.prototype.getColumns = function() {
                             }
                         }
                         
-                        // if (samples){
-                        //     var cells = {};
-                        //     for (var i = 0; i < samples.length; i++) {
-                        //         var sample = samples[i];
-                        //         var selected = false;
-                        //         if (!_.isEmpty(pucks[sample.Container_containerId].initSelected)){
-                        //             selected = pucks[sample.Container_containerId].initSelected.includes(sample.BLSample_location);
-                        //         }
-                        //         var dataCollectionIds = pucks[sample.Container_containerId].dataCollectionIds[sample.BLSample_location];
-                        //         var state = "FILLED";
-                        //         if (dataCollectionIds != null && dataCollectionIds.length > 0){
-                        //             state = "COLLECTED";
-                        //         }
-                        //         // Parse data
-                        //         if (cells[sample.Container_containerId] == null){
-                        //             cells[sample.Container_containerId] = [];
-                        //         }
-                                
-                        //         cells[sample.Container_containerId].push({
-                        //             location : sample.BLSample_location,
-                        //             state : state,
-                        //             selected : selected,
-                        //             sample_name : sample.BLSample_name,
-                        //             protein_acronym : sample.Protein_acronym,
-                        //             protein_name : sample.Protein_name,
-                        //             containerId : sample.Container_containerId,
-                        //             container_code : sample.Container_code,
-                        //             dewarId : sample.Dewar_dewarId,
-                        //             dataCollectionIds : dataCollectionIds
-                        //         });
-                        //     }
-                            
-                        //     for (containerId in pucks){
-                        //         pucks[containerId].load(cells[containerId]);
-                        //         var infoHtml = "";
-                                
-                        //         dust.render("containers.info.mxdatacollectiongrid.template", cells[containerId][0], function(err, out) {                                                                       
-                        //             infoHtml = infoHtml + out;
-                        //         }); 
-                                
-                        //         $("#puck-panel-" + containerId + "-info").html(infoHtml);
-                        //     }
-                        // }
+                      
                     };
                     html = tree.html();
                     EXI.getDataAdapter({onSuccess : onSuccess}).mx.sample.getSamplesByContainerId(data.containerIds);

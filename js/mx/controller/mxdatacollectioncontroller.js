@@ -24,6 +24,8 @@ MxDataCollectionController.prototype.init = function() {
 	var _this = this;
 	var listView;	
     
+	
+
 	Path.map("#/mx/datacollection/protein_acronym/:acronmys/main").to(function() {
 		var mainView = new DataCollectionMxMainView();
 		EXI.addMainPanel(mainView);
@@ -34,8 +36,9 @@ MxDataCollectionController.prototype.init = function() {
 		EXI.getDataAdapter({onSuccess : onSuccess}).mx.dataCollection.getByAcronymList(this.params['acronmys']);
 	}).enter(this.setPageBackground);
     
-	/** This URL is supposed to be included in automatic emails **/
-	Path.map("#/mx/proposal/:proposal/datacollection/session/:sessionId/main").to(function() {			
+	
+	Path.map("#/mx/proposal/:proposal/datacollection/session/:sessionId/main").to(function() {		
+			
 		var redirection = "#/mx/datacollection/session/" + this.params['sessionId'] +"/main";				
 		/** Are we logged in yet? */
 		if (EXI.credentialManager.getConnections().length > 0){			
@@ -48,19 +51,20 @@ MxDataCollectionController.prototype.init = function() {
 	}).enter(this.setPageBackground);
 
 
-	Path.map("#/mx/datacollection/session/:sessionId/main").to(function() {		
+	Path.map("#/mx/datacollection/session/:sessionId/main").to(function() {	
+			
 		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId']});
 		EXI.addMainPanel(mainView);
         EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
-		var onSuccessProposal = function (sender,proposal) {
+		var onSuccessProposal = function (sender,proposal) {			
 			if (proposal && proposal.length > 0) {
 				mainView.loadProposal(proposal[0]);
 			}
 		}
 		EXI.getDataAdapter({onSuccess : onSuccessProposal}).proposal.proposal.getProposalBySessionId(this.params['sessionId']);
 
-		var onSuccess = function(sender, data){			
+		var onSuccess = function(sender, data){						
 		    mainView.loadCollections(data);
 		    EXI.setLoadingMainPanel(false);
 		};

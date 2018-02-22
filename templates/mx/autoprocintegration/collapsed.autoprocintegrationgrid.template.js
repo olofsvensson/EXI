@@ -14,7 +14,7 @@
                   <th>&#x3B1; (&deg)</th>
                   <th>&beta; (&deg)</th>
                   <th>&gamma; (&deg)</th>
-                  <th>Shell</th>
+                  <th>Shell</th> 
                   <th>Resolution (&#197;)</th>
                   <th>Multiplicity</th>
                   <th>Completeness %</th> 
@@ -29,7 +29,7 @@
                   <th>Download</th>
                   <th></th>
                </tr>
-            </thead> 
+            </thead>  
             {#.}
                   {@select key=v_datacollection_processingStatus}
                         {@eq value="SUCCESS"} {>"success.collapsed.autoprocintegrationgrid.template" /}  {/eq}

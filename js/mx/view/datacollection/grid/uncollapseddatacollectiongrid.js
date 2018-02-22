@@ -13,6 +13,7 @@ function UncollapsedDataCollectionGrid(args) {
 UncollapsedDataCollectionGrid.prototype._getAutoprocessingStatistics = DataCollectionGrid.prototype._getAutoprocessingStatistics;
 UncollapsedDataCollectionGrid.prototype.getColumns = DataCollectionGrid.prototype.getColumns;
 UncollapsedDataCollectionGrid.prototype.loadMagnifiers = DataCollectionGrid.prototype.loadMagnifiers;
+UncollapsedDataCollectionGrid.prototype.parseEMData = DataCollectionGrid.prototype.parseEMData;
 
 /**
 * Loads the store and load the maginifiers
@@ -40,7 +41,7 @@ UncollapsedDataCollectionGrid.prototype.getPanel = function(){
         border: 1,        
         store: this.store,  
         id: this.id,     
-         minHeight : 900,
+        minHeight : 900,
         disableSelection: true,
         columns: this.getColumns(),
         viewConfig: {

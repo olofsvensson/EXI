@@ -32,8 +32,8 @@
 
         <!-- bower:js -->
         <script src="../bower_components/jquery/dist/jquery.js"></script>
-        <script src="../bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
         <script src="../bower_components/moment/moment.js"></script>
+        <script src="../bower_components/numbro/numbro.js"></script>
         <script src="../bower_components/pikaday/pikaday.js"></script>
         <script src="../bower_components/handsontable/dist/handsontable.js"></script>
         <script src="../bower_components/jquery-lazy/jquery.lazy.min.js"></script>
@@ -114,6 +114,10 @@
         <script src="../bower_components/ispyb-js-api/js/saxs/stocksolutionsaxsdataadapter.js"></script>
         <script src="../bower_components/ispyb-js-api/js/saxs/subtractionsaxsdataadapter.js"></script>
         <script src="../bower_components/ispyb-js-api/js/saxs/templatesaxsdataadapter.js"></script>
+        <script src="../bower_components/ispyb-js-api/js/em/a_emdataadaptergroup.js"></script>
+        <script src="../bower_components/ispyb-js-api/js/em/emdataadapterfactory.js"></script>
+        <script src="../bower_components/ispyb-js-api/js/em/emdataadaptergroup.js"></script>
+        <script src="../bower_components/ispyb-js-api/js/em/emdatacollectiondataadapter.js"></script>
 		  
         <!-- DUST -->  
 		<script src="../js/dust/helpers.js"></script>
@@ -240,6 +244,7 @@
         <script src="../js/mx/controller/puckcontroller.js"></script>
         <script src="../js/mx/controller/workflowcontroller.js"></script>
         <script src="../js/mx/controller/xfecontroller.js"></script>
+        <script src="../js/em/controller/emdatacollectioncontroller.js"></script> 
         <script src="../js/saxs/controller/saxsexicontroller.js"></script>
         <script src="../js/test/controller/testcontroller.js"></script>
         
@@ -257,6 +262,7 @@
         <script src="../js/mx/navigation/proteinlistview.js"></script>
         <script src="../js/mx/navigation/pucklistview.js"></script>
         <script src="../js/mx/navigation/workflowsteplistview.js"></script>
+          
         <script src="../js/saxs/navigation/bufferlistview.js"></script>
         <script src="../js/saxs/navigation/datacollectionlistview.js"></script>
         <script src="../js/saxs/navigation/macromoleculelistview.js"></script>
@@ -287,11 +293,13 @@
         <script src="../js/core/view/run/x_dimplerunmainview.js"></script>
         <script src="../js/core/view/scatteringform.js"></script>
         <script src="../js/core/view/sessionmainview.js"></script>
+        <script src="../js/core/view/shipping/a_puckformview.js"></script>
         <script src="../js/core/view/shipping/a_spreadsheet.js"></script>
         <script src="../js/core/view/shipping/addcontainerform.js"></script>
         <script src="../js/core/view/shipping/caseform.js"></script>
         <script src="../js/core/view/shipping/containerspreadsheet.js"></script>
         <script src="../js/core/view/shipping/crystalformview.js"></script>
+        <script src="../js/core/view/shipping/csvcontainerspreadsheet.js"></script>
         <script src="../js/core/view/shipping/csvimportmainview.js"></script>
         <script src="../js/core/view/shipping/dewartrackinggrid.js"></script>
         <script src="../js/core/view/shipping/dewartrackingview.js"></script>
@@ -300,7 +308,6 @@
         <script src="../js/core/view/shipping/genericcontainerspreadsheet.js"></script>
         <script src="../js/core/view/shipping/othercontainerform.js"></script>
         <script src="../js/core/view/shipping/parcelgrid.js"></script>
-        <script src="../js/core/view/shipping/puckformview.js"></script>
         <script src="../js/core/view/shipping/sendshipmentform.js"></script>
         <script src="../js/core/view/shipping/shipmenteditform.js"></script>
         <script src="../js/core/view/shipping/shipmentform.js"></script>
@@ -345,6 +352,8 @@
         <script src="../js/mx/view/prepareexperiment/previewpanelview.js"></script>
         <script src="../js/mx/view/workflowstepmainview.js"></script>
         <script src="../js/mx/view/xfe/xfeviewermainview.js"></script>
+         <script src="../js/em/view/datacollectionemmainview.js"></script>
+         <script src="../js/em/view/emdatacollectiongrid.js"></script>
         <script src="../js/saxs/view/abinitiomainview.js"></script>
         <script src="../js/saxs/view/buffermainview.js"></script>
         <script src="../js/saxs/view/bufferwelcomemainview.js"></script>

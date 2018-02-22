@@ -4,7 +4,7 @@
 * @class MXDataCollectionGrid
 * @constructor
 */
-function CollapsedDataCollectionGrid(args) {
+function CollapsedDataCollectionGrid(args) {    
     this.template = "collapsed.mxdatacollectiongrid.template";
     DataCollectionGrid.call(this,args);
 }
@@ -14,6 +14,8 @@ CollapsedDataCollectionGrid.prototype.getColumns = DataCollectionGrid.prototype.
 CollapsedDataCollectionGrid.prototype.load = DataCollectionGrid.prototype.load;
 CollapsedDataCollectionGrid.prototype.loadMagnifiers = DataCollectionGrid.prototype.loadMagnifiers;
 CollapsedDataCollectionGrid.prototype.getPanel = DataCollectionGrid.prototype.getPanel;
+CollapsedDataCollectionGrid.prototype.parseEMData = DataCollectionGrid.prototype.parseEMData;
+
 
 CollapsedDataCollectionGrid.prototype.onBoxReady = function () {
     var _this = this;

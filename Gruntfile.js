@@ -28,6 +28,7 @@ module.exports = function(grunt) {
                             'min/exi.js' : [ "js/dust/**/*js", "js/core/**/*js" ],
                             'min/exi.mx.js' : [ "js/mx/**/*js" ],
                             'min/exi.saxs.js' : [ "js/saxs/**/*js" ],
+                            'min/exi.em.js' : [ "js/em/**/*js" ],
                             'min/exi.test.js' : [ "js/test/**/*js" ],
                             'min/exi.tracking.js' : [ "js/tracking/**/*js" ],
                             'min/bower_components.min.js' : [
@@ -63,7 +64,7 @@ module.exports = function(grunt) {
                     prod : {
                         options : {},
                         files : {
-                            'min/exi.min.js' : [ 'min/exi.js', 'min/exi.mx.js',
+                            'min/exi.min.js' : [ 'min/exi.js', 'min/exi.mx.js', 'min/exi.saxs.js', 'min/exi.em.js',
                                     'min/exi.test.js',
                                     'min/precompiled.templates.min.js' ],
                             'min/exi.saxs.min.js' : [ 'min/exi.js',
@@ -196,6 +197,9 @@ module.exports = function(grunt) {
                             'mx/dev.html' : 'mx/index.tpl.html'
                         }, {
                             'tracking/dev.html' : 'tracking/index.tpl.html'
+                        },
+                        {
+                            'test/dev.html' : 'test/index.tpl.html'
                         } ]
                     }
                 },
@@ -211,7 +215,7 @@ module.exports = function(grunt) {
                 wiredep : {
                     target : {
                         src : [ 'mx/dev.html', 'saxs/dev.html',
-                                'tracking/dev.html' ], // point to your HTML
+                                'tracking/dev.html', 'test/dev.html' ], // point to your HTML
                                                         // file.
                     }
                 },

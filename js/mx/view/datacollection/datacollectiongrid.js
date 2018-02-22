@@ -34,6 +34,7 @@ DataCollectionGrid.prototype.loadMagnifiers = function(dataCollectionGroup){
 */
 DataCollectionGrid.prototype.load = function(dataCollectionGroup){
     try{        
+        
         this.store.loadData(dataCollectionGroup);
         this.loadMagnifiers(dataCollectionGroup);
     }
@@ -145,6 +146,7 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
 
 DataCollectionGrid.prototype.getColumns = function() {
     var _this = this;
+
     var columns = [
         {
 
@@ -156,6 +158,10 @@ DataCollectionGrid.prototype.getColumns = function() {
 
                 var data = record.data;                              
                 var html = "";                               
+
+                /** DataCollectionGroup */
+                
+                data.xtalShapShot = EXI.getDataAdapter().mx.dataCollectionGroup.getXtalThumbnail(data.DataCollectionGroup_dataCollectionGroupId);
 
                 /** For thumbnail */
                 data.urlThumbnail = EXI.getDataAdapter().mx.dataCollection.getThumbNailById(data.lastImageId);
@@ -182,6 +188,7 @@ DataCollectionGrid.prototype.getColumns = function() {
                 data.xtal2 = EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(record.data.DataCollection_dataCollectionId, 2);
                 data.xtal3 = EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(record.data.DataCollection_dataCollectionId, 3);
                 data.xtal4 = EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(record.data.DataCollection_dataCollectionId, 4);
+
 
                 /** Image quality indicator **/
                 data.indicator = EXI.getDataAdapter().mx.dataCollection.getQualityIndicatorPlot(record.data.DataCollection_dataCollectionId);                              
@@ -233,8 +240,11 @@ DataCollectionGrid.prototype.getColumns = function() {
                     data.workflows = [];
                 }
                 
+                /** EM technique */
                 
-                dust.render(_this.template, data, function(err, out) {                                                                       
+                data = _this.parseEMData(record.data);
+
+                dust.render(_this.template, data, function(err, out) {                                                                                           
                     html = html + out;
                 });
                 
@@ -250,6 +260,7 @@ DataCollectionGrid.prototype.getColumns = function() {
             hidden: true,
             renderer: function(grid, e, record) {
                 var html = "";
+                
                 dust.render("ids.mxdatacollectiongrid.template", record.data, function(err, out) {
                     html = out;
                 });
@@ -260,4 +271,84 @@ DataCollectionGrid.prototype.getColumns = function() {
     ];
 
     return columns;
+};
+
+DataCollectionGrid.prototype.parseEMData =  function(data){
+   var gridSquares = [];
+   
+   function getArray(data, key){
+       if (data[key]){
+           return data[key].split(",");
+       }
+       return [];
+   }
+
+   function getPercentrage(count, total){
+       try{
+       if (count){
+           if(total){
+               return count/total*100;
+           }
+       }
+       }
+       catch(e){
+       }
+       return 0;
+   }
+
+   if (data.DataCollectionGroup_experimentType == 'EM'){
+        try{            
+            
+            var moviesCount = getArray(data, "movieCount");
+            var motionCorrectionsCount = getArray(data, "motionCorrectionCount");
+            var motionCorrectionDataCollectionIds = getArray(data, "motionCorrectionDataCollectionIds");
+            var ctfsCount = getArray(data, "CTFCount");        
+            var ctfDataCollectionIds = getArray(data, "CTFdataCollectionIds");            
+            var imageDirectoryList = getArray(data, "imageDirectoryList");
+            var startTimeList = getArray(data, "startTimeList");
+            var magnificationList = getArray(data, "magnificationList");
+            var voltageList = getArray(data, "voltageList");
+            var dataCollectionList = getArray(data, "dataCollectionIdList");                                               
+
+            function getMotionCorrectionByDataCollectionId(dataCollectionId, counts, ids ){  
+                              
+                var index = _.findIndex(ids, function(o) { return o == dataCollectionId });
+                if (index > -1){
+                    return counts[index];
+                }
+                return 0;
+            }
+            
+             /** Parsing grid squares */
+            for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
+                
+                var motionCount =  getMotionCorrectionByDataCollectionId(dataCollectionList[i], motionCorrectionsCount, motionCorrectionDataCollectionIds);
+                var ctfCount =  getMotionCorrectionByDataCollectionId(dataCollectionList[i], ctfsCount, ctfDataCollectionIds);
+                debugger
+                gridSquares.push({
+                    name : i + 1,
+                    movieCount : moviesCount[i],
+                    motionCorrectionCount : motionCount,
+                    ctfCount : ctfCount,
+                    dataCollectionId : dataCollectionList[i],
+                    snapshot : EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(dataCollectionList[i], 1),
+                    imageDirectory : imageDirectoryList[i],
+                    magnification : magnificationList[i],
+                    voltage : voltageList[i],
+                    startTime : startTimeList[i],
+                    motionPercentage : getPercentrage(motionCount, moviesCount[i]),
+                    ctfPercentage : getPercentrage(ctfCount, moviesCount[i])
+
+                });
+
+            }
+
+        }
+        catch(e){
+           console.log(e);
+        }
+   }
+   
+   data.gridSquares = gridSquares.reverse();   
+   return data;
 };

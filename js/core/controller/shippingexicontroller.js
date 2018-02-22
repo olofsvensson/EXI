@@ -109,9 +109,9 @@ ShippingExiController.prototype.init = function() {
 
 
 		Path.map("#/shipping/:shippingId/import/csv").to(function() {
-			var mainView = new CSVImportMainView();
+			var mainView = new CSVPuckFormView();
 			EXI.addMainPanel(mainView);
-			mainView.load(this.params['containerId'],this.params['shippingId'],this.params['shippingStatus']);
+			mainView.load(this.params['shippingId']);
 		}).enter(this.setPageBackground);
 
 

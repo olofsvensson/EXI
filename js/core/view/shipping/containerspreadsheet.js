@@ -37,14 +37,13 @@ ContainerSpreadSheet.prototype.getHeaderId = SpreadSheet.prototype.getHeaderId;
 ContainerSpreadSheet.prototype.getHeaderText = SpreadSheet.prototype.getHeaderText;
 ContainerSpreadSheet.prototype.getColumns = SpreadSheet.prototype.getColumns;
 ContainerSpreadSheet.prototype.getData = SpreadSheet.prototype.getData;
-ContainerSpreadSheet.prototype.loadData = SpreadSheet.prototype.loadData;
 ContainerSpreadSheet.prototype.setDataAtCell = SpreadSheet.prototype.setDataAtCell;
 ContainerSpreadSheet.prototype.getColumnIndex = SpreadSheet.prototype.getColumnIndex;
 ContainerSpreadSheet.prototype.disableAll = SpreadSheet.prototype.disableAll;
 ContainerSpreadSheet.prototype.setContainerType  = SpreadSheet.prototype.setContainerType;
 ContainerSpreadSheet.prototype.updateNumberOfRows  = SpreadSheet.prototype.updateNumberOfRows;
 ContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
-
+ContainerSpreadSheet.prototype.loadData  = SpreadSheet.prototype.loadData;
 
 
 /**
@@ -87,9 +86,16 @@ ContainerSpreadSheet.prototype.parseTableData = function() {
 };
 
 
-ContainerSpreadSheet.prototype.loadData = function(data){
-
-      var _this = this;
+ContainerSpreadSheet.prototype.load = function(puck){
+	
+	var _this = this;
+	this.puck = puck;
+	var container = document.getElementById(this.id + '_samples');
+	this.crystalFormIndex = this.getColumnIndex('Crystal Form');
+	// this.unitCellIndex = this.getColumnIndex('Unit cell');
+	this.spaceGroupIndex = this.getColumnIndex("Space Group");
+	var data = this.getSamplesData(puck);
+    
 	  function firstRowRenderer(instance, td, row, col, prop, value, cellProperties) {
 	    Handsontable.renderers.TextRenderer.apply(this, arguments);
 	    td.style.fontWeight = 'bold';
@@ -114,10 +120,11 @@ ContainerSpreadSheet.prototype.loadData = function(data){
 			td.style.background = '#EEE';
 		}
 	  }
-	  	  
+
+	  
 	  // maps function to lookup string
 	  Handsontable.renderers.registerRenderer('ValueRenderer', ValueRenderer);
-	  this.spreadSheet = new Handsontable(document.getElementById(this.id + '_samples'), {
+	  this.spreadSheet = new Handsontable(container, {
 		  		afterCreateRow: function (index, numberOfRows) {
                     data.splice(index, numberOfRows);
                 },
@@ -133,7 +140,6 @@ ContainerSpreadSheet.prototype.loadData = function(data){
 					
                     $(".htInvalid").removeClass("htInvalid");
 					$(".edit-crystal-button").click(function(sender){
-						debugger
 								var row = sender.target.id.split("-")[2];
 								var crystal = _this.parseCrystalFormColumn(_this.getData()[row][_this.crystalFormIndex],row);
 								_this.showEditForm(crystal,row);
@@ -181,18 +187,6 @@ ContainerSpreadSheet.prototype.loadData = function(data){
 				stretchH: 'last',
 				columns: this.getColumns(),
 		});
-}
-
-ContainerSpreadSheet.prototype.load = function(puck){
-	
-	var _this = this;
-	this.puck = puck;
-	
-	this.crystalFormIndex = this.getColumnIndex('Crystal Form');
-	// this.unitCellIndex = this.getColumnIndex('Unit cell');
-	this.spaceGroupIndex = this.getColumnIndex("Space Group");
-	
-	this.loadData(this.getSamplesData(puck));    	
 };
 
 /**
@@ -284,7 +278,7 @@ ContainerSpreadSheet.prototype.getHeader = function() {
     header = [
             // { text :'', id :'crystalId', column : {width : 100}}, 
             { text : 'Parcel', 	id: 'parcel', column : {width : 40}}, 
-			{ text : 'Container', 	id: 'position', column : {width : 40}}, 
+			{ text : 'Container', 	id: 'container', column : {width : 40}}, 
 			{ text : 'Type', 	id: 'position', column : {width : 40}}, 
 			{ text : '#', 	id: 'position', column : {width : 20}}, 
             { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
@@ -597,7 +591,7 @@ ContainerSpreadSheet.prototype.resetCrystalGroup = function (row) {
 	this.setDataAtCell(row,this.spaceGroupIndex,"");
 	
 	this.populateCrystalFormButton(row,this.getColumnIndex("editCrystalForm"),"");
-	console.log("->resetCrystalGroup");
+	
 	
 };
 

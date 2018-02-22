@@ -6,14 +6,17 @@ function SpreadSheet(args){
 	
 	this.acronyms;
 	if (args != null) {
-		//if (args.height != null) {
-		//	this.height = args.height;
-		//}
+		if (args.height != null) {
+			this.height = args.height;
+		}
 		if (args.width != null) {
 			this.width = args.width;
 		}
 		if (args.containerType != null) {
 			this.containerType = args.containerType;
+		}
+		if (args.cells != null){
+			this.cells = args.cells;
 		}
 	}
 
@@ -43,7 +46,7 @@ SpreadSheet.prototype.setLoading = function (bool) {
 
 SpreadSheet.prototype.getAcronyms = function() {
 	if (this.acronyms == null){		
-		this.acronyms = _.map(EXI.proposalManager.getProteins(), 'acronym').sort();;	
+		this.acronyms = _.map(EXI.proposalManager.getProteins(), 'acronym').sort();	
 	}
 	return this.acronyms;
 };
@@ -65,19 +68,19 @@ SpreadSheet.prototype.getHeaderText = function() {
 };
 
 
-SpreadSheet.prototype.getColumns = function() {
+SpreadSheet.prototype.getColumns = function() {	
 	return _.map(this.getHeader(), 'column');
 };
 
 
-SpreadSheet.prototype.load = function(data){
+SpreadSheet.prototype.loadData = function(data){
 	var _this = this;
 	this.data = data;
 	var container = document.getElementById(this.id + '_samples');
 
 	this.spreadSheet = new Handsontable(container, {
 			data: data,
-			//height : this.height,
+			height : this.height,
 			width : this.width,
 			manualColumnResize: true,
 			colWidths: this.getHeaderWidth(),
@@ -89,11 +92,12 @@ SpreadSheet.prototype.load = function(data){
 
 SpreadSheet.prototype.getData = function () {
 	return this.spreadSheet.getData();
-}
+};
 
 SpreadSheet.prototype.loadData = function (data) {
 	return this.spreadSheet.loadData(data);
-}
+};
+
 
 SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
 	if ((this.getData()[rowIndex][columnIndex] == null)&&(value == "")){
@@ -103,7 +107,7 @@ SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
 		return;
 	}
 	this.spreadSheet.setDataAtCell(rowIndex, columnIndex, value);
-}
+};
 
 /**
 * Returns the columnIndex given the columnId
@@ -114,7 +118,7 @@ SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
 */
 SpreadSheet.prototype.getColumnIndex = function (colId) {
 	return _.findIndex(this.getHeader(),{id :colId});
-}
+};
 
 /**
 * Changes the number of rows in the grid
@@ -136,7 +140,7 @@ SpreadSheet.prototype.updateNumberOfRows = function (n) {
 		}
 		this.spreadSheet.loadData(data);
 	}
-}
+};
 
 /**
 * Sets an empty value for all the cells in a given row
@@ -149,4 +153,4 @@ SpreadSheet.prototype.emptyRow = function (row) {
 	for (var i = 1 ; i < columnIds.length ; i++) {
 		this.setDataAtCell(row,i,"");
 	}
-}
+};

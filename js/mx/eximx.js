@@ -18,7 +18,9 @@ function ExiMX() {
 									new ImageController(),
                                     new PhasingController(),
                                     new XfeController(),
-                                    new BeamlineParameterController()
+                                    new BeamlineParameterController(),
+									new SAXSExiController(),
+									new EMDataCollectionController()
 									
 							],
 		 					headerCssClass : 'mxTitlePanel'
@@ -51,6 +53,9 @@ ExiMX.prototype.addMainPanelWithTimer = Exi.prototype.addMainPanelWithTimer;
 ExiMX.prototype.addNavigationPanelWithTimer = Exi.prototype.addNavigationPanelWithTimer;
 ExiMX.prototype.authenticate = Exi.prototype.authenticate;
 ExiMX.prototype.openWelcomePage = Exi.prototype.openWelcomePage;
+ExiMX.prototype.afterRender = Exi.prototype.afterRender;
+
+
  
 
 ExiMX.prototype.getHeader = function(){

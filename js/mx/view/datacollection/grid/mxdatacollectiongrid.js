@@ -33,7 +33,7 @@ MXDataCollectionGrid.prototype.getPanel = function(dataCollectionGroup) {
 MXDataCollectionGrid.prototype.getToolBar = function() {
     var _this = this;
 
-    function onMenuClicked(widget) {
+    function onMenuClicked(widget) {        
         if (_this.activePanel != widget) {
             _this.activePanel = widget;
             if (Ext.getCmp(_this.id + "_search").getValue() != "") {
@@ -80,7 +80,7 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                         handler: function() {
                             _this.renderingType = "DATACOLLECTION_COLLAPSED";
                             Ext.getCmp('DataCollectionListViewBtn').toggle(false);
-                            Ext.getCmp('ContainerViewBtn').toggle(false);
+                            Ext.getCmp('ContainerViewBtn').toggle(false);                            
                             onMenuClicked(_this.collapsedDataCollectionGrid);
                         }
 
@@ -122,9 +122,18 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                                 location.href = _this.pdfUrl;                             
                             }
                         }
-
                     },
-
+             {                     
+                        text: "<span class='glyphicon glyphicon-download-alt'> RTF</span>",
+                        id : 'rtfBtn',
+                        tooltip: 'Download Session Report as RTF',                                              
+                        margin: '2 0 2 5',
+                        handler : function(){
+                            if (_this.rtfUrl != null){
+                                location.href = _this.rtfUrl;                             
+                            }
+                        }
+                    },
             '->',
             {
                 html: '<span class="glyphicon glyphicon-download-alt"></span> Best results',
@@ -210,7 +219,9 @@ MXDataCollectionGrid.prototype.load = function(dataCollectionGroup) {
     var sessionsId = _.keyBy(this.dataCollectionGroup, "BLSession_sessionId" );    
     for (sessionId in sessionsId){
         this.pdfUrl = EXI.getDataAdapter().mx.dataCollection.getReportURLBySessionId(sessionId);
-        
+        this.rtfUrl = EXI.getDataAdapter().mx.dataCollection.getRtfReportURLBySessionId(sessionId);
+		this.pdfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getAnalysisReportURLBySessionId(sessionId);
+        this.rtfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getRtfAnalysisReportURLBySessionId(sessionId);
     }
 };
 
