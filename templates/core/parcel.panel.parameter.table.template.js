@@ -1,7 +1,7 @@
 <table class="table valign-middle-rows small-padding-rows" style="height:{height}px;margin:0px;font-size: 9px;">
     <tr>
         <td style="border-top:none;">Name: </td>
-        <td class="column_parameter_value" style="border-top:none;">{dewar.code}{isSelectedForReimb}</td>
+        <td class="column_parameter_value" style="border-top:none;">{dewar.code}{isSelectedForReimb}{dewar.isReimbursed}</td>
     </tr>
     <tr valign="middle">
         <td>Status: </td>

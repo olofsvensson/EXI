@@ -51,7 +51,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	nSamples = 0;
 	nMeasured = 0;
 	maxReimbursedDewars = 0;
-	currentReimbursedDewars = 0;
+	this.currentReimbursedDewars = 0;
 	if (samples) {
 		nSamples = samples.length;
 		nMeasured = nSamples - withoutCollection.length;
@@ -66,7 +66,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	
 	for (var i =0; i < this.dewars.length; i++){ 
 		if (this.dewars[i].isReimbursed ) {
-			currentReimbursedDewars++;
+			this.currentReimbursedDewars++;
 		}
 	}	
     
@@ -90,7 +90,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	}
 	
 	if (nbReimbDewars > 0) {
-		$("#" + this.id + "-reimbursed").html("Max nb of reimbursed parcels: " + maxReimbursedDewars + " " );
+		$("#" + this.id + "-reimbursed").html(this.currentReimbursedDewars + " parcels reimbursed out of max : " + maxReimbursedDewars + " authorized" );
 	 };
 
 	this.fillTab("content", this.dewars);
@@ -125,11 +125,12 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 	for ( var i in dewars) {
 		var parcelPanel = new ParcelPanel({
 			height : 90,
-		width : this.panel.getWidth()*0.9,
+			width : this.panel.getWidth()*0.9,
 			shippingId : this.shipment.shippingId,
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,
-			currentTab : tabName
+			currentTab : tabName,
+			currentReimbursedDewars : this.currentReimbursedDewars
 		});
 		this.parcelPanels[tabName].insert(parcelPanel.getPanel());
 		parcelPanel.load(this.dewars[i],this.shipment,this.samples[this.dewars[i].dewarId],this.withoutCollection[this.dewars[i].dewarId]);

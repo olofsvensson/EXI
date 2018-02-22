@@ -47,6 +47,9 @@ function ParcelPanel(args) {
 		if (args.currentTab != null) {
 			this.currentTab = args.currentTab;
 		}
+		if (args.currentReimbursedDewars != null) {
+			this.currentReimbursedDewars = args.currentReimbursedDewars;
+		}
 	}
 	
 	this.onSavedClick = new Event(this);
@@ -59,11 +62,6 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	this.dewar.index = this.index;
 	this.shipment = shipment;
 	
-	if (dewar.isReimbursed){
-		this.isSelectedForReimb = " (R)";
-	} else {
-		this.isSelectedForReimb = "";
-	}
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			this.dewar.beamlineName = shipment.sessions[0].beamlineName;
@@ -93,13 +91,24 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 		$("#" + this.id + "-edit-button").click(function () {
 			_this.showCaseForm();
 		});
+		
+		if (this.currentReimbursedDewars < this.dewar.nbReimbDewars || this.dewar.isReimbursed) {
+			$("#" + this.id + "-euro-button").removeClass("disabled");
+			$("#" + this.id + "-euro-button").click(function () {
+				_this.showReimbForm();
+			});
+		}
 	}
-
+	
 	$("#" + this.id + "-print-button").click(function () {
 		var dewarId = _this.dewar.dewarId;
 		var url = EXI.getDataAdapter().proposal.shipping.getDewarLabelURL(dewarId, dewarId);
 		location.href = url;
 		return;
+	});
+	
+	$("#" + this.id + "-euro-button").click(function () {
+		_this.showReimbForm();
 	});
 	
 	this.containersPanel = Ext.create('Ext.panel.Panel', {
@@ -128,6 +137,11 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 
 ParcelPanel.prototype.renderDewarParameters = function (dewar) {
 	var html = "";
+	if (dewar.isReimbursed){
+		this.isSelectedForReimb = " (R)";
+	} else {
+		this.isSelectedForReimb = "";
+	}
 	dust.render("parcel.panel.parameter.table.template", {id : this.id, dewar : dewar, height : this.height, isSelectedForReimb : this.isSelectedForReimb}, function(err, out){
 		html = out;
 	});
@@ -346,6 +360,46 @@ ParcelPanel.prototype.showCaseForm = function() {
 							_this.panel.doLayout();
 						}
 					}, {
+						text : 'Cancel',
+						handler : function() {
+							window.close();
+						}
+					} ]
+	});
+	window.show();
+};
+
+/**
+* It displays a window with the reimbursement form
+*
+* @method showReimbForm
+*/
+ParcelPanel.prototype.showReimbForm = function() {
+	var _this = this;
+	/** Opens a window with the cas form **/
+	var reimbForm = new ReimbForm();
+	var window = Ext.create('Ext.window.Window', {
+	    title: 'Reimburse Parcel',
+	    height: 450,
+	    width: 600,
+	    modal : true,
+	    layout: 'fit',
+	    items: [
+	            reimbForm.getPanel(_this.dewar)
+	    ],
+	    buttons : [ {
+						text : 'Save',
+						handler : function() {
+							_this.onSavedClick.notify(reimbForm.getDewar());
+							window.close();
+							if (_this.currentTab == "content") {
+                            	_this.renderDewarParameters(_this.dewar);
+							}
+							_this.renderDewarComments(_this.dewar);
+							_this.panel.doLayout();
+						}
+					}, 
+					{
 						text : 'Cancel',
 						handler : function() {
 							window.close();

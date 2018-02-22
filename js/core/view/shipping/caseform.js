@@ -68,12 +68,6 @@ CaseForm.prototype.setDewar = function(dewar) {
 		this.sessionsCombo.setValue(this.dewar.sessionVO.sessionId);
 	}*/
 	
-	if (dewar.isReimbursed){
-		this.isSelectedForReimb = " (R)";
-	} else {
-		this.isSelectedForReimb = "";
-	}
-	
 };
 
 /*
@@ -139,7 +133,9 @@ CaseForm.prototype.getPanel = function(dewar) {
 					},
 					{           
 						xtype: 'checkbox',
-						fieldLabel : 'By setting this dewar to reimbursed, the labels that will be generated for the sending will contain the fedex account that you should use to send your dewars.Please note that you MUST NOT use this account to ship more than the allowed number of dewars.In case of abuse, your proposal will no more be able to benefit from the dewar reimbursement. Click on the following checkbox if you agree with these conditions and you want to have this dewar automatically reimbursed.',
+						fieldLabel : ' ',
+						boxLabel : 'By setting this dewar to reimbursed, the labels that will be generated for the sending will contain the fedex account that you should use to send your dewars. <br>Please note that you MUST NOT use this account to ship more than the allowed number of dewars. <br>In case of abuse, your proposal will no more be able to benefit from the dewar reimbursement. <br>Click if you agree with these conditions and you want to have this dewar automatically reimbursed.',
+						hideLabel:true,
 						labelWidth : 500,
 						name : 'isReimbursed',
 						id : this.id + 'dewar_isReimbursed',
