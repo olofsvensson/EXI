@@ -18,6 +18,11 @@ function CSVPuckFormView(args) {
 	/** When getPanel it will load all the samples for this proposal */
 	this.proposalSamples = [];
 
+	/** dewars names that already exist on this shipment */
+	this.dewarNameControlledList = [];
+	this.containerNameControlledList = [];
+
+
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -45,6 +50,8 @@ CSVPuckFormView.prototype.checkSampleNames = PuckFormView.prototype.checkSampleN
 CSVPuckFormView.prototype.displaySpecialCharacterWarning = PuckFormView.prototype.displaySpecialCharacterWarning;
 CSVPuckFormView.prototype.displayUniquenessWarning = PuckFormView.prototype.displayUniquenessWarning;
 CSVPuckFormView.prototype.showReturnWarning = PuckFormView.prototype.showReturnWarning;
+CSVPuckFormView.prototype.getSamplesFromProposal = PuckFormView.prototype.getSamplesFromProposal;
+
 
 CSVPuckFormView.prototype.getToolBar = function() {
 	var _this = this;
@@ -94,10 +101,14 @@ CSVPuckFormView.prototype.getToolBar = function() {
 	];
 };
 
+
+
+
 CSVPuckFormView.prototype.save = function() {
     var _this = this;
-    var parcels = this.containerSpreadSheet.getParcels();
-    console.log(parcels);
+    var parcels = this.containerSpreadSheet.getParcels();   
+
+	this.containerSpreadSheet.validateData();
 
     var onError = function(sender, error, mesg){
 			_this.panel.setLoading(false);                        
@@ -114,6 +125,9 @@ CSVPuckFormView.prototype.save = function() {
 };
 
 CSVPuckFormView.prototype.getPanel = function() {
+	/** Get Samples from Proposal */
+	this.getSamplesFromProposal();
+
 	this.container = Ext.create('Ext.container.Container', {
 		xtype : 'container',
 		items : []
@@ -151,10 +165,9 @@ CSVPuckFormView.prototype.getContainer = function() {
         buttons : this.getToolBar(),
         layout: 'vbox',
         items: [
-
             {
                 html: html,
-                height: 50,
+                height: 100,
                 margin : 20
             },
             this.containerSpreadSheet.getPanel(),
@@ -165,6 +178,12 @@ CSVPuckFormView.prototype.getContainer = function() {
 
 };
 
+/**
+* This converts the content of a CSV file and split up into lines and columns
+*
+* @method csvToArray
+* @return {Array} Array of arrays that represents rows and columns of the CSV 
+*/
 CSVPuckFormView.prototype.csvToArray = function(csvContent) {    
     if (csvContent){
         var allTextLines = csvContent.split(/\r\n|\n/);
@@ -181,6 +200,33 @@ CSVPuckFormView.prototype.csvToArray = function(csvContent) {
     }
 };
 
+CSVPuckFormView.prototype.setFileUploadListeners = function() {
+	var _this = this;
+	function handleFileSelect(evt) {            
+		var files = evt.target.files; // FileList object            
+		var output = [];
+		for (var i = 0, f; f = files[i]; i++) {              
+				var reader = new FileReader();
+				reader.onload = (function(f) {					 
+					$("#box_file_" + _this.id).val(f.name);					 
+					$("#box_info_" + _this.id).html(f.size/1024 + " KB");
+								
+				return function(e) {                                        
+					_this.containerSpreadSheet.loadData(_this.csvToArray(e.target.result));
+															
+				};
+			})(f);
+				// Read in the image file as a data URL.
+			reader.readAsText(f);
+		}
+	}
+	/** Add listener to change */
+	document.getElementById("file_" + _this.id).addEventListener('change', handleFileSelect, false);
+	/** Make button active */
+	document.getElementById("file_" + _this.id).disabled = false;
+
+};
+
 
 CSVPuckFormView.prototype.load = function(shippingId) {
     var _this = this;
@@ -191,29 +237,30 @@ CSVPuckFormView.prototype.load = function(shippingId) {
     this.containerSpreadSheet.loadData([[]]);
 
     function attachListeners() {
-
-        function handleFileSelect(evt) {            
-            var files = evt.target.files; // FileList object            
-            var output = [];
-            for (var i = 0, f; f = files[i]; i++) {              
-                 var reader = new FileReader();
-                 reader.onload = (function(f) {
-                    return function(e) {                                        
-                        _this.containerSpreadSheet.loadData(_this.csvToArray(e.target.result));
-						                                        
-                    };
-                })(f);
-                 // Read in the image file as a data URL.
-                reader.readAsText(f);
-            }
-        }
-        /** Add listener to change */
-        document.getElementById("file_" + _this.id).addEventListener('change', handleFileSelect, false);
-        /** Make button active */
-        document.getElementById("file_" + _this.id).disabled = false;
+        _this.setFileUploadListeners();
     };
-
     var timer = setTimeout(attachListeners, 1000);
+
+	if (shippingId != null){
+		this.panel.setLoading();
+		var onSuccess = function(sender, shipment){
+			_this.shipment = shipment;
+			_this.dewarNameControlledList = _.map(_this.shipment.dewarVOs, 'code');	
+
+			for(var i = 0; i < shipment.dewarVOs.length; i++){				
+				_this.containerNameControlledList = _this.containerNameControlledList.concat(_.map(shipment.dewarVOs[i].containerVOs, 'code'));				
+			}		
+			/** Setting controlled list of values into spreadSheet object */			
+			_this.containerSpreadSheet.setContainerNameControlledList(_this.containerNameControlledList);
+			_this.containerSpreadSheet.setDewarNameControlledList(_this.dewarNameControlledList);
+			_this.panel.setLoading(false);
+		};
+		var onError = function(sender, error){			
+			_this.panel.setLoading(false);
+		};
+		EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.shipping.getShipment(shippingId);
+    }	
+
 
 };
 

@@ -42,7 +42,29 @@ function CSVContainerSpreadSheet(args){
 
 	this.count = 0;
 
-	this.cellColorBackground = this.getDifferentColors();
+	/** Colors for parcels */
+	this.cellColorBackground = this.getParcelColors();
+	
+	this.parcelColorBackground = {};
+
+	/** When getPanel it will load all the samples for this proposal */
+	this.proposalSamples = [];
+
+	/** Controlled list of values */
+	this.containerTypeControlledList = [
+											{ name:"Unipuck", capacity: 16 },
+											{ name:"Spinepuck", capacity:10 }
+										];
+	/** dewars names that already exist on this shipment. This object is supposed to be a SET */
+	this.dewarNameControlledList = new Set();
+	this.containerNameControlledList = new Set();
+
+	/** It validates the data */
+	this.puckValidator = new PuckValidator();
+
+	/** Table Indices */
+	this.CONTAINERTYPE_INDEX = 2;
+	this.PROTEINACRONYM_INDEX = 4;
 }
 
 CSVContainerSpreadSheet.prototype.getPanel = SpreadSheet.prototype.getPanel;
@@ -53,7 +75,6 @@ CSVContainerSpreadSheet.prototype.getHeaderId = SpreadSheet.prototype.getHeaderI
 CSVContainerSpreadSheet.prototype.getHeaderText = SpreadSheet.prototype.getHeaderText;
 CSVContainerSpreadSheet.prototype.getColumns = SpreadSheet.prototype.getColumns;
 CSVContainerSpreadSheet.prototype.getData = SpreadSheet.prototype.getData;
-CSVContainerSpreadSheet.prototype.loadData = SpreadSheet.prototype.loadData;
 CSVContainerSpreadSheet.prototype.setDataAtCell = SpreadSheet.prototype.setDataAtCell;
 CSVContainerSpreadSheet.prototype.getColumnIndex = SpreadSheet.prototype.getColumnIndex;
 CSVContainerSpreadSheet.prototype.disableAll = SpreadSheet.prototype.disableAll;
@@ -61,14 +82,29 @@ CSVContainerSpreadSheet.prototype.setContainerType  = SpreadSheet.prototype.setC
 CSVContainerSpreadSheet.prototype.updateNumberOfRows  = SpreadSheet.prototype.updateNumberOfRows;
 CSVContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
 CSVContainerSpreadSheet.prototype.parseTableData  = ContainerSpreadSheet.prototype.parseTableData;
-
 CSVContainerSpreadSheet.prototype.disableAll  = ContainerSpreadSheet.prototype.disableAll;
 
+/**
+* This checks all rows and validate the data
+*
+* @method validateData
+* @return {Boolean} Return true if data is valid or false otherwise
+*/
+CSVContainerSpreadSheet.prototype.validateData = function() {
+	var data = this.spreadSheet.getData();
+};
 
-
-CSVContainerSpreadSheet.prototype.getDifferentColors = function(){	
-	return ["#e6f7ff", "#99ddff", "#4dc3ff", "#00aaff"];
-
+/**
+* Returns a list of objects that will contain colors for parent and containers nodes
+*
+* @method getParcelColors
+*/
+CSVContainerSpreadSheet.prototype.getParcelColors = function(){	
+	return [{"color": "#0099ff", "containers" : [{"color":"#4db8ff"}, {"color":"#80ccff"}, {"color":"#b3e0ff"}, {"color":"#e6f5ff"}]}, 
+			{"color": "#33cc33", "containers" : [{"color":"#5cd65c"},{"color":"#85e085"},{"color":"#adebad"},{"color":"#d6f5d6#"}]},
+			{"color": "#ffbb33", "containers" : [{"color":"#ffcc66"},{"color":"#ffdd99"},{"color":"#ffeecc"}, {"color":"#fff7e6"}]},
+			{"color": "#bb33ff", "containers" : [{"color":"#cc66ff"}, {"color":"#dd99ff"},{"color":"#e6b3ff"}, {"color":"#eeccff"}]}
+	];
 };
 
 CSVContainerSpreadSheet.prototype.loadData = function(data){
@@ -83,10 +119,7 @@ CSVContainerSpreadSheet.prototype.loadData = function(data){
 	  }
 	  
 	  function ValueRenderer(instance, td, row, col, prop, value, cellProperties) {
-	        Handsontable.renderers.TextRenderer.apply(this, arguments);
-	        debugger
-		
-		
+	        Handsontable.renderers.TextRenderer.apply(this, arguments);	        				
 	  }
 	  	  		
 	  // maps function to lookup string
@@ -99,13 +132,9 @@ CSVContainerSpreadSheet.prototype.loadData = function(data){
 				beforeChange: function (changes, source) {
 					lastChange = changes;
 				},
-				afterChange: function (changes, source) {
-						  			
+				afterChange: function (changes, source) {						  			
 				},
-				cells: function (row, col, prop) {	
-					// var cellProperties = {};
-					 //cellProperties.renderer = 	ValueRenderer;
-					// return cellProperties;										
+				cells: function (row, col, prop) {														
 				},
 				data: data,
 				height : this.height,
@@ -126,12 +155,24 @@ CSVContainerSpreadSheet.prototype.getParcelsByRows = function(rows) {
 CSVContainerSpreadSheet.prototype.getContainersByRows = function(rows) {
 	return _.groupBy(rows, "containerCode");
 };
+
+CSVContainerSpreadSheet.prototype.getProteinByAcronym = function(acronym) {
+	var proteins = EXI.proposalManager.getProteinByAcronym(acronym);
+	if (proteins){
+		if (proteins.length > 0){
+			return proteins[0];
+		}
+	}
+	return null;
+};
+
 /**
 * Returns a set of parcels
 *
 * @method getParcels
 */
 CSVContainerSpreadSheet.prototype.getParcels = function() {
+	var _this = this;
 	function  getDiffrationPlanByRow(row){
 		return {
 			radiationSensivity : row["Radiation Sensitivity"],
@@ -143,14 +184,7 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 		};
 	};
 
-    function getProteinByAcronym(acronym){
-		var proteins = EXI.proposalManager.getProteinByAcronym(acronym);
-		if (proteins){
-			if (proteins.length > 0){
-				return proteins[0];
-			}
-		}
-    };
+  
 
 	function  getCrystalByRow(row){
 		return {
@@ -161,7 +195,7 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 			cellAlpha : row["alpha"],
 			cellBeta : row["beta"],
 			cellGamma : row["gamma"],
-			proteinVO : getProteinByAcronym(row["Protein Acronym"])
+			proteinVO : _this.getProteinByAcronym(row["Protein Acronym"])
 		};
 	};
 
@@ -204,12 +238,8 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 			}
 		}
 	};
-	
-	
-	var rows = this.parseTableData();
 		
-	
-
+	var rows = this.parseTableData();			
 	var dewars3vo = [];
 	var parcels = this.getParcelsByRows(rows);
 	for(var parcel in parcels){
@@ -218,15 +248,13 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 		var containerVOs = [];
 		var containers = this.getContainersByRows(parcels[parcel]);
 		for (key in containers){
-			var containerRows = containers[key];	
-					
+			var containerRows = containers[key];						
 			containerVOs.push({
 				code : _.trim(containerRows[0].containerCode),		
 				containerType : getContainerType(containerRows),
 				capacity :		getContainerCapacity(containerRows),
 				sampleVOs : getSamplesByContainerRows(containerRows)
-			});			
-			
+			});						
 		}
 		
 		dewars3vo.push({
@@ -238,6 +266,27 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 	return dewars3vo;
 };
 
+
+/**
+* This method set the property containerNameControlledList as a Set
+*
+* @method setContainerNameControlledList
+* @param {Array} containerNameControlledList list of names of all containers for this shipment
+*/
+CSVContainerSpreadSheet.prototype.setContainerNameControlledList = function (containerNameControlledList){	
+	this.containerNameControlledList = new Set(containerNameControlledList);	
+};
+
+
+/**
+* This method set the property dewarNameControlledList as a Set
+*
+* @method setDewarNameControlledList
+* @param {Array} dewarNameControlledList list of names of all dewars for this shipment
+*/
+CSVContainerSpreadSheet.prototype.setDewarNameControlledList = function (dewarNameControlledList){
+	this.dewarNameControlledList = new Set(dewarNameControlledList);	
+};
 
 /**
 * Method executed when a change is made on the spreadSheet. It manages the process when the crystal form or the protein acronym are changed
@@ -275,11 +324,144 @@ CSVContainerSpreadSheet.prototype.manageChange = function (change, source, direc
 };
 
 
+CSVContainerSpreadSheet.prototype.getParcelColor = function(parcelName) {
+	if (!this.parcelColorBackground[parcelName]){
+		this.parcelColorBackground[parcelName] = this.cellColorBackground[_.size(this.parcelColorBackground)%this.cellColorBackground.length];
+		/** add parcel name to get the container colors later on */
+		this.parcelColorBackground[parcelName].name = parcelName;
+	}	
+	return this.parcelColorBackground[parcelName].color;
+};
 
+CSVContainerSpreadSheet.prototype.getContainerColor = function(parcelName, containerName) {	
+	if (this.parcelColorBackground[parcelName]){
+		var assignedColorIndex = _.findIndex(_.map(this.parcelColorBackground[parcelName].containers, "name"), function(o){return o == containerName;})
+		if (assignedColorIndex == -1){
+			for (var i = 0; i < this.parcelColorBackground[parcelName].containers.length; i++){
+				if (!this.parcelColorBackground[parcelName].containers[i].name){
+					this.parcelColorBackground[parcelName].containers[i].name = containerName;
+					return this.parcelColorBackground[parcelName].containers[i].color;
+				}
+			}
+		}
+		else{
+			return this.parcelColorBackground[parcelName].containers[assignedColorIndex].color;
+		}
+	}
+	return "#FFFFFF";	
+};
+
+/**
+ * Checks the containerType. It checks that it is not empty, not null and it is in the controlled list of values "containerTypeControlledList"
+ * @method checkContainerType
+ *  @param {String} containerType Type of container read from the CSV file
+ * @return {Boolean} Returns true if container type is ok or false if container type is not valid
+ */
+CSVContainerSpreadSheet.prototype.isContainerTypeValid = function(containerType) {	
+	if (containerType){		
+		if ((containerType != undefined)||(value != "")){
+			var foundContainerType = _.find(this.containerTypeControlledList, function(o){return o.name == containerType});
+			if (foundContainerType){
+					return true;
+			}			
+		}
+	}
+	return false;
+};
+
+
+
+/**
+ * Checks the sample Position. It checks the containerType and checks that position of the sample is < capacity of the dewar
+ * @method isSamplePositionValid
+ * @param {String} containerType Type of container read from the CSV file
+ * @param {String} samplePosition Position of the sample within the container
+ * @return {Boolean} Returns true if container type is ok or false if container type is not valid
+ */
+CSVContainerSpreadSheet.prototype.isSamplePositionValid = function(containerType, samplePosition) {	
+	/** Check that container puck is in  containerTypeControlledList */
+	var containerType = _.find(this.containerTypeControlledList, function(o){return o.name == containerType});
+	if (containerType == null){
+		return false;
+	}		
+	
+	if(containerType == null){
+		return false;
+	}	
+	else{
+		try{
+			if(containerType.capacity < parseInt(samplePosition)){
+				return false;	
+			}
+		}	
+		catch(e){
+			return false;
+		}
+	}
+	return true;
+};
+
+
+/**
+ * Checks the value. It checks that it is not empty and not null
+ * @method isValueFilled
+ *  @param {String} containerType Type of container read from the CSV file
+ * @return {Boolean} Returns true if value is filled
+ */
+CSVContainerSpreadSheet.prototype.isValueFilled = function(value) {	
+	if ((value == undefined)||(value == "")){					
+			return false;		
+	}
+	return true;
+};
+
+/**
+ * Checks the name of the parcel. It checks that parcel name does not exist within the shipment. It means in the list of dewarNameControlledList
+ * @method isParcelNameValid
+ *  @param {String} parcelName Name of the parcel read from CSV
+ * @return {Boolean} Returns true if name of the parcel is ok
+ */
+CSVContainerSpreadSheet.prototype.isParcelNameValid = function(parcelName) {			
+	if ((parcelName == undefined)||(parcelName == "")){					
+			return false;		
+	}
+	if (this.dewarNameControlledList.has(parcelName)){
+		return false;
+	}
+	return true;
+};
+
+
+/**
+ * Checks the name of the sample. (ProteinId + sample name) should be unique for the whole proposal and not empty or null
+ * @method isSampleNameValid
+ *  @param {String} parcelName Name of the parcel read from CSV
+ * @return {Boolean} Returns true if name of the parcel is ok
+ */
+CSVContainerSpreadSheet.prototype.isSampleNameValid = function(sampleName, proteinName) {			
+	if ((sampleName == undefined)||(sampleName == "")){					
+			return false;		
+	}	
+	var protein = this.getProteinByAcronym(proteinName);
+	if (protein){		
+		var conflicts = this.puckValidator.checkSampleNames([sampleName], [protein.proteinId], null, this.proposalSamples);
+		if (conflicts){
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	else{
+		return false;
+	}
+	
+};
 
 CSVContainerSpreadSheet.prototype.getHeader = function() {	
     var _this = this;
 	var header = [];
+
 	var disabledRenderer = function(instance, td, row, col, prop, value, cellProperties){
 		if (value != undefined){
 			td.innerHTML = value;
@@ -288,29 +470,94 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 	}
 
 	var mandatoryParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){				
+		if (!_this.isValueFilled(value)){				
+			td.className = 'custom-row-text-required';			
+		}		
+		td.innerHTML = value;		
+	}
+
+	var proteinParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
 		if ((value == undefined)||(value == "")){					
 			td.className = 'custom-row-text-required';			
+			return;
 		}
-		else{				
-			td.innerHTML = value;		
+		
+		var protein = _.find(_this.getAcronyms(), function(o){ return o==value;});		
+		if (!protein){
+			td.className = 'custom-row-text-required';			
 		}		
+		td.innerHTML = value;		
+		
 	}
+
+	var sampleParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
+		/** For testing purposes **/
+		// value =value + 	Math.random();		
+		var proteinName = instance.getSourceDataAtCell(row, _this.PROTEINACRONYM_INDEX);		
+		if (!_this.isSampleNameValid(value, proteinName)){					
+			td.className = 'custom-row-text-required';			
+		}
+		
+		td.innerHTML = value;		
+				
+	}
+    /** Checking parcels name */
+	var parcelDisplayCell = function(instance, td, row, col, prop, value, cellProperties){				
+			if (!_this.isParcelNameValid(value)){
+				td.className = 'custom-row-text-required';
+			}	
+			else{			
+				td.style.background = 	_this.getParcelColor(value);
+			}
+			td.innerHTML = value;				
+	}
+
+    /** Checking containers name */
+	var containerNameParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){						
+			if (_this.containerNameControlledList.has(value)){
+				td.className = 'custom-row-text-required';
+			}
+			else{			
+				td.style.background = _this.getContainerColor(instance.getDataAtCell(row, col-1), value);
+			}
+			td.innerHTML = value;							
+	}
+	 
+	 /** Checking containers type */
+	 var containerTypeParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){		
+		 	if (_this.isContainerTypeValid(value) == false){
+				td.className = 'custom-row-text-required';
+			 }					
+			td.innerHTML = value;		
+	}
+
+	 var samplePositionParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){			 
+		 	var rowContainerType = instance.getSourceDataAtCell(row, _this.CONTAINERTYPE_INDEX);
+			 if (!_this.isSamplePositionValid(rowContainerType, value)){
+				 td.className = 'custom-row-text-required';
+			 }				
+			td.innerHTML = value;										
+	}
+
 	 
 	 
     header = [
             // { text :'', id :'crystalId', column : {width : 100}}, 
-            { text : 'Parcel', 	id: 'parcel', column : {width : 80}}, 
-			{ text : 'Container', 	id: 'containerCode', column : {width : 80}}, 
-			{ text : 'Type', 	id: 'containerType', column : {width : 80}}, 
-			{ text : '#', 	id: 'position', column : {width : 20}}, 
+            { text : 'Parcel  <br /> Name', 	id: 'parcel', column : {width : 80, renderer: parcelDisplayCell}}, 
+			{ text : 'Container <br /> Name', 	id: 'containerCode', column : {width : 80, renderer: containerNameParameterRenderer}}, 
+			{ text : 'Container <br />Type', 	id: 'containerType', column : {width : 80, renderer: containerTypeParameterRenderer}}, 
+			{ text : '#', 	id: 'position', column : {width : 20, renderer: samplePositionParameterRenderer}},
             { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
                                                                                         width : 80,
                                                                                         type: 'dropdown',
-																						renderer: mandatoryParameterRenderer,
+																						renderer: proteinParameterRenderer,
                                                                                         source: this.getAcronyms()
                                                                                     }
             }, 
-            { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}}, 
+            { text :'Sample<br /> Name', id :'Sample Name', column : {
+																		width : 120,
+																	  	renderer: sampleParameterRenderer	
+			}}, 
             { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},  
           
 			
@@ -340,13 +587,13 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 
             { text :'Required<br /> multiplicity', id :'Required multiplicity', column : {width : 60}}, 
             { text :'Required<br /> Completeness', id :'Required Completeness', column : {width : 80}},            
-			{ text :'Forced <br /> SG',  id :'forced', column : {
+			{ text :'Forced <br /> SPG',  id :'forced', column : {
                                                                         width : 70,  
                                                                         type: 'dropdown',
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }}, 
 
-            { text :'Smiles', id :'Smiles', column : {width : 60}}, 
+            { text :'SMILES', id :'Smiles', column : {width : 60}}, 
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
 

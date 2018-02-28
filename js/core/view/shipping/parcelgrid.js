@@ -43,6 +43,38 @@ function ParcelGrid(args) {
 	this.onRemove = new Event(this);
 }
 
+/**
+ * Add content 
+ */
+ParcelGrid.prototype.setContentLabel = function(dewarsCount, samplesCount, samplesMeasured) {
+	if ($("#" + this.id + "-label")){
+		$("#" + this.id + "-label").html("Content (" + dewarsCount + " Parcels - " + samplesCount + " Samples - " + samplesMeasured + " Measured)");
+	}
+};
+
+/** This disable the Export PDF view button */
+ParcelGrid.prototype.disableExportButton = function() {
+	$("#" + this.id + "-export").removeClass("disabled");
+	$("#" + this.id + "-export").unbind('click').click(function(sender){
+			/** Do nothing */
+	});
+};
+
+ParcelGrid.prototype.disableImportFromCSVButton = function() {
+	$("#" + this.id + "-import").addClass("disabled");
+	$("#" + this.id + "-import").unbind('click').click(function(sender){			
+	});
+};
+
+ParcelGrid.prototype.enableImportFromCSVButton = function() {
+	var _this = this;
+	$("#" + this.id + "-import").removeClass("disabled");
+	$("#" + this.id + "-import").bind('click').click(function(sender){			
+		window.open('#/shipping/' + _this.shipment.shippingId +'/import/csv', '_blank');
+	});
+};
+
+
 ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCollection) {
 	var _this = this;
 	this.shipment = shipment;
@@ -61,17 +93,17 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		return a.dewarId - b.dewarId;
 	});
 
-	$("#" + this.id + "-label").html("Content (" + this.dewars.length + " Parcels - " + nSamples + " Samples - " + nMeasured + " Measured)");
+	
+
 	$("#" + this.id + "-add-button").removeClass("disabled");
 	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
 		_this.edit();
 	});
+	/** Button Export PDF view */
 	if (nSamples > 0) {
-		$("#" + this.id + "-export").removeClass("disabled");
-		$("#" + this.id + "-export").unbind('click').click(function(sender){
-		       
-		});
+		this.disableExportButton();
 	}
+
 
 
     var html = "";    
@@ -79,6 +111,20 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		$('#' + _this.id).html(out);
 		_this.fillTab("content", _this.dewars);
 	    _this.attachCallBackAfterRender();
+		/** Button Add Parcel */	
+		_this.setContentLabel(_this.dewars.length, nSamples, nMeasured);
+		/** Disable import from csv button */
+		
+		if (_this.shipment){
+			if (_this.shipment.shippingStatus){
+				if (_this.shipment.shippingStatus == "processing"){					
+					_this.disableImportFromCSVButton();
+				}
+				else{
+					_this.enableImportFromCSVButton();
+				}
+			}
+		}
 	})
 
 

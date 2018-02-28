@@ -46,6 +46,8 @@ ContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
 ContainerSpreadSheet.prototype.loadData  = SpreadSheet.prototype.loadData;
 
 
+
+
 /**
 * Returns an array of objects for each row in the grid where at least the protein acronym column is filled
 *
@@ -595,11 +597,7 @@ ContainerSpreadSheet.prototype.resetCrystalGroup = function (row) {
 	
 };
 
-ContainerSpreadSheet.prototype.disableAll = function () {
-	this.spreadSheet.updateSettings({
-					readOnly: true
-				});
-};
+
 
 ContainerSpreadSheet.prototype.getCrystalsByProteinId = function (proteinId){
 	if (this.crystals[proteinId] == null){

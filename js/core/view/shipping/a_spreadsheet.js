@@ -109,6 +109,12 @@ SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
 	this.spreadSheet.setDataAtCell(rowIndex, columnIndex, value);
 };
 
+SpreadSheet.prototype.disableAll = function () {
+	this.spreadSheet.updateSettings({
+					readOnly: true
+				});
+};
+
 /**
 * Returns the columnIndex given the columnId
 *
