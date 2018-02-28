@@ -63,6 +63,8 @@ function CSVContainerSpreadSheet(args){
 	this.puckValidator = new PuckValidator();
 
 	/** Table Indices */
+	this.PARCELNAME_INDEX = 0;
+	this.CONTAINERNAME_INDEX = 1;
 	this.CONTAINERTYPE_INDEX = 2;
 	this.PROTEINACRONYM_INDEX = 4;
 }
@@ -92,7 +94,28 @@ CSVContainerSpreadSheet.prototype.disableAll  = ContainerSpreadSheet.prototype.d
 */
 CSVContainerSpreadSheet.prototype.validateData = function() {
 	var data = this.spreadSheet.getData();
+	debugger
+	for (var i = 0; i< data.length; i++){
+		this.validateRow(data[i]);
+	}
 };
+
+/**
+* This checks all rows and validate the data
+*
+* @method validateData
+* @return {Boolean} Return true if data is valid or false otherwise
+*/
+CSVContainerSpreadSheet.prototype.validateRow = function(row) {	
+	debugger
+	var parcelName = row[this.PARCELNAME_INDEX];
+	if (this.isParcelNameValid(parcelName)){
+		
+	}
+	
+};
+
+
 
 /**
 * Returns a list of objects that will contain colors for parent and containers nodes
