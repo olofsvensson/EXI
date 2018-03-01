@@ -66,6 +66,7 @@ function CSVContainerSpreadSheet(args){
 	this.PARCELNAME_INDEX = 0;
 	this.CONTAINERNAME_INDEX = 1;
 	this.CONTAINERTYPE_INDEX = 2;
+	this.SAMPLEPOSITION_INDEX = 3;
 	this.PROTEINACRONYM_INDEX = 4;
 }
 
@@ -94,9 +95,9 @@ CSVContainerSpreadSheet.prototype.disableAll  = ContainerSpreadSheet.prototype.d
 */
 CSVContainerSpreadSheet.prototype.validateData = function() {
 	var data = this.spreadSheet.getData();
-	debugger
+	
 	for (var i = 0; i< data.length; i++){
-		this.validateRow(data[i]);
+		console.log(this.validateRow(data[i]));
 	}
 };
 
@@ -106,13 +107,21 @@ CSVContainerSpreadSheet.prototype.validateData = function() {
 * @method validateData
 * @return {Boolean} Return true if data is valid or false otherwise
 */
-CSVContainerSpreadSheet.prototype.validateRow = function(row) {	
-	debugger
+CSVContainerSpreadSheet.prototype.validateRow = function(row) {		
 	var parcelName = row[this.PARCELNAME_INDEX];
+	var containerName = row[this.CONTAINERNAME_INDEX];
+	var containerType = row[this.CONTAINERTYPE_INDEX];
+	var samplePosition = row[this.SAMPLEPOSITION_INDEX];
 	if (this.isParcelNameValid(parcelName)){
-		
-	}
-	
+		if (this.isContainerNameValid(containerName)){
+			if (this.isContainerTypeValid(containerType)){
+				if (this.isSamplePositionValid(containerType, samplePosition)){
+					
+				}
+			}
+		}
+	}	
+	return false;
 };
 
 
@@ -480,6 +489,20 @@ CSVContainerSpreadSheet.prototype.isSampleNameValid = function(sampleName, prote
 	}
 	
 };
+
+/**
+ * Checks the name of the container.
+ * @method isContainerNameValid
+ *  @param {String} parcelName Name of the parcel read from CSV
+ * @return {Boolean} Returns true if name of the container is ok
+ */
+CSVContainerSpreadSheet.prototype.isContainerNameValid = function(containerName) {
+	if (_this.containerNameControlledList.has(value)){
+		return false;
+	}
+	return true;
+};
+
 
 CSVContainerSpreadSheet.prototype.getHeader = function() {	
     var _this = this;
