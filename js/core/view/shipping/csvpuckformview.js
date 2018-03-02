@@ -23,6 +23,12 @@ function CSVPuckFormView(args) {
 	this.containerNameControlledList = [];
 
 
+
+	/**  csvpuckformview.template contains information panels which id are the stored in the next variables. This is done because we want to use notify based in the ID **/
+	this.specialCharacterInfoPanelId = this.id + "_specialCharacterInfoPanelId";
+    this.uniquenessInfoPanelId = this.id + "_uniquenessInfoPanelId";
+
+
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -124,14 +130,26 @@ CSVPuckFormView.prototype.save = function() {
 
 };
 
+
+CSVPuckFormView.prototype.getWarningPanelsHTML = function() {	
+	/** Warning HTML */
+	var html = "";
+	dust.render("csvpuckformview.template", 
+					{
+								specialCharacterInfoPanelId: this.specialCharacterInfoPanelId,
+								uniquenessInfoPanelId:this.uniquenessInfoPanelId
+					}, 
+					function(err, out) {						
+                    	html = out;
+    				}
+	);
+	return html;
+};
 CSVPuckFormView.prototype.getPanel = function() {
 	/** Get Samples from Proposal */
 	this.getSamplesFromProposal();
 
-	this.container = Ext.create('Ext.container.Container', {
-		xtype : 'container',
-		items : []
-	});
+	
 
 	this.panel = Ext.create('Ext.panel.Panel', {
 		autoScroll : true,				
@@ -167,9 +185,12 @@ CSVPuckFormView.prototype.getContainer = function() {
         items: [
             {
                 html: html,
-                height: 100,
-                margin : 20
+                height: 60,
+                margin : 10
             },
+			{
+				html : this.getWarningPanelsHTML()
+			},
             this.containerSpreadSheet.getPanel(),
 
         ]

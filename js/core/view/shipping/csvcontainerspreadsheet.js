@@ -24,17 +24,7 @@ function CSVContainerSpreadSheet(args){
 	/** Array of arrays with the list of crystal form by protein acronym */
     this.crystalFormList = {};
 
-    this.renderCrystalFormColumn = false;
-
-    if (args != null) {
-		if (args.renderCrystalFormColumn != null) {
-			this.renderCrystalFormColumn = args.renderCrystalFormColumn;
-		}
-	}
-
-    this.crystalInfoToIdMap = {};
-
-	this.crystalFormIndex = -1;
+  	this.crystalFormIndex = -1;
 	// this.unitCellIndex = -1;
 	this.spaceGroupIndex = -1;
 	
@@ -53,7 +43,7 @@ function CSVContainerSpreadSheet(args){
 	/** Controlled list of values */
 	this.containerTypeControlledList = [
 											{ name:"Unipuck", capacity: 16 },
-											{ name:"Spinepuck", capacity:10 }
+											{ name:"SPINEpuck", capacity:10 }
 										];
 	/** dewars names that already exist on this shipment. This object is supposed to be a SET */
 	this.dewarNameControlledList = new Set();
@@ -87,6 +77,9 @@ CSVContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
 CSVContainerSpreadSheet.prototype.parseTableData  = ContainerSpreadSheet.prototype.parseTableData;
 CSVContainerSpreadSheet.prototype.disableAll  = ContainerSpreadSheet.prototype.disableAll;
 
+CSVContainerSpreadSheet.prototype._getContainerTypeControlledListNames = function() {
+	return _.map(this.containerTypeControlledList, "name");
+};
 /**
 * This checks all rows and validate the data
 *
@@ -116,7 +109,7 @@ CSVContainerSpreadSheet.prototype.validateRow = function(row) {
 		if (this.isContainerNameValid(containerName)){
 			if (this.isContainerTypeValid(containerType)){
 				if (this.isSamplePositionValid(containerType, samplePosition)){
-					
+					if (this.is)xx
 				}
 			}
 		}
@@ -208,10 +201,27 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 	function  getDiffrationPlanByRow(row){
 		return {
 			radiationSensivity : row["Radiation Sensitivity"],
-			requiredCompleteness : row["Required Completeness"],
-			requiredMultiplicity : row["Required multiplicity"],
-			forcedSpaceGroup : row["forced"],
-			experimentKind : row["experimentKind"]
+			aimedCompleteness : row["Aimed Completeness"],
+			aimedMultiplicity : row["Aimed Multiplicity"],
+			aimedResolution : row["Aimed Resolution"],
+			requiredResolution : row["Required Resolution"],
+			forcedSpaceGroup : row["forcedSpaceGroup"],
+			experimentKind : row["experimentKind"],
+			observedResolution : row["Observed Resolution"],
+			preferredBeamDiameter : row["Beam Diameter"]
+
+			/**
+			 * 	sample["diffractionPlanVO"]["radiationSensitivity"]= Number(rows[i]["Radiation Sensitivity"]);
+				sample["diffractionPlanVO"]["requiredCompleteness"]= Number(rows[i]["Required Completeness"]);
+				sample["diffractionPlanVO"]["requiredMultiplicity"]= Number(rows[i]["Required multiplicity"]);
+				sample["diffractionPlanVO"]["requiredResolution"]= Number(rows[i]["Needed resolution"]);
+				sample["diffractionPlanVO"]["observedResolution"]= Number(rows[i]["Pre-observed resolution"]);
+				sample["diffractionPlanVO"]["preferredBeamDiameter"]= Number(rows[i]["Pref. Diameter"]);
+				sample["diffractionPlanVO"]["numberOfPositions"]= Number(rows[i]["Number Of positions"]);
+				sample["diffractionPlanVO"]["experimentKind"]= rows[i]["Experiment Type"];
+				sample["diffractionPlanVO"]["forcedSpaceGroup"]= rows[i]["Space Group"];
+
+			 */
 
 		};
 	};
@@ -478,7 +488,10 @@ CSVContainerSpreadSheet.prototype.isSampleNameValid = function(sampleName, prote
 	if (protein){		
 		var conflicts = this.puckValidator.checkSampleNames([sampleName], [protein.proteinId], null, this.proposalSamples);
 		if (conflicts){
-			return false;
+			if (conflicts.length > 0){
+				return false;
+			}
+			return true;
 		}
 		else{
 			return true;
@@ -539,7 +552,7 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 	var sampleParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
 		/** For testing purposes **/
 		// value =value + 	Math.random();		
-		var proteinName = instance.getSourceDataAtCell(row, _this.PROTEINACRONYM_INDEX);		
+		var proteinName = instance.getSourceDataAtCell(row, _this.PROTEINACRONYM_INDEX);				
 		if (!_this.isSampleNameValid(value, proteinName)){					
 			td.className = 'custom-row-text-required';			
 		}
@@ -591,7 +604,10 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
             // { text :'', id :'crystalId', column : {width : 100}}, 
             { text : 'Parcel  <br /> Name', 	id: 'parcel', column : {width : 80, renderer: parcelDisplayCell}}, 
 			{ text : 'Container <br /> Name', 	id: 'containerCode', column : {width : 80, renderer: containerNameParameterRenderer}}, 
-			{ text : 'Container <br />Type', 	id: 'containerType', column : {width : 80, renderer: containerTypeParameterRenderer}}, 
+			{ text : 'Container <br />Type', 	id: 'containerType', column : {width : 80, 
+																				type: 'dropdown',
+																				source : this._getContainerTypeControlledListNames(),
+																				renderer: containerTypeParameterRenderer}}, 
 			{ text : '#', 	id: 'position', column : {width : 20, renderer: samplePositionParameterRenderer}},
             { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
                                                                                         width : 80,
@@ -604,42 +620,46 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 																		width : 120,
 																	  	renderer: sampleParameterRenderer	
 			}}, 
-            { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},  
-          
+            { text :'Pin <br />Barcode', id : 'Pin BarCode', column : {width : 60}},  
+            { text :'Space <br />group',  id : 'Space Group', column : {
+                                                                        width : 40,  
+                                                                        type: 'dropdown',																		
+																	    renderer: mandatoryParameterRenderer,
+																		source: _.concat([""], ExtISPyB.spaceGroups)
+                                                                    }}, 
+            { text :'a',  id :'a', column : {width : 25}}, 
+			{ text :'b',  id :'b', column : {width :25}}, 
+			{ text :'c',  id :'c', column : {width :25}}, 
+			{ text :'&alpha;',  id :'alpha', column : {width : 25}}, 
+			{ text :'&beta;',  id :'beta', column : {width : 25}}, 
+			{ text :'&gamma;',  id :'gamma', column : {width :25}}, 
 			
             { text :'Exp.<br /> Type', id : 'experimentKind', column : {
-                                                                        width : 100,  
+                                                                        width : 90,  
                                                                         type: 'dropdown',
 																		renderer: mandatoryParameterRenderer,
                                                                         source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
             }, 
-           
-            { text :'Space <br />group',  id : 'Space Group', column : {
-                                                                        width : 70,  
-                                                                        type: 'dropdown',																		
-																	    renderer: mandatoryParameterRenderer,
-																		source: _.concat([""], ExtISPyB.spaceGroups)
-                                                                    }}, 
-            { text :'a',  id :'a', column : {width : 40}}, 
-			{ text :'b',  id :'b', column : {width :40}}, 
-			{ text :'c',  id :'c', column : {width :40}}, 
-			{ text :'&alpha;',  id :'alpha', column : {width : 40}}, 
-			{ text :'&beta;',  id :'beta', column : {width : 40}}, 
-			{ text :'&gamma;',  id :'gamma', column : {width : 40}}, 
-            { text :'Beam <br />Diameter', id :'Pref. Diameter',column : {width : 60}}, 
-            { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 80}}, 
-            { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 80}}, 
-
-            { text :'Required<br /> multiplicity', id :'Required multiplicity', column : {width : 60}}, 
-            { text :'Required<br /> Completeness', id :'Required Completeness', column : {width : 80}},            
-			{ text :'Forced <br /> SPG',  id :'forced', column : {
-                                                                        width : 70,  
+           { text :'Aimed <br />Resolution', id :'Aimed Resolution',column : {width : 60}},
+		   { text :'Required <br />Resolution', id :'Required Resolution',column : {width : 60}},
+         
+            { text :'Beam <br />Diameter', id :'Beam Diameter',column : {width : 60}}, 
+            { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 60}},
+			{ text :'Aimed<br /> Multiplicity', id :'Aimed Multiplicity', column : {width : 60}}, 
+            { text :'Aimed<br /> Completeness', id :'Aimed Completeness', column : {width : 80}},  
+			{ text :'Forced <br /> SPG',  id :'forcedSpaceGroup', column : {
+                                                                        width : 60,  
                                                                         type: 'dropdown',
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }}, 
+            { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 60}}, 
+
+                     
+			
 
             { text :'SMILES', id :'Smiles', column : {width : 60}}, 
+			{ text :'Observed <br />Resolution', id :'Observed Resolution',column : {width : 60}},
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
 

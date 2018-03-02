@@ -27,9 +27,7 @@ function PuckFormView(args) {
 		}
 	}
 
-	
-	var _this = this;
-	
+	var _this = this;	
 	this.containerSpreadSheet = new ContainerSpreadSheet({width : Ext.getBody().getWidth() - 100, height : 600});
 	this.containerSpreadSheet.onModified.attach(function (sender, change) {
 		_this.unsavedChanges = true;
@@ -133,8 +131,8 @@ PuckFormView.prototype.getPanel = function() {
     var html = "";
 	dust.render("puckformview.template", 
 					{
-								specialCharacterInfoPanelId: this.specialCharacterInfoPanelId,
-								uniquenessInfoPanelId:this.uniquenessInfoPanelId
+								specialCharacterInfoPanelId	: this.specialCharacterInfoPanelId,
+								uniquenessInfoPanelId		:this.uniquenessInfoPanelId
 					}, 
 					function(err, out) {
                     	html = out;
