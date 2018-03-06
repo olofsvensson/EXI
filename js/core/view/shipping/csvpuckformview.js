@@ -6,10 +6,7 @@
 **/
 function CSVPuckFormView(args) {
 	this.id = BUI.id();
-
-	/**  CSVPuckFormView.template contains two information panels which id are the stored in the next variables. This is done because we want to use notify based in the ID **/
-	this.specialCharacterInfoPanelId = this.id + "_specialCharacterInfoPanelId";
-    this.uniquenessInfoPanelId = this.id + "_uniquenessInfoPanelId";
+	
 
 	this.height = 500;
 	this.width = 500;
@@ -25,8 +22,10 @@ function CSVPuckFormView(args) {
 
 
 	/**  csvpuckformview.template contains information panels which id are the stored in the next variables. This is done because we want to use notify based in the ID **/
-	this.specialCharacterInfoPanelId = this.id + "_specialCharacterInfoPanelId";
-    this.uniquenessInfoPanelId = this.id + "_uniquenessInfoPanelId";
+	this.uniquenessParcelPanelId = this.id + "_uniquenessParcelPanelId";
+    this.acceptedContainerListPanelId = this.id + "_acceptedContainerListPanelId";
+	this.uniquenessContainerNamelPanelId = this.id + "_uniquenessContainerNamelPanelId";
+	this.uniquenessSampleNamePanelId = this.id + "_uniquenessSampleNamePanelId";
 
 
 	if (args != null) {
@@ -107,24 +106,58 @@ CSVPuckFormView.prototype.getToolBar = function() {
 	];
 };
 
+CSVPuckFormView.prototype.displayErrors = function(errors, panelId, message) {
+	if (errors){
+		if (errors.length > 0){			
+			var rows = _.map(errors, function(o){ return Number(o.rowIndex)+1; });
+			$("#" + panelId).notify("Rows " + rows + " " +  message, { position:"bottom" });
+			$("#" + panelId).fadeIn().fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
+			return true;
+		}
+	}
+};
 
-
-
+/*
+	this.uniquenessParcelPanelId = this.id + "_uniquenessParcelPanelId";
+    this.acceptedContainerListPanelId = this.id + "_acceptedContainerListPanelId";
+	this.uniquenessContainerNamelPanelId = this.id + "_uniquenessContainerNamelPanelId";
+	this.uniquenessSampleNamePanelId = this.id + "_uniquenessSampleNamePanelId";
+*/
 CSVPuckFormView.prototype.save = function() {
     var _this = this;
     var parcels = this.containerSpreadSheet.getParcels();   
 
-	this.containerSpreadSheet.validateData();
+	if (!this.containerSpreadSheet.isDataValid()){	
+		$.notify("Sorry. Your data contain errors!", "error");
+		var errors = (this.containerSpreadSheet.getErrors());
+		if (this.displayErrors(errors.INCORRECT_PARCEL_NAME, this.uniquenessParcelPanelId, " contain parcel names that are not unique within the proposal")){
+			return;
+		}
+		if (this.displayErrors(errors.INCORRECT_CONTAINER_NAME, this.uniquenessContainerNamelPanelId, "")){
+			return;
+		}
+		if (this.displayErrors(errors.INCORRECT_CONTAINER_TYPE, this.acceptedContainerListPanelId, "")){
+			return;
+		}	
+		if (this.displayErrors(errors.INCORRECT_SAMPLE_POSITION, this.uniquenessSampleNamePanelId, "")){
+			return;
+		}	
+		if (this.displayErrors(errors.INCORRECT_SAMPLE_NAME, this.uniquenessSampleNamePanelId, "")){
+			return;
+		}			
+	}
 
     var onError = function(sender, error, mesg){
 			_this.panel.setLoading(false);                        
 			EXI.setError(error.responseText);
+			$.notify(error.responseText, "error");
 		};
 		
 		var onSuccess = function(sender, puck){
-			_this.panel.setLoading(false);          
+			_this.panel.setLoading(false); 
+			_this.returnToShipment();         
 	};
-	this.panel.setLoading("Saving Puck");
+	this.panel.setLoading("Saving CSV");
 		
 	EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.shipping.addDewarsToShipment(this.shippingId, parcels);
 
@@ -136,8 +169,10 @@ CSVPuckFormView.prototype.getWarningPanelsHTML = function() {
 	var html = "";
 	dust.render("csvpuckformview.template", 
 					{
-								specialCharacterInfoPanelId: this.specialCharacterInfoPanelId,
-								uniquenessInfoPanelId:this.uniquenessInfoPanelId
+								uniquenessParcelPanelId			: this.uniquenessParcelPanelId,
+								acceptedContainerListPanelId 	: this.acceptedContainerListPanelId,
+								uniquenessContainerNamelPanelId : this.uniquenessContainerNamelPanelId,
+								uniquenessSampleNamePanelId 	: this.uniquenessSampleNamePanelId
 					}, 
 					function(err, out) {						
                     	html = out;

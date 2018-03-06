@@ -298,8 +298,7 @@ PuckFormView.prototype.save = function(returnToShipment) {
 	var _this = this;
 
 	var puck = this.containerSpreadSheet.getPuck();
-	
-	
+		
 	/** Check if all samples have got a name */
 	if (puck.sampleVOs && puck.sampleVOs.length > 0) {
 		var sampleNames = _.map(puck.sampleVOs,"name");

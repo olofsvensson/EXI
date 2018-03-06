@@ -2,16 +2,21 @@
     <div class="row">
         <div class="col-lg-6 col-sm-6 col-12">                  
             <div class="input-group">
-                <label class="input-group-btn">
+                <label class="input-group-btn"> 
                     <span class="btn btn-primary">
                         Browse&hellip;   <input type="file" id="{.id}"  style='display:none' name="files[]"  class="file"  disabled="true" />
                     </span>
-                </label>
+                </label>               
                 <input id='box_{.id}' type="text" class="form-control" readonly value=''>                               
-            </div>           
+                
+            </div>    
+
             <span class="help-block">
-                Select one CSV file with the content of your shipment. <span class="glyphicons glyphicons-question-sign"></span> Do you need help? Click <a target='_blank' href='https://github.com/ispyb/EXI/wiki/Fill-shipment-from-CSV'>here</a>
+                <span class="glyphicons glyphicons-question-sign"></span> Do you need help? Click 
+                <a target='_blank' href='https://github.com/ispyb/EXI/wiki/Fill-shipment-from-CSV'>here.</a> 
+                Examples can be found here:  <a target='_blank' href='../csv/example3.csv'>example.csv</a>
             </span>
+            
         </div>           
     </div>
 </div>

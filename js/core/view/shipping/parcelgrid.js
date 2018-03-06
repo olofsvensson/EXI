@@ -7,7 +7,7 @@
 */
 function ParcelGrid(args) {
 	this.id = BUI.id();
-	this.height = 100;
+	this.height = 110;
 	this.width = 100;
 	this.padding = 10;
 	this.btnEditVisible = true;
@@ -68,10 +68,13 @@ ParcelGrid.prototype.disableImportFromCSVButton = function() {
 
 ParcelGrid.prototype.enableImportFromCSVButton = function() {
 	var _this = this;
-	$("#" + this.id + "-import").removeClass("disabled");
-	$("#" + this.id + "-import").bind('click').click(function(sender){			
-		window.open('#/shipping/' + _this.shipment.shippingId +'/import/csv', '_blank');
-	});
+	/** Only for managers */
+	if (EXI.credentialManager.getCredentials()[0].isManager()){
+		$("#" + this.id + "-import").removeClass("disabled");
+		$("#" + this.id + "-import").bind('click').click(function(sender){			
+			window.open('#/shipping/' + _this.shipment.shippingId +'/import/csv', '_blank');
+		});
+	}
 };
 
 
@@ -95,10 +98,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 
 	
 
-	$("#" + this.id + "-add-button").removeClass("disabled");
-	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
-		_this.edit();
-	});
+
 	/** Button Export PDF view */
 	if (nSamples > 0) {
 		this.disableExportButton();
@@ -113,8 +113,12 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	    _this.attachCallBackAfterRender();
 		/** Button Add Parcel */	
 		_this.setContentLabel(_this.dewars.length, nSamples, nMeasured);
-		/** Disable import from csv button */
-		
+		/** Add Pacel button */
+		$("#" + _this.id + "-add-button").removeClass("disabled");
+		$("#" + _this.id + "-add-button").unbind('click').click(function(sender){
+			_this.edit();
+		});
+		/** Disable import from csv button */		
 		if (_this.shipment){
 			if (_this.shipment.shippingStatus){
 				if (_this.shipment.shippingStatus == "processing"){					
@@ -154,8 +158,8 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 	
 	for ( var i in dewars) {
 		var parcelPanel = new ParcelPanel({
-			height : 90,
-		width : this.panel.getWidth()*0.9,
+			height : 110,
+			width : this.panel.getWidth()*0.9,
 			shippingId : this.shipment.shippingId,
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,
@@ -213,10 +217,7 @@ ParcelGrid.prototype.edit = function(dewar) {
 	window.show();
 };
 
-ParcelGrid.prototype.getPanel = function() {
-
-	
-
+ParcelGrid.prototype.getPanel = function() {	
 	this.panel =  Ext.create('Ext.panel.Panel', {
 		layout : 'fit',		
 		items : {

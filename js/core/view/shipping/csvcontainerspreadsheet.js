@@ -58,6 +58,12 @@ function CSVContainerSpreadSheet(args){
 	this.CONTAINERTYPE_INDEX = 2;
 	this.SAMPLEPOSITION_INDEX = 3;
 	this.PROTEINACRONYM_INDEX = 4;
+	this.SAMPLENAME_INDEX = 5;
+
+	/** Validation errors */
+	this.errors = this.resetErrors();
+
+	
 }
 
 CSVContainerSpreadSheet.prototype.getPanel = SpreadSheet.prototype.getPanel;
@@ -81,38 +87,121 @@ CSVContainerSpreadSheet.prototype._getContainerTypeControlledListNames = functio
 	return _.map(this.containerTypeControlledList, "name");
 };
 /**
-* This checks all rows and validate the data
+* Remove errors produced after validation
 *
-* @method validateData
+* @method resetErrors
 * @return {Boolean} Return true if data is valid or false otherwise
 */
-CSVContainerSpreadSheet.prototype.validateData = function() {
+CSVContainerSpreadSheet.prototype.resetErrors = function() {
+	return {
+		INCORRECT_PARCEL_NAME : [],
+		INCORRECT_CONTAINER_NAME : [],
+		INCORRECT_CONTAINER_TYPE : [],
+		INCORRECT_SAMPLE_POSITION : [],
+		INCORRECT_SAMPLE_NAME : []
+	};
+};
+
+/**
+* Remove errors produced after validation
+*
+* @method resetErrors
+* @return {Boolean} Return true if data is valid or false otherwise
+*/
+CSVContainerSpreadSheet.prototype.getErrors = function() {
+	//this.resetErrors();
+	//this.validateData();
+	return this.errors;
+};
+
+
+/**
+* This checks all rows and validate the data
+*
+* @method isDataValid
+* @return {Boolean} isValid Return true if data is valid or false otherwise
+*/
+CSVContainerSpreadSheet.prototype.isDataValid = function() {
+	/** Reset errors */
+	this.errors = this.resetErrors();
 	var data = this.spreadSheet.getData();
-	
+	var keySampleName = {};
+	var isValid = true;
 	for (var i = 0; i< data.length; i++){
-		console.log(this.validateRow(data[i]));
+		if (this.validateRow(data[i], i) == false){
+			isValid = false;
+		}
+		/** Are protein + sample Names unique */
+		var proteinName = data[i][this.PROTEINACRONYM_INDEX];	
+		var sampleName = data[i][this.SAMPLENAME_INDEX];
+		var key = proteinName + "__" + sampleName;
+		if (keySampleName[key] == null){
+			keySampleName[key] = true;
+		}
+		else{
+			isValid = false;			
+		}
 	}
+	return isValid;
 };
 
 /**
 * This checks all rows and validate the data
 *
 * @method validateData
+* @param {Array} row A row for the handsontable
+* @param {Array} rowIndex Index of the row in the table
 * @return {Boolean} Return true if data is valid or false otherwise
 */
-CSVContainerSpreadSheet.prototype.validateRow = function(row) {		
+CSVContainerSpreadSheet.prototype.validateRow = function(row, rowIndex) {		
 	var parcelName = row[this.PARCELNAME_INDEX];
 	var containerName = row[this.CONTAINERNAME_INDEX];
 	var containerType = row[this.CONTAINERTYPE_INDEX];
 	var samplePosition = row[this.SAMPLEPOSITION_INDEX];
+	var proteinName = row[this.PROTEINACRONYM_INDEX];	
+	var sampleName = row[this.SAMPLENAME_INDEX];	
+
 	if (this.isParcelNameValid(parcelName)){
 		if (this.isContainerNameValid(containerName)){
 			if (this.isContainerTypeValid(containerType)){
 				if (this.isSamplePositionValid(containerType, samplePosition)){
-					if (this.is)xx
+					if (this.isSampleNameValid(sampleName, proteinName)){
+						return true;
+					}
+					else{
+						this.errors.INCORRECT_SAMPLE_NAME.push({
+							value 		: samplePosition,
+							rowIndex	: rowIndex
+						});
+					}					
+				}
+				else{
+					this.errors.INCORRECT_SAMPLE_POSITION.push({
+						value 		: samplePosition,
+						rowIndex	: rowIndex
+					});
+
 				}
 			}
+			else{				
+				this.errors.INCORRECT_CONTAINER_TYPE.push({
+					value 		: containerType,
+					rowIndex	: rowIndex
+				});
+			}
 		}
+		else{
+			this.errors.INCORRECT_CONTAINER_NAME.push({
+				value 		: containerName,
+				rowIndex	: rowIndex
+			});
+		}
+	}
+	else{				
+		this.errors.INCORRECT_PARCEL_NAME.push({
+			value 		: parcelName,
+			rowIndex	: rowIndex
+		});
 	}	
 	return false;
 };
@@ -191,6 +280,13 @@ CSVContainerSpreadSheet.prototype.getProteinByAcronym = function(acronym) {
 	return null;
 };
 
+CSVContainerSpreadSheet.prototype.emptyToNull = function(value) {
+	if (value == ""){
+		return null;
+	}
+	return value;
+
+};
 /**
 * Returns a set of parcels
 *
@@ -200,49 +296,38 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 	var _this = this;
 	function  getDiffrationPlanByRow(row){
 		return {
-			radiationSensivity : row["Radiation Sensitivity"],
-			aimedCompleteness : row["Aimed Completeness"],
-			aimedMultiplicity : row["Aimed Multiplicity"],
-			aimedResolution : row["Aimed Resolution"],
-			requiredResolution : row["Required Resolution"],
-			forcedSpaceGroup : row["forcedSpaceGroup"],
-			experimentKind : row["experimentKind"],
-			observedResolution : row["Observed Resolution"],
-			preferredBeamDiameter : row["Beam Diameter"]
+			radiationSensivity 		: _this.emptyToNull(row["Radiation Sensitivity"]),
+			aimedCompleteness 		: _this.emptyToNull(row["Aimed Completeness"]),
+			aimedMultiplicity 		: _this.emptyToNull(row["Aimed Multiplicity"]),
+			aimedResolution 		: _this.emptyToNull(row["Aimed Resolution"]),
+			requiredResolution 		: _this.emptyToNull(row["Required Resolution"]),
+			forcedSpaceGroup 		: _this.emptyToNull(row["forcedSpaceGroup"]),
+			experimentKind 			: _this.emptyToNull(row["experimentKind"]),
+			observedResolution 		: _this.emptyToNull(row["Observed Resolution"]),
+			preferredBeamDiameter 	: _this.emptyToNull(row["Beam Diameter"]),
+			numberOfPositions	 	: _this.emptyToNull(row["Number Of positions"])
 
-			/**
-			 * 	sample["diffractionPlanVO"]["radiationSensitivity"]= Number(rows[i]["Radiation Sensitivity"]);
-				sample["diffractionPlanVO"]["requiredCompleteness"]= Number(rows[i]["Required Completeness"]);
-				sample["diffractionPlanVO"]["requiredMultiplicity"]= Number(rows[i]["Required multiplicity"]);
-				sample["diffractionPlanVO"]["requiredResolution"]= Number(rows[i]["Needed resolution"]);
-				sample["diffractionPlanVO"]["observedResolution"]= Number(rows[i]["Pre-observed resolution"]);
-				sample["diffractionPlanVO"]["preferredBeamDiameter"]= Number(rows[i]["Pref. Diameter"]);
-				sample["diffractionPlanVO"]["numberOfPositions"]= Number(rows[i]["Number Of positions"]);
-				sample["diffractionPlanVO"]["experimentKind"]= rows[i]["Experiment Type"];
-				sample["diffractionPlanVO"]["forcedSpaceGroup"]= rows[i]["Space Group"];
 
-			 */
-
-		};
+		};		
 	};
 
   
 
-	function  getCrystalByRow(row){
+	function  getCrystalByRow(row){		
 		return {
-			spaceGroup : row["Space Group"],
-			cellA : row["a"],
-			cellB : row["b"],
-			cellC : row["c"],
-			cellAlpha : row["alpha"],
-			cellBeta : row["beta"],
-			cellGamma : row["gamma"],
-			proteinVO : _this.getProteinByAcronym(row["Protein Acronym"])
+			spaceGroup 	: _this.emptyToNull(row["Space Group"]),
+			cellA 		: _this.emptyToNull(row["a"]),
+			cellB 		: _this.emptyToNull(row["b"]),
+			cellC 		: _this.emptyToNull(row["c"]),
+			cellAlpha 	: _this.emptyToNull(row["alpha"]),
+			cellBeta 	: _this.emptyToNull(row["beta"]),
+			cellGamma 	: _this.emptyToNull(row["gamma"]),
+			proteinVO 	: _this.getProteinByAcronym(row["Protein Acronym"])
 		};
 	};
 
 	function getSamplesByContainerRows(rows){
-		var samples3vo = [];
+		var samples3vo = [];		
 		if (rows){
 			for(var i = 0; i< rows.length; i++){
 				samples3vo.push({
@@ -251,6 +336,7 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 					diffractionPlanVO : getDiffrationPlanByRow(rows[i]),
 					crystalVO : getCrystalByRow(rows[i]),				
 					smiles : rows[i]["Smiles"],
+					comments: rows[i]["Comments"]
 
 				});
 			}
@@ -304,7 +390,8 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 			type : 'Dewar',
 			containerVOs : containerVOs
 		});		
-	}	       
+	}	
+	debugger       
 	return dewars3vo;
 };
 
@@ -510,7 +597,7 @@ CSVContainerSpreadSheet.prototype.isSampleNameValid = function(sampleName, prote
  * @return {Boolean} Returns true if name of the container is ok
  */
 CSVContainerSpreadSheet.prototype.isContainerNameValid = function(containerName) {
-	if (_this.containerNameControlledList.has(value)){
+	if (this.containerNameControlledList.has(containerName)){
 		return false;
 	}
 	return true;
@@ -535,6 +622,29 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 		td.innerHTML = value;		
 	}
 
+	var numericParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){						
+		try{
+			if ((value == undefined)||(value == "")){		
+				td.innerHTML = value;				
+			}
+			else{				
+				if (isNaN(value)){
+					td.className = 'custom-row-text-required';			
+					td.innerHTML = value;
+				}
+				else{
+					td.innerHTML = parseFloat(value);				
+				}
+			}
+		}	
+		catch(e){
+			td.className = 'custom-row-text-required';			
+			td.innerHTML = value;									
+		}		
+		
+	}
+
+
 	var proteinParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
 		if ((value == undefined)||(value == "")){					
 			td.className = 'custom-row-text-required';			
@@ -550,8 +660,13 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 	}
 
 	var sampleParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
-		/** For testing purposes **/
-		// value =value + 	Math.random();		
+		/** For testing purposes
+		if (value != null){
+			if (value.length < 8){						
+				value =value + 	Math.random();
+				instance.setDataAtCell(row, col, value);
+			}
+		} **/
 		var proteinName = instance.getSourceDataAtCell(row, _this.PROTEINACRONYM_INDEX);				
 		if (!_this.isSampleNameValid(value, proteinName)){					
 			td.className = 'custom-row-text-required';			
@@ -624,15 +739,15 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
             { text :'Space <br />group',  id : 'Space Group', column : {
                                                                         width : 40,  
                                                                         type: 'dropdown',																		
-																	    renderer: mandatoryParameterRenderer,
+																	    //renderer: mandatoryParameterRenderer,
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }}, 
-            { text :'a',  id :'a', column : {width : 25}}, 
-			{ text :'b',  id :'b', column : {width :25}}, 
-			{ text :'c',  id :'c', column : {width :25}}, 
-			{ text :'&alpha;',  id :'alpha', column : {width : 25}}, 
-			{ text :'&beta;',  id :'beta', column : {width : 25}}, 
-			{ text :'&gamma;',  id :'gamma', column : {width :25}}, 
+            { text :'a',  id :'a', column : {width : 25, renderer:numericParameterRenderer}}, 
+			{ text :'b',  id :'b', column : {width :25, renderer:numericParameterRenderer}}, 
+			{ text :'c',  id :'c', column : {width :25, renderer:numericParameterRenderer}}, 
+			{ text :'&alpha;',  id :'alpha', column : {width : 25, renderer:numericParameterRenderer}}, 
+			{ text :'&beta;',  id :'beta', column : {width : 25, renderer:numericParameterRenderer}}, 
+			{ text :'&gamma;',  id :'gamma', column : {width :25, renderer:numericParameterRenderer }}, 
 			
             { text :'Exp.<br /> Type', id : 'experimentKind', column : {
                                                                         width : 90,  
@@ -641,25 +756,25 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
                                                                         source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
             }, 
-           { text :'Aimed <br />Resolution', id :'Aimed Resolution',column : {width : 60}},
-		   { text :'Required <br />Resolution', id :'Required Resolution',column : {width : 60}},
+           { text :'Aimed <br />Resolution', id :'Aimed Resolution',column : {width : 60, renderer:numericParameterRenderer}},
+		   { text :'Required <br />Resolution', id :'Required Resolution',column : {width : 60, renderer:numericParameterRenderer}},
          
-            { text :'Beam <br />Diameter', id :'Beam Diameter',column : {width : 60}}, 
-            { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 60}},
-			{ text :'Aimed<br /> Multiplicity', id :'Aimed Multiplicity', column : {width : 60}}, 
-            { text :'Aimed<br /> Completeness', id :'Aimed Completeness', column : {width : 80}},  
+            { text :'Beam <br />Diameter', id :'Beam Diameter',column : {width : 60, renderer:numericParameterRenderer}}, 
+            { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 60, renderer:numericParameterRenderer}},
+			{ text :'Aimed<br /> Multiplicity', id :'Aimed Multiplicity', column : {width : 60, renderer:numericParameterRenderer}}, 
+            { text :'Aimed<br /> Completeness', id :'Aimed Completeness', column : {width : 80, renderer:numericParameterRenderer}},  
 			{ text :'Forced <br /> SPG',  id :'forcedSpaceGroup', column : {
                                                                         width : 60,  
                                                                         type: 'dropdown',
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }}, 
-            { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 60}}, 
+            { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 60, renderer:numericParameterRenderer}}, 
 
                      
 			
 
             { text :'SMILES', id :'Smiles', column : {width : 60}}, 
-			{ text :'Observed <br />Resolution', id :'Observed Resolution',column : {width : 60}},
+			{ text :'Observed <br />Resolution', id :'Observed Resolution',column : {width : 60, renderer:numericParameterRenderer}},
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
 
