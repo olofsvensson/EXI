@@ -31,6 +31,7 @@ module.exports = function(grunt) {
                             'min/exi.em.js' : [ "js/em/**/*js" ],
                             'min/exi.test.js' : [ "js/test/**/*js" ],
                             'min/exi.tracking.js' : [ "js/tracking/**/*js" ],
+                            'min/exi.tools.js' : [ "js/tools/**/*js" ],
                             'min/bower_components.min.js' : [
 
                                     "bower_components/jquery/dist/jquery.min.js",
@@ -47,8 +48,7 @@ module.exports = function(grunt) {
                                     "bower_components/bootstrap/dist/js/bootstrap.js",
                                     "bower_components/bootstrap-year-calendar/js/bootstrap-year-calendar.min.js",
                                     "bower_components/moment/min/moment.min.js",
-                                    "bower_components/pathjs-amd/dist/path.min.js",
-                                    "bower_components/exi-ui-utils/min/exi-ui-utils.min.js",
+                                    "bower_components/pathjs-amd/dist/path.min.js",                                    
                                     "bower_components/ispyb-js-api/min/ispyb-js-api.min.js",
                                     "bower_components/exi-ui-viz/min/exi-ui-viz.min.js",
                                     "bower_components/three/build/three.min.js",
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
                     prod : {
                         options : {},
                         files : {
-                            'min/exi.min.js' : [ 'min/exi.js', 'min/exi.mx.js', 'min/exi.saxs.js', 'min/exi.em.js',
+                            'min/exi.min.js' : [ 'min/exi.tools.js', 'min/exi.js', 'min/exi.mx.js', 'min/exi.saxs.js', 'min/exi.em.js',
                                     'min/exi.test.js',
                                     'min/precompiled.templates.min.js' ],
                             'min/exi.saxs.min.js' : [ 'min/exi.js',
