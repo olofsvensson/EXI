@@ -7,7 +7,7 @@ var ExtISPyB ={
          name:'ESRF',
  	     description : 'European Synchroton Radiation Facility',
          icon : '../images/site/esrf.png',
-         url:'https://wwws.esrf.fr/ispyb/ispyb-ws/rest',
+         url:'https:/ispyb.esrf.fr/ispyb/ispyb-ws/rest',
          exiUrl:'http://pc593.embl.fr:8080/extispyb-ws/rest',
 	     plateGroup : [
 			{
