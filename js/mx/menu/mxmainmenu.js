@@ -22,7 +22,7 @@ MXMainMenu.prototype.getMenuItems = function() {
 		{
                 text : this._convertToHTMLWhiteSpan("Proteins and Crystals"),
                 cls : 'ExiSAXSMenuToolBar',
-                disabled : true,
+                disabled : false,
                 menu : this.getProteinCrystalsMenu() 
 	    	},
 	    	{
@@ -115,7 +115,7 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 			location.hash = "/crystal/nav";
 		}
 		if (item.text == "My Proteins") {
-			location.hash = "/protein/nav";
+			location.hash = "/protein/list";
 		}
 		if (item.text == "Puck") {
 			location.hash = "/puck/nav";
@@ -126,6 +126,7 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 			{
 				text : 'My Crystals',
 				icon : '../images/icon/macromolecule.png',
+				disabled : true,
 				handler : onItemCheck 
 			},
 			{
@@ -135,6 +136,7 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 			},
 			{
 				text : 'Puck',
+				disabled : true,
 				icon : '../images/icon/testtube.png',
 				handler : onItemCheck 
 			}
