@@ -31,7 +31,7 @@
     "jquery-lazy": "~0.6.1",
     "dygraphs": "1.1.1",
     "qunit": "~1.22.0",
-    "ispyb-js-api": "5.4.0",
+    "ispyb-js-api": "*",
     "vis": "^4.15.0",
     "Snap.svg": "snap.svg#^0.4.1",
     "pathjs-amd": "^0.10.0",
@@ -41,7 +41,6 @@
     "lightbox2": "2.8.2",
     "bootstrap": "^3.3.7",    
     "bootstrap-year-calendar": "^1.1.0",
-    "three": "*",
     "notifyjs": "*",
     "bootstrap-multiselect": "^0.9.13",
     "eonasdan-bootstrap-datetimepicker": "^4.17.45",
@@ -49,7 +48,6 @@
     "html-docx-js": "^0.3.1"
   },
   "devDependencies": {
-    "uglymol": "^0.1.0"
   },
   "resolutions": {
     "lightbox2": "2.8.2",
