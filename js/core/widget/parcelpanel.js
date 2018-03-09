@@ -21,6 +21,7 @@ function ParcelPanel(args) {
 	this.shippingStatus = "";
 	this.containersPanel = null;
 	this.currentTab = "content";
+	this.currentReimbursedDewars = 0;
 
 	this.isSaveButtonHidden = false;
 	this.isHidden = false;
@@ -97,6 +98,8 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 			$("#" + this.id + "-euro-button").click(function () {
 				_this.showReimbForm();
 			});
+		} else {
+			$("#" + this.id + "-euro-button").hide();
 		}
 	}
 	
@@ -105,10 +108,6 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 		var url = EXI.getDataAdapter().proposal.shipping.getDewarLabelURL(dewarId, dewarId);
 		location.href = url;
 		return;
-	});
-	
-	$("#" + this.id + "-euro-button").click(function () {
-		_this.showReimbForm();
 	});
 	
 	this.containersPanel = Ext.create('Ext.panel.Panel', {

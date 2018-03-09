@@ -36,6 +36,7 @@ function ParcelGrid(args) {
 	this.parcelPanels = {};
 	this.samples = [];
 	this.withoutCollection = [];
+	this.nbReimbDewars=0;
 
 	/** Events **/
 	this.onSuccess = new Event(this);
@@ -89,7 +90,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		});
 	}
 	
-	if (nbReimbDewars > 0) {
+	if (nbReimbDewars != null && nbReimbDewars > -1) {
 		$("#" + this.id + "-reimbursed").html(this.currentReimbursedDewars + " parcels reimbursed out of max : " + maxReimbursedDewars + " authorized" );
 	 };
 

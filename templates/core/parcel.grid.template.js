@@ -12,7 +12,7 @@
                     <span class="glyphicon glyphicon-export"></span> Export PDF View
                 </button>
 				<span id="{id}-reimbursed" style='font-size:15px;color:orange;font-weight:700;margin-left:60px;"' >
-                    Reimbursed (0 Parcels)
+                    
                 </span>
             </div>
             
