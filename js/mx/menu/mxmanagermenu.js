@@ -33,10 +33,12 @@ MXManagerMenu.prototype.getMenuItems = function() {
 				}
 		},
 		{
-                text : this._convertToHTMLWhiteSpan("Proteins and Crystals"),
+                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
                 disabled : false,
-                menu : this.getProteinCrystalsMenu() 
+                handler : function(){
+                    location.hash = "#/protein/list";
+                }
 	    	},
 		{
 				text : this._convertToHTMLWhiteSpan("Data Explorer"),

@@ -52,7 +52,7 @@ ProteinListMainView.prototype.getPanel =  function(){
 		layout : this.layout,
 		items : [   
                   {
-                       html : '<div style="overflow: auto;height:100%;" id="' + this.id +'_main">test</div>',
+                       html : '<div style="overflow: auto;height:100%;" id="' + this.id +'_main"></div>',
 					   margin : 10,
 					   flex:1,
 					   cls : 'border-grid',
@@ -78,6 +78,7 @@ ProteinListMainView.prototype.renderHTML = function(proteins) {
  */
     
 	_.forEach(proteins, function(protein) {
+		/** Sessions */
 		var keys = {};
 		if (protein.sessions == null){
 			    protein.sessions = [];
@@ -100,6 +101,10 @@ ProteinListMainView.prototype.renderHTML = function(proteins) {
 				    }
 			    }
 			}
+		}
+		/** Space group */
+		if (protein.SpaceGroupModelBuildingPhasingStep){
+			protein.solvedStructureSpaceGroups = protein.SpaceGroupModelBuildingPhasingStep.split(",");
 		}
 		
     });

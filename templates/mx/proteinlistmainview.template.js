@@ -8,7 +8,7 @@
             <td colspan='4' style="text-align:center;" class="sessiogridtechnique">
                Data Collection
             </td>
-            <td colspan='3' style="text-align:center;" class="sessiogridtechnique">
+            <td colspan='4' style="text-align:center;" class="sessiogridtechnique">
                Online Data Analysis
             </td>
              <td style="text-align:center;" class="sessiogridtechnique">
@@ -54,8 +54,8 @@
             <td style="text-align:center;" class="saxssessiongridheader">
                MR
             </td>
-            <td style="text-align:center;" class="saxssessiongridheader">
-               HPLC
+            <td colspan='2' style="text-align:center;" class="saxssessiongridheader">
+               Solved by SAD
             </td>
             <td style="text-align:center;" class="emsessiongridheader">
                Gridsquares
@@ -108,7 +108,7 @@
             <td class="mxsessiongridcell">
                <div style="text-align:center;">
                   {@gt key=TestDataCollectionCount value=0}                   
-                   <a href='#/mx/datacollection/datacollectionid/{.TestDataCollectionIdList}/main'>   
+                   <a href='#/mx/datacollection/datacollectionid/{.TestDataCollectionIdList}/main' target='_blank'>   
                       <button type="button" class="btn btn-primary" style='width:50px;'>
                           <span  class="badge">{.TestDataCollectionCount}</span>
                       </button>                       
@@ -121,7 +121,7 @@
             <td class="mxsessiongridcell">
                <div style="text-align:center;">
                   {@gt key=DataCollectionGroupCount value=0}     
-                  <a href='#/mx/datacollection/datacollectionid/{.DataCollectionGroupIdList}/main'>   
+                  <a href='#/mx/datacollection/datacollectionid/{.DataCollectionIdList}/main'  target='_blank'>   
                       <button type="button" class="btn btn-primary" style='width:50px;'>
                           <span  class="badge">{.DataCollectionGroupCount}</span>
                       </button>                       
@@ -143,20 +143,25 @@
                   {/gt}
                </div>
             </td>
-            <td class="saxssessiongridcell">
+            <td class="saxssessiongridcell" colspan='2'>
                <div style="text-align:center;">
-                  {@gt key=hplcCount value=0} 
-                  <span style="background-color:#207a7a;" class="badge">{.hplcCount}</span>
+              
+
+                  {@gt key=ModelBuildingPhasingStepCount value=0} 
+                   <a href='#/mx/datacollection/datacollectionid/{.ModelBuildingPhasingStepDataCollectionIdList}/main'  target='_blank'>   
+                      <button type="button" class="btn btn-primary">
+                          <span  class="badge"  style='font-size:10px'>
+                           {#solvedStructureSpaceGroups}
+                              {.}<br/>
+                          {/solvedStructureSpaceGroups}
+                          </span>
+                      </button>                       
+                  </a>
                   {/gt}
                </div>
             </td>
             <td class="emsessiongridcell">
-               <div style="text-align:center;">
-                  {@gt key=EMdataCollectionGroupCount value=0}                               
-                  <span style="background-color:#207a7a;" class="badge">{.EMdataCollectionGroupCount}</span>                        
-                  {/gt}
-               </div>
-               </a>
+              --
             </td>
             <td style='width:400px;' > 
                <div style="width:390px; wordWrap: break-word;">

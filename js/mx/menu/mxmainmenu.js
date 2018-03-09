@@ -19,11 +19,19 @@ MXMainMenu.prototype.getMenuItems = function() {
 	return [
 		this.getHomeItem(),
 		this.getShipmentItem(),
-		{
-                text : this._convertToHTMLWhiteSpan("Proteins and Crystals"),
+		/*{
+                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
                 disabled : false,
                 menu : this.getProteinCrystalsMenu() 
+	    	},*/
+			{
+                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
+                cls : 'ExiSAXSMenuToolBar',
+                disabled : false,
+                handler : function(){
+                    location.hash = "#/protein/list";
+                }
 	    	},
 	    	{
                 text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
@@ -110,7 +118,7 @@ MXMainMenu.prototype.getOnlineDataAnalisysMenu = function() {
  
 
 MXMainMenu.prototype.getProteinCrystalsMenu = function() {
-	function onItemCheck(item, checked) {
+	/*function onItemCheck(item, checked) {
 		if (item.text == "My Crystals") {
 			location.hash = "/crystal/nav";
 		}
@@ -141,5 +149,5 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 				handler : onItemCheck 
 			}
 		] 
-	});
+	});*/
 };
