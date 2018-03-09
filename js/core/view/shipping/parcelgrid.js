@@ -36,7 +36,6 @@ function ParcelGrid(args) {
 	this.parcelPanels = {};
 	this.samples = [];
 	this.withoutCollection = [];
-	this.nbReimbDewars=0;
 
 	/** Events **/
 	this.onSuccess = new Event(this);
@@ -51,7 +50,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	this.hasExportedData = hasExportedData;
 	nSamples = 0;
 	nMeasured = 0;
-	maxReimbursedDewars = 0;
+	this.maxReimbursedDewars = 0;
 	this.currentReimbursedDewars = 0;
 	if (samples) {
 		nSamples = samples.length;
@@ -61,7 +60,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	};
 	if (shipment){
 		if (shipment.sessions.length > 0){
-			maxReimbursedDewars = shipment.sessions[0].nbReimbDewars;
+			this.maxReimbursedDewars = shipment.sessions[0].nbReimbDewars;
 		} 
 	};
 	
@@ -91,7 +90,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	}
 	
 	if (nbReimbDewars != null && nbReimbDewars > -1) {
-		$("#" + this.id + "-reimbursed").html(this.currentReimbursedDewars + " parcels reimbursed out of max : " + maxReimbursedDewars + " authorized" );
+		$("#" + this.id + "-reimbursed").html(this.currentReimbursedDewars + " parcels reimbursed out of max : " + this.maxReimbursedDewars + " authorized" );
 	 };
 
 	this.fillTab("content", this.dewars);
@@ -125,13 +124,14 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 	
 	for ( var i in dewars) {
 		var parcelPanel = new ParcelPanel({
-			height : 90,
+			height : 110,
 			width : this.panel.getWidth()*0.9,
 			shippingId : this.shipment.shippingId,
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,
 			currentTab : tabName,
-			currentReimbursedDewars : this.currentReimbursedDewars
+			currentReimbursedDewars : this.currentReimbursedDewars,
+			maxReimbursedDewars : this.maxReimbursedDewars
 		});
 		this.parcelPanels[tabName].insert(parcelPanel.getPanel());
 		parcelPanel.load(this.dewars[i],this.shipment,this.samples[this.dewars[i].dewarId],this.withoutCollection[this.dewars[i].dewarId]);
@@ -150,7 +150,7 @@ ParcelGrid.prototype.edit = function(dewar) {
 		width : 600,
 		modal : true,
 		layout : 'fit',
-		items : [ caseForm.getPanel(dewar) ],
+		items : [ caseForm.getPanel(dewar, true) ],
 		listeners : {
 			afterrender : function(component, eOpts) {
 				if (_this.puck != null) {

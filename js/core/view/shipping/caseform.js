@@ -85,7 +85,8 @@ CaseForm.prototype.getStorageLocationCombo = function() {
 	return this.storageLocationComboBox;
 };
 
-CaseForm.prototype.getPanel = function(dewar) {
+CaseForm.prototype.getPanel = function(dewar, hideReimb) {
+
 		this.panel = Ext.create('Ext.form.Panel', {
 			width : this.width - 10,
 //			cls : 'border-grid',
@@ -141,10 +142,10 @@ CaseForm.prototype.getPanel = function(dewar) {
 						id : this.id + 'dewar_isReimbursed',
 						trueText: 'true',
 						falseText: 'false' ,
-						hidden : false //'{4 < 3}'
+						hidden : hideReimb
 					},
 			]}]			
-		});
+		});	
 
 	this.refresh(dewar);
 	return this.panel;

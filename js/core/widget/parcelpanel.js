@@ -22,6 +22,7 @@ function ParcelPanel(args) {
 	this.containersPanel = null;
 	this.currentTab = "content";
 	this.currentReimbursedDewars = 0;
+	this.maxReimbursedDewars = 0;
 
 	this.isSaveButtonHidden = false;
 	this.isHidden = false;
@@ -50,6 +51,9 @@ function ParcelPanel(args) {
 		}
 		if (args.currentReimbursedDewars != null) {
 			this.currentReimbursedDewars = args.currentReimbursedDewars;
+		}		
+		if (args.maxReimbursedDewars != null) {
+			this.maxReimbursedDewars = args.maxReimbursedDewars;
 		}
 	}
 	
@@ -336,6 +340,13 @@ ParcelPanel.prototype.addContainerToDewar = function(containerVO) {
 */
 ParcelPanel.prototype.showCaseForm = function() {
 	var _this = this;
+	var hideReimb = true;
+	if (this.dewar.isReimbursed) {
+		hideReimb = false;
+	}
+	if (this.maxReimbursedDewars > this.currentReimbursedDewars) {
+		hideReimb = false;
+	}
 	/** Opens a window with the cas form **/
 	var caseForm = new CaseForm();
 	var window = Ext.create('Ext.window.Window', {
@@ -345,7 +356,7 @@ ParcelPanel.prototype.showCaseForm = function() {
 	    modal : true,
 	    layout: 'fit',
 	    items: [
-	            	caseForm.getPanel(_this.dewar)
+	            	caseForm.getPanel(_this.dewar, hideReimb)
 	    ],
 	    buttons : [ {
 						text : 'Save',
