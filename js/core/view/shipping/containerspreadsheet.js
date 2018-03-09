@@ -342,6 +342,19 @@ ContainerSpreadSheet.prototype.getHeader = function() {
 };
 
 /**
+ * Converts value into number if not null or empty otherwise it returns null
+ * @method convertToNumberIfNotEmpty
+ */
+ContainerSpreadSheet.prototype.convertToNumberIfNotEmpty = function(value) {
+	if (value){
+		if (value != ""){
+            return Number(value);
+		}
+	}
+	return null;
+};
+
+/**
 * Returns a puck object with the corresponding samples from the grid
 *
 * @method getPuck
@@ -394,14 +407,14 @@ ContainerSpreadSheet.prototype.getPuck = function() {
 		sample["crystalVO"]["cellGamma"] = crystal.cellGamma;
 		
 		sample["diffractionPlanVO"] = {};
-		sample["diffractionPlanVO"]["radiationSensitivity"]= Number(rows[i]["Radiation Sensitivity"]);
-		sample["diffractionPlanVO"]["aimedCompleteness"]= Number(rows[i]["Aimed Completeness"]);
-		sample["diffractionPlanVO"]["aimedMultiplicity"]= Number(rows[i]["Aimed multiplicity"]);
-		sample["diffractionPlanVO"]["aimedResolution"]= Number(rows[i]["Aimed resolution"]);
-		sample["diffractionPlanVO"]["requiredResolution"]= Number(rows[i]["Needed resolution"]);
-		sample["diffractionPlanVO"]["observedResolution"]= Number(rows[i]["Pre-observed resolution"]);
-		sample["diffractionPlanVO"]["preferredBeamDiameter"]= Number(rows[i]["Pref. Diameter"]);
-		sample["diffractionPlanVO"]["numberOfPositions"]= Number(rows[i]["Number Of positions"]);
+		sample["diffractionPlanVO"]["radiationSensitivity"]= this.convertToNumberIfNotEmpty(rows[i]["Radiation Sensitivity"]);
+		sample["diffractionPlanVO"]["aimedCompleteness"]= this.convertToNumberIfNotEmpty(rows[i]["Aimed Completeness"]);
+		sample["diffractionPlanVO"]["aimedMultiplicity"]= this.convertToNumberIfNotEmpty(rows[i]["Aimed multiplicity"]);
+		sample["diffractionPlanVO"]["aimedResolution"]= this.convertToNumberIfNotEmpty(rows[i]["Aimed resolution"]);
+		sample["diffractionPlanVO"]["requiredResolution"]= this.convertToNumberIfNotEmpty(rows[i]["Needed resolution"]);
+		sample["diffractionPlanVO"]["observedResolution"]= this.convertToNumberIfNotEmpty(rows[i]["Pre-observed resolution"]);
+		sample["diffractionPlanVO"]["preferredBeamDiameter"]= this.convertToNumberIfNotEmpty(rows[i]["Pref. Diameter"]);
+		sample["diffractionPlanVO"]["numberOfPositions"]= this.convertToNumberIfNotEmpty(rows[i]["Number Of positions"]);
 		sample["diffractionPlanVO"]["experimentKind"]= rows[i]["Experiment Type"];
 		sample["diffractionPlanVO"]["forcedSpaceGroup"]= rows[i]["Space Group"];
 		aux.push(sample);
