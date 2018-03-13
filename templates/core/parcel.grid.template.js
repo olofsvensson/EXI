@@ -11,9 +11,9 @@
                 <button id="{id}-export" type="button" style="margin-left:60px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-export"></span> Export PDF View
                 </button>
-				<span id="{id}-reimbursed" style='font-size:15px;color:orange;font-weight:700;margin-left:60px;"' >
+				
                     
-                </span>
+                
             </div>
             
             <div class="pull-right">

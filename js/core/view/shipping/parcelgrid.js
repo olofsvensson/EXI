@@ -13,6 +13,9 @@ function ParcelGrid(args) {
 	this.btnEditVisible = true;
 	this.btnRemoveVisible = true;
 
+	this.reimbursementId = this.id+ "_reimbursement_panel";
+	
+	
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -43,6 +46,40 @@ function ParcelGrid(args) {
 	this.onRemove = new Event(this);
 }
 
+ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
+	return "("+ currentReimbursedDewars +" reimbursed out of " + maxReimbursedDewars +" allowed)";
+};
+ParcelGrid.prototype.getReimbursementHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
+	if (maxReimbursedDewars){
+		if (maxReimbursedDewars > 0){
+			return "<span id='" + this.reimbursementId +"' style='color:orange'>" + this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars)+ "</span>"
+		}
+	} 
+	return "";
+};
+
+ParcelGrid.prototype.refreshReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
+	$("#" + this.reumbursementId).html(this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars));
+};
+
+ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {
+	
+	$("#" + this.id + "-label").html("Content (" + dewars.length + " Parcels " + this.getReimbursementHTML(currentReimbursedDewars, maxReimbursedDewars) + " - " + nSamples + " Samples - " + nMeasured + " Measured )");
+};
+
+ParcelGrid.prototype.getAuthorizedReimbursedDewars = function(sessions) {
+	if (sessions){
+		if (sessions.length > 0){
+			return sessions[0].nbReimbDewars;
+		} 
+	};
+	return 0;
+};
+
+ParcelGrid.prototype.getCurrentReimbursedDewars = function(dewars) {
+	return _.filter(dewars, function(o){ return o.isReimbursed == true}).length;	
+};
+
 ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCollection) {
 	var _this = this;
 	this.shipment = shipment;
@@ -58,23 +95,17 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		this.samples = _.groupBy(samples,"Dewar_dewarId");
 		this.withoutCollection = _.groupBy(withoutCollection,"Dewar_dewarId");
 	};
-	if (shipment){
-		if (shipment.sessions.length > 0){
-			this.maxReimbursedDewars = shipment.sessions[0].nbReimbDewars;
-		} 
-	};
 	
-	for (var i =0; i < this.dewars.length; i++){ 
-		if (this.dewars[i].isReimbursed ) {
-			this.currentReimbursedDewars++;
-		}
-	}	
+	if (shipment){
+		this.maxReimbursedDewars = this.getAuthorizedReimbursedDewars(this.shipment.sessions);
+		this.currentReimbursedDewars = this.getCurrentReimbursedDewars(this.dewars);
+	}
     
 	this.dewars.sort(function(a, b) {
 		return a.dewarId - b.dewarId;
 	});
 
-	$("#" + this.id + "-label").html("Content (" + this.dewars.length + " Parcels - " + nSamples + " Samples - " + nMeasured + " Measured)");
+	this.displayContentLabel(this.dewars, nSamples, nMeasured, this.currentReimbursedDewars, this.maxReimbursedDewars);
 	$("#" + this.id + "-add-button").removeClass("disabled");
 	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
 		_this.edit();
@@ -89,9 +120,9 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		});
 	}
 	
-	if (this.maxReimbursedDewars != null && this.maxReimbursedDewars > 0) {
+	/*if (this.maxReimbursedDewars != null && this.maxReimbursedDewars > 0) {
 		$("#" + this.id + "-reimbursed").html(this.currentReimbursedDewars + " parcels reimbursed out of max : " + this.maxReimbursedDewars + " authorized" );
-	 };
+	 };*/
 
 	this.fillTab("content", this.dewars);
 
@@ -99,7 +130,8 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 };
 
 ParcelGrid.prototype.fillTab = function (tabName, dewars) {
-	var _this = this;
+	var _this = this;	
+
 	$("#" + tabName + "-" + this.id).html("");
 	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {
 															// cls 		: 'border-grid',
@@ -117,7 +149,8 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 			
 			var onSuccess = function(sender, shipment) {				
 				_this.panel.setLoading(false);
-				_this.panel.doLayout();
+				_this.panel.doLayout();				
+				_this.refreshReimbursementContentHTML( _this.getCurrentReimbursedDewars(shipment.dewarVOs), _this.getAuthorizedReimbursedDewars(shipment.sessions));
 			};			
 			EXI.getDataAdapter({onSuccess : onSuccess}).proposal.dewar.saveDewar(_this.shipment.shippingId, dewar);
     }
@@ -130,8 +163,8 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,
 			currentTab : tabName,
-			currentReimbursedDewars : this.currentReimbursedDewars,
-			maxReimbursedDewars : this.maxReimbursedDewars
+			currentReimbursedDewars : _this.currentReimbursedDewars,
+			maxReimbursedDewars : _this.maxReimbursedDewars
 		});
 		this.parcelPanels[tabName].insert(parcelPanel.getPanel());
 		parcelPanel.load(this.dewars[i],this.shipment,this.samples[this.dewars[i].dewarId],this.withoutCollection[this.dewars[i].dewarId]);
