@@ -407,6 +407,7 @@ ParcelPanel.prototype.showReimbForm = function() {
 							}
 							_this.renderDewarComments(_this.dewar);
 							_this.panel.doLayout();
+							
 						}
 					}, 
 					{

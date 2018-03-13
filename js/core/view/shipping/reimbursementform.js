@@ -37,7 +37,6 @@ ReimbForm.prototype.refresh = function(dewar) {
 
 ReimbForm.prototype.getDewar = function() {
 	this.dewar.isReimbursed = Ext.getCmp(this.id + "dewar_isReimbursed").getValue();
-	this.dewar.comments = Ext.getCmp(this.id + "dewar_comments").getValue();
 	return this.dewar;
 };
 
@@ -47,11 +46,9 @@ ReimbForm.prototype.setDewar = function(dewar) {
 	if (this.dewar == null){
 		this.dewar={};
 		this.dewar["isReimbursed"] = "";
-		this.dewar["comments"] = "";
 	}
 	
 	Ext.getCmp(this.id + "dewar_isReimbursed").setValue(this.dewar.isReimbursed);
-	Ext.getCmp(this.id + "dewar_comments").setValue(this.dewar.comments);
 };
 
 ReimbForm.prototype.getPanel = function(dewar) {
@@ -80,17 +77,6 @@ ReimbForm.prototype.getPanel = function(dewar) {
 						falseText: 'false' ,
 						hidden : false //'{4 < 3}'
 					},
-					{
-						xtype : 'textareafield',
-						name : 'comments',
-						fieldLabel : 'Comments',
-						labelWidth : 200,
-						width : 500,
-						margin : '10 0 0 0',
-						height : 100,
-						id : this.id + 'dewar_comments'
-					},
-
 			]}]			
 		});
 
