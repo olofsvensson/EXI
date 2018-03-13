@@ -109,8 +109,9 @@
                <div style="text-align:center;">
                   {@gt key=TestDataCollectionCount value=0}                   
                    <a href='#/mx/datacollection/datacollectionid/{.TestDataCollectionIdList}/main' target='_blank'>   
-                      <button type="button" class="btn btn-primary" style='width:50px;'>
-                          <span  class="badge">{.TestDataCollectionCount}</span>
+                      <button type="button" class="btn" style='width:50px;'>
+                          {!<span  class="badge">{.TestDataCollectionCount}</span>!}
+                          <span style='font-size:20px;' class="glyphicon glyphicon-ok"></span>  
                       </button>                       
                   </a>
                   {/gt}
@@ -122,8 +123,9 @@
                <div style="text-align:center;">
                   {@gt key=DataCollectionGroupCount value=0}     
                   <a href='#/mx/datacollection/datacollectionid/{.DataCollectionIdList}/main'  target='_blank'>   
-                      <button type="button" class="btn btn-primary" style='width:50px;'>
-                          <span  class="badge">{.DataCollectionGroupCount}</span>
+                      <button type="button" class="btn" style='width:50px;'>
+                          {!<span  class="badge">{.DataCollectionGroupCount}</span>!}
+                           <span style='font-size:20px;' class="glyphicon glyphicon-ok"></span>  
                       </button>                       
                   </a>
                   {/gt}
@@ -132,7 +134,7 @@
             <td class="saxssessiongridcell">
                <div style="text-align:center;">
                   {@gt key=SADPhasingStepCount value=0}                                  
-                  <span style="background-color:#207a7a;" class="badge">{.SADPhasingStepCount}</span>                       
+                        <span style='color:green; font-size:20px;' class="glyphicon glyphicon-ok"></span>                          
                   {/gt}
                </div>
             </td>
