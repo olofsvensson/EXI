@@ -89,7 +89,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		});
 	}
 	
-	if (nbReimbDewars != null && nbReimbDewars > -1) {
+	if (this.maxReimbursedDewars != null && this.maxReimbursedDewars > 0) {
 		$("#" + this.id + "-reimbursed").html(this.currentReimbursedDewars + " parcels reimbursed out of max : " + this.maxReimbursedDewars + " authorized" );
 	 };
 
