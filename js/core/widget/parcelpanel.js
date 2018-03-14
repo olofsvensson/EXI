@@ -21,8 +21,8 @@ function ParcelPanel(args) {
 	this.shippingStatus = "";
 	this.containersPanel = null;
 	this.currentTab = "content";
-	this.currentReimbursedDewars = 0;
-	this.maxReimbursedDewars = 0;
+	
+	this.displayReimbButton = false;
 
 	this.isSaveButtonHidden = false;
 	this.isHidden = false;
@@ -49,17 +49,24 @@ function ParcelPanel(args) {
 		if (args.currentTab != null) {
 			this.currentTab = args.currentTab;
 		}
-		if (args.currentReimbursedDewars != null) {
-			this.currentReimbursedDewars = args.currentReimbursedDewars;
-		}		
-		if (args.maxReimbursedDewars != null) {
-			this.maxReimbursedDewars = args.maxReimbursedDewars;
+		if (args.displayReimbButton != null) {
+			this.displayReimbButton = args.displayReimbButton;
 		}
 	}
 	
 	this.onSavedClick = new Event(this);
 
 }
+
+ParcelPanel.prototype.getDisplayReimb = function(dewar, currentReimb, maxReimb) {
+	if (dewar.isReimbursed) {
+		return true;
+	}
+	if (currentReimb < maxReimb) {
+		return true;
+	}
+	return false;	
+};
 
 ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollection) {
 	var _this = this;
@@ -70,7 +77,6 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			this.dewar.beamlineName = shipment.sessions[0].beamlineName;
-			this.dewar.nbReimbDewars = shipment.sessions[0].nbReimbDewars;
 		}
 	}
 	this.samples = samples;
@@ -97,7 +103,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 			_this.showCaseForm();
 		});
 		//debugger
-		if (this.currentReimbursedDewars < this.dewar.nbReimbDewars || this.dewar.isReimbursed) {
+		if (this.displayReimbButton) {
 			$("#" + this.id + "-euro-button").removeClass("disabled");
 			$("#" + this.id + "-euro-button").click(function () {
 				_this.showReimbForm();
