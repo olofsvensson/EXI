@@ -13,9 +13,8 @@ function ParcelGrid(args) {
 	this.btnEditVisible = true;
 	this.btnRemoveVisible = true;
 
-	this.reimbursementId = this.id+ "_reimbursement_panel";
-	
-	
+	this.reimbursementId = this.id + "_reimbursement_panel";
+		
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -59,7 +58,7 @@ ParcelGrid.prototype.getReimbursementHTML = function(currentReimbursedDewars, ma
 };
 
 ParcelGrid.prototype.refreshReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
-	$("#" + this.reumbursementId).html(this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars));
+	$("#" + this.reimbursementId).html(this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars));
 };
 
 ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {
@@ -120,10 +119,6 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		});
 	}
 	
-	/*if (this.maxReimbursedDewars != null && this.maxReimbursedDewars > 0) {
-		$("#" + this.id + "-reimbursed").html(this.currentReimbursedDewars + " parcels reimbursed out of max : " + this.maxReimbursedDewars + " authorized" );
-	 };*/
-
 	this.fillTab("content", this.dewars);
 
 	this.attachCallBackAfterRender();
