@@ -153,10 +153,10 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 			dewar["shippingId"] = _this.shipment.shippingId;
 			
 			var onSuccess = function(sender, shipment) {				
-				_this.panel.setLoading(false);
-				_this.panel.doLayout();				
+				_this.panel.setLoading(false);							
 				_this.refreshReimbursementContentHTML( _this.getCurrentReimbursedDewars(shipment.dewarVOs), _this.getAuthorizedReimbursedDewars(shipment.sessions));
 				_this.currentReimbursedDewars = _this.getCurrentReimbursedDewars(shipment.dewarVOs);
+				_this.panel.doLayout();	
 			};			
 			EXI.getDataAdapter({onSuccess : onSuccess}).proposal.dewar.saveDewar(_this.shipment.shippingId, dewar);
     }

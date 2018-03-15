@@ -51,7 +51,21 @@ ReimbForm.prototype.setDewar = function(dewar) {
 	Ext.getCmp(this.id + "dewar_isReimbursed").setValue(this.dewar.isReimbursed);
 };
 
-ReimbForm.prototype.getPanel = function(dewar) {
+ReimbForm.prototype.getCurrentReimbursedDewars = function(dewars) {
+	return _.filter(dewars, function(o){ return o.isReimbursed == true}).length;	
+};
+
+ReimbForm.prototype.hideReimbursedButton = function(shipment, dewar){
+	var nbmax=3;// TODO replace
+	if (dewar.isReimbursed) 
+		return false;
+	if (this.getCurrentReimbursedDewars(shipment.dewarVOs) < nbmax){
+		return false;
+	}
+	return true;
+}
+
+ReimbForm.prototype.getPanel = function(dewar, shipment) {
 		this.panel = Ext.create('Ext.form.Panel', {
 			width : this.width - 10,
 //			cls : 'border-grid',
@@ -75,8 +89,9 @@ ReimbForm.prototype.getPanel = function(dewar) {
 						id : this.id + 'dewar_isReimbursed',
 						trueText: 'true',
 						falseText: 'false' ,
-						hidden : false //'{4 < 3}'
+						hidden : this.hideReimbursedButton(shipment, dewar) //false //'{4 < 3}'
 					},
+					
 			]}]			
 		});
 

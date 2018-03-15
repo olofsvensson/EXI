@@ -58,19 +58,10 @@ function ParcelPanel(args) {
 
 }
 
-ParcelPanel.prototype.getDisplayReimb = function(dewar, currentReimb, maxReimb) {
-	if (dewar.isReimbursed) {
-		return true;
-	}
-	if (currentReimb < maxReimb) {
-		return true;
-	}
-	return false;	
-};
-
 ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollection) {
 	var _this = this;
 	this.dewar = dewar;
+	this.oldDewar = dewar;
 	this.dewar.index = this.index;
 	this.shipment = shipment;
 	
@@ -401,7 +392,7 @@ ParcelPanel.prototype.showReimbForm = function() {
 	    modal : true,
 	    layout: 'fit',
 	    items: [
-	            reimbForm.getPanel(_this.dewar)
+	            reimbForm.getPanel(_this.dewar, _this.shipment)
 	    ],
 	    buttons : [ {
 						text : 'Save',
