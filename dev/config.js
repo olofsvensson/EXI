@@ -2,8 +2,8 @@ var ExtISPyB ={
    sites:[
       {
          name:'ESRF',
-         url:'http://ispyb.esrf.fr:8080/ispyb/ispyb-ws/rest',
-         exiUrl:'http://pc593.embl.fr:8080/extispyb-ws/rest',
+         url:'https://ispyb.esrf.fr/ispyb/ispyb-ws/rest',
+         exiUrl:'https://ispyb.esrf.fr/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
                'BM29'
@@ -15,8 +15,8 @@ var ExtISPyB ={
       },
       {
          name:'ESRF TEST',
-         url:'http://ispyvalid.esrf.fr:8080/ispyb/ispyb-ws/rest',
-         exiUrl:'http://pc593.embl.fr:8080/extispyb-ws/rest',
+         url:'https://ispyb-valid.esrf.fr/ispyb/ispyb-ws/rest',
+         exiUrl:'https://ispyb-valid.esrf.fr/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
                'BM29'
