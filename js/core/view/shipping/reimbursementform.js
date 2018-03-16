@@ -56,18 +56,34 @@ ReimbForm.prototype.getCurrentReimbursedDewars = function(dewars) {
 };
 
 ReimbForm.prototype.hideReimbursedButton = function(shipment, dewar){
-	var nbmax=3;// TODO replace
+	this.maxReimb = 0;
+	debugger;
+	if (shipment) {
+		if (shipment.sessions.length > 0){
+			this.maxReimb = shipment.sessions[0].nbReimbDewars;
+		}
+	}	
 	if (dewar.isReimbursed) 
 		return false;
-	if (this.getCurrentReimbursedDewars(shipment.dewarVOs) < nbmax){
+	if (this.getCurrentReimbursedDewars(shipment.dewarVOs) < this.maxReimb){
 		return false;
 	}
 	return true;
 }
 
+ReimbForm.prototype.getBoxLabelText = function(shipment, dewar){
+	
+	boxLabel = 'By setting this parcel to reimbursed, the labels printed for the sending<br>will contain the fedex account that you should use to send your dewars. <br>Please note that you MUST NOT use this account to ship more<br>than the allowed number of dewars. <br>In case of abuse, your proposal will no more benefit<br>from parcel reimbursement.';
+	if (this.hideReimbursedButton(shipment, dewar) == true){
+		boxLabel = "<span style='color:orange'>You are not authorized to select another parcel to be reimbursed</span>";
+	}
+	return boxLabel;
+}
+
 ReimbForm.prototype.getPanel = function(dewar, shipment) {
 		this.panel = Ext.create('Ext.form.Panel', {
 			width : this.width - 10,
+			title : this.getBoxLabelText(shipment, dewar),
 //			cls : 'border-grid',
 //			margin : 10,
 			padding : 10,
@@ -82,7 +98,7 @@ ReimbForm.prototype.getPanel = function(dewar, shipment) {
 					{           
 						xtype: 'checkbox',
 						fieldLabel : ' ',
-						boxLabel : 'By setting this dewar to reimbursed, the labels that will be generated for the sending will contain the fedex account that you should use to send your dewars. <br>Please note that you MUST NOT use this account to ship more than the allowed number of dewars. <br>In case of abuse, your proposal will no more be able to benefit from the dewar reimbursement. <br>Click if you agree with these conditions and you want to have this dewar automatically reimbursed.',
+						boxLabel : 'Click if you agree with these conditions and you want to have this parcel automatically reimbursed.',
 						hideLabel:true,
 						labelWidth : 500,
 						name : 'isReimbursed',

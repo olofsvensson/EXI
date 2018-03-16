@@ -79,16 +79,6 @@ ParcelGrid.prototype.getCurrentReimbursedDewars = function(dewars) {
 	return _.filter(dewars, function(o){ return o.isReimbursed == true}).length;	
 };
 
-ParcelGrid.prototype.getDisplayReimbursementButton = function(dewar, currentReimb, maxReimb) {
-	if (dewar.isReimbursed) {
-		return true;
-	}
-	if (currentReimb < maxReimb) {
-		return true;
-	}
-	return false;	
-};
-
 ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCollection) {
 	var _this = this;
 	this.shipment = shipment;
@@ -169,7 +159,6 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,
 			currentTab : tabName,
-			displayReimbButton : _this.getDisplayReimbursementButton(this.dewars[i], _this.currentReimbursedDewars, _this.maxReimbursedDewars)
 		});
 		this.parcelPanels[tabName].insert(parcelPanel.getPanel());
 		parcelPanel.load(this.dewars[i],this.shipment,this.samples[this.dewars[i].dewarId],this.withoutCollection[this.dewars[i].dewarId]);

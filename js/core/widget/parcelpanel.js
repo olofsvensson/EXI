@@ -22,7 +22,7 @@ function ParcelPanel(args) {
 	this.containersPanel = null;
 	this.currentTab = "content";
 	
-	this.displayReimbButton = false;
+	this.maxReimb = 0;
 
 	this.isSaveButtonHidden = false;
 	this.isHidden = false;
@@ -49,9 +49,6 @@ function ParcelPanel(args) {
 		if (args.currentTab != null) {
 			this.currentTab = args.currentTab;
 		}
-		if (args.displayReimbButton != null) {
-			this.displayReimbButton = args.displayReimbButton;
-		}
 	}
 	
 	this.onSavedClick = new Event(this);
@@ -68,6 +65,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			this.dewar.beamlineName = shipment.sessions[0].beamlineName;
+			this.maxReimb = shipment.sessions[0].nbReimbDewars;
 		}
 	}
 	this.samples = samples;
@@ -94,7 +92,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 			_this.showCaseForm();
 		});
 		//debugger
-		if (this.displayReimbButton) {
+		if (this.maxReimb > 0) {
 			$("#" + this.id + "-euro-button").removeClass("disabled");
 			$("#" + this.id + "-euro-button").click(function () {
 				_this.showReimbForm();
