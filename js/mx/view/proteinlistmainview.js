@@ -68,7 +68,9 @@ ProteinListMainView.prototype.getPanel =  function(){
 ProteinListMainView.prototype.renderHTML = function(proteins) {              
     var _this = this;
 	try{
-	proteins = _.orderBy(proteins, [protein => protein.acronym.toLowerCase()],['asc']);
+	     proteins.sort(function (a, b) {
+   			 return  protein.acronym.toLowerCase().localeCompare( protein.acronym.toLowerCase());
+		});
 	}
 	catch(e){}
 
