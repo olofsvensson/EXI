@@ -221,14 +221,16 @@ ContainerSpreadSheet.prototype.getHeader = function() {
             { text : '#', 	id: 'position', column : {width : 20}}, 
             { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
                                                                                         width : 80,
-                                                                                        type: 'dropdown',
+                                                                                        type: 'autocomplete',
+                                                                                        filter: 'true',
                                                                                         source: this.getAcronyms()
                                                                                     }
             }, 
             { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}}, 
             { text :'Crystal Form', id : 'Crystal Form',column : {
                                                                         width : 230,
-                                                                        type: 'dropdown',
+                                                                        type: 'autocomplete',
+                                                                        filter: 'true',
                                                                         source: function(query, process) {
                                                                             var colIndex = _this.getColumnIndex("Protein Acronym");																			
                                                                             var protein = EXI.proposalManager.getProteinByAcronym(this.instance.getDataAtCell(this.row,colIndex));
@@ -243,7 +245,8 @@ ContainerSpreadSheet.prototype.getHeader = function() {
                                                                 }, 
             { text :'Exp.<br /> Type', id : 'Experiment Type', column : {
                                                                         width : 100,  
-                                                                        type: 'dropdown',
+                                                                        type: 'autocomplete',
+                                                                        filter: 'true',
                                                                         source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
             }, 
@@ -257,9 +260,10 @@ ContainerSpreadSheet.prototype.getHeader = function() {
             { text :'Required<br /> multiplicity', id :'Required multiplicity', column : {width : 60}}, 
             { text :'Required<br /> Completeness', id :'Required Completeness', column : {width : 80}},            
             
-			  { text :'Forced <br /> Space G.', id : 'Space Group', column : {
+			{ text :'Forced <br /> Space G.', id : 'Space Group', column : {
                                                                         width : 55,  
-                                                                        type: 'dropdown',
+                                                                        type: 'autocomplete',
+                                                                        filter: 'true',
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }
             }, 
