@@ -14,7 +14,6 @@ function CaseForm(args) {
 			this.showTitle = args.showTitle;
 		}
 	}
-
 	this.onSaved = new Event(this);
 }
 
@@ -40,9 +39,9 @@ CaseForm.prototype.getDewar = function() {
 	this.dewar.code = Ext.getCmp(this.id + "dewar_code").getValue();
 	this.dewar.comments = Ext.getCmp(this.id + "dewar_comments").getValue();
 	this.dewar.transportValue = Ext.getCmp(this.id + "dewar_transportValue").getValue();
-//	this.dewar.storageLocation = Ext.getCmp("dewar_storageLocation").getValue();
 	this.dewar.storageLocation = this.storageLocationComboBox.getValue();
 	//this.dewar.firstExperimentId = this.sessionsCombo.getValue();
+
 	return this.dewar;
 };
 
@@ -60,29 +59,17 @@ CaseForm.prototype.setDewar = function(dewar) {
 	Ext.getCmp(this.id + "dewar_code").setValue(this.dewar.code);
 	Ext.getCmp(this.id + "dewar_comments").setValue(this.dewar.comments);
 	Ext.getCmp(this.id + "dewar_transportValue").setValue(this.dewar.transportValue);
-//	Ext.getCmp("dewar_storageLocation").setValue(this.dewar.storageLocation);
 	this.storageLocationComboBox.setValue(this.dewar.storageLocation);
-	/*if (this.dewar.sessionVO != null) {
-		this.sessionsCombo.setValue(this.dewar.sessionVO.sessionId);
-	}*/
+	
 };
-
-/*
-CaseForm.prototype.getSessionCombo = function() {
-	this.sessionsCombo = BIOSAXS_COMBOMANAGER.getComboSessions(EXI.proposalManager.getFutureSessions(), {
-		labelWidth : 200,
-		margin : '5 0 00 0',
-		width : 500
-	});
-	return this.sessionsCombo;
-};*/
 
 CaseForm.prototype.getStorageLocationCombo = function() {
 	this.storageLocationComboBox =  BIOSAXS_COMBOMANAGER.getComboStorageTemperature();
 	return this.storageLocationComboBox;
 };
 
-CaseForm.prototype.getPanel = function(dewar) {
+CaseForm.prototype.getPanel = function(dewar, hideReimb) {
+
 		this.panel = Ext.create('Ext.form.Panel', {
 			width : this.width - 10,
 //			cls : 'border-grid',
@@ -106,30 +93,31 @@ CaseForm.prototype.getPanel = function(dewar) {
 						id : this.id + 'dewar_code',
 						labelWidth : 200,
 						width : 500
-					}
+					},
 					]
-				}, 
-				this.getStorageLocationCombo(),
-				{
-					xtype : 'numberfield',
-					width : 500,
-					labelWidth : 200,
-					margin : '10 0 0 0',
-					fieldLabel : 'Transport Value',
-					id : this.id + 'dewar_transportValue'
-				},
-				{
-					xtype : 'textareafield',
-					name : 'comments',
-					fieldLabel : 'Comments',
-					labelWidth : 200,
-					width : 500,
-					margin : '10 0 0 0',
-					height : 100,
-					id : this.id + 'dewar_comments'
-				} ]
-			} ]
-		});
+					}, 
+					this.getStorageLocationCombo(),
+					{
+						xtype : 'numberfield',
+						width : 500,
+						labelWidth : 200,
+						margin : '10 0 0 0',
+						fieldLabel : 'Transport Value',
+						id : this.id + 'dewar_transportValue'
+					},
+					{
+						xtype : 'textareafield',
+						name : 'comments',
+						fieldLabel : 'Comments',
+						labelWidth : 200,
+						width : 500,
+						margin : '10 0 0 0',
+						height : 100,
+						id : this.id + 'dewar_comments'
+					},
+			]}]			
+		});	
+
 	this.refresh(dewar);
 	return this.panel;
 };
