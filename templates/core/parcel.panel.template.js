@@ -32,6 +32,13 @@
                             </tr>
                             <tr>
                                 <td>
+                                    <a id="{id}-euro-button" class="btn btn-xs disabled">
+                                        <span class="glyphicon glyphicon-euro"></span> Reimburse
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <a id="{id}-print-button" class="btn btn-xs">
                                         <span class="glyphicon glyphicon-print"></span> Print labels
                                     </a>

@@ -17,6 +17,10 @@
                 <td class='column_parameter_value'>Status:</td>
                 <td>{shipment.shippingStatus}</td>
             </tr>
+			 <tr>
+                <td class='column_parameter_value'>Reimb. parcels:</td>
+                <td>{.nbReimbDewars}</td>
+            </tr>
         </table> 
     </div>
 

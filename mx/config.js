@@ -2,7 +2,7 @@ var ExtISPyB ={
    version : 'alpha-u3',
    release_date : '2017/03/01',
 
-   spaceGroups : ["P1", "P2", "P21", "C2", "P222", "P2221", "P21212", "P212121", "C222", "C2221", "F222", "I222", "I212121", "P4", "P41", "P42", "P43", "P422", "P4212", "P4122", "P41212", "P4222", "P42212", "P4322", "P43212", "I4", "I41", "I422", "I4122", "P3", "P31", "P32", "P31", "P321", "P3112", "P3121", "P3212", "P3221", "P6", "P61", "P65", "P62", "P64", "P63", "P622", "P6122", "P6522", "P6222", "P6422", "P6322", "R3", "R32", "P23", "P213", "P432", "P4232", "P4332", "P4132", "F23", "F432", "F4132", "I23", "I213", "I432", "I4132"],
+   spaceGroups : ["P1", "P2", "P21", "C2", "P222", "P2221", "P21212", "P212121", "C2221", "C222", "F222", "I222", "I212121", "P4", "P41", "P42", "P43", "I4", "I41", "P422", "P4212", "P4122", "P41212", "P4222", "P42212", "P4322", "P43212", "I422", "I4122", "P3", "P31", "P32", "H3", "R3", "P312", "P321", "P3112", "P3121", "P3212", "P3221", "H32", "R32", "P6", "P61", "P65", "P62", "P64", "P63", "P622", "P6122", "P6522", "P6222", "P6422", "P6322", "P23", "F23", "I23", "P213", "I213", "P432", "P4232", "F432", "F4132", "I432", "P4332", "P4132", "I4132"],   
  
 
    sites:[
@@ -206,6 +206,56 @@ var ExtISPyB ={
                    sampleChangerType : 'FlexHCD'
                },
                
+               { 
+                   name : "ID23-2",
+                   sampleChangerType : 'SC3'
+               },
+               { 
+                   name : "ID29",
+                   sampleChangerType : 'FlexHCD'
+               },
+               { 
+                   name : "ID30A-1",
+                   sampleChangerType : 'RoboDiff'
+               },
+               { 
+                   name : "ID30A-2",
+                   sampleChangerType : 'SC3'
+               },
+               { 
+                   name : "ID30A-3",
+                   sampleChangerType : 'SC3'
+               },
+               { 
+                   name : "ID30B",
+                   sampleChangerType : 'FlexHCD'
+               },
+               { 
+                   name : "BM14U",
+                   sampleChangerType : 'FlexHCD'
+               },
+               { 
+                   name : "BM30A",
+                   sampleChangerType : 'FlexHCD'
+               }                                             
+            ]
+         }
+      },
+	       {
+         name:'ESRF localhost',
+         url:'http://localhost:8080/ispyb/ispyb-ws/rest',
+         icon : '../images/site/dev.esrf.png',
+		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
+         beamlines:{
+            SAXS:[
+
+             
+            ],
+            MX:[
+               { 
+                   name : "ID23-1",
+                   sampleChangerType : 'FlexHCD'
+               },
                { 
                    name : "ID23-2",
                    sampleChangerType : 'SC3'

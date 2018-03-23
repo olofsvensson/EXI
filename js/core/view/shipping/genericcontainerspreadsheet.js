@@ -105,7 +105,8 @@ GenericContainerSpreadSheet.prototype.getHeader = function() {
     header = [{ text : '#', 	id: 'position', column : {width : 20}}, 
 				{ text :'Samplesheet <br />Acronym', id :'Protein Acronym', 	column :  {
 																							width : 100,
-																							type: 'dropdown',
+																							type: 'autocomplete',
+																							filter: 'true',
 																							source: this.getAcronyms()
 																						}
 				}, 

@@ -21,6 +21,8 @@ function ParcelPanel(args) {
 	this.shippingStatus = "";
 	this.containersPanel = null;
 	this.currentTab = "content";
+	
+	this.maxReimb = 0;
 
 	this.isSaveButtonHidden = false;
 	this.isHidden = false;
@@ -56,11 +58,14 @@ function ParcelPanel(args) {
 ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollection) {
 	var _this = this;
 	this.dewar = dewar;
+	this.oldDewar = dewar;
 	this.dewar.index = this.index;
 	this.shipment = shipment;
+	
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			this.dewar.beamlineName = shipment.sessions[0].beamlineName;
+			this.maxReimb = shipment.sessions[0].nbReimbDewars;
 		}
 	}
 	this.samples = samples;
@@ -86,8 +91,17 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 		$("#" + this.id + "-edit-button").click(function () {
 			_this.showCaseForm();
 		});
+		//debugger
+		if (this.maxReimb > 0) {
+			$("#" + this.id + "-euro-button").removeClass("disabled");
+			$("#" + this.id + "-euro-button").click(function () {
+				_this.showReimbForm();
+			});
+		} else {
+			$("#" + this.id + "-euro-button").hide();
+		}
 	}
-
+	
 	$("#" + this.id + "-print-button").click(function () {
 		var dewarId = _this.dewar.dewarId;
 		var url = EXI.getDataAdapter().proposal.shipping.getDewarLabelURL(dewarId, dewarId);
@@ -121,7 +135,12 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 
 ParcelPanel.prototype.renderDewarParameters = function (dewar) {
 	var html = "";
-	dust.render("parcel.panel.parameter.table.template", {id : this.id, dewar : dewar, height : this.height}, function(err, out){
+	if (dewar.isReimbursed){
+		this.isSelectedForReimb = " (R)";
+	} else {
+		this.isSelectedForReimb = "";
+	}
+	dust.render("parcel.panel.parameter.table.template", {id : this.id, dewar : dewar, height : this.height, isSelectedForReimb : this.isSelectedForReimb}, function(err, out){
 		html = out;
 	});
 	$('#' + this.id + "-parameters-div").hide().html(html).fadeIn("fast");
@@ -316,6 +335,13 @@ ParcelPanel.prototype.addContainerToDewar = function(containerVO) {
 */
 ParcelPanel.prototype.showCaseForm = function() {
 	var _this = this;
+	var hideReimb = true;
+	if (this.dewar.isReimbursed) {
+		hideReimb = false;
+	}
+	if (this.maxReimbursedDewars > this.currentReimbursedDewars) {
+		hideReimb = false;
+	}
 	/** Opens a window with the cas form **/
 	var caseForm = new CaseForm();
 	var window = Ext.create('Ext.window.Window', {
@@ -325,7 +351,7 @@ ParcelPanel.prototype.showCaseForm = function() {
 	    modal : true,
 	    layout: 'fit',
 	    items: [
-	            	caseForm.getPanel(_this.dewar)
+	            	caseForm.getPanel(_this.dewar, hideReimb)
 	    ],
 	    buttons : [ {
 						text : 'Save',
@@ -339,6 +365,47 @@ ParcelPanel.prototype.showCaseForm = function() {
 							_this.panel.doLayout();
 						}
 					}, {
+						text : 'Cancel',
+						handler : function() {
+							window.close();
+						}
+					} ]
+	});
+	window.show();
+};
+
+/**
+* It displays a window with the reimbursement form
+*
+* @method showReimbForm
+*/
+ParcelPanel.prototype.showReimbForm = function() {
+	var _this = this;
+	/** Opens a window with the cas form **/
+	var reimbForm = new ReimbForm();
+	var window = Ext.create('Ext.window.Window', {
+	    title: 'Reimburse Parcel',
+	    height: 450,
+	    width: 600,
+	    modal : true,
+	    layout: 'fit',
+	    items: [
+	            reimbForm.getPanel(_this.dewar, _this.shipment)
+	    ],
+	    buttons : [ {
+						text : 'Save',
+						handler : function() {
+							_this.onSavedClick.notify(reimbForm.getDewar());
+							window.close();
+							if (_this.currentTab == "content") {
+                            	_this.renderDewarParameters(_this.dewar);
+							}
+							_this.renderDewarComments(_this.dewar);
+							_this.panel.doLayout();
+							
+						}
+					}, 
+					{
 						text : 'Cancel',
 						handler : function() {
 							window.close();

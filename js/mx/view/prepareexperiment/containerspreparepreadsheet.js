@@ -163,7 +163,8 @@ ContainerPrepareSpreadSheet.prototype.getPanel = function() {
                 header : 'Beamline',
                 dataIndex: 'beamlineName',
                 hidden : true,
-                type: 'dropdown',			        	 								
+                type: 'autocomplete',
+                filter: 'true',
                 flex: 1,
                 source: EXI.credentialManager.getBeamlineNames()
             },

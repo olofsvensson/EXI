@@ -585,7 +585,8 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 			{ text : '#', 	id: 'position', column : {width : 20, renderer: samplePositionParameterRenderer}},
             { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
                                                                                         width : 80,
-                                                                                        type: 'dropdown',
+                                                                                        type: 'autocomplete',
+                                                                                        filter: 'true',
 																						renderer: proteinParameterRenderer,
                                                                                         source: this.getAcronyms()
                                                                                     }
@@ -599,7 +600,8 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 			
             { text :'Exp.<br /> Type', id : 'experimentKind', column : {
                                                                         width : 100,  
-                                                                        type: 'dropdown',
+                                                                        type: 'autocomplete',
+                                                                        filter: 'true',
 																		renderer: mandatoryParameterRenderer,
                                                                         source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
@@ -607,7 +609,8 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
            
             { text :'Space <br />group',  id : 'Space Group', column : {
                                                                         width : 70,  
-                                                                        type: 'dropdown',																		
+                                                                        type: 'autocomplete',
+                                                                        filter: 'true',
 																	    renderer: mandatoryParameterRenderer,
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }}, 
@@ -625,7 +628,8 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
             { text :'Required<br /> Completeness', id :'Required Completeness', column : {width : 80}},            
 			{ text :'Forced <br /> SPG',  id :'forced', column : {
                                                                         width : 70,  
-                                                                        type: 'dropdown',
+                                                                        type: 'autocomplete',
+                                                                        filter: 'true',
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }}, 
 

@@ -42,11 +42,12 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			beamlineName = shipment.sessions[0].beamlineName;
+			nbReimbDewars = shipment.sessions[0].nbReimbDewars;
 			startDate = moment(shipment.sessions[0].startDate).format("DD/MM/YYYY");
 		}
 	}
 	
-    dust.render("shipping.form.template", {id : this.id, to : toData, from : fromData, beamlineName : beamlineName, startDate : startDate, shipment : shipment}, function(err, out){
+    dust.render("shipping.form.template", {id : this.id, to : toData, from : fromData, beamlineName : beamlineName, startDate : startDate, shipment : shipment, nbReimbDewars : nbReimbDewars}, function(err, out){
 		html = out;
 	});
 	
