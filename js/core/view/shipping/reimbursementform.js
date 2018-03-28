@@ -72,8 +72,10 @@ ReimbForm.prototype.hideReimbursedButton = function(shipment, dewar){
 }
 
 ReimbForm.prototype.getBoxLabelText = function(shipment, dewar){
-	
-	boxLabel = 'By setting this parcel to reimbursed, the labels printed for the sending<br>will contain the fedex account that you should use to send your dewars. <br>Please note that you MUST NOT use this account to ship more<br>than the allowed number of dewars. <br>In case of abuse, your proposal will no more benefit<br>from parcel reimbursement.';
+	this.fedexReference = shipment.sessions[0].proposalVO.code + shipment.sessions[0].proposalVO.number + "/" 
+	+ shipment.sessions[0].beamlineName + "/" + moment(shipment.sessions[0].startDate).format('YYYYMMDD');
+
+	boxLabel = 'By setting this parcel to reimbursed, the labels printed for the sending<br>will contain the fedex account that you should use to send your dewars. <br>Please note that you MUST NOT use this account to ship more<br>than the allowed number of dewars. <br>In case of abuse, your proposal will no more benefit<br>from parcel reimbursement.<br>-> You MUST enter the following reference into your fedex page: <br><center>' + this.fedexReference + '</center>';
 	if (this.hideReimbursedButton(shipment, dewar) == true){
 		boxLabel = "<span style='color:orange'>You are not authorized to select another parcel to be reimbursed</span>";
 	}
