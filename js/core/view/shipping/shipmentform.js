@@ -39,6 +39,7 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
     var html = "";
 	var beamlineName = "";
 	var startDate = "";
+	var nbReimbDewars = 0;
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			beamlineName = shipment.sessions[0].beamlineName;
