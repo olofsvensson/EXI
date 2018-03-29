@@ -86,4 +86,16 @@
     <div class="col-md-1 pull-right" style="padding:0px">
         <button id="{id}-edit-button" class="btn btn-primary btn-lg" style="margin-left:10px;height:90px;" disabled>Edit</button>
     </div>
+</div>	
+<br>
+<div class="form-group row" style="margin:0px">
+	<span  style='font-size:12px; color:red' >
+		{.reimbText} 
+	</span >                 
+</div>
+<div class="form-group row" style="margin:0px">
+	<span  style='font-size:12px; color:black' >
+		{.fedexCode}
+	</span >  
+                 
 </div>
