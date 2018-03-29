@@ -38,6 +38,7 @@ function ParcelGrid(args) {
 	this.parcelPanels = {};
 	this.samples = [];
 	this.withoutCollection = [];
+	this.fedexCode = "fedexCode" ;
 
 	/** Events **/
 	this.onSuccess = new Event(this);
@@ -48,6 +49,7 @@ function ParcelGrid(args) {
 ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
 	return "("+ currentReimbursedDewars +" reimbursed out of " + maxReimbursedDewars +" allowed)";
 };
+
 ParcelGrid.prototype.getReimbursementHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
 	if (maxReimbursedDewars){
 		if (maxReimbursedDewars > 0){
@@ -61,8 +63,7 @@ ParcelGrid.prototype.refreshReimbursementContentHTML = function(currentReimburse
 	$("#" + this.reimbursementId).html(this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars));
 };
 
-ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {
-	
+ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {	
 	$("#" + this.id + "-label").html("Content (" + dewars.length + " Parcels " + this.getReimbursementHTML(currentReimbursedDewars, maxReimbursedDewars) + " - " + nSamples + " Samples - " + nMeasured + " Measured )");
 };
 
