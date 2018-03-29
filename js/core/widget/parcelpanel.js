@@ -379,12 +379,12 @@ ParcelPanel.prototype.showCaseForm = function() {
 *
 * @method showReimbForm
 */
-ParcelPanel.prototype.showReimbForm = function() {
+ParcelPanel.prototype.showReimbForm = function(shipment) {
 	var _this = this;
-	/** Opens a window with the cas form **/
+	/** Opens a window with the reimbursement form **/
 	var reimbForm = new ReimbForm();
 	var window = Ext.create('Ext.window.Window', {
-	    title: 'Reimburse Parcel',
+	    title: '<center>Acknowledge the conditions and set the reimbursement status</center>',
 	    height: 450,
 	    width: 600,
 	    modal : true,
