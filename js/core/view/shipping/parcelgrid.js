@@ -148,7 +148,7 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 				_this.refreshReimbursementContentHTML( _this.getCurrentReimbursedDewars(shipment.dewarVOs), _this.getAuthorizedReimbursedDewars(shipment.sessions));
 				_this.currentReimbursedDewars = _this.getCurrentReimbursedDewars(shipment.dewarVOs);
 				_this.panel.doLayout();	
-			};			
+			};
 			EXI.getDataAdapter({onSuccess : onSuccess}).proposal.dewar.saveDewar(_this.shipment.shippingId, dewar);
     }
 	

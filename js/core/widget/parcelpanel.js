@@ -381,12 +381,19 @@ ParcelPanel.prototype.showCaseForm = function() {
 */
 ParcelPanel.prototype.showReimbForm = function(shipment) {
 	var _this = this;
+	hideReimb = false;//true;
+	if (this.dewar.isReimbursed) {
+		hideReimb = false;
+	}
+	if (this.maxReimbursedDewars > this.currentReimbursedDewars) {
+		hideReimb = false;
+	}
 	/** Opens a window with the reimbursement form **/
 	var reimbForm = new ReimbForm();
 	var window = Ext.create('Ext.window.Window', {
 	    title: '<center>Acknowledge the conditions and set the reimbursement status</center>',
-	    height: 450,
-	    width: 600,
+	    height: 480,
+	    width: 650,
 	    modal : true,
 	    layout: 'fit',
 	    items: [
@@ -395,15 +402,16 @@ ParcelPanel.prototype.showReimbForm = function(shipment) {
 	    buttons : [ {
 						text : 'Save',
 						handler : function() {
-							_this.onSavedClick.notify(reimbForm.getDewar());
-							window.close();
-							if (_this.currentTab == "content") {
-                            	_this.renderDewarParameters(_this.dewar);
-							}
-							_this.renderDewarComments(_this.dewar);
-							_this.panel.doLayout();
 							
-						}
+								_this.onSavedClick.notify(reimbForm.getDewar());
+								window.close();
+								if (_this.currentTab == "content") {
+									_this.renderDewarParameters(_this.dewar);
+								}
+								_this.renderDewarComments(_this.dewar);
+								_this.panel.doLayout();
+						},
+						hidden : hideReimb						
 					}, 
 					{
 						text : 'Cancel',

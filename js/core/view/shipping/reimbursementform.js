@@ -14,30 +14,11 @@ function ReimbForm(args) {
 			this.showTitle = args.showTitle;
 		}
 	}
-	this.onSaved = new Event(this);
+	this.fedexAccount = 'fedexAccountNb ';	
+	this.fedexCode = 'fedexCode';				
+	this.boxLabel3 = 'I agree, please set this dewar to reimbursed';
 	
-	this.fedexAccount = ' ';
-	
-	this.fedexCode = 'fedexCode';
-	
-	if (this.shipment){
-		this.fedexCode = this.shipment.sessions[0].proposalVO.code + this.shipment.sessions[0].proposalVO.number + "/" + beamlineName+ "/" + startDate;
-	}
-
-	
-	this.boxLabel1 = 'For ESRF reimbursement, you MUST: '
-	+ '<br> * Copy and paste the following information into the FedEx request page'
-	+ '<br> &nbsp;&nbsp; - Account Number : 252790713'
-	+ '<br> &nbsp;&nbsp; - Your Reference : MX-415/ID30A-1/20180704 '
-	+ '<br> * Tick \"the Include a return label\" box.';
-	
-	this.boxLabel3 = 'I agree, please set this dewar to reimbursed:';
-	
-	this.boxLabel2 = 'By setting this dewar to reimbursed, the labels that will be generated for sending the dewar will use the ESRF FedEx account. '
-	+ 'You MUST NOT use this account to ship more than the allowed number of dewars, or any other equipment for this or any other experiment. '
-	+ 'Any abuse of this account will immediately result in your proposal being refused access to the dewar reimbursement procedure, and eventually to the ESRF beamlines. '
-	+ '<br> <br>Please click on the following checkbox if you agree with these conditions and you wish to have this dewar automatically reimbursed by the ESRF. '
-	+ '<br><br>'+ this.boxLabel1 ; //+ '<br><br>' + this.boxLabel3;
+	this.onSaved = new Event(this);				
 }
 
 ReimbForm.prototype.fillStores = function() {
@@ -64,6 +45,7 @@ ReimbForm.prototype.getDewar = function() {
 };
 
 ReimbForm.prototype.setDewar = function(dewar) {
+	dewar["sessionId"] = dewar.firstExperimentId;
 	this.dewar = dewar;
 	
 	if (this.dewar == null){
@@ -95,9 +77,7 @@ ReimbForm.prototype.hideReimbursedButton = function(shipment, dewar){
 }
 
 ReimbForm.prototype.getBoxLabelText = function(shipment, dewar){
-	this.fedexReference = shipment.sessions[0].proposalVO.code + shipment.sessions[0].proposalVO.number + "/" 
-	+ shipment.sessions[0].beamlineName + "/" + moment(shipment.sessions[0].startDate).format('YYYYMMDD');
-
+	
 	boxLabelText = '<center>Declaration</center>';
 	
 	if (this.hideReimbursedButton(shipment, dewar) == true){
@@ -106,46 +86,55 @@ ReimbForm.prototype.getBoxLabelText = function(shipment, dewar){
 	return boxLabelText;
 }
 
+ReimbForm.prototype.getDeclarationText = function(shipment, dewar){
+	
+	if (this.hideReimbursedButton(shipment, dewar) == true){
+		return ' ';
+	}
+	
+	if (shipment){
+		this.fedexCode = shipment.sessions[0].proposalVO.code + shipment.sessions[0].proposalVO.number + "/" 
+		+ shipment.sessions[0].beamlineName + "/" + moment(shipment.sessions[0].startDate).format('YYYYMMDD');
+	}
+	boxLabel1 = '<br>By setting this dewar to reimbursed, the labels that will be generated for sending the dewar will use the ESRF FedEx account. '
+	+ '<br>You MUST NOT use this account to ship more than the allowed number of dewars, or any other equipment for this or any other experiment. '
+	+ ' Any abuse of this account will immediately result in your proposal being refused access to the dewar reimbursement procedure, and eventually to the ESRF beamlines. '
+	+ '<br> <br>Please click on the following checkbox if you agree with these conditions and you wish to have this dewar automatically reimbursed by the ESRF. '
+	+ '<br><br>' ;
+	
+	var html = 	boxLabel1 + 'For ESRF reimbursement, you MUST: '
+	+ '<br> * Copy and paste the following information into the FedEx request page'
+	+ '<br> &nbsp;&nbsp; - Account Number : '+ this.fedexAccountNb
+	+ '<br> &nbsp;&nbsp; - Your Reference : '+ this.fedexCode
+	+ '<br> * Tick \"the Include a return label\" box.' + '<br><br>' ;
+	
+	return html;
+}
+
 ReimbForm.prototype.getPanel = function(dewar, shipment) {
+	
 		this.panel = Ext.create('Ext.form.Panel', {
 			width : this.width - 10,
 			title : this.getBoxLabelText(shipment, dewar),
-//			cls : 'border-grid',
-//			margin : 10,
 			padding : 10,
-			height : 520,
-			items : [ {
-				xtype : 'container',
-				margin : "2 2 2 2",
-				collapsible : false,
-				defaultType : 'textfield',
-				layout : 'anchor',
-				items : [ 		
-					{     
-						xtype: 'displayfield',
- 						fieldLabel: 'Declaration',
-						name: 'declaration',
-						value: this.boxLabel2,
-						//style: {
-						//	'font-size: 12px;'
-						//},
-						id : this.id + 'declaration',
-						hideLabel: true					
-					},
-					{           
-						xtype: 'checkbox',
-						fieldLabel : 'fieldlabel',
-						boxLabel : this.boxLabel3,
-						hideLabel: true,
-						labelWidth : 800,
-						name : 'isReimbursed',
-						id : this.id + 'dewar_isReimbursed',
-						trueText: 'true',
-						falseText: 'false' ,
-						hidden : false
-					},
+			height : 500,
+			items : [ 		
+				{     													
+					html: this.getDeclarationText(shipment, dewar),					
+				},
+				{           
+					xtype: 'checkbox',
+					fieldLabel : 'fieldlabel',
+					boxLabel : this.boxLabel3,
+					hideLabel: true,
+					name : 'isReimbursed',
+					id : this.id + 'dewar_isReimbursed',
+					trueText: 'true',
+					falseText: 'false' ,
+					hidden : this.hideReimbursedButton(shipment, dewar)
+				}
 					
-			]}]			
+			]			
 		});
 
 	this.refresh(dewar);
