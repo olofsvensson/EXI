@@ -47,13 +47,19 @@ function ParcelGrid(args) {
 }
 
 ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
-	return "("+ currentReimbursedDewars +" reimbursed out of " + maxReimbursedDewars +" allowed)";
+	return "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed";
 };
 
 ParcelGrid.prototype.getReimbursementHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
 	if (maxReimbursedDewars){
 		if (maxReimbursedDewars > 0){
-			return "<span id='" + this.reimbursementId +"' style='color:orange'>" + this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars)+ "</span>"
+			if (maxReimbursedDewars > currentReimbursedDewars - 1 ){
+				return "<span id='" + this.reimbursementId +"' style='color:green'>" 
+				+ this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars)+ ".) </span>"
+			} else {				
+				return "<span id='" + this.reimbursementId +"' style='color:red'>" 
+				+ this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars)+ "! Please modify.) </span>"
+			}
 		}
 	} 
 	return "";

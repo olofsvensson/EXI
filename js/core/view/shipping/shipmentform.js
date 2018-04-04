@@ -32,7 +32,7 @@ function ShipmentForm(args) {
 }
 ShipmentForm.prototype.getReimbursementContentHTML = function(nbReimbDewars) {	
 	return "According to the A-form for this experiment, you are allowed to have " + nbReimbDewars 
-	+ " dewars reimbursed by the ESRF. Please use the Reimburse button to select/unselect the dewars to be reimbursed.";
+	+ " parcels reimbursed by the ESRF. Please use the Reimburse button to select/unselect the parcels to be reimbursed.";
 };
 
 ShipmentForm.prototype.getReimbursementHTML = function(nbReimbDewars) {	

@@ -16,7 +16,7 @@ function ReimbForm(args) {
 	}
 	this.fedexAccount = 'fedexAccountNb ';	
 	this.fedexCode = 'fedexCode';				
-	this.boxLabel3 = 'I agree, please set this dewar to reimbursed';
+	this.boxLabel3 = 'I agree, please set this parcel to reimbursed';
 	
 	this.onSaved = new Event(this);				
 }
@@ -96,10 +96,10 @@ ReimbForm.prototype.getDeclarationText = function(shipment, dewar){
 		this.fedexCode = shipment.sessions[0].proposalVO.code + shipment.sessions[0].proposalVO.number + "/" 
 		+ shipment.sessions[0].beamlineName + "/" + moment(shipment.sessions[0].startDate).format('YYYYMMDD');
 	}
-	boxLabel1 = '<br>By setting this dewar to reimbursed, the labels that will be generated for sending the dewar will use the ESRF FedEx account. '
-	+ '<br>You MUST NOT use this account to ship more than the allowed number of dewars, or any other equipment for this or any other experiment. '
-	+ ' Any abuse of this account will immediately result in your proposal being refused access to the dewar reimbursement procedure, and eventually to the ESRF beamlines. '
-	+ '<br> <br>Please click on the following checkbox if you agree with these conditions and you wish to have this dewar automatically reimbursed by the ESRF. '
+	boxLabel1 = '<br>By setting this parcel to reimbursed, the labels that will be generated for sending the parcel will use the ESRF FedEx account. '
+	+ '<br>You MUST NOT use this account to ship more than the allowed number of parcels, or any other equipment for this or any other experiment. '
+	+ ' Any abuse of this account will immediately result in your proposal being refused access to the parcel reimbursement procedure, and eventually to the ESRF beamlines. '
+	+ '<br> <br>Please click on the following checkbox if you agree with these conditions and you wish to have this parcel automatically reimbursed by the ESRF. '
 	+ '<br><br>' ;
 	
 	var html = 	boxLabel1 + 'For ESRF reimbursement, you MUST: '
