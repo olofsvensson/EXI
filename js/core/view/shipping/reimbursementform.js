@@ -93,8 +93,9 @@ ReimbForm.prototype.getDeclarationText = function(shipment, dewar){
 	}
 	
 	if (shipment){
-		this.fedexCode = shipment.sessions[0].proposalVO.code + shipment.sessions[0].proposalVO.number + "/" 
-		+ shipment.sessions[0].beamlineName + "/" + moment(shipment.sessions[0].startDate).format('YYYYMMDD');
+		startDate = moment(shipment.sessions[0].startDate).format("DD-MM-YYYY");
+		this.fedexCode = shipment.sessions[0].proposalVO.code + "-" + shipment.sessions[0].proposalVO.number + "/" 
+		+ shipment.sessions[0].beamlineName + "/" + startDate;
 	}
 	boxLabel1 = '<br>By setting this parcel to reimbursed, the labels that will be generated for sending the parcel will use the ESRF FedEx account. '
 	+ '<br>You MUST NOT use this account to ship more than the allowed number of parcels, or any other equipment for this or any other experiment. '

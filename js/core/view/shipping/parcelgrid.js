@@ -46,22 +46,16 @@ function ParcelGrid(args) {
 	this.onRemove = new Event(this);
 }
 
-ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
-	return "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed";
-};
-
-ParcelGrid.prototype.getReimbursementHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
-	if (maxReimbursedDewars){
-		if (maxReimbursedDewars > 0){
-			if (maxReimbursedDewars > currentReimbursedDewars - 1 ){
-				return "<span id='" + this.reimbursementId +"' style='color:green'>" 
-				+ this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars)+ ".) </span>"
-			} else {				
-				return "<span id='" + this.reimbursementId +"' style='color:red'>" 
-				+ this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars)+ "! Please modify.) </span>"
-			}
+ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {
+	if ((maxReimbursedDewars && maxReimbursedDewars > 0 ) || (currentReimbursedDewars && currentReimbursedDewars > 0 ))	{
+		if (maxReimbursedDewars > currentReimbursedDewars - 1 ){
+			return "<span id='" + this.reimbursementId +"' style='color:green'>" 
+				+ "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed.) </span>"
+		} else {				
+			return "<span id='" + this.reimbursementId +"' style='color:red'>" 
+				+ "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed! Please modify.) </span>"
 		}
-	} 
+	}
 	return "";
 };
 
@@ -70,7 +64,7 @@ ParcelGrid.prototype.refreshReimbursementContentHTML = function(currentReimburse
 };
 
 ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {	
-	$("#" + this.id + "-label").html("Content (" + dewars.length + " Parcels " + this.getReimbursementHTML(currentReimbursedDewars, maxReimbursedDewars) + " - " + nSamples + " Samples - " + nMeasured + " Measured )");
+	$("#" + this.id + "-label").html("Content (" + dewars.length + " Parcels " + this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars) + " - " + nSamples + " Samples - " + nMeasured + " Measured )");
 };
 
 ParcelGrid.prototype.getAuthorizedReimbursedDewars = function(sessions) {

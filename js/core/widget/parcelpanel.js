@@ -92,7 +92,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 			_this.showCaseForm();
 		});
 		//debugger
-		if (this.maxReimb > 0) {
+		if (this.maxReimb > 0 || this.dewar.isReimbursed) {
 			$("#" + this.id + "-euro-button").removeClass("disabled");
 			$("#" + this.id + "-euro-button").click(function () {
 				_this.showReimbForm();
