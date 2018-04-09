@@ -106,8 +106,7 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
 
     var nonSuccessProcessing = 0;
     /** We should skip all processing that are not success: it means failed or running */
-    for (var i = 0; i < processingStatus.length; i++) { 
-        debugger         
+    for (var i = 0; i < processingStatus.length; i++) {                  
         if (processingStatus[i] != "SUCCESS"){            
             nonSuccessProcessing = nonSuccessProcessing + 1;
         }
@@ -149,8 +148,7 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
     for ( i = 0; i < ids.length; i++) {
         result.push(parsed[ids[i]]);
     }
-    /** Rank results when anomouls is 0 */
-    debugger
+    /** Rank results when anomouls is 0 */    
     return new AutoprocessingRanker().rank(_.filter(result, {anomalous : '0'}), "spaceGroup");  
     //return new AutoprocessingRanker().rank(result, "spaceGroup");  
 };
