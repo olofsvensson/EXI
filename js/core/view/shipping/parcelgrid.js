@@ -132,28 +132,27 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	this.dewars.sort(function(a, b) {
 		return a.dewarId - b.dewarId;
 	});
-	
-	/** Button Export PDF view */
+
+	$("#" + this.id + "-label").html("Content (" + this.dewars.length + " Parcels - " + nSamples + " Samples - " + nMeasured + " Measured)");
+	$("#" + this.id + "-add-button").removeClass("disabled");
+	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
+		_this.edit();
+	});
 	if (nSamples > 0) {
-		this.disableExportButton();
+		$("#" + this.id + "-export").removeClass("disabled");
+		$("#" + this.id + "-export").unbind('click').click(function(sender){
+			var exportForm = new ExportPDFForm();
+			exportForm.load(_this.shipment);
+			exportForm.show();
+		});
 	}
 
 
+	this.fillTab("content", this.dewars);
 
-    var html = "";    
-	dust.render("parcel.grid.template",{id : this.id, shippingId: _this.shipment.shippingId},function (err,out){		
-		$('#' + _this.id).html(out);
-		_this.fillTab("content", _this.dewars);
-	    _this.attachCallBackAfterRender();
-		/** Button Add Parcel */	
-				
-		_this.displayContentLabel(_this.dewars, nSamples, nMeasured, _this.currentReimbursedDewars, _this.maxReimbursedDewars);
-		/** Add Pacel button */
-		$("#" + _this.id + "-add-button").removeClass("disabled");
-		$("#" + _this.id + "-add-button").unbind('click').click(function(sender){
-			_this.edit();
-		});
-		/** Disable import from csv button */		
+	this.attachCallBackAfterRender();
+
+	/** Disable import from csv button */		
 		if (_this.shipment){
 			if (_this.shipment.shippingStatus){
 				if (_this.shipment.shippingStatus == "processing"){					
@@ -164,9 +163,7 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 				}
 			}
 		}
-	})
-
-
+		
 };
 
 ParcelGrid.prototype.fillTab = function (tabName, dewars) {
@@ -254,14 +251,24 @@ ParcelGrid.prototype.edit = function(dewar) {
 	window.show();
 };
 
-ParcelGrid.prototype.getPanel = function() {	
+ParcelGrid.prototype.getPanel = function() {
+
+	var html = "";
+
+	dust.render("parcel.grid.template",{id : this.id},function (err,out){
+		html = out;
+	})
+
 	this.panel =  Ext.create('Ext.panel.Panel', {
-		layout : 'fit',		
+		layout : 'fit',
+		// cls	: 'overflowed',
 		items : {
-					
-					html : '<div id="' + this.id + '"></div>',				
+					// cls	: 'border-grid',
+					html : '<div id="' + this.id + '">' + html + '</div>',
+					// width : this.width,
 					autoScroll:false,
-					autoHeight :true,					
+					autoHeight :true,
+					// maxHeight: this.height,
 					padding : this.padding
 				}
 	});

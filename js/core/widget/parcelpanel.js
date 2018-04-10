@@ -58,8 +58,7 @@ function ParcelPanel(args) {
 
 ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollection) {
 	var _this = this;
-	this.dewar = dewar;
-	this.oldDewar = dewar;
+	this.dewar = dewar;	
 	this.dewar.index = this.index;
 	this.shipment = shipment;
 	
@@ -74,12 +73,12 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	
 	/** Loading the template **/
 	var html = "";
-	dust.render("parcel.panel.template", {id : this.id, dewar : this.dewar}, function(err, out){
+	dust.render("parcel.panel.template", {id : this.id, dewar : this.dewar}, function(err, out){		
 		html = out;
 	});
 	
-	/** Setting click listeners **/		
-	$('#' + this.id).html(html);
+	/** Setting click listeners **/			
+	$('#' + this.id).hide().html(html).fadeIn("fast");
 	this.panel.doLayout();
 
 	if (this.shippingStatus != "processing"){
@@ -92,7 +91,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 		$("#" + this.id + "-edit-button").click(function () {
 			_this.showCaseForm();
 		});
-		//debugger
+		
 		if (this.maxReimb > 0 || this.dewar.isReimbursed) {
 			$("#" + this.id + "-euro-button").removeClass("disabled");
 			$("#" + this.id + "-euro-button").click(function () {
@@ -109,6 +108,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 		location.href = url;
 		return;
 	});
+	
 	
 	this.containersPanel = Ext.create('Ext.panel.Panel', {
 		id			: this.id + "-containers-panel",
@@ -299,7 +299,7 @@ ParcelPanel.prototype.addContainerToDewar = function(containerVO) {
 		
 		EXI.getDataAdapter({onSuccess : onSuccess}).saxs.stockSolution.saveStockSolution(stockSolution);
 	} else {
-		var onSuccess = function(sender, container){
+		var onSuccess = function(sender, container){			
 			container.code = containerVO.code;
 			container.containerStatus = _this.dewar.dewarStatus;
 			container.sampleChangerLocation = _this.dewar.storageLocation;
@@ -317,8 +317,7 @@ ParcelPanel.prototype.addContainerToDewar = function(containerVO) {
 			var onError = function(sender,error) {
 				EXI.setError(error.responseText);
 				_this.renderPucks(_this.dewar);
-			};
-			
+			};			
 			EXI.getDataAdapter({onSuccess : onSaveSuccess, onError : onError}).proposal.shipping.saveContainer(_this.shippingId, _this.dewar.dewarId, container.containerId, container);		
 		};
 
@@ -432,7 +431,7 @@ ParcelPanel.prototype.showAddContainerForm = function() {
 	/** Opens a window with the cas form **/
 	var addContainerForm = new AddContainerForm();
 
-	addContainerForm.onSave.attach(function(sender,container){
+	addContainerForm.onSave.attach(function(sender,container){		
 		_this.addContainerToDewar(container);
 		window.close();
 	})
@@ -463,8 +462,7 @@ ParcelPanel.prototype.getPanel = function() {
 		items :	[{
 					html : '<div id="' + this.id + '"></div>',
 					autoScroll : false,
-					padding : this.padding,
-					// width : this.width,
+					padding : this.padding,					
 					layout 		: 'fit',
 				}]
 	});
