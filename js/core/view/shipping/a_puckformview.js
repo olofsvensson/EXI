@@ -27,9 +27,7 @@ function PuckFormView(args) {
 		}
 	}
 
-	
-	var _this = this;
-	
+	var _this = this;	
 	this.containerSpreadSheet = new ContainerSpreadSheet({width : Ext.getBody().getWidth() - 100, height : 600});
 	this.containerSpreadSheet.onModified.attach(function (sender, change) {
 		_this.unsavedChanges = true;
@@ -108,15 +106,13 @@ PuckFormView.prototype.fillSamplesGrid = function (puck) {
 	EXI.getDataAdapter({onSuccess : onSuccess}).mx.sample.getSamplesByContainerId(puck.containerId);
 }
 
-PuckFormView.prototype.getPanel = function() {
+PuckFormView.prototype.getSamplesFromProposal = function() {
 	var _this =this;
-
-    /** Retrieve samples for the proposal in order to check that the protein + sample name are unique */
-	var onSuccess = function(sender, data){		
-		console.log(data);
-		
-		_this.proposalSamples = data;
-		$.notify("Retrieved " + data.length + " samples for selected proposal" , "info");
+	 /** Retrieve samples for the proposal in order to check that the protein + sample name are unique */
+	var onSuccess = function(sender, data){						
+		_this.proposalSamples = data;	
+		$.notify("Retrieved " + data.length + " samples for selected proposal" , "info");		
+		_this.containerSpreadSheet.proposalSamples = _this.proposalSamples;
 
 	};
 	var onError = function(sender, data){
@@ -124,13 +120,19 @@ PuckFormView.prototype.getPanel = function() {
 	};
 
 	EXI.getDataAdapter({onSuccess: onSuccess, onError:onError}).mx.sample.getSampleInfoByProposalId();
+};
+
+PuckFormView.prototype.getPanel = function() {
+	var _this =this;
+
+   this.getSamplesFromProposal();
 
 
     var html = "";
 	dust.render("puckformview.template", 
 					{
-								specialCharacterInfoPanelId: this.specialCharacterInfoPanelId,
-								uniquenessInfoPanelId:this.uniquenessInfoPanelId
+								specialCharacterInfoPanelId	: this.specialCharacterInfoPanelId,
+								uniquenessInfoPanelId		:this.uniquenessInfoPanelId
 					}, 
 					function(err, out) {
                     	html = out;
@@ -188,9 +190,8 @@ PuckFormView.prototype.getPanel = function() {
 		         },
 				 {
 					 html : html
-				 }
-				 ,
-		         this.containerSpreadSheet.getPanel(),
+				 } ,
+		         this.containerSpreadSheet.getPanel()
                 
 	         ] 
 		} 
@@ -259,8 +260,10 @@ PuckFormView.prototype.removePuck = function() {
 
 PuckFormView.prototype.returnToShipment = function(){
     /**Check if the container's name has been changed */
-	if (this.puck.code != Ext.getCmp(this.id + 'puck_name').getValue()) {
-		this.unsavedChanges = true;
+	if (this.puck){
+		if (this.puck.code != Ext.getCmp(this.id + 'puck_name').getValue()) {
+			this.unsavedChanges = true;
+		}
 	}
 	if (this.unsavedChanges) {
 		this.showReturnWarning();
@@ -279,42 +282,9 @@ PuckFormView.prototype.displayUniquenessWarning = function(message) {
 	$("#" + this.uniquenessInfoPanelId).fadeIn().fadeOut().fadeIn().fadeOut().fadeIn().fadeOut().fadeIn();
 };
 
-/**
-* Check the uniqueness of proteinId + sampleName with the already created samples or within the shipment
-* If containerId is the same then protein + sampleName + containerId should match
-*
-* @method checkSampleNames
-* @param {Array} sampleNames Array with the sample names from table
-* @param {Array} proteinIds Array with the proteinIds from table
-*/
+
 PuckFormView.prototype.checkSampleNames = function(sampleNames, proteinIds, containerId) {	
-	 var conflicts = [];
-
-	 /** Add a conflict if two samples have got the same name and the same proteinId within the shipment */
-	 var samples = [];
-	 for(var i=0; i < sampleNames.length; i++){		
-		 samples.push({name : sampleNames[i], proteinId: proteinIds[i]});
-	 }
-
-	 for(var i=0; i < sampleNames.length; i++){		
-		var sameSampleName = (_.filter(samples, { 'name': samples[i].name, 'proteinId': samples[i].proteinId }));
-		if (sameSampleName.length > 1){			
-			conflicts = conflicts.concat(sameSampleName[0].name);
-			break;
-		}
-	 }
-	 
-	 for(var i=0; i < sampleNames.length; i++){		
-		 var conflict = _.find(this.proposalSamples, {BLSample_name:  sampleNames[i], Protein_proteinId:  proteinIds[i] });
-		 if (conflict){
-			 /** Are the same samples, same container Id? */
-			 if (conflict.Container_containerId != containerId){			 
-			 	conflicts.push(sampleNames[i]);
-			 }
-		 }
-	 }
-	
-	 return conflicts;
+	 return new PuckValidator().checkSampleNames(sampleNames, proteinIds, containerId, this.proposalSamples);
 	
 };
 
@@ -324,12 +294,11 @@ PuckFormView.prototype.checkSampleNames = function(sampleNames, proteinIds, cont
 * @method save
 * @param {Boolean} returnToShipment True if you want to return to shipment after the save
 */
-PuckFormView.prototype.save = function(returnToShipment) {	
+PuckFormView.prototype.save = function(returnToShipment) {		
 	var _this = this;
 
 	var puck = this.containerSpreadSheet.getPuck();
-
-	
+		
 	/** Check if all samples have got a name */
 	if (puck.sampleVOs && puck.sampleVOs.length > 0) {
 		var sampleNames = _.map(puck.sampleVOs,"name");
@@ -386,7 +355,7 @@ PuckFormView.prototype.save = function(returnToShipment) {
 			_this.panel.setLoading(false);
 			if (returnToShipment){
 				location.href = "#/shipping/" + _this.shippingId + "/main";
-			} else {
+			} else {				
 				_this.load(_this.containerId, _this.shippingId);
 			}
 		};

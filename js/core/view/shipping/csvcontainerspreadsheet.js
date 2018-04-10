@@ -24,17 +24,7 @@ function CSVContainerSpreadSheet(args){
 	/** Array of arrays with the list of crystal form by protein acronym */
     this.crystalFormList = {};
 
-    this.renderCrystalFormColumn = false;
-
-    if (args != null) {
-		if (args.renderCrystalFormColumn != null) {
-			this.renderCrystalFormColumn = args.renderCrystalFormColumn;
-		}
-	}
-
-    this.crystalInfoToIdMap = {};
-
-	this.crystalFormIndex = -1;
+  	this.crystalFormIndex = -1;
 	// this.unitCellIndex = -1;
 	this.spaceGroupIndex = -1;
 	
@@ -53,7 +43,7 @@ function CSVContainerSpreadSheet(args){
 	/** Controlled list of values */
 	this.containerTypeControlledList = [
 											{ name:"Unipuck", capacity: 16 },
-											{ name:"Spinepuck", capacity:10 }
+											{ name:"SPINEpuck", capacity:10 }
 										];
 	/** dewars names that already exist on this shipment. This object is supposed to be a SET */
 	this.dewarNameControlledList = new Set();
@@ -66,7 +56,14 @@ function CSVContainerSpreadSheet(args){
 	this.PARCELNAME_INDEX = 0;
 	this.CONTAINERNAME_INDEX = 1;
 	this.CONTAINERTYPE_INDEX = 2;
+	this.SAMPLEPOSITION_INDEX = 3;
 	this.PROTEINACRONYM_INDEX = 4;
+	this.SAMPLENAME_INDEX = 5;
+
+	/** Validation errors */
+	this.errors = this.resetErrors();
+
+	
 }
 
 CSVContainerSpreadSheet.prototype.getPanel = SpreadSheet.prototype.getPanel;
@@ -86,32 +83,126 @@ CSVContainerSpreadSheet.prototype.emptyRow  = SpreadSheet.prototype.emptyRow;
 CSVContainerSpreadSheet.prototype.parseTableData  = ContainerSpreadSheet.prototype.parseTableData;
 CSVContainerSpreadSheet.prototype.disableAll  = ContainerSpreadSheet.prototype.disableAll;
 
+CSVContainerSpreadSheet.prototype._getContainerTypeControlledListNames = function() {
+	return _.map(this.containerTypeControlledList, "name");
+};
+/**
+* Remove errors produced after validation
+*
+* @method resetErrors
+* @return {Boolean} Return true if data is valid or false otherwise
+*/
+CSVContainerSpreadSheet.prototype.resetErrors = function() {
+	return {
+		INCORRECT_PARCEL_NAME : [],
+		INCORRECT_CONTAINER_NAME : [],
+		INCORRECT_CONTAINER_TYPE : [],
+		INCORRECT_SAMPLE_POSITION : [],
+		INCORRECT_SAMPLE_NAME : []
+	};
+};
+
+/**
+* Remove errors produced after validation
+*
+* @method resetErrors
+* @return {Boolean} Return true if data is valid or false otherwise
+*/
+CSVContainerSpreadSheet.prototype.getErrors = function() {
+	//this.resetErrors();
+	//this.validateData();
+	return this.errors;
+};
+
+
 /**
 * This checks all rows and validate the data
 *
-* @method validateData
-* @return {Boolean} Return true if data is valid or false otherwise
+* @method isDataValid
+* @return {Boolean} isValid Return true if data is valid or false otherwise
 */
-CSVContainerSpreadSheet.prototype.validateData = function() {
+CSVContainerSpreadSheet.prototype.isDataValid = function() {
+	/** Reset errors */
+	this.errors = this.resetErrors();
 	var data = this.spreadSheet.getData();
-	debugger
+	var keySampleName = {};
+	var isValid = true;
 	for (var i = 0; i< data.length; i++){
-		this.validateRow(data[i]);
+		if (this.validateRow(data[i], i) == false){
+			isValid = false;
+		}
+		/** Are protein + sample Names unique */
+		var proteinName = data[i][this.PROTEINACRONYM_INDEX];	
+		var sampleName = data[i][this.SAMPLENAME_INDEX];
+		var key = proteinName + "__" + sampleName;
+		if (keySampleName[key] == null){
+			keySampleName[key] = true;
+		}
+		else{
+			isValid = false;			
+		}
 	}
+	return isValid;
 };
 
 /**
 * This checks all rows and validate the data
 *
 * @method validateData
+* @param {Array} row A row for the handsontable
+* @param {Array} rowIndex Index of the row in the table
 * @return {Boolean} Return true if data is valid or false otherwise
 */
-CSVContainerSpreadSheet.prototype.validateRow = function(row) {	
-	debugger
+CSVContainerSpreadSheet.prototype.validateRow = function(row, rowIndex) {		
 	var parcelName = row[this.PARCELNAME_INDEX];
+	var containerName = row[this.CONTAINERNAME_INDEX];
+	var containerType = row[this.CONTAINERTYPE_INDEX];
+	var samplePosition = row[this.SAMPLEPOSITION_INDEX];
+	var proteinName = row[this.PROTEINACRONYM_INDEX];	
+	var sampleName = row[this.SAMPLENAME_INDEX];	
+
 	if (this.isParcelNameValid(parcelName)){
-		if (this.isContinaer)xx
+		if (this.isContainerNameValid(containerName)){
+			if (this.isContainerTypeValid(containerType)){
+				if (this.isSamplePositionValid(containerType, samplePosition)){
+					if (this.isSampleNameValid(sampleName, proteinName)){
+						return true;
+					}
+					else{
+						this.errors.INCORRECT_SAMPLE_NAME.push({
+							value 		: samplePosition,
+							rowIndex	: rowIndex
+						});
+					}					
+				}
+				else{
+					this.errors.INCORRECT_SAMPLE_POSITION.push({
+						value 		: samplePosition,
+						rowIndex	: rowIndex
+					});
+
+				}
+			}
+			else{				
+				this.errors.INCORRECT_CONTAINER_TYPE.push({
+					value 		: containerType,
+					rowIndex	: rowIndex
+				});
+			}
+		}
+		else{
+			this.errors.INCORRECT_CONTAINER_NAME.push({
+				value 		: containerName,
+				rowIndex	: rowIndex
+			});
+		}
 	}
+	else{				
+		this.errors.INCORRECT_PARCEL_NAME.push({
+			value 		: parcelName,
+			rowIndex	: rowIndex
+		});
+	}	
 	return false;
 };
 
@@ -189,6 +280,13 @@ CSVContainerSpreadSheet.prototype.getProteinByAcronym = function(acronym) {
 	return null;
 };
 
+CSVContainerSpreadSheet.prototype.emptyToNull = function(value) {
+	if (value == ""){
+		return null;
+	}
+	return value;
+
+};
 /**
 * Returns a set of parcels
 *
@@ -198,32 +296,40 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 	var _this = this;
 	function  getDiffrationPlanByRow(row){
 		return {
-			radiationSensivity : row["Radiation Sensitivity"],
-			requiredCompleteness : row["Required Completeness"],
-			requiredMultiplicity : row["Required multiplicity"],
-			forcedSpaceGroup : row["forced"],
-			experimentKind : row["experimentKind"]
+			radiationSensivity 		: _this.emptyToNull(row["Radiation Sensitivity"]),
+			aimedCompleteness 		: _this.emptyToNull(row["Aimed Completeness"]),
+			aimedMultiplicity 		: _this.emptyToNull(row["Aimed Multiplicity"]),
+			aimedResolution 		: _this.emptyToNull(row["Aimed Resolution"]),
+			requiredResolution 		: _this.emptyToNull(row["Required Resolution"]),
+			forcedSpaceGroup 		: _this.emptyToNull(row["forcedSpaceGroup"]),
+			experimentKind 			: _this.emptyToNull(row["experimentKind"]),
+			observedResolution 		: _this.emptyToNull(row["Observed Resolution"]),
+			preferredBeamDiameter 	: _this.emptyToNull(row["Beam Diameter"]),
+			numberOfPositions	 	: _this.emptyToNull(row["Number Of positions"]),
+			axisRange	 			: _this.emptyToNull(row["axisRange"]),
+			
 
-		};
+
+		};		
 	};
 
   
 
-	function  getCrystalByRow(row){
+	function  getCrystalByRow(row){		
 		return {
-			spaceGroup : row["Space Group"],
-			cellA : row["a"],
-			cellB : row["b"],
-			cellC : row["c"],
-			cellAlpha : row["alpha"],
-			cellBeta : row["beta"],
-			cellGamma : row["gamma"],
-			proteinVO : _this.getProteinByAcronym(row["Protein Acronym"])
+			spaceGroup 	: _this.emptyToNull(row["Space Group"]),
+			cellA 		: _this.emptyToNull(row["a"]),
+			cellB 		: _this.emptyToNull(row["b"]),
+			cellC 		: _this.emptyToNull(row["c"]),
+			cellAlpha 	: _this.emptyToNull(row["alpha"]),
+			cellBeta 	: _this.emptyToNull(row["beta"]),
+			cellGamma 	: _this.emptyToNull(row["gamma"]),
+			proteinVO 	: _this.getProteinByAcronym(row["Protein Acronym"])
 		};
 	};
 
 	function getSamplesByContainerRows(rows){
-		var samples3vo = [];
+		var samples3vo = [];		
 		if (rows){
 			for(var i = 0; i< rows.length; i++){
 				samples3vo.push({
@@ -232,6 +338,7 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 					diffractionPlanVO : getDiffrationPlanByRow(rows[i]),
 					crystalVO : getCrystalByRow(rows[i]),				
 					smiles : rows[i]["Smiles"],
+					comments: rows[i]["Comments"]
 
 				});
 			}
@@ -285,7 +392,8 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 			type : 'Dewar',
 			containerVOs : containerVOs
 		});		
-	}	       
+	}	
+	debugger       
 	return dewars3vo;
 };
 
@@ -469,7 +577,10 @@ CSVContainerSpreadSheet.prototype.isSampleNameValid = function(sampleName, prote
 	if (protein){		
 		var conflicts = this.puckValidator.checkSampleNames([sampleName], [protein.proteinId], null, this.proposalSamples);
 		if (conflicts){
-			return false;
+			if (conflicts.length > 0){
+				return false;
+			}
+			return true;
 		}
 		else{
 			return true;
@@ -488,11 +599,12 @@ CSVContainerSpreadSheet.prototype.isSampleNameValid = function(sampleName, prote
  * @return {Boolean} Returns true if name of the container is ok
  */
 CSVContainerSpreadSheet.prototype.isContainerNameValid = function(containerName) {
-	if (_this.containerNameControlledList.has(value)){
+	if (this.containerNameControlledList.has(containerName)){
 		return false;
 	}
 	return true;
 };
+
 
 CSVContainerSpreadSheet.prototype.getHeader = function() {	
     var _this = this;
@@ -512,6 +624,29 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 		td.innerHTML = value;		
 	}
 
+	var numericParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){						
+		try{
+			if ((value == undefined)||(value == "")){		
+				td.innerHTML = value;				
+			}
+			else{				
+				if (isNaN(value)){
+					td.className = 'custom-row-text-required';			
+					td.innerHTML = value;
+				}
+				else{
+					td.innerHTML = parseFloat(value);				
+				}
+			}
+		}	
+		catch(e){
+			td.className = 'custom-row-text-required';			
+			td.innerHTML = value;									
+		}		
+		
+	}
+
+
 	var proteinParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
 		if ((value == undefined)||(value == "")){					
 			td.className = 'custom-row-text-required';			
@@ -527,9 +662,14 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 	}
 
 	var sampleParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
-		/** For testing purposes **/
-		// value =value + 	Math.random();		
-		var proteinName = instance.getSourceDataAtCell(row, _this.PROTEINACRONYM_INDEX);		
+		/** For testing purposes
+		if (value != null){
+			if (value.length < 8){						
+				value =value + 	Math.random();
+				instance.setDataAtCell(row, col, value);
+			}
+		} **/
+		var proteinName = instance.getSourceDataAtCell(row, _this.PROTEINACRONYM_INDEX);				
 		if (!_this.isSampleNameValid(value, proteinName)){					
 			td.className = 'custom-row-text-required';			
 		}
@@ -549,8 +689,8 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 	}
 
     /** Checking containers name */
-	var containerNameParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){	
-			if (!_this.isContainerNameValid(value)){								
+	var containerNameParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){						
+			if (_this.containerNameControlledList.has(value)){
 				td.className = 'custom-row-text-required';
 			}
 			else{			
@@ -567,7 +707,7 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 			td.innerHTML = value;		
 	}
 
-	 var samplePositionParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){			 
+	 var samplePositionParameterRenderer = function(instance, td, row, col, prop, value, cellProperties){			 		 
 		 	var rowContainerType = instance.getSourceDataAtCell(row, _this.CONTAINERTYPE_INDEX);
 			 if (!_this.isSamplePositionValid(rowContainerType, value)){
 				 td.className = 'custom-row-text-required';
@@ -581,12 +721,14 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
             // { text :'', id :'crystalId', column : {width : 100}}, 
             { text : 'Parcel  <br /> Name', 	id: 'parcel', column : {width : 80, renderer: parcelDisplayCell}}, 
 			{ text : 'Container <br /> Name', 	id: 'containerCode', column : {width : 80, renderer: containerNameParameterRenderer}}, 
-			{ text : 'Container <br />Type', 	id: 'containerType', column : {width : 80, renderer: containerTypeParameterRenderer}}, 
+			{ text : 'Container <br />Type', 	id: 'containerType', column : {width : 80, 
+																				type: 'dropdown',
+																				source : this._getContainerTypeControlledListNames(),
+																				renderer: containerTypeParameterRenderer}}, 
 			{ text : '#', 	id: 'position', column : {width : 20, renderer: samplePositionParameterRenderer}},
             { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
                                                                                         width : 80,
-                                                                                        type: 'autocomplete',
-                                                                                        filter: 'true',
+                                                                                        type: 'dropdown',
 																						renderer: proteinParameterRenderer,
                                                                                         source: this.getAcronyms()
                                                                                     }
@@ -595,45 +737,45 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 																		width : 120,
 																	  	renderer: sampleParameterRenderer	
 			}}, 
-            { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},  
-          
+            { text :'Pin <br />Barcode', id : 'Pin BarCode', column : {width : 60}},  
+            { text :'Space <br />group',  id : 'Space Group', column : {
+                                                                        width : 40,  
+                                                                        type: 'dropdown',																																			    
+																		source: _.concat([""], ExtISPyB.spaceGroups)
+                                                                    }}, 
+            { text :'a',  id :'a', column : {width : 25, renderer:numericParameterRenderer}}, 
+			{ text :'b',  id :'b', column : {width :25, renderer:numericParameterRenderer}}, 
+			{ text :'c',  id :'c', column : {width :25, renderer:numericParameterRenderer}}, 
+			{ text :'&alpha;',  id :'alpha', column : {width : 25, renderer:numericParameterRenderer}}, 
+			{ text :'&beta;',  id :'beta', column : {width : 25, renderer:numericParameterRenderer}}, 
+			{ text :'&gamma;',  id :'gamma', column : {width :25, renderer:numericParameterRenderer }}, 
 			
             { text :'Exp.<br /> Type', id : 'experimentKind', column : {
-                                                                        width : 100,  
-                                                                        type: 'autocomplete',
-                                                                        filter: 'true',
-																		renderer: mandatoryParameterRenderer,
-                                                                        source: [ "Default", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
+                                                                        width : 90,  
+                                                                        type: 'dropdown',																		
+                                                                        source: [ "", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
             }, 
-           
-            { text :'Space <br />group',  id : 'Space Group', column : {
-                                                                        width : 70,  
-                                                                        type: 'autocomplete',
-                                                                        filter: 'true',
-																	    renderer: mandatoryParameterRenderer,
+           { text :'Aimed <br />Resolution', id :'Aimed Resolution',column : {width : 60, renderer:numericParameterRenderer}},
+		   { text :'Required <br />Resolution', id :'Required Resolution',column : {width : 60, renderer:numericParameterRenderer}},
+         
+            { text :'Beam <br />Diameter', id :'Beam Diameter',column : {width : 60, renderer:numericParameterRenderer}}, 
+            { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 60, renderer:numericParameterRenderer}},
+			{ text :'Aimed<br /> Multiplicity', id :'Aimed Multiplicity', column : {width : 60, renderer:numericParameterRenderer}}, 
+            { text :'Aimed<br /> Completeness', id :'Aimed Completeness', column : {width : 80, renderer:numericParameterRenderer}},  
+			{ text :'Forced <br /> SPG',  id :'forcedSpaceGroup', column : {
+                                                                        width : 60,  
+                                                                        type: 'dropdown',
 																		source: _.concat([""], ExtISPyB.spaceGroups)
                                                                     }}, 
-            { text :'a',  id :'a', column : {width : 40}}, 
-			{ text :'b',  id :'b', column : {width :40}}, 
-			{ text :'c',  id :'c', column : {width :40}}, 
-			{ text :'&alpha;',  id :'alpha', column : {width : 40}}, 
-			{ text :'&beta;',  id :'beta', column : {width : 40}}, 
-			{ text :'&gamma;',  id :'gamma', column : {width : 40}}, 
-            { text :'Beam <br />Diameter', id :'Pref. Diameter',column : {width : 60}}, 
-            { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 80}}, 
-            { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 80}}, 
+            { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 60, renderer:numericParameterRenderer}}, 
 
-            { text :'Required<br /> multiplicity', id :'Required multiplicity', column : {width : 60}}, 
-            { text :'Required<br /> Completeness', id :'Required Completeness', column : {width : 80}},            
-			{ text :'Forced <br /> SPG',  id :'forced', column : {
-                                                                        width : 70,  
-                                                                        type: 'autocomplete',
-                                                                        filter: 'true',
-																		source: _.concat([""], ExtISPyB.spaceGroups)
-                                                                    }}, 
+                     
+			
 
             { text :'SMILES', id :'Smiles', column : {width : 60}}, 
+			{ text :'Tot Rot. <br />Angle', id :'axisRange',column : {width : 60, renderer:numericParameterRenderer}},
+			{ text :'Observed <br />Resolution', id :'Observed Resolution',column : {width : 60, renderer:numericParameterRenderer}},
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
 

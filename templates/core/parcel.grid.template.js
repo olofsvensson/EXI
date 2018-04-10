@@ -3,17 +3,18 @@
         <div class="panel-heading clearfix">
             <div class="pull-left">
                 <span id="{id}-label" style='font-size:15px;color:black;font-weight:700' >
-                    Content (0 Parcels)
+                   {! Content (0 Parcels) !}
                 </span>
                 <button id="{id}-add-button" type="button" style="margin-left:15px;" class="btn btn-default disabled">
-                    <span class="glyphicon glyphicon-plus-sign"></span> Add
+                    <span class="glyphicon glyphicon-plus-sign"></span> Add Parcel
                 </button>
+
 
                 <button id="{id}-import" type="button" style="margin-left:5px;" class="btn btn-default disabled">                    
                     <span class="glyphicon glyphicon-import"></span> Import from CSV                    
                 </button>
 
-                <button id="{id}-export" type="button" style="margin-left:60px;" class="btn btn-default disabled">
+                <button id="{id}-export" type="button" style="margin-left:5px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-export"></span> Export PDF View
                 </button>
 				<br>
@@ -23,6 +24,7 @@
         
                 
             </div>
+
             
             <div class="pull-right">
                 <ul class="nav nav-tabs" id="{id}-tabs">

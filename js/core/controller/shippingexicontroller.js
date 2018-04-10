@@ -77,12 +77,10 @@ ShippingExiController.prototype.init = function() {
 		});
 
 		Path.map("#/proposal/shipping/nav").to(function() {
-			loadShipmentNavigationList();
-			// EXI.addMainPanel(new ShippingWelcomeMainView());
+			loadShipmentNavigationList();			
 		});
 		
-		Path.map("#/shipping/:shippingId/main").to(function() {
-			
+		Path.map("#/shipping/:shippingId/main").to(function() {			
 			var mainView = new ShippingMainView();
 			EXI.addMainPanel(mainView);
 			mainView.load(this.params['shippingId']);
@@ -106,6 +104,7 @@ ShippingExiController.prototype.init = function() {
 			EXI.addMainPanel(mainView);
 			mainView.load(this.params['containerId'],this.params['sampleId'],this.params['shippingId']);
 		}).enter(this.setPageBackground);
+
 
 		Path.map("#/shipping/:shippingId/import/csv").to(function() {
 			var mainView = new CSVPuckFormView();

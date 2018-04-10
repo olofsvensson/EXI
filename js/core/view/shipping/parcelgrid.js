@@ -7,14 +7,12 @@
 */
 function ParcelGrid(args) {
 	this.id = BUI.id();
-	this.height = 100;
+	this.height = 110;
 	this.width = 100;
 	this.padding = 10;
 	this.btnEditVisible = true;
 	this.btnRemoveVisible = true;
 
-	this.reimbursementId = this.id + "_reimbursement_panel";
-		
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -46,95 +44,13 @@ function ParcelGrid(args) {
 	this.onRemove = new Event(this);
 }
 
-ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
-	return "("+ currentReimbursedDewars +" reimbursed out of " + maxReimbursedDewars +" allowed)";
-};
 
-ParcelGrid.prototype.getReimbursementHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
-	if (maxReimbursedDewars){
-		if (maxReimbursedDewars > 0){
-			return "<span id='" + this.reimbursementId +"' style='color:orange'>" + this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars)+ "</span>"
-		}
-	} 
-	return "";
-};
-
-ParcelGrid.prototype.refreshReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
-	$("#" + this.reimbursementId).html(this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars));
-};
-
-ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {	
-	$("#" + this.id + "-label").html("Content (" + dewars.length + " Parcels " + this.getReimbursementHTML(currentReimbursedDewars, maxReimbursedDewars) + " - " + nSamples + " Samples - " + nMeasured + " Measured )");
-};
-
-ParcelGrid.prototype.getAuthorizedReimbursedDewars = function(sessions) {
-	if (sessions){
-		if (sessions.length > 0){
-			return sessions[0].nbReimbDewars;
-		} 
-	};
-	return 0;
-};
-
-ParcelGrid.prototype.getCurrentReimbursedDewars = function(dewars) {
-	return _.filter(dewars, function(o){ return o.isReimbursed == true}).length;	
-};
-
-ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCollection) {
-	var _this = this;
-	this.shipment = shipment;
-	this.dewars = shipment.dewarVOs;
-	this.hasExportedData = hasExportedData;
-	nSamples = 0;
-	nMeasured = 0;
-	this.maxReimbursedDewars = 0;
-	this.currentReimbursedDewars = 0;
-	if (samples) {
-		nSamples = samples.length;
-		nMeasured = nSamples - withoutCollection.length;
-		this.samples = _.groupBy(samples,"Dewar_dewarId");
-		this.withoutCollection = _.groupBy(withoutCollection,"Dewar_dewarId");
-	};
-	
-	if (shipment){
-		this.maxReimbursedDewars = this.getAuthorizedReimbursedDewars(this.shipment.sessions);
-		this.currentReimbursedDewars = this.getCurrentReimbursedDewars(this.dewars);
-	}
-    
-	this.dewars.sort(function(a, b) {
-		return a.dewarId - b.dewarId;
+/** This disable the Export PDF view button */
+ParcelGrid.prototype.disableExportButton = function() {
+	$("#" + this.id + "-export").removeClass("disabled");
+	$("#" + this.id + "-export").unbind('click').click(function(sender){
+			/** Do nothing */
 	});
-
-	this.displayContentLabel(this.dewars, nSamples, nMeasured, this.currentReimbursedDewars, this.maxReimbursedDewars);
-	$("#" + this.id + "-add-button").removeClass("disabled");
-	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
-		_this.edit();
-	});
-	
-	if (nSamples > 0) {
-		$("#" + this.id + "-export").removeClass("disabled");
-		$("#" + this.id + "-export").unbind('click').click(function(sender){
-			var exportForm = new ExportPDFForm();
-			exportForm.load(_this.shipment);
-			exportForm.show();
-		});
-	}
-	
-	this.fillTab("content", this.dewars);
-
-	/** Disable import from csv button */		
-		if (this.shipment){
-			if (this.shipment.shippingStatus){
-				if (this.shipment.shippingStatus == "processing"){					
-					this.disableImportFromCSVButton();
-				}
-				else{
-					this.enableImportFromCSVButton();
-				}
-			}
-		}
-
-	this.attachCallBackAfterRender();
 };
 
 ParcelGrid.prototype.disableImportFromCSVButton = function() {
@@ -156,13 +72,107 @@ ParcelGrid.prototype.enableImportFromCSVButton = function() {
 
 
 
-ParcelGrid.prototype.fillTab = function (tabName, dewars) {
-	var _this = this;	
+ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {
+	if ((maxReimbursedDewars && maxReimbursedDewars > 0 ) || (currentReimbursedDewars && currentReimbursedDewars > 0 ))	{
+		if (maxReimbursedDewars > currentReimbursedDewars - 1 ){
+			return "<span id='" + this.reimbursementId +"' style='color:green'>" 
+				+ "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed.) </span>"
+		} else {				
+			return "<span id='" + this.reimbursementId +"' style='color:red'>" 
+				+ "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed! Please modify.) </span>"
+		}
+	}
+	return "";
+};
 
+ParcelGrid.prototype.refreshReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
+	$("#" + this.reimbursementId).html(this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars));
+};
+
+ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {	
+	$("#" + this.id + "-label").html("Content (" + dewars.length + " Parcels " + this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars) + " - " + nSamples + " Samples - " + nMeasured + " Measured )");
+};
+
+ParcelGrid.prototype.getAuthorizedReimbursedDewars = function(sessions) {
+	if (sessions){
+		if (sessions.length > 0){
+			return sessions[0].nbReimbDewars;
+		} 
+	};
+	return 0;
+};
+
+ParcelGrid.prototype.getCurrentReimbursedDewars = function(dewars) {
+	return _.filter(dewars, function(o){ return o.isReimbursed == true}).length;	
+};
+
+
+ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCollection) {
+	var _this = this;
+	this.shipment = shipment;
+	this.dewars = shipment.dewarVOs;
+	this.hasExportedData = hasExportedData;
+	var nSamples = 0;
+	var nMeasured = 0;
+	this.maxReimbursedDewars = 0;
+	this.currentReimbursedDewars = 0;
+
+	if (samples) {
+		nSamples = samples.length;
+		nMeasured = nSamples - withoutCollection.length;
+		this.samples = _.groupBy(samples,"Dewar_dewarId");
+		this.withoutCollection = _.groupBy(withoutCollection,"Dewar_dewarId");
+	}
+
+    if (shipment){
+		this.maxReimbursedDewars = this.getAuthorizedReimbursedDewars(this.shipment.sessions);
+		this.currentReimbursedDewars = this.getCurrentReimbursedDewars(this.dewars);
+	}
+
+	this.dewars.sort(function(a, b) {
+		return a.dewarId - b.dewarId;
+	});
+	
+	/** Button Export PDF view */
+	if (nSamples > 0) {
+		this.disableExportButton();
+	}
+
+
+
+    var html = "";    
+	dust.render("parcel.grid.template",{id : this.id, shippingId: _this.shipment.shippingId},function (err,out){		
+		$('#' + _this.id).html(out);
+		_this.fillTab("content", _this.dewars);
+	    _this.attachCallBackAfterRender();
+		/** Button Add Parcel */	
+				
+		_this.displayContentLabel(_this.dewars, nSamples, nMeasured, _this.currentReimbursedDewars, _this.maxReimbursedDewars);
+		/** Add Pacel button */
+		$("#" + _this.id + "-add-button").removeClass("disabled");
+		$("#" + _this.id + "-add-button").unbind('click').click(function(sender){
+			_this.edit();
+		});
+		/** Disable import from csv button */		
+		if (_this.shipment){
+			if (_this.shipment.shippingStatus){
+				if (_this.shipment.shippingStatus == "processing"){					
+					_this.disableImportFromCSVButton();
+				}
+				else{
+					_this.enableImportFromCSVButton();
+				}
+			}
+		}
+	})
+
+
+};
+
+ParcelGrid.prototype.fillTab = function (tabName, dewars) {
+	var _this = this;
 	$("#" + tabName + "-" + this.id).html("");
-	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {
-															// cls 		: 'border-grid',
-															// width 		: this.width,
+	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {															
 															autoScroll	:true,
 															autoHeight 	:true,
 															maxHeight	: this.height,
@@ -190,7 +200,7 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 			shippingId : this.shipment.shippingId,
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,
-			currentTab : tabName,
+			currentTab : tabName
 		});
 		this.parcelPanels[tabName].insert(parcelPanel.getPanel());
 		parcelPanel.load(this.dewars[i],this.shipment,this.samples[this.dewars[i].dewarId],this.withoutCollection[this.dewars[i].dewarId]);
@@ -209,7 +219,7 @@ ParcelGrid.prototype.edit = function(dewar) {
 		width : 600,
 		modal : true,
 		layout : 'fit',
-		items : [ caseForm.getPanel(dewar, true) ],
+		items : [ caseForm.getPanel(dewar) ],
 		listeners : {
 			afterrender : function(component, eOpts) {
 				if (_this.puck != null) {
@@ -244,24 +254,14 @@ ParcelGrid.prototype.edit = function(dewar) {
 	window.show();
 };
 
-ParcelGrid.prototype.getPanel = function() {
-
-	var html = "";
-
-	dust.render("parcel.grid.template",{id : this.id},function (err,out){
-		html = out;
-	})
-
+ParcelGrid.prototype.getPanel = function() {	
 	this.panel =  Ext.create('Ext.panel.Panel', {
-		layout : 'fit',
-		// cls	: 'overflowed',
+		layout : 'fit',		
 		items : {
-					// cls	: 'border-grid',
-					html : '<div id="' + this.id + '">' + html + '</div>',
-					// width : this.width,
+					
+					html : '<div id="' + this.id + '"></div>',				
 					autoScroll:false,
-					autoHeight :true,
-					// maxHeight: this.height,
+					autoHeight :true,					
 					padding : this.padding
 				}
 	});
