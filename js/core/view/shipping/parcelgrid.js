@@ -122,8 +122,39 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 	
 	this.fillTab("content", this.dewars);
 
+	/** Disable import from csv button */		
+		if (this.shipment){
+			if (this.shipment.shippingStatus){
+				if (this.shipment.shippingStatus == "processing"){					
+					this.disableImportFromCSVButton();
+				}
+				else{
+					this.enableImportFromCSVButton();
+				}
+			}
+		}
+
 	this.attachCallBackAfterRender();
 };
+
+ParcelGrid.prototype.disableImportFromCSVButton = function() {
+	$("#" + this.id + "-import").addClass("disabled");
+	$("#" + this.id + "-import").unbind('click').click(function(sender){			
+	});
+};
+
+ParcelGrid.prototype.enableImportFromCSVButton = function() {
+	var _this = this;
+	/** Only for managers */
+	if (EXI.credentialManager.getCredentials()[0].isManager()){
+		$("#" + this.id + "-import").removeClass("disabled");
+		$("#" + this.id + "-import").bind('click').click(function(sender){			
+			window.open('#/shipping/' + _this.shipment.shippingId +'/import/csv', '_blank');
+		});
+	}
+};
+
+
 
 ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 	var _this = this;	

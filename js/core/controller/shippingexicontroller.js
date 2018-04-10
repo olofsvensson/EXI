@@ -107,9 +107,10 @@ ShippingExiController.prototype.init = function() {
 			mainView.load(this.params['containerId'],this.params['sampleId'],this.params['shippingId']);
 		}).enter(this.setPageBackground);
 
-		// Path.map("#/shipping/edv").to(function() {
-		// 	var mainView = new ElectronDensityViewer();
-		// 	EXI.addMainPanel(mainView);
-		// }).enter(this.setPageBackground);
+		Path.map("#/shipping/:shippingId/import/csv").to(function() {
+			var mainView = new CSVPuckFormView();
+			EXI.addMainPanel(mainView);
+			mainView.load(this.params['shippingId']);
+		}).enter(this.setPageBackground);
 
 };

@@ -8,12 +8,17 @@
                 <button id="{id}-add-button" type="button" style="margin-left:15px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-plus-sign"></span> Add
                 </button>
+
+                <button id="{id}-import" type="button" style="margin-left:5px;" class="btn btn-default disabled">                    
+                    <span class="glyphicon glyphicon-import"></span> Import from CSV                    
+                </button>
+
                 <button id="{id}-export" type="button" style="margin-left:60px;" class="btn btn-default disabled">
                     <span class="glyphicon glyphicon-export"></span> Export PDF View
                 </button>
 				<br>
             	<span id="{id}-label2" style='font-size:12px;' >
-                    
+                     
                 </span>
         
                 
