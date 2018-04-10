@@ -1186,7 +1186,7 @@ img.small {
 
 .custom-field-text-required .x-form-field{    
     background-color: #faafbe; 
-    background-image: url(http://skirtlesden.com/static/lib/silk/bullet_red.png); 
+    background-image: url(../images/bullet_red.png); 
     background-position: right center; 
     background-repeat:no-repeat;
     color: #090; 
@@ -1195,7 +1195,7 @@ img.small {
 
 .custom-row-text-required {    
     background-color: #faafbe !important; 
-    background-image: url(http://skirtlesden.com/static/lib/silk/bullet_red.png); 
+    background-image: url(../images/bullet_red.png); 
     background-position: right center; 
     background-repeat:no-repeat;
     color: #090; 

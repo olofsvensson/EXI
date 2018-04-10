@@ -30,11 +30,13 @@ function ShipmentForm(args) {
 	this.onSaved = new Event(this);
 	this.refresh = new Event(this);
 }
-ShipmentForm.prototype.getReimbursementContentHTML = function(nbReimbDewars) {	
+
+ShipmentForm.prototype.getReimbursementContentHTML = function(nbReimbDewars) {		
 	return "According to the A-form for this experiment, you are allowed to have " + nbReimbDewars 
 	+ " parcels reimbursed by the ESRF. Please use the Reimburse button to select/unselect the parcels to be reimbursed.";
 };
 
+/*
 ShipmentForm.prototype.getReimbursementHTML = function(nbReimbDewars) {	
 	if (nbReimbDewars){
 		if (nbReimbDewars > 0){
@@ -42,7 +44,7 @@ ShipmentForm.prototype.getReimbursementHTML = function(nbReimbDewars) {
 		}
 	} 
 	return "";
-};
+};*/
 
 ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	var _this = this;
@@ -57,6 +59,7 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	var reimbText = "";
 	var fedexCode = "";
 	var nbReimbDewars = 0;
+	
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			beamlineName = shipment.sessions[0].beamlineName;

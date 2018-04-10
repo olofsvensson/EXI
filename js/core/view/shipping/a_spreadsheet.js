@@ -1,6 +1,6 @@
 function SpreadSheet(args){
 	this.id = BUI.id();
-	this.height = 380;
+    this.height = 440;
 	this.width = 500;
 	this.containerType = "OTHER";
 	
@@ -15,6 +15,9 @@ function SpreadSheet(args){
 		if (args.containerType != null) {
 			this.containerType = args.containerType;
 		}
+		if (args.cells != null){
+			this.cells = args.cells;
+		}
 	}
 
 }
@@ -23,11 +26,11 @@ SpreadSheet.prototype.getPanel = function(){
 	var _this = this;
 	this.panel = Ext.create('Ext.panel.Panel', {
 		layout : 'vbox',
-		height 		: this.height+ 50,
+		//height 		: this.height+ 50,
 		items : [ 
 				  {
-						html 		: '<div  style="overflow: auto;overflow-y: hidden; border:1px solid gray;background-color:white;height:500px;width:' + (_this.width - 20) +'px"; id="' + this.id + '_samples"; ></div>',
-						margin 		: '0 0 20 10',
+						html 		: '<div  style="overflow: auto;overflow-y: hidden; border:1px solid gray;background-color:white;height:100px;"; id="' + this.id + '_samples"; ></div>',
+						//margin 		: '0 0 20 10',
 						height 		: this.height,
 						width 		: this.width,
 						autoScroll 	: true,
@@ -69,51 +72,13 @@ SpreadSheet.prototype.getHeaderText = function() {
 };
 
 
-SpreadSheet.prototype.getColumns = function() {
+SpreadSheet.prototype.getColumns = function() {	
 	return _.map(this.getHeader(), 'column');
 };
 
-/**
-* Returns an array of objects for each row in the grid where at least the protein acronym column is filled
-*
-* @method parseTableData
-*/
-SpreadSheet.prototype.parseTableData = function() {
-	var parsed = [];
-	var data = this.spreadSheet.getData();
-	// var columnIds = this.getHeaderId();
-	if (data != null && data.length > 0){
-		var columnIds = this.getHeaderId();
-		for (var j = 0; j < data.length; j++) {
-			if (data[j].length > 1){
-				var row = {};
-				row["location"] = j + 1;
-				for (var k = 0 ; k < columnIds.length ; k++) {
-					var key = columnIds[k];
-					var value = data[j][this.getColumnIndex(key)];
-					row[key] = value;
-				}
-				if (row["Protein Acronym"]){
-					if (row["Protein Acronym"].length > 0){
-						parsed.push(row);
-					}
-				}
-			}
-		}
-	}
-	/** Curated contains the whole-data rows * */
-	var curated = [];
-	for (var i = 0; i < parsed.length; i++) {
-		if (parsed[i]["Protein Acronym"] != null){
-			curated.push(parsed[i]);
-		}
-	}
-	return curated;
-};
 
-
-SpreadSheet.prototype.load = function(data){
-	var _this = this;
+SpreadSheet.prototype.loadData = function(data){
+	var _this = this;	
 	this.data = data;
 	var container = document.getElementById(this.id + '_samples');
 
@@ -131,11 +96,12 @@ SpreadSheet.prototype.load = function(data){
 
 SpreadSheet.prototype.getData = function () {
 	return this.spreadSheet.getData();
-}
-
+};
+/*
 SpreadSheet.prototype.loadData = function (data) {
 	return this.spreadSheet.loadData(data);
-}
+};
+*/
 
 SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
 	if ((this.getData()[rowIndex][columnIndex] == null)&&(value == "")){
@@ -145,7 +111,13 @@ SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
 		return;
 	}
 	this.spreadSheet.setDataAtCell(rowIndex, columnIndex, value);
-}
+};
+
+SpreadSheet.prototype.disableAll = function () {
+	this.spreadSheet.updateSettings({
+					readOnly: true
+				});
+};
 
 /**
 * Returns the columnIndex given the columnId
@@ -156,7 +128,7 @@ SpreadSheet.prototype.setDataAtCell = function (rowIndex, columnIndex, value) {
 */
 SpreadSheet.prototype.getColumnIndex = function (colId) {
 	return _.findIndex(this.getHeader(),{id :colId});
-}
+};
 
 /**
 * Changes the number of rows in the grid
@@ -178,7 +150,7 @@ SpreadSheet.prototype.updateNumberOfRows = function (n) {
 		}
 		this.spreadSheet.loadData(data);
 	}
-}
+};
 
 /**
 * Sets an empty value for all the cells in a given row
@@ -191,4 +163,4 @@ SpreadSheet.prototype.emptyRow = function (row) {
 	for (var i = 1 ; i < columnIds.length ; i++) {
 		this.setDataAtCell(row,i,"");
 	}
-}
+};

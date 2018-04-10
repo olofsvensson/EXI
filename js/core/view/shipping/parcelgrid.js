@@ -7,14 +7,12 @@
 */
 function ParcelGrid(args) {
 	this.id = BUI.id();
-	this.height = 100;
+	this.height = 110;
 	this.width = 100;
 	this.padding = 10;
 	this.btnEditVisible = true;
 	this.btnRemoveVisible = true;
 
-	this.reimbursementId = this.id + "_reimbursement_panel";
-		
 	if (args != null) {
 		if (args.height != null) {
 			this.height = args.height;
@@ -45,6 +43,34 @@ function ParcelGrid(args) {
 	this.onAdd = new Event(this);
 	this.onRemove = new Event(this);
 }
+
+/** This disable the Export PDF view button */
+ParcelGrid.prototype.disableExportButton = function() {
+	$("#" + this.id + "-export").removeClass("disabled");
+	$("#" + this.id + "-export").unbind('click').click(function(sender){
+			/** Do nothing */
+	});
+};
+
+ParcelGrid.prototype.disableImportFromCSVButton = function() {
+	$("#" + this.id + "-import").addClass("disabled");
+	$("#" + this.id + "-import").unbind('click').click(function(sender){			
+	});
+};
+
+ParcelGrid.prototype.enableImportFromCSVButton = function() {
+	var _this = this;
+	/** Only for managers */
+	if (EXI.credentialManager.getCredentials()[0].isManager()){
+		$("#" + this.id + "-import").removeClass("disabled");
+		$("#" + this.id + "-import").bind('click').click(function(sender){			
+			window.open('#/shipping/' + _this.shipment.shippingId +'/import/csv', '_blank');
+		});
+	}
+};
+
+
+
 
 ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {
 	if ((maxReimbursedDewars && maxReimbursedDewars > 0 ) || (currentReimbursedDewars && currentReimbursedDewars > 0 ))	{
@@ -80,58 +106,73 @@ ParcelGrid.prototype.getCurrentReimbursedDewars = function(dewars) {
 	return _.filter(dewars, function(o){ return o.isReimbursed == true}).length;	
 };
 
+
 ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCollection) {
 	var _this = this;
 	this.shipment = shipment;
 	this.dewars = shipment.dewarVOs;
 	this.hasExportedData = hasExportedData;
-	nSamples = 0;
-	nMeasured = 0;
+	var nSamples = 0;
+	var nMeasured = 0;
 	this.maxReimbursedDewars = 0;
 	this.currentReimbursedDewars = 0;
+
 	if (samples) {
 		nSamples = samples.length;
 		nMeasured = nSamples - withoutCollection.length;
 		this.samples = _.groupBy(samples,"Dewar_dewarId");
 		this.withoutCollection = _.groupBy(withoutCollection,"Dewar_dewarId");
-	};
-	
-	if (shipment){
+	}
+
+    if (shipment){
 		this.maxReimbursedDewars = this.getAuthorizedReimbursedDewars(this.shipment.sessions);
 		this.currentReimbursedDewars = this.getCurrentReimbursedDewars(this.dewars);
 	}
-    
+
 	this.dewars.sort(function(a, b) {
 		return a.dewarId - b.dewarId;
 	});
-
-	this.displayContentLabel(this.dewars, nSamples, nMeasured, this.currentReimbursedDewars, this.maxReimbursedDewars);
-	$("#" + this.id + "-add-button").removeClass("disabled");
-	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
-		_this.edit();
-	});
 	
+	/** Button Export PDF view */
 	if (nSamples > 0) {
-		$("#" + this.id + "-export").removeClass("disabled");
-		$("#" + this.id + "-export").unbind('click').click(function(sender){
-			var exportForm = new ExportPDFForm();
-			exportForm.load(_this.shipment);
-			exportForm.show();
-		});
+		this.disableExportButton();
 	}
-	
-	this.fillTab("content", this.dewars);
 
-	this.attachCallBackAfterRender();
+
+
+    var html = "";    
+	dust.render("parcel.grid.template",{id : this.id, shippingId: _this.shipment.shippingId},function (err,out){		
+		$('#' + _this.id).html(out);
+		_this.fillTab("content", _this.dewars);
+	    _this.attachCallBackAfterRender();
+		/** Button Add Parcel */	
+				
+		_this.displayContentLabel(_this.dewars, nSamples, nMeasured, _this.currentReimbursedDewars, _this.maxReimbursedDewars);
+		/** Add Pacel button */
+		$("#" + _this.id + "-add-button").removeClass("disabled");
+		$("#" + _this.id + "-add-button").unbind('click').click(function(sender){
+			_this.edit();
+		});
+		/** Disable import from csv button */		
+		if (_this.shipment){
+			if (_this.shipment.shippingStatus){
+				if (_this.shipment.shippingStatus == "processing"){					
+					_this.disableImportFromCSVButton();
+				}
+				else{
+					_this.enableImportFromCSVButton();
+				}
+			}
+		}
+	})
+
+
 };
 
 ParcelGrid.prototype.fillTab = function (tabName, dewars) {
-	var _this = this;	
-
+	var _this = this;
 	$("#" + tabName + "-" + this.id).html("");
-	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {
-															// cls 		: 'border-grid',
-															// width 		: this.width,
+	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {															
 															autoScroll	:true,
 															autoHeight 	:true,
 															maxHeight	: this.height,
@@ -159,7 +200,7 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 			shippingId : this.shipment.shippingId,
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,
-			currentTab : tabName,
+			currentTab : tabName
 		});
 		this.parcelPanels[tabName].insert(parcelPanel.getPanel());
 		parcelPanel.load(this.dewars[i],this.shipment,this.samples[this.dewars[i].dewarId],this.withoutCollection[this.dewars[i].dewarId]);
@@ -178,7 +219,7 @@ ParcelGrid.prototype.edit = function(dewar) {
 		width : 600,
 		modal : true,
 		layout : 'fit',
-		items : [ caseForm.getPanel(dewar, true) ],
+		items : [ caseForm.getPanel(dewar) ],
 		listeners : {
 			afterrender : function(component, eOpts) {
 				if (_this.puck != null) {
@@ -213,24 +254,14 @@ ParcelGrid.prototype.edit = function(dewar) {
 	window.show();
 };
 
-ParcelGrid.prototype.getPanel = function() {
-
-	var html = "";
-
-	dust.render("parcel.grid.template",{id : this.id},function (err,out){
-		html = out;
-	})
-
+ParcelGrid.prototype.getPanel = function() {	
 	this.panel =  Ext.create('Ext.panel.Panel', {
-		layout : 'fit',
-		// cls	: 'overflowed',
+		layout : 'fit',		
 		items : {
-					// cls	: 'border-grid',
-					html : '<div id="' + this.id + '">' + html + '</div>',
-					// width : this.width,
+					
+					html : '<div id="' + this.id + '"></div>',				
 					autoScroll:false,
-					autoHeight :true,
-					// maxHeight: this.height,
+					autoHeight :true,					
 					padding : this.padding
 				}
 	});

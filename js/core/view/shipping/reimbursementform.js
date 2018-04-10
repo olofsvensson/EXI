@@ -62,7 +62,6 @@ ReimbForm.prototype.getCurrentReimbursedDewars = function(dewars) {
 
 ReimbForm.prototype.hideReimbursedButton = function(shipment, dewar){
 	this.maxReimb = 0;
-	debugger;
 	if (shipment) {
 		if (shipment.sessions.length > 0){
 			this.maxReimb = shipment.sessions[0].nbReimbDewars;
@@ -87,7 +86,6 @@ ReimbForm.prototype.getBoxLabelText = function(shipment, dewar){
 }
 
 ReimbForm.prototype.getDeclarationText = function(shipment, dewar){
-	
 	if (this.hideReimbursedButton(shipment, dewar) == true){
 		return ' ';
 	}

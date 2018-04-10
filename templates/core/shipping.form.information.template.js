@@ -15,7 +15,7 @@
             </tr>
             <tr>
                 <td class='column_parameter_value'>Status:</td>
-                <td>{shipment.shippingStatus}</td>
+                <td><kbd style='background-color:#207a7a;'>{.shipment.shippingStatus}</kbd></td>
             </tr>
 			 <tr>
                 <td class='column_parameter_value'>Reimb. parcels:</td>

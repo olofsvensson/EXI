@@ -51,9 +51,12 @@ function ContainerParcelPanel(args) {
         if (args.code != null) {
             this.data.code = args.code;
 		}
-        if (args.type != null){
+        if (args.type != null){            
             this.data.puckType = args.type;
             if (args.type == "SPINE Puck") {
+                this.data.puckType = "Spinepuck";
+            }
+            if (args.type == "SPINEpuck") {
                 this.data.puckType = "Spinepuck";
             }
 		}
