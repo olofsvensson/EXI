@@ -33,7 +33,7 @@ function ShipmentForm(args) {
 
 ShipmentForm.prototype.getReimbursementContentHTML = function(nbReimbDewars) {		
 	return "According to the A-form for this experiment, you are allowed to have " + nbReimbDewars 
-	+ " dewars reimbursed by the ESRF. Please use the Reimburse button to select/unselect the dewars to be reimbursed.";
+	+ " parcels reimbursed by the ESRF. Please use the Reimburse button to select/unselect the parcels to be reimbursed.";
 };
 
 /*
@@ -64,9 +64,9 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 		if (shipment.sessions.length > 0){
 			beamlineName = shipment.sessions[0].beamlineName;
 			nbReimbDewars = shipment.sessions[0].nbReimbDewars;
-			startDate = moment(shipment.sessions[0].startDate).format("DD/MM/YYYY");
+			startDate = moment(shipment.sessions[0].startDate).format("DD-MM-YYYY");
 			reimbText = this.getReimbursementContentHTML(nbReimbDewars); //"reimbtext"; //this.getReimbursementHTML(nbReimbDewars);
-			fedexCode = "Your FedEx Reference for this shipment: " + shipment.sessions[0].proposalVO.code + shipment.sessions[0].proposalVO.number + "/" + beamlineName+ "/" + startDate;
+			fedexCode = "Your FedEx Reference for this shipment: " + shipment.sessions[0].proposalVO.code + "-" + shipment.sessions[0].proposalVO.number + "/" + beamlineName+ "/" + startDate;
 		}
 	}
 		

@@ -93,7 +93,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 			_this.showCaseForm();
 		});
 		//debugger
-		if (this.maxReimb > 0) {
+		if (this.maxReimb > 0 || this.dewar.isReimbursed) {
 			$("#" + this.id + "-euro-button").removeClass("disabled");
 			$("#" + this.id + "-euro-button").click(function () {
 				_this.showReimbForm();
@@ -378,14 +378,21 @@ ParcelPanel.prototype.showCaseForm = function() {
 *
 * @method showReimbForm
 */
-ParcelPanel.prototype.showReimbForm = function() {
+ParcelPanel.prototype.showReimbForm = function(shipment) {
 	var _this = this;
-	/** Opens a window with the cas form **/
+	hideReimb = false;//true;
+	if (this.dewar.isReimbursed) {
+		hideReimb = false;
+	}
+	if (this.maxReimbursedDewars > this.currentReimbursedDewars) {
+		hideReimb = false;
+	}
+	/** Opens a window with the reimbursement form **/
 	var reimbForm = new ReimbForm();
 	var window = Ext.create('Ext.window.Window', {
-	    title: 'Reimburse Parcel',
-	    height: 550,
-	    width: 600,
+	    title: '<center>Acknowledge the conditions and set the reimbursement status</center>',
+	    height: 480,
+	    width: 650,
 	    modal : true,
 	    layout: 'fit',
 	    items: [
@@ -394,15 +401,16 @@ ParcelPanel.prototype.showReimbForm = function() {
 	    buttons : [ {
 						text : 'Save',
 						handler : function() {
-							_this.onSavedClick.notify(reimbForm.getDewar());
-							window.close();
-							if (_this.currentTab == "content") {
-                            	_this.renderDewarParameters(_this.dewar);
-							}
-							_this.renderDewarComments(_this.dewar);
-							_this.panel.doLayout();
 							
-						}
+								_this.onSavedClick.notify(reimbForm.getDewar());
+								window.close();
+								if (_this.currentTab == "content") {
+									_this.renderDewarParameters(_this.dewar);
+								}
+								_this.renderDewarComments(_this.dewar);
+								_this.panel.doLayout();
+						},
+						hidden : hideReimb						
 					}, 
 					{
 						text : 'Cancel',

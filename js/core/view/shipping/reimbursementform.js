@@ -86,7 +86,6 @@ ReimbForm.prototype.getBoxLabelText = function(shipment, dewar){
 }
 
 ReimbForm.prototype.getDeclarationText = function(shipment, dewar){
-	debugger
 	if (this.hideReimbursedButton(shipment, dewar) == true){
 		return ' ';
 	}
