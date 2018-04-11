@@ -18,11 +18,7 @@
                     <span class="glyphicon glyphicon-export"></span> Export PDF View
                 </button>
 				<br>
-            	<span id="{id}-label2" style='font-size:12px;' >
-                     
-                </span>
-        
-                
+            	<span id="{id}-label2" style='font-size:12px;' >                   </span>                        
             </div>
 
             

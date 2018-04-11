@@ -31,20 +31,7 @@ function ShipmentForm(args) {
 	this.refresh = new Event(this);
 }
 
-ShipmentForm.prototype.getReimbursementContentHTML = function(nbReimbDewars) {		
-	return "According to the A-form for this experiment, you are allowed to have " + nbReimbDewars 
-	+ " parcels reimbursed by the ESRF. Please use the Reimburse button to select/unselect the parcels to be reimbursed.";
-};
 
-/*
-ShipmentForm.prototype.getReimbursementHTML = function(nbReimbDewars) {	
-	if (nbReimbDewars){
-		if (nbReimbDewars > 0){
-			return  this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars);		
-		}
-	} 
-	return "";
-};*/
 
 ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	var _this = this;
@@ -58,19 +45,22 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	var startDate = "";
 	var reimbText = "";
 	var fedexCode = "";
-	var nbReimbDewars = 0;
-	
+	var nbReimbDewars = 0;	
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			beamlineName = shipment.sessions[0].beamlineName;
 			nbReimbDewars = shipment.sessions[0].nbReimbDewars;
-			startDate = moment(shipment.sessions[0].startDate).format("DD-MM-YYYY");
-			reimbText = this.getReimbursementContentHTML(nbReimbDewars); //"reimbtext"; //this.getReimbursementHTML(nbReimbDewars);
-			fedexCode = "Your FedEx Reference for this shipment: " + shipment.sessions[0].proposalVO.code + "-" + shipment.sessions[0].proposalVO.number + "/" + beamlineName+ "/" + startDate;
+			startDate = moment(shipment.sessions[0].startDate).format("DD-MM-YYYY");			
+			fedexCode = shipment.sessions[0].proposalVO.code + "-" + shipment.sessions[0].proposalVO.number + "/" + beamlineName+ "/" + startDate;
 		}
 	}
 		
-    dust.render("shipping.form.template", {id : this.id, to : toData, from : fromData, beamlineName : beamlineName, startDate : startDate, shipment : shipment, nbReimbDewars : nbReimbDewars, reimbText : reimbText, fedexCode : fedexCode}, function(err, out){
+    dust.render("shipping.form.template", {id : this.id, to : toData, 
+		from : fromData, beamlineName : beamlineName, 
+		startDate : startDate, shipment : shipment, 
+		nbReimbDewars : nbReimbDewars, 
+		reimbText : reimbText, 
+		fedexCode : fedexCode}, function(err, out){
 		html = out;
 	});
 	

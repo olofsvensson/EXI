@@ -133,7 +133,8 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		return a.dewarId - b.dewarId;
 	});
 
-	$("#" + this.id + "-label").html("Content (" + this.dewars.length + " Parcels - " + nSamples + " Samples - " + nMeasured + " Measured)");
+	this.displayContentLabel(this.dewars, nSamples, nMeasured, this.currentReimbursedDewars, this.maxReimbursedDewars);
+	//$("#" + this.id + "-label").html("Content (" + this.dewars.length + " Parcels - " + nSamples + " Samples - " + nMeasured + " Measured)");
 	$("#" + this.id + "-add-button").removeClass("disabled");
 	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
 		_this.edit();
