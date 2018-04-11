@@ -14,7 +14,7 @@ function ReimbForm(args) {
 			this.showTitle = args.showTitle;
 		}
 	}
-	this.fedexAccount = 'fedexAccountNb ';	
+	this.fedexAccount = '252790713 ';	
 	this.fedexCode = 'fedexCode';				
 	this.boxLabel3 = 'I agree, please set this parcel to reimbursed';
 	
@@ -98,14 +98,15 @@ ReimbForm.prototype.getDeclarationText = function(shipment, dewar){
 	boxLabel1 = '<br>By setting this parcel to reimbursed, the labels that will be generated for sending the parcel will use the ESRF FedEx account. '
 	+ '<br>You MUST NOT use this account to ship more than the allowed number of parcels, or any other equipment for this or any other experiment. '
 	+ ' Any abuse of this account will immediately result in your proposal being refused access to the parcel reimbursement procedure, and eventually to the ESRF beamlines. '
-	+ '<br> <br>Please click on the following checkbox if you agree with these conditions and you wish to have this parcel automatically reimbursed by the ESRF. '
 	+ '<br><br>' ;
-	
+		
 	var html = 	boxLabel1 + 'For ESRF reimbursement, you MUST: '
 	+ '<br> * Copy and paste the following information into the FedEx request page'
-	+ '<br> &nbsp;&nbsp; - Account Number : '+ this.fedexAccountNb
+	+ '<br> &nbsp;&nbsp; - Account Number : '+ this.fedexAccount
 	+ '<br> &nbsp;&nbsp; - Your Reference : '+ this.fedexCode
-	+ '<br> * Tick \"the Include a return label\" box.' + '<br><br>' ;
+	+ '<br> * Tick \"the Include a return label\" box.'
+	+ '<br> <br>Please click on the following checkbox if you agree with these conditions and you wish to have this parcel automatically reimbursed by the ESRF. '
+	+ '<br><br>' ;
 	
 	return html;
 }
