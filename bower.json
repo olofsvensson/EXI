@@ -1,6 +1,6 @@
 {
   "name": "exi-ui",
-  "version": "5.4.5",
+  "version": "5.5.0.2",
   "homepage": "https://github.com/ispyb/EXI",
   "description": "Extended ISPyB User Interface",
   "main": "mx/index.html",
