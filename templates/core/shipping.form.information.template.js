@@ -1,5 +1,5 @@
 <div class="form-group row" style="margin:0px">
-   <div class="col-md-2" style="padding:0px">
+   <div class="col-md-3" style="padding:0px">
       <table class="table">
          <tr>
             <td>Name</td>
@@ -23,7 +23,14 @@
          </tr>
       </table>
    </div>
-   <div class="col-md-5" style="margin-left:10px">
+    <div class="col-md-2" >
+    <a id="{id}-send-button" class="btn btn-md enabled">
+      <span class="glyphicon glyphicon-plane"></span> 
+      <button class="btn btn-primary btn-md" style="margin-left:10px;height:40px;" >Send shipment to ESRF</button>
+      </a>
+   </div>
+
+   <div class="col-md-3" style="margin-left:10px">
       <div class="form-group row" style="margin:5px">
          <label class="col-md-3 col-form-label " ><b>Comments:</b></label>
          <textarea  class="col-md-9" rows="2" disabled>{shipment.comments}</textarea >
@@ -36,22 +43,28 @@
    </div>
 </div>
 
-{@gt key=nbReimbDewars value=0}
-    <div class="alert alert-warning">
-         According to the A-form for this experiment, you are allowed to have <strong> {.nbReimbDewars}  parcels reimbursed by the ESRF</strong>. Please use the Reimburse button to select/unselect the parcels to be reimbursed. 
+
+<div class="form-group row">
+   
+   
+   <div class="col-md-12" >
+    {@gt key=nbReimbDewars value=0}
+        <div class="alert alert-warning">
+             According to the A-form, you are allowed to have <strong> {.nbReimbDewars}  parcels reimbursed by the ESRF</strong>. Please use the Reimburse button to select/unselect the parcels to be reimbursed. 
+        </div>
+    {/gt}
     </div>
- {/gt}
+</div>
 
-
-<div class="form-group row" style="margin:0px">
-   <div class="col-md-2" style="margin-left:10px">
+<div class="form-group row">
+   <div class="col-md-3" >
       <table class="table">
          <tr>
             <td>From</td>
             <td class='column_parameter_value'>{.shipment.sendingLabContactVO.cardName}</td>
          </tr>
          <tr>
-            <td>Return address:s</td>
+            <td>Return address</td>
             <td class='column_parameter_value'>
                 {?shipment.returnLabContactVO} 
                     {shipment.returnLabContactVO.cardName}
@@ -66,17 +79,17 @@
    <div class="col-md-2" style="margin-left:10px">
       <table class="table">
          <tr>
+         <tr>
             <td>Courier company</td>
             <td class='column_parameter_value'>{.shipment.returnLabContactVO.defaultCourrierCompany}</td>
          </tr>
-         <tr>
             <td>Billing Reference</td>
             <td class='column_parameter_value'>{.shipment.returnLabContactVO.billingReference}</td>
          </tr>
-      </table>
+      </table> 
    </div>
-
-   <div class="col-md-3" style="margin-left:10px">
+ 
+   <div class="col-md-6" style="margin-left:10px">  
       <table class="table">
          <tr>
             <td>Allowed Reimb. parcels</td>
