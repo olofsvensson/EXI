@@ -78,7 +78,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                
 
                /**
-                * This funcitons adds the metrics into the dicctionary and also the PNG
+                * This function adds the metrics into the dictionary and also the PNG
                 */
                function getMetrics(phasingStep){                                                         
                     if (phasingStep.metric){                        
@@ -91,8 +91,12 @@ PhasingGridView.prototype.printHTML = function(target) {
                     } 
                     if (phasingStep.png){                        
                         /** It might happens that there are two PDB like:"159386,159388" */
-                        phasingStep.png = phasingStep.png.split(",")[0];                        
-                        phasingStep.pngURL = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(phasingStep.png);
+                        fileType = phasingStep.fileType.split(",")[0];
+                        /** Exclude other file types than IMAGE */
+                        if (fileType == "IMAGE") {
+                        	phasingStep.png = phasingStep.png.split(",")[0];                        
+                        	phasingStep.pngURL = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(phasingStep.png);
+                        }
                     }                                        
                     phasingStep.spaceGroup = phasingStep.SpaceGroup_spaceGroupShortName; 
                     return (phasingStep);                     
