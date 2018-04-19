@@ -157,7 +157,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     */           
                             var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( steps[z].pdb);                            
                            
-                            if ( steps[0].map != null){
+                            if ( steps[z].map != null){
                                 var mapsArr = steps[z].map.split(",");
                                 if (mapsArr.length == 2){
                                     var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[0]);
