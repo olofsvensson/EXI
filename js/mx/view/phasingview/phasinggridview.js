@@ -89,13 +89,15 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     phasingStep[singleMetric[j].replace(/ /g, '_')] = values[j];                           
                             }
                     } 
-                    if (phasingStep.png){                        
+                    if (phasingStep.png){
                         /** It might happens that there are two PDB like:"159386,159388" */
-                        fileType = phasingStep.fileType.split(",")[0];
-                        /** Exclude other file types than IMAGE */
-                        if (fileType == "IMAGE") {
-                        	phasingStep.png = phasingStep.png.split(",")[0];                        
-                        	phasingStep.pngURL = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(phasingStep.png);
+                        var phasingStepPngs = phasingStep.png.split(",");
+                        var fileTypes = phasingStep.fileType.split(",");
+                        for (var z=0; z < fileTypes.length; z++){
+                            /** Exclude other file types than IMAGE */
+                            if (fileTypes[z] == "IMAGE") {
+                                phasingStep.pngURL = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(phasingStepPngs[z]);
+                            }
                         }
                     }                                        
                     phasingStep.spaceGroup = phasingStep.SpaceGroup_spaceGroupShortName; 
