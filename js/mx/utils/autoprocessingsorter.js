@@ -34,15 +34,26 @@ AutoprocessingRanker.prototype.rank = function(array, spacegroudFieldName){
      }); 
    
     
-     function sortByHighestSymmetry(a, b) {         
-        var spaceGroupA = a[spacegroudFieldName].replace(/\s/g, "");        
+     function sortByHighestSymmetry(a, b) {
+        var spaceGroupA = a[spacegroudFieldName].replace(/\s/g, "");
         var spaceGroupB = b[spacegroudFieldName].replace(/\s/g, "");
-        
-        if ( _.indexOf(ExtISPyB.spaceGroups, spaceGroupA) ==  _.indexOf(ExtISPyB.spaceGroups, spaceGroupB)){                          
+
+        indexOfSpaceGroupA = _.indexOf(ExtISPyB.spaceGroups, spaceGroupA)
+        if (indexOfSpaceGroupA == -1) {
+            /** If not found check with long name */
+            indexOfSpaceGroupA = _.indexOf(ExtISPyB.spaceGroupLongNames, spaceGroupA)
+        }
+
+        indexOfSpaceGroupB = _.indexOf(ExtISPyB.spaceGroups, spaceGroupB)
+        if (indexOfSpaceGroupB == -1) {
+            indexOfSpaceGroupB = _.indexOf(ExtISPyB.spaceGroupLongNames, spaceGroupB)
+        }
+
+        if ( indexOfSpaceGroupA == indexOfSpaceGroupB ){
             return ( parseFloat(a.innerShell.rMerge) -  parseFloat(b.innerShell.rMerge));
         }
-        return _.indexOf(ExtISPyB.spaceGroups, spaceGroupB) - _.indexOf(ExtISPyB.spaceGroups, spaceGroupA);                           
-       
+        return indexOfSpaceGroupB - indexOfSpaceGroupA;
+
     }
     
     function sortByrMerge(a, b) {                                    
