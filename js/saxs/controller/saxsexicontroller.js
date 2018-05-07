@@ -161,8 +161,7 @@ SAXSExiController.prototype.routeExperiment = function() {
 	
 
 	/** Loading Experiments * */
-	Path.map("#/experiment/:key/:value/main").to(function() {
-		alert("!");
+	Path.map("#/experiment/:key/:value/main").to(function() {		
 		EXI.setLoadingMainPanel();
 		var onSuccess = function(sender, data) {
 			EXI.setLoadingMainPanel(false);

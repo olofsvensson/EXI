@@ -1,4 +1,4 @@
-function SamplePlateGroupWidget(args){
+function CollectedSamplePlateGroupWidget(args){
 	this.id = BUI.id();
 	this.width = 900;
 	this.height = 300;
@@ -42,10 +42,29 @@ function SamplePlateGroupWidget(args){
 	/** Events * */
 	this.onClick = new Event(this);
 	this.onExperimentChanged = new Event(this);
+
+	this.plateGroup = [{
+				type: 'Deep Well',
+				rowCount : 8,
+				columnCount : 12,
+				id : 'deep-well'
+			},
+			{
+				type: ' 4 x ( 8 + 3 ) Block',
+				rowCount : 4,
+				columnCount : 11,
+				id : 'block'
+			},
+			{
+				type: '96 Well plate',
+				rowCount : 8,
+				columnCount : 12,
+				id : 'well-plate'
+			}];
 }
 
 
-SamplePlateGroupWidget.prototype.drawPlate = function(experiment, plate, targetId){
+CollectedSamplePlateGroupWidget.prototype.drawPlate = function(dataCollections, plate, targetId){
 	var _this = this;
 	
 	var samplePlateWidget = new SamplePlateWidget(
@@ -53,8 +72,9 @@ SamplePlateGroupWidget.prototype.drawPlate = function(experiment, plate, targetI
 				width		: (this.width/3) - 5, 
 				height		: this.heightPlates + 10 , 
 				nodeSize	: this.nodeSize, 
-				fontSize	: 0, 
-				strokeWidth	: 1.5
+				fontSize	: 8, 
+				strokeWidth	: 1.5,
+				enableClick : true
 			});
 
 	if (this.isVerticalLayout()){
@@ -62,49 +82,57 @@ SamplePlateGroupWidget.prototype.drawPlate = function(experiment, plate, targetI
 		samplePlateWidget.height = this.heightPlates - 10;
 	}
 	
-	samplePlateWidget.draw(experiment, plate, targetId );
-	samplePlateWidget.onVertexUp.attach(function(sender, args){
+	samplePlateWidget.draw(dataCollections, plate, targetId );
+
+	samplePlateWidget.onNodeSelected.attach(function(sender, args){
 		_this.onClick.notify(
 				{
 					samplePlate	: args.samplePlate, 
-					row			: args.row, 
-					column		: args.column
-
+					row			: args.node.row, 
+					column		: args.node.column,
+					specimenId 	: args.node.specimenId
 				}
 		);
 	});
 
+	// samplePlateWidget.onVertexUp.attach(function(sender, args){
+	// 	_this.onClick.notify(
+	// 			{
+	// 				samplePlate	: args.samplePlate, 
+	// 				row			: args.row, 
+	// 				column		: args.column
+
+	// 			}
+	// 	);
+	// });
+
 	this.samplePlateWidgets.push(samplePlateWidget);
 };
 
-SamplePlateGroupWidget.prototype.drawPlates = function(experiment){
-	if (experiment){
-		var plateGroups = experiment.getPlateGroups();
-		for ( var i = 0; i < plateGroups.length; i++) {
-			var id = plateGroups[i].plateGroupId;
-			var plates = experiment.getPlatesByPlateGroupId(id);
-			for ( var j = 0; j < plates.length; j++) {
-				var targetId = ('id', this.id + "_" + plates[j].samplePlateId);
-				if (document.getElementById(targetId) != null){
-					this.drawPlate(experiment, plates[j], targetId);
-				}
+CollectedSamplePlateGroupWidget.prototype.drawPlates = function(dataCollections){
+	if (dataCollections){
+		for (var i = 0 ; i < this.plateGroup.length ; i++){
+			var plate = this.plateGroup[i];
+			var targetId = ('id', this.id + "_" + plate.id);
+			if (document.getElementById(targetId) != null){
+				this.drawPlate(dataCollections, plate, targetId);
 			}
-		} 
+		}
 	}
 };
 
 /*
-SamplePlateGroupWidget.prototype._sortPlates = function(a, b) {
+CollectedSamplePlateGroupWidget.prototype._sortPlates = function(a, b) {
 	return a.slotPositionColumn - b.slotPositionColumn;
 };
 */
 
 /** This returns maxSlotPositionRow and maxSlotPositionColumn to set visually the sample changer layout **/
-SamplePlateGroupWidget.prototype.getDimensions = function(plates) {
+CollectedSamplePlateGroupWidget.prototype.getDimensions = function(sample) {
 	var maxSlotPositionRow = 0;
 	var maxSlotPositionColumn = 0;
 	
-	if (plates != null){
+	if (sample != null){
 		for (var i = 0; i < plates.length; i++) {
 			/** Row **/
 			var slotPositionRow = plates[i].slotPositionRow;
@@ -131,7 +159,7 @@ SamplePlateGroupWidget.prototype.getDimensions = function(plates) {
 };
 
 /** return true or false if the plates are going to be displayed vertically or horizontally **/
-SamplePlateGroupWidget.prototype.isVerticalLayout = function() {
+CollectedSamplePlateGroupWidget.prototype.isVerticalLayout = function() {
 //	var dimensions = this.getDimensions(this.experiment.getSamplePlates())
 //	if (dimensions.maxSlotPositionRow < dimensions.maxSlotPositionColumn){
 //		return false;
@@ -140,7 +168,7 @@ SamplePlateGroupWidget.prototype.isVerticalLayout = function() {
 };
 
 /** This returns a sample plate object based on the position it occupies on the sample plate **/
-SamplePlateGroupWidget.prototype.getPlateBySlotPosition = function(plates, row, column) {
+CollectedSamplePlateGroupWidget.prototype.getPlateBySlotPosition = function(plates, row, column) {
 	if (plates != null){
 		for (var i = 0; i < plates.length; i++) {
 			/** Row **/
@@ -153,12 +181,8 @@ SamplePlateGroupWidget.prototype.getPlateBySlotPosition = function(plates, row, 
 };
 
 /** Returns the html that will be used to display the plates **/
-SamplePlateGroupWidget.prototype.getPlatesContainer = function(experiment){
+CollectedSamplePlateGroupWidget.prototype.getPlatesContainer = function(dataCollections){
 	var plateGroups = [];
-	
-	if (experiment!= null){
-		plateGroups = experiment.getPlateGroups();
-	}
 
 	var div  = document.createElement("div");
 	var table  = document.createElement("table");
@@ -166,35 +190,30 @@ SamplePlateGroupWidget.prototype.getPlatesContainer = function(experiment){
 	table.setAttribute('width', this.width - 30 + 'px');
 	table.setAttribute('height', this.heightPlates + 'px');
 	
-	for ( var i = 0; i < plateGroups.length; i++) {
-		var id = plateGroups[i].plateGroupId;
-		var plates = experiment.getPlatesByPlateGroupId(id);
-		var dimensions = this.getDimensions(plates);
-		
-		for ( var j = 1; j <= dimensions.maxSlotPositionRow; j++) {
-			for ( var k = 1; k <= dimensions.maxSlotPositionColumn; k++) {
+	if (dataCollections!= null){
+		for (var i = 0 ; i < this.plateGroup.length ; i++) {
 			var tr = document.createElement("tr");
-				var plate = this.getPlateBySlotPosition(plates,j,k);
-				var td = document.createElement("td");
-				td.setAttribute('id', this.id + "_" + plate.samplePlateId);
-				td.setAttribute('style', "background-color:#E6E6E6;border-width:1px;border-style:solid;");
-				/** plate Type title * */
-				var divTitle = document.createElement("div");
-				divTitle.setAttribute("class", "menu-title");
-				var text = document.createTextNode(plate.platetype3VO.name);
-				divTitle.appendChild(text);
-				
-				td.appendChild(divTitle);
-				tr.appendChild(td);
-				table.appendChild(tr);
-			}
+			// var plate = this.getPlateBySlotPosition(plates,j,k);
+			var td = document.createElement("td");
+			// td.setAttribute('id', this.id + "_" + plate.samplePlateId);
+			td.setAttribute('id', this.id + "_" + this.plateGroup[i].id);
+			td.setAttribute('style', "background-color:#E6E6E6;border-width:1px;border-style:solid;");
+			/** plate Type title * */
+			var divTitle = document.createElement("div");
+			divTitle.setAttribute("class", "menu-title");
+			var text = document.createTextNode(this.plateGroup[i].type);
+			divTitle.appendChild(text);
+			
+			td.appendChild(divTitle);
+			tr.appendChild(td);
+			table.appendChild(tr);
 		}
-	} 
+	}
 	div.appendChild(table);
 	return div.innerHTML;
 };
 
-SamplePlateGroupWidget.prototype.selectSpecimens = function(specimens){
+CollectedSamplePlateGroupWidget.prototype.selectSpecimens = function(specimens){
 	/** Clear previous selected * */
 	for ( var i = 0; i < this.samplePlateWidgets.length; i++) {
 		this.samplePlateWidgets[i].clearSelection();
@@ -204,12 +223,10 @@ SamplePlateGroupWidget.prototype.selectSpecimens = function(specimens){
 	}
 };
 
-SamplePlateGroupWidget.prototype.selectSpecimen = function(specimen){
-	if (specimen.sampleplateposition3VO != null){
-//		var samplePlateId = specimen.sampleplateposition3VO.samplePlateId;
+CollectedSamplePlateGroupWidget.prototype.selectSpecimen = function(specimen){
+	if (specimen.SamplePlatePosition_samplePlateId != null){
 		for ( var i = 0; i < this.samplePlateWidgets.length; i++) {
-//			var samplePlateId = this.samplePlateWidgets[i].samplePlate.samplePlateId;
-			if ( this.samplePlateWidgets[i].samplePlate.samplePlateId == specimen.sampleplateposition3VO.samplePlateId){
+			if ( this.samplePlateWidgets[i].samplePlate.type == specimen.SamplePlate_name){
 				this.samplePlateWidgets[i].selectSpecimen(specimen);
 				return;
 			}
@@ -217,30 +234,27 @@ SamplePlateGroupWidget.prototype.selectSpecimen = function(specimen){
 	}
 };
 
-SamplePlateGroupWidget.prototype._refreshBbar = function(){
+CollectedSamplePlateGroupWidget.prototype._refreshBbar = function(){
 	if (this.panel != null){
 		this.panel.removeDocked(Ext.getCmp( this.id + 'bbar'));
 		this.panel.addDocked(this.getBbar());
 	}
 };
 
-SamplePlateGroupWidget.prototype.refresh = function(experiment){
-	this.experiment = experiment;
+CollectedSamplePlateGroupWidget.prototype.refresh = function(dataCollections){
+	this.dataCollections = dataCollections;
 	this.samplePlateWidgets = [];
-
 	if (document.getElementById(this.id + "_container") != null){
 		document.getElementById(this.id + "_container").innerHTML = "";
-		document.getElementById(this.id + "_container").innerHTML = this.getPlatesContainer(experiment);
-		this.drawPlates(experiment);
+		document.getElementById(this.id + "_container").innerHTML = this.getPlatesContainer(dataCollections);
+		this.drawPlates(dataCollections);
 	}
 
 	/** We refrsh also the bbar  but it could not exist yet* */
 	this._refreshBbar();	
-	
-
 };
 
-SamplePlateGroupWidget.prototype._getAutoFillButton = function(){
+CollectedSamplePlateGroupWidget.prototype._getAutoFillButton = function(){
 	var _this = this;
 	var item = null;
 	function onButtonClick(){
@@ -295,7 +309,7 @@ SamplePlateGroupWidget.prototype._getAutoFillButton = function(){
 	});
 };
 
-SamplePlateGroupWidget.prototype._getZoomButton = function(){
+CollectedSamplePlateGroupWidget.prototype._getZoomButton = function(){
 	var _this = this;
 	var item = null;
 
@@ -361,7 +375,7 @@ SamplePlateGroupWidget.prototype._getZoomButton = function(){
 };
 
 
-SamplePlateGroupWidget.prototype._getEmptyButton = function(){
+CollectedSamplePlateGroupWidget.prototype._getEmptyButton = function(){
 	var _this = this;
 	var item = null;
 	function onButtonClick(){
@@ -416,7 +430,7 @@ SamplePlateGroupWidget.prototype._getEmptyButton = function(){
 	});
 };
 
-SamplePlateGroupWidget.prototype._getPlateTypes = function(){
+CollectedSamplePlateGroupWidget.prototype._getPlateTypes = function(){
 	var _this = this;
 	var item = null;
 	function onButtonClick(){
@@ -504,8 +518,8 @@ SamplePlateGroupWidget.prototype._getPlateTypes = function(){
 	});
 };
 
-SamplePlateGroupWidget.prototype.getBbar = function(experiment){
-	var _this = this;	
+CollectedSamplePlateGroupWidget.prototype.getBbar = function(experiment){
+	var _this = this;
 	if (this.bbar){
 		return  Ext.create('Ext.toolbar.Toolbar', {
 			id	: _this.id + 'bbar',
@@ -523,7 +537,7 @@ SamplePlateGroupWidget.prototype.getBbar = function(experiment){
 	return null;
 };
 
-SamplePlateGroupWidget.prototype.getPanel = function(){
+CollectedSamplePlateGroupWidget.prototype.getPanel = function(){
 	var _this = this;
 	
 	var id = this.id + "_container"; 
@@ -543,7 +557,7 @@ SamplePlateGroupWidget.prototype.getPanel = function(){
 					   ]
 	});
 
-	this.panel.on("afterrender", function(){		
+	this.panel.on("afterrender", function(){
 		document.getElementById(id).innerHTML = _this.getPlatesContainer(_this.experiment);
 		_this.drawPlates(_this.experiment);
 		_this._refreshBbar();
