@@ -26,6 +26,12 @@ ExperimentSaxsDataAdapter.prototype.getByExperimentId= function(experimentIds){
 	this.get('/{token}/proposal/{proposal}/saxs/experiment/experimentId/{0}/list'.format( [ experimentIds]));
 };
 
+
+ExperimentSaxsDataAdapter.prototype.getDownloadExperimentURL = function(experimentId){
+	return this.getUrl('/{token}/proposal/{proposal}/saxs/experiment/{0}/download'.format( [experimentId]));
+};
+
+
 ExperimentSaxsDataAdapter.prototype.saveExperiment = function(experimentId, name, comments ){
     var url = ('/{token}/proposal/{proposal}/saxs/experiment/{0}/save'.format([experimentId]));
 	this.post(url, {
