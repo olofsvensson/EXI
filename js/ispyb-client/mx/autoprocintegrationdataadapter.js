@@ -111,6 +111,22 @@ AutoProcIntegrationDataAdapter.prototype.getAttachmentUrl= function(autoProcAtta
 };
 
 /**
+* It gets the URL for display a PDF attachement from an autoProcAttachmentId
+* @method getDownloadAttachmentUrl
+*/
+AutoProcIntegrationDataAdapter.prototype.getAttachmentUrlPdf= function(autoProcAttachmentId){
+	return this.getUrl('/{token}/proposal/{proposal}/mx/autoprocintegration/autoprocattachmentid/{0}/getPdf'.format( [autoProcAttachmentId.toString()]));
+};
+
+/**
+* It gets the URL for display an HTML attachement from an autoProcAttachmentId
+* @method getDownloadAttachmentUrl
+*/
+AutoProcIntegrationDataAdapter.prototype.getAttachmentUrlHtml= function(autoProcAttachmentId){
+	return this.getUrl('/{token}/proposal/{proposal}/mx/autoprocintegration/autoprocattachmentid/{0}/getHtml'.format( [autoProcAttachmentId.toString()]));
+};
+
+/**
 * It gets the list of attachments linked to a list of autoProcPrograms id
 * @method getDownloadAttachmentUrl
 */
