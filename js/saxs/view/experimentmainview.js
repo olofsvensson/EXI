@@ -16,13 +16,13 @@ function ExperimentMainView() {
 	});
 
 		
-	/** Specimen Widget contains a specimenGrid and a sampleChangerWidget than can be displayed with are vertical or horizontal layout **/
-	this.specimenWidget = new SpecimenWidget({
+	/** Specimen Widget contains a specimenGrid and a sampleChangerWidget than can be displayed with are vertical or horizontal layout **/	
+	this.specimenWidget = new CollectedSpecimenWidget({
 		height : this.height,
 		width : 1200
 	});
 	
-	this.measurementGrid = new MeasurementGrid();
+	this.measurementGrid = new CollectedMeasurementGrid();
 	
 	this.queueGrid = new OverviewQueueGrid({
 		positionColumnsHidden : true,
