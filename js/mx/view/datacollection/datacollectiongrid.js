@@ -338,7 +338,7 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
              /** Parsing grid squares */
             for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
                 
-                var stats = _.find(data.stats, function(o){return o.dataCollectionId = dataCollectionList[i]});
+                var stats = _.find(data.stats, function(o){return o.dataCollectionId == dataCollectionList[i]});
                 var motionCount =  stats.motionCorrectionCount;
                 var ctfCount =  stats.ctfCorrectionCount;                
                 gridSquares.push({
