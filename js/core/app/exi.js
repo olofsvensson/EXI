@@ -149,7 +149,7 @@ Exi.prototype.appendDataAdapterParameters = function(args) {
 };
 
 
-Exi.prototype.getDataAdapter = function(args) {   
+Exi.prototype.getDataAdapter = function(args) {   	
     var dataAdapter =  new DataAdapterFactory(this.appendDataAdapterParameters(args));       
     return dataAdapter;  	
 };
