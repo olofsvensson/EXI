@@ -27,6 +27,7 @@ SessionSaxsListView.prototype.getRow = function(record){
     record.data.averaged = this.parseStatistics(record.data.measurementAveragedCount, record.data.measurementCount);
     record.data.subtracted = this.parseStatistics(record.data.dataCollectionDoneCount, record.data.dataCollectionCount);
     
+    record.data.downloadURL = EXI.getDataAdapter().saxs.experiment.getDownloadExperimentURL(record.data.experimentId);
     dust.render("sessionsaxslistview.template", record.data, function(err, out){
         	html = out;
      	});

@@ -13,8 +13,17 @@ AutoProcIntegrationAttachmentGrid.prototype.load = function(data) {
 		});	
 
 		/** URL to attachment */
-		_.forEach(data, function(row){row.url = EXI.getDataAdapter().mx.autoproc.getAttachmentUrl(row.autoProcProgramAttachmentId);})
-
+		_.forEach(data, function(row){
+			/** Get the extension of the file name */
+			extension = row.fileName.split(".").pop()
+			if (extension == "pdf") {
+				row.url = EXI.getDataAdapter().mx.autoproc.getAttachmentUrlPdf(row.autoProcProgramAttachmentId);
+			} else if (extension == "html"){
+				row.url = EXI.getDataAdapter().mx.autoproc.getAttachmentUrlHtml(row.autoProcProgramAttachmentId);
+			} else {
+				row.url = EXI.getDataAdapter().mx.autoproc.getAttachmentUrl(row.autoProcProgramAttachmentId);
+			}
+		})
 		var html = "";
 		dust.render("files.autoprocintegrationgrid.template", data, function(err, out) { 			
 			html = out;

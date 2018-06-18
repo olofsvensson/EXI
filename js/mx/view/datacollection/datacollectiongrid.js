@@ -67,16 +67,21 @@ DataCollectionGrid.prototype.getPanel = function (dataCollectionGroup) {
 * @param {Object} data Record with all the information that it is stored in the store
 * @return {Object} return all statistics sorted by best values
 */
-DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
+DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {    
     /** This converts and array of comma separated value in a array */
     function getArrayValues(value) {
         /** It splits every value */
         return _.map(_.trim(value).split(","), function(singleValue) { return _.trim(singleValue); });
     }
 
+    /** This will allow us to check if pipelines has statistics. Failed, running will not have statistics */
+    var autoProcIntegrationIds = getArrayValues(data.autoProcIntegrationId);
+    var anomalous = getArrayValues(data.Autoprocessing_anomalous);        
+    var processingStatus = getArrayValues(data.processingStatus);
+
+    /** These arrays only will get value if there are statistics it means they did not failed */
     var autoProc_spaceGroups = getArrayValues(data.AutoProc_spaceGroups);
     var autoProcIds = getArrayValues(data.autoProcIds);
-    var autoProcIntegrationIds = getArrayValues(data.autoProcIntegrationId);
     var completenessList = getArrayValues(data.completenessList);
     var resolutionsLimitHigh = getArrayValues(data.resolutionsLimitHigh);
     var resolutionsLimitLow = getArrayValues(data.resolutionsLimitLow);
@@ -90,54 +95,60 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
     var cell_beta = getArrayValues(data.Autoprocessing_cell_beta);
     var cell_gamma = getArrayValues(data.Autoprocessing_cell_gamma);
 
-    var anomalous = getArrayValues(data.Autoprocessing_anomalous);
-    
-
-    data = {};
+   
+    var parsed = {};
     /** Returning if no autoprocs */
     if (autoProcIds) {
         if (autoProcIds[0] == "") {
             return [];
         }
     }
-    for (var i = 0; i < autoProcIds.length; i++) {
-        if (data[autoProcIds[i]] == null) {
-            data[autoProcIds[i]] = {
-                autoProcId: autoProcIds[i],
+
+    var nonSuccessProcessing = 0;
+    /** We should skip all processing that are not success: it means failed or running */
+    for (var i = 0; i < processingStatus.length; i++) {                  
+        if (processingStatus[i] != "SUCCESS"){            
+            nonSuccessProcessing = nonSuccessProcessing + 1;
+        }
+        else{
+        var counter = i - nonSuccessProcessing;  
+        if (parsed[autoProcIds[counter]] == null) {
+            parsed[autoProcIds[counter]] = {
+                autoProcId: autoProcIds[counter],
                 autoProcIntegrationId: autoProcIntegrationIds[i],
-                spaceGroup: autoProc_spaceGroups[i],
-                anomalous: anomalous[i]
+                spaceGroup: autoProc_spaceGroups[counter],
+                anomalous: anomalous[i],
+                status :  processingStatus[i]
+
             };
         }
         
-        data[autoProcIds[i]][scalingStatisticsTypes[i]] = ({
-            autoProcId: autoProcIds[i],
-            scalingStatisticsType: scalingStatisticsTypes[i],
-            completeness: Number(completenessList[i]),
-            resolutionsLimitHigh: Number(resolutionsLimitHigh[i]),
-            resolutionsLimitLow: Number(resolutionsLimitLow[i]),
-            rMerge: Number(rMerges[i]),
-            spaceGroup: autoProc_spaceGroups[i],
-            cell_a: cell_a[i],
-            cell_b: cell_b[i],
-            cell_c: cell_c[i],
-            cell_alpha: cell_alpha[i],
-            cell_beta: cell_beta[i],
-            cell_gamma: cell_gamma[i],
-            anomalous : anomalous[i]
-
+        parsed[autoProcIds[counter]][scalingStatisticsTypes[counter]] = ({
+            autoProcId: autoProcIds[counter],
+            scalingStatisticsType: scalingStatisticsTypes[counter],
+            completeness: Number(completenessList[counter]),
+            resolutionsLimitHigh: Number(resolutionsLimitHigh[counter]),
+            resolutionsLimitLow: Number(resolutionsLimitLow[counter]),
+            rMerge: Number(rMerges[counter]),
+            spaceGroup: autoProc_spaceGroups[counter],
+            cell_a: cell_a[counter],
+            cell_b: cell_b[counter],
+            cell_c: cell_c[counter],
+            cell_alpha: cell_alpha[counter],
+            cell_beta: cell_beta[counter],
+            cell_gamma: cell_gamma[counter],
+            anomalous : anomalous[counter]            
         });
-
+        }
     }
     
     /** Convert from map to array */
-    var ids = _.map(data, 'autoProcId');
+    var ids = _.map(parsed, 'autoProcId');
     var result = [];
     for ( i = 0; i < ids.length; i++) {
-        result.push(data[ids[i]]);
+        result.push(parsed[ids[i]]);
     }
-    /** Rank results when anomouls is 0 */
-    
+    /** Rank results when anomouls is 0 */    
     return new AutoprocessingRanker().rank(_.filter(result, {anomalous : '0'}), "spaceGroup");  
     //return new AutoprocessingRanker().rank(result, "spaceGroup");  
 };

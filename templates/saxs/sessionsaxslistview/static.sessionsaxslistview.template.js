@@ -6,7 +6,7 @@
      <kbd style='background-color:#2E9AFE;font-size:12px;'>{.experimentType}</kbd>
    
 {/eq} 
-<a href="#">
+<a href="{.downloadURL}">
     <span class="glyphicon glyphicon-download"></span>
 </a>
 <br />

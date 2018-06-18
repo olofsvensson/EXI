@@ -42,29 +42,10 @@ function SamplePlateGroupWidget(args){
 	/** Events * */
 	this.onClick = new Event(this);
 	this.onExperimentChanged = new Event(this);
-
-	this.plateGroup = [{
-				type: 'Deep Well',
-				rowCount : 8,
-				columnCount : 12,
-				id : 'deep-well'
-			},
-			{
-				type: ' 4 x ( 8 + 3 ) Block',
-				rowCount : 4,
-				columnCount : 11,
-				id : 'block'
-			},
-			{
-				type: '96 Well plate',
-				rowCount : 8,
-				columnCount : 12,
-				id : 'well-plate'
-			}];
 }
 
 
-SamplePlateGroupWidget.prototype.drawPlate = function(dataCollections, plate, targetId){
+SamplePlateGroupWidget.prototype.drawPlate = function(experiment, plate, targetId){
 	var _this = this;
 	
 	var samplePlateWidget = new SamplePlateWidget(
@@ -72,9 +53,8 @@ SamplePlateGroupWidget.prototype.drawPlate = function(dataCollections, plate, ta
 				width		: (this.width/3) - 5, 
 				height		: this.heightPlates + 10 , 
 				nodeSize	: this.nodeSize, 
-				fontSize	: 8, 
-				strokeWidth	: 1.5,
-				enableClick : true
+				fontSize	: 0, 
+				strokeWidth	: 1.5
 			});
 
 	if (this.isVerticalLayout()){
@@ -82,42 +62,34 @@ SamplePlateGroupWidget.prototype.drawPlate = function(dataCollections, plate, ta
 		samplePlateWidget.height = this.heightPlates - 10;
 	}
 	
-	samplePlateWidget.draw(dataCollections, plate, targetId );
-
-	samplePlateWidget.onNodeSelected.attach(function(sender, args){
+	samplePlateWidget.draw(experiment, plate, targetId );
+	samplePlateWidget.onVertexUp.attach(function(sender, args){
 		_this.onClick.notify(
 				{
 					samplePlate	: args.samplePlate, 
-					row			: args.node.row, 
-					column		: args.node.column,
-					specimenId 	: args.node.specimenId
+					row			: args.row, 
+					column		: args.column
+
 				}
 		);
 	});
 
-	// samplePlateWidget.onVertexUp.attach(function(sender, args){
-	// 	_this.onClick.notify(
-	// 			{
-	// 				samplePlate	: args.samplePlate, 
-	// 				row			: args.row, 
-	// 				column		: args.column
-
-	// 			}
-	// 	);
-	// });
-
 	this.samplePlateWidgets.push(samplePlateWidget);
 };
 
-SamplePlateGroupWidget.prototype.drawPlates = function(dataCollections){
-	if (dataCollections){
-		for (var i = 0 ; i < this.plateGroup.length ; i++){
-			var plate = this.plateGroup[i];
-			var targetId = ('id', this.id + "_" + plate.id);
-			if (document.getElementById(targetId) != null){
-				this.drawPlate(dataCollections, plate, targetId);
+SamplePlateGroupWidget.prototype.drawPlates = function(experiment){
+	if (experiment){
+		var plateGroups = experiment.getPlateGroups();
+		for ( var i = 0; i < plateGroups.length; i++) {
+			var id = plateGroups[i].plateGroupId;
+			var plates = experiment.getPlatesByPlateGroupId(id);
+			for ( var j = 0; j < plates.length; j++) {
+				var targetId = ('id', this.id + "_" + plates[j].samplePlateId);
+				if (document.getElementById(targetId) != null){
+					this.drawPlate(experiment, plates[j], targetId);
+				}
 			}
-		}
+		} 
 	}
 };
 
@@ -128,11 +100,11 @@ SamplePlateGroupWidget.prototype._sortPlates = function(a, b) {
 */
 
 /** This returns maxSlotPositionRow and maxSlotPositionColumn to set visually the sample changer layout **/
-SamplePlateGroupWidget.prototype.getDimensions = function(sample) {
+SamplePlateGroupWidget.prototype.getDimensions = function(plates) {
 	var maxSlotPositionRow = 0;
 	var maxSlotPositionColumn = 0;
 	
-	if (sample != null){
+	if (plates != null){
 		for (var i = 0; i < plates.length; i++) {
 			/** Row **/
 			var slotPositionRow = plates[i].slotPositionRow;
@@ -181,8 +153,12 @@ SamplePlateGroupWidget.prototype.getPlateBySlotPosition = function(plates, row, 
 };
 
 /** Returns the html that will be used to display the plates **/
-SamplePlateGroupWidget.prototype.getPlatesContainer = function(dataCollections){
+SamplePlateGroupWidget.prototype.getPlatesContainer = function(experiment){
 	var plateGroups = [];
+	
+	if (experiment!= null){
+		plateGroups = experiment.getPlateGroups();
+	}
 
 	var div  = document.createElement("div");
 	var table  = document.createElement("table");
@@ -190,25 +166,30 @@ SamplePlateGroupWidget.prototype.getPlatesContainer = function(dataCollections){
 	table.setAttribute('width', this.width - 30 + 'px');
 	table.setAttribute('height', this.heightPlates + 'px');
 	
-	if (dataCollections!= null){
-		for (var i = 0 ; i < this.plateGroup.length ; i++) {
+	for ( var i = 0; i < plateGroups.length; i++) {
+		var id = plateGroups[i].plateGroupId;
+		var plates = experiment.getPlatesByPlateGroupId(id);
+		var dimensions = this.getDimensions(plates);
+		
+		for ( var j = 1; j <= dimensions.maxSlotPositionRow; j++) {
+			for ( var k = 1; k <= dimensions.maxSlotPositionColumn; k++) {
 			var tr = document.createElement("tr");
-			// var plate = this.getPlateBySlotPosition(plates,j,k);
-			var td = document.createElement("td");
-			// td.setAttribute('id', this.id + "_" + plate.samplePlateId);
-			td.setAttribute('id', this.id + "_" + this.plateGroup[i].id);
-			td.setAttribute('style', "background-color:#E6E6E6;border-width:1px;border-style:solid;");
-			/** plate Type title * */
-			var divTitle = document.createElement("div");
-			divTitle.setAttribute("class", "menu-title");
-			var text = document.createTextNode(this.plateGroup[i].type);
-			divTitle.appendChild(text);
-			
-			td.appendChild(divTitle);
-			tr.appendChild(td);
-			table.appendChild(tr);
+				var plate = this.getPlateBySlotPosition(plates,j,k);
+				var td = document.createElement("td");
+				td.setAttribute('id', this.id + "_" + plate.samplePlateId);
+				td.setAttribute('style', "background-color:#E6E6E6;border-width:1px;border-style:solid;");
+				/** plate Type title * */
+				var divTitle = document.createElement("div");
+				divTitle.setAttribute("class", "menu-title");
+				var text = document.createTextNode(plate.platetype3VO.name);
+				divTitle.appendChild(text);
+				
+				td.appendChild(divTitle);
+				tr.appendChild(td);
+				table.appendChild(tr);
+			}
 		}
-	}
+	} 
 	div.appendChild(table);
 	return div.innerHTML;
 };
@@ -224,9 +205,11 @@ SamplePlateGroupWidget.prototype.selectSpecimens = function(specimens){
 };
 
 SamplePlateGroupWidget.prototype.selectSpecimen = function(specimen){
-	if (specimen.SamplePlatePosition_samplePlateId != null){
+	if (specimen.sampleplateposition3VO != null){
+//		var samplePlateId = specimen.sampleplateposition3VO.samplePlateId;
 		for ( var i = 0; i < this.samplePlateWidgets.length; i++) {
-			if ( this.samplePlateWidgets[i].samplePlate.type == specimen.SamplePlate_name){
+//			var samplePlateId = this.samplePlateWidgets[i].samplePlate.samplePlateId;
+			if ( this.samplePlateWidgets[i].samplePlate.samplePlateId == specimen.sampleplateposition3VO.samplePlateId){
 				this.samplePlateWidgets[i].selectSpecimen(specimen);
 				return;
 			}
@@ -241,17 +224,20 @@ SamplePlateGroupWidget.prototype._refreshBbar = function(){
 	}
 };
 
-SamplePlateGroupWidget.prototype.refresh = function(dataCollections){
-	this.dataCollections = dataCollections;
+SamplePlateGroupWidget.prototype.refresh = function(experiment){
+	this.experiment = experiment;
 	this.samplePlateWidgets = [];
+
 	if (document.getElementById(this.id + "_container") != null){
 		document.getElementById(this.id + "_container").innerHTML = "";
-		document.getElementById(this.id + "_container").innerHTML = this.getPlatesContainer(dataCollections);
-		this.drawPlates(dataCollections);
+		document.getElementById(this.id + "_container").innerHTML = this.getPlatesContainer(experiment);
+		this.drawPlates(experiment);
 	}
 
 	/** We refrsh also the bbar  but it could not exist yet* */
 	this._refreshBbar();	
+	
+
 };
 
 SamplePlateGroupWidget.prototype._getAutoFillButton = function(){
@@ -519,7 +505,7 @@ SamplePlateGroupWidget.prototype._getPlateTypes = function(){
 };
 
 SamplePlateGroupWidget.prototype.getBbar = function(experiment){
-	var _this = this;
+	var _this = this;	
 	if (this.bbar){
 		return  Ext.create('Ext.toolbar.Toolbar', {
 			id	: _this.id + 'bbar',
@@ -557,7 +543,7 @@ SamplePlateGroupWidget.prototype.getPanel = function(){
 					   ]
 	});
 
-	this.panel.on("afterrender", function(){
+	this.panel.on("afterrender", function(){		
 		document.getElementById(id).innerHTML = _this.getPlatesContainer(_this.experiment);
 		_this.drawPlates(_this.experiment);
 		_this._refreshBbar();

@@ -7,7 +7,7 @@
 */
 function ParcelGrid(args) {
 	this.id = BUI.id();
-	this.height = 100;
+	this.height = 110;
 	this.width = 100;
 	this.padding = 10;
 	this.btnEditVisible = true;
@@ -36,6 +36,7 @@ function ParcelGrid(args) {
 	this.parcelPanels = {};
 	this.samples = [];
 	this.withoutCollection = [];
+	this.fedexCode = "fedexCode" ;
 
 	/** Events **/
 	this.onSuccess = new Event(this);
@@ -43,13 +44,79 @@ function ParcelGrid(args) {
 	this.onRemove = new Event(this);
 }
 
+/** This disable the Export PDF view button */
+ParcelGrid.prototype.disableExportButton = function() {
+	$("#" + this.id + "-export").removeClass("disabled");
+	$("#" + this.id + "-export").unbind('click').click(function(sender){
+			/** Do nothing */
+	});
+};
+
+ParcelGrid.prototype.disableImportFromCSVButton = function() {
+	$("#" + this.id + "-import").addClass("disabled");
+	$("#" + this.id + "-import").unbind('click').click(function(sender){			
+	});
+};
+
+ParcelGrid.prototype.enableImportFromCSVButton = function() {
+	var _this = this;
+	/** Only for managers */
+	if (EXI.credentialManager.getCredentials()[0].isManager()){
+		$("#" + this.id + "-import").removeClass("disabled");
+		$("#" + this.id + "-import").bind('click').click(function(sender){			
+			window.open('#/shipping/' + _this.shipment.shippingId +'/import/csv', '_blank');
+		});
+	}
+};
+
+
+
+
+ParcelGrid.prototype.getReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {
+	if ((maxReimbursedDewars && maxReimbursedDewars > 0 ) || (currentReimbursedDewars && currentReimbursedDewars > 0 ))	{
+		if (maxReimbursedDewars > currentReimbursedDewars - 1 ){
+			return "<span id='" + this.reimbursementId +"' style='color:green'>" 
+				+ "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed.) </span>"
+		} else {				
+			return "<span id='" + this.reimbursementId +"' style='color:red'>" 
+				+ "("+ currentReimbursedDewars +" reimbursed selected out of " + maxReimbursedDewars +" allowed! Please modify.) </span>"
+		}
+	}
+	return "";
+};
+
+ParcelGrid.prototype.refreshReimbursementContentHTML = function(currentReimbursedDewars, maxReimbursedDewars ) {	
+	$("#" + this.reimbursementId).html(this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars));
+};
+
+ParcelGrid.prototype.displayContentLabel = function(dewars,nSamples,nMeasured, currentReimbursedDewars, maxReimbursedDewars ) {	
+	$("#" + this.id + "-label").html("Content (" + dewars.length + " Parcels " + this.getReimbursementContentHTML(currentReimbursedDewars, maxReimbursedDewars) + " - " + nSamples + " Samples - " + nMeasured + " Measured )");
+};
+
+ParcelGrid.prototype.getAuthorizedReimbursedDewars = function(sessions) {
+	if (sessions){
+		if (sessions.length > 0){
+			return sessions[0].nbReimbDewars;
+		} 
+	};
+	return 0;
+};
+
+ParcelGrid.prototype.getCurrentReimbursedDewars = function(dewars) {
+	return _.filter(dewars, function(o){ return o.isReimbursed == true}).length;	
+};
+
+
 ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCollection) {
 	var _this = this;
 	this.shipment = shipment;
 	this.dewars = shipment.dewarVOs;
 	this.hasExportedData = hasExportedData;
-	nSamples = 0;
-	nMeasured = 0;
+	var nSamples = 0;
+	var nMeasured = 0;
+	this.maxReimbursedDewars = 0;
+	this.currentReimbursedDewars = 0;
+
 	if (samples) {
 		nSamples = samples.length;
 		nMeasured = nSamples - withoutCollection.length;
@@ -57,11 +124,17 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		this.withoutCollection = _.groupBy(withoutCollection,"Dewar_dewarId");
 	}
 
+    if (shipment){
+		this.maxReimbursedDewars = this.getAuthorizedReimbursedDewars(this.shipment.sessions);
+		this.currentReimbursedDewars = this.getCurrentReimbursedDewars(this.dewars);
+	}
+
 	this.dewars.sort(function(a, b) {
 		return a.dewarId - b.dewarId;
 	});
 
-	$("#" + this.id + "-label").html("Content (" + this.dewars.length + " Parcels - " + nSamples + " Samples - " + nMeasured + " Measured)");
+	this.displayContentLabel(this.dewars, nSamples, nMeasured, this.currentReimbursedDewars, this.maxReimbursedDewars);
+	//$("#" + this.id + "-label").html("Content (" + this.dewars.length + " Parcels - " + nSamples + " Samples - " + nMeasured + " Measured)");
 	$("#" + this.id + "-add-button").removeClass("disabled");
 	$("#" + this.id + "-add-button").unbind('click').click(function(sender){
 		_this.edit();
@@ -75,17 +148,29 @@ ParcelGrid.prototype.load = function(shipment,hasExportedData,samples,withoutCol
 		});
 	}
 
+
 	this.fillTab("content", this.dewars);
 
 	this.attachCallBackAfterRender();
+
+	/** Disable import from csv button */		
+		if (_this.shipment){
+			if (_this.shipment.shippingStatus){
+				if (_this.shipment.shippingStatus == "processing"){					
+					_this.disableImportFromCSVButton();
+				}
+				else{
+					_this.enableImportFromCSVButton();
+				}
+			}
+		}
+		
 };
 
 ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 	var _this = this;
 	$("#" + tabName + "-" + this.id).html("");
-	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {
-															// cls 		: 'border-grid',
-															// width 		: this.width,
+	this.parcelPanels[tabName] = Ext.create('Ext.panel.Panel', {															
 															autoScroll	:true,
 															autoHeight 	:true,
 															maxHeight	: this.height,
@@ -98,16 +183,18 @@ ParcelGrid.prototype.fillTab = function (tabName, dewars) {
 			dewar["shippingId"] = _this.shipment.shippingId;
 			
 			var onSuccess = function(sender, shipment) {				
-				_this.panel.setLoading(false);
-				_this.panel.doLayout();
-			};			
+				_this.panel.setLoading(false);							
+				_this.refreshReimbursementContentHTML( _this.getCurrentReimbursedDewars(shipment.dewarVOs), _this.getAuthorizedReimbursedDewars(shipment.sessions));
+				_this.currentReimbursedDewars = _this.getCurrentReimbursedDewars(shipment.dewarVOs);
+				_this.panel.doLayout();	
+			};
 			EXI.getDataAdapter({onSuccess : onSuccess}).proposal.dewar.saveDewar(_this.shipment.shippingId, dewar);
     }
 	
 	for ( var i in dewars) {
 		var parcelPanel = new ParcelPanel({
-			height : 90,
-		width : this.panel.getWidth()*0.9,
+			height : 110,
+			width : this.panel.getWidth()*0.9,
 			shippingId : this.shipment.shippingId,
 			shippingStatus : this.shipment.shippingStatus,
 			index : Number(i)+1,

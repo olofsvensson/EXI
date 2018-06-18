@@ -78,7 +78,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                
 
                /**
-                * This funcitons adds the metrics into the dicctionary and also the PNG
+                * This function adds the metrics into the dictionary and also the PNG
                 */
                function getMetrics(phasingStep){                                                         
                     if (phasingStep.metric){                        
@@ -89,10 +89,16 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     phasingStep[singleMetric[j].replace(/ /g, '_')] = values[j];                           
                             }
                     } 
-                    if (phasingStep.png){                        
+                    if (phasingStep.png){
                         /** It might happens that there are two PDB like:"159386,159388" */
-                        phasingStep.png = phasingStep.png.split(",")[0];                        
-                        phasingStep.pngURL = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(phasingStep.png);
+                        var phasingStepPngs = phasingStep.png.split(",");
+                        var fileTypes = phasingStep.fileType.split(",");
+                        for (var z=0; z < fileTypes.length; z++){
+                            /** Exclude other file types than IMAGE */
+                            if (fileTypes[z] == "IMAGE") {
+                                phasingStep.pngURL = EXI.getDataAdapter().mx.phasing.getPhasingFilesByPhasingProgramAttachmentIdAsImage(phasingStepPngs[z]);
+                            }
+                        }
                     }                                        
                     phasingStep.spaceGroup = phasingStep.SpaceGroup_spaceGroupShortName; 
                     return (phasingStep);                     
@@ -153,7 +159,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     */           
                             var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( steps[z].pdb);                            
                            
-                            if ( steps[0].map != null){
+                            if ( steps[z].map != null){
                                 var mapsArr = steps[z].map.split(",");
                                 if (mapsArr.length == 2){
                                     var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[0]);

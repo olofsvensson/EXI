@@ -60,42 +60,45 @@ function SpecimenGrid(args) {
 	this.onSpecimenChanged = new Event();
 }
 
-SpecimenGrid.prototype._prepareData = function(dataCollections) {
+SpecimenGrid.prototype._prepareData = function(experiment) {
 	var data = [];
 
-	for ( var i = 0; i < dataCollections.length; i++) {
-		var sample = dataCollections[i];
-		if (sample.Macromolecule_macromoleculeId != null) {
-			sample.macromolecule = sample.Macromolecule_acronym;
+	var samples = experiment.getSamples();
+	for ( var i = 0; i < samples.length; i++) {
+		var sample = samples[i];
+		if (sample.macromolecule3VO != null) {
+			sample.macromolecule = sample.macromolecule3VO.acronym;
 			sample.exposureTemperature = [];
-			sample.macromoleculeId = sample.Macromolecule_macromoleculeId;
+			sample.macromoleculeId = sample.macromolecule3VO.macromoleculeId;
 		}
 
-		if (sample.SamplePlatePosition_samplePlatePositionId != null) {
-			if (sample.SamplePlatePosition_samplePlateId != null) {
-				sample.samplePlateId = sample.SamplePlatePosition_samplePlateId;
-				sample.rowNumber = sample.SamplePlatePosition_rowNumber;
-				sample.columnNumber = sample.SamplePlatePosition_columnNumber;
-				// sample.plateGroupName = experiment.getSamplePlateById(sample.sampleplateposition3VO.samplePlateId).plategroup3VO.name;
-				sample.samplePlateName = sample.SamplePlate_name;
-				sample.slotPositionColumn = sample.SamplePlate_slotPositionColumn;
+		if (sample.sampleplateposition3VO != null) {
+			if (sample.sampleplateposition3VO.samplePlateId != null) {
+				sample.samplePlateId = sample.sampleplateposition3VO.samplePlateId;
+				sample.rowNumber = sample.sampleplateposition3VO.rowNumber;
+				sample.columnNumber = sample.sampleplateposition3VO.columnNumber;
+				if (experiment.getSamplePlateById(sample.sampleplateposition3VO.samplePlateId).plategroup3VO != null) {
+					sample.plateGroupName = experiment.getSamplePlateById(sample.sampleplateposition3VO.samplePlateId).plategroup3VO.name;
+					sample.samplePlateName = experiment.getSamplePlateById(sample.sampleplateposition3VO.samplePlateId).name + "  [" + sample.plateGroupName + "]";
+					sample.slotPositionColumn = experiment.getSamplePlateById(sample.sampleplateposition3VO.samplePlateId).slotPositionColumn;
+				}
 			}
 		} else {
 			sample.samplePlateName = "Unallocated Specimens";
 		}
 
 		/** For grouping, because sencha has not option for multiple grouping I add a field to your store with a convert function that concatenates these two fields and then group by that field.**/
-		sample.groupIndex = sample.Buffer_bufferId + sample.Macromolecule_macromoleculeId;
-		var macromolecule = EXI.proposalManager.getMacromoleculeById(sample.Macromolecule_macromoleculeId);
+		sample.groupIndex = sample.bufferId + sample.macromoleculeId;
+		var macromolecule = EXI.proposalManager.getMacromoleculeById(sample.macromoleculeId);
 
 		sample.acronym = "Buffers";
 		if (macromolecule != null) {
-			sample.acronym = EXI.proposalManager.getMacromoleculeById(sample.Macromolecule_macromoleculeId).acronym;
+			sample.acronym = EXI.proposalManager.getMacromoleculeById(sample.macromoleculeId).acronym;
 		}
 
-		sample.buffer = EXI.proposalManager.getBufferById(sample.Buffer_bufferId);
+		sample.buffer = experiment.getBufferById(sample.bufferId);
 
-		sample.volumeToLoad = sample.Measurement_volumeToLoad;
+		sample.volumeToLoad = experiment.getVolumeToLoadBySampleId(sample.sampleId);
 		data.push(sample);
 	}
 	return data;
@@ -109,7 +112,7 @@ SpecimenGrid.prototype.selectById = function(specimenId) {
 	this.grid.getSelectionModel().deselectAll();
 	for ( var i = 0; i < this.grid.getStore().data.items.length; i++) {
 		var item = this.grid.getStore().data.items[i].data;
-		if (item.Specimen_specimenId == specimenId) {
+		if (item.specimenId == specimenId) {
 			this.grid.getSelectionModel().select(i);
 		}
 	}
@@ -196,6 +199,7 @@ SpecimenGrid.prototype.getPlugins = function() {
 					var macromoleculeId = e.record.data.macromoleculeId;
 					
 					var onSuccess = (function(sender, specimen) {
+						debugger
 						/** Because macromolecule3VO is fecthed LAZY **/
 						if (macromoleculeId != null) {
 							specimen.macromolecule3VO = EXI.proposalManager.getMacromoleculeById(macromoleculeId);
@@ -287,37 +291,26 @@ SpecimenGrid.prototype.getPanelByExperiment = function(experiment) {
 	return this.getPanel(data);
 };
 
-SpecimenGrid.prototype.refresh = function(dataCollections) {
-	// debugger
-	this.dataCollections = dataCollections;
-	_.map(dataCollections, function(o){ 
-        if(o.Macromolecule_macromoleculeId){
-		    o.acronym = EXI.proposalManager.getMacromoleculeById(o.Macromolecule_macromoleculeId).acronym;
-        } else {
-			o.acronym = "Buffers";
-		}
-		o.groupIndex = o.Buffer_bufferId + o.Macromolecule_macromoleculeId;
-	});
-	// var data = this._prepareData(dataCollections);
-
-	this.store.loadData(dataCollections);
+SpecimenGrid.prototype.refresh = function(experiment) {	
+	this.experiment = experiment;
+	var data = this._prepareData(experiment);
+	this.store.loadData(data);
 };
 
 SpecimenGrid.prototype.getPanel = function() {
-	
 	var _this = this;
 	this.store = Ext.create('Ext.data.Store', {
 		fields : [
-			'Buffer_acronym', 'Buffer_bufferId', 'Measurement_code', 'Macromolecule_acronym', 'acronym', 'Macromolecule_macromoleculeId', 'Specimen_concentration', 'Specimen_volume', 'SamplePlatePosition_samplePlateId',
-			'SamplePlate_slotPositionColumn', 'SamplePlatePosition_rowNumber', 'SamplePlatePosition_columnNumber', 'groupIndex' ],
+			'buffer', 'bufferId', 'code', 'macromolecule', 'acronym', 'macromoleculeId', 'concentration', 'volume', 'samplePlateId',
+			'slotPositionColumn', 'rowNumber', 'columnNumber', 'groupIndex' ],
 		data : [],
 		groupField : 'acronym'
 	});
 	this.store.sort([ {
-		property : 'Specimen_concentration',
+		property : 'concentration',
 		direction : 'ASC'
 	}, {
-		property : 'Buffer_acronym',
+		property : 'buffer',
 		direction : 'ASC'
 	} ]);
 
@@ -326,10 +319,12 @@ SpecimenGrid.prototype.getPanel = function() {
 //		mode : this.selectionMode,
 		listeners : {
 			select : function(sm, record, index, eOpts ) {
+//				debugger
+//				var selected = [];
+//				for ( var i = 0; i < selections.length; i++) {
+//					selected.push(selections[i].data);
+//				}
 				_this.onSelected.notify([record.data]);
-			},
-			deselect : function(sm, record, index, eOpts ) {
-				_this.onSelected.notify([]);
 			}
 		}
 	});
@@ -361,37 +356,43 @@ SpecimenGrid.prototype.getPanel = function() {
 						columns : [
 							{
 								text : '',
-								dataIndex : 'Macromolecule_acronym',
+								dataIndex : 'macromolecule',
 								width : 20,
 								renderer : function(val, y, sample) {
-									var macromoleculeId = sample.data.Macromolecule_macromoleculeId;
+									var macromoleculeId = null;
+									if (sample.data.macromolecule3VO != null) {
+										macromoleculeId = sample.data.macromolecule3VO.macromoleculeId;
+									}
+									else{
+										macromoleculeId = sample.data.macromoleculeId;
+									}
+									
 									if (macromoleculeId == null) return; 
-									// return BUI.getRectangleColorDIV(_this.experiment.macromoleculeColors[macromoleculeId], 10, 10);
-									return BUI.getRectangleColorDIV("red", 10, 10);
+									return BUI.getRectangleColorDIV(_this.experiment.macromoleculeColors[macromoleculeId], 10, 10);
 								}
 							},
 							{
 								text : 'Macromolecule',
-								dataIndex : 'Macromolecule_acronym',
+								dataIndex : 'macromolecule',
 								width : 100
 							},
 							{
 								text : '',
-								dataIndex : 'Buffer_acronym',
+								dataIndex : 'buffer',
 								width : 20,
 								renderer : function(val, y, sample) {
 									var color = "black";
-									if (sample.data.Buffer_bufferId != null) {
-										// if (_this.experiment.getDataCollectionsBySpecimenId(sample.data.Specimen_specimenId)[0] != null){
-										// 	color = _this.experiment.getSpecimenColorByBufferId(_this.experiment.getMeasurementById(_this.experiment.getDataCollectionsBySpecimenId(sample.data.Specimen_specimenId)[0].measurementtodatacollection3VOs[0].measurementId).specimenId);
-										// }
+									if (sample.data.bufferId != null) {
+										if (_this.experiment.getDataCollectionsBySpecimenId(sample.data.specimenId)[0] != null){
+											color = _this.experiment.getSpecimenColorByBufferId(_this.experiment.getMeasurementById(_this.experiment.getDataCollectionsBySpecimenId(sample.data.specimenId)[0].measurementtodatacollection3VOs[0].measurementId).specimenId);
+										}
 										return BUI.getRectangleColorDIV(color, 10, 10);
 									}
 								}
 							}
 							, {
 								text : 'Buffer',
-								dataIndex : 'Buffer_bufferId',
+								dataIndex : 'bufferId',
 								width : 140,
 								editor : BIOSAXS_COMBOMANAGER.getComboBuffers(EXI.proposalManager.getBuffers(), {
 									noLabel : true,
@@ -405,7 +406,7 @@ SpecimenGrid.prototype.getPanel = function() {
 							}, 
 							{
 								text : 'Conc.',
-								dataIndex : 'Specimen_concentration',
+								dataIndex : 'concentration',
 								width : 100,
 								editor : {
 									allowBlank : false
@@ -429,36 +430,35 @@ SpecimenGrid.prototype.getPanel = function() {
 							},
 							{
 								text : 'Vol. Well',
-								dataIndex : 'Specimen_volume',
+								dataIndex : 'volume',
 								width : 70,
 								editor : {
 									allowBlank : true
 								},
 								renderer : function(val, y, sample) {
-									return BUI.formatValuesUnits(sample.data.Specimen_volume, '&#181l', {
+									return BUI.formatValuesUnits(sample.data.volume, '&#181l', {
 										fontSize : 12,
 										decimals : 2,
 										unitsFontSize : this.unitsFontSize
 									});
 								}
 							}, 
-							// {
-							// 	text : 'Position',
-							// 	hidden : true,
-							// 	flex : 1,
-							// 	renderer : function(val, y, sample) {
-							// 		return BUI.getSamplePositionHTML(sample.data, _this.experiment);
-							// 	}
-							// }, 
 							{
+								text : 'Position',
+								hidden : true,
+								flex : 1,
+								renderer : function(val, y, sample) {
+									return BUI.getSamplePositionHTML(sample.data, _this.experiment);
+								}
+							}, {
 								text : 'samplePlateId',
-								dataIndex : 'SamplePlatePosition_samplePlateId',
+								dataIndex : 'samplePlateId',
 								hidden : true
 							}, 
 							{
 								text : 'Plate',
 								hidden : this.isPositionColumnHidden,
-								dataIndex : 'SamplePlate_slotPositionColumn',
+								dataIndex : 'slotPositionColumn',
 								editor : _this._getSlotColumBombo(),
 								flex : 1,
 								renderer : function(val, meta, sample) {
@@ -471,7 +471,7 @@ SpecimenGrid.prototype.getPanel = function() {
 							}, {
 								text : 'Row',
 								hidden : this.isPositionColumnHidden,
-								dataIndex : 'SamplePlatePosition_rowNumber',
+								dataIndex : 'rowNumber',
 								editor : this._getRowCombo(),
 								flex : 1,
 								renderer : function(val, meta, sample) {
@@ -484,7 +484,7 @@ SpecimenGrid.prototype.getPanel = function() {
 							}, {
 								text : 'Well',
 								hidden : this.isPositionColumnHidden,
-								dataIndex : 'SamplePlatePosition_columnNumber',
+								dataIndex : 'columnNumber',
 								editor : this._getColumnCombo(),
 								flex : 1,
 								renderer : function(val, meta, sample) {
@@ -523,9 +523,8 @@ SpecimenGrid.prototype.getPanel = function() {
 							preserveScrollOnRefresh : true,
 							stripeRows : true,
 							getRowClass : function(record) {
-								var specimens = _.filter(_this.dataCollections,{"SamplePlatePosition_rowNumber":record.data.SamplePlatePosition_rowNumber,
-																				"SamplePlatePosition_columnNumber":record.data.SamplePlatePosition_columnNumber,
-																				"SamplePlatePosition_samplePlateId":record.data.SamplePlatePosition_samplePlateId});
+								var specimens = _this.experiment.getSampleByPosition(record.data.samplePlateId, record.data.rowNumber,
+										record.data.columnNumber);
 								if (specimens.length > 1) {
 									return 'red-row';
 

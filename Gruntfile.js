@@ -24,7 +24,7 @@ module.exports = function(grunt) {
                 concat : {
                     prod : {
                         files : {
-
+                            'min/ispyb-client.js' : [ "js/ispyb-client/**/*js" ],
                             'min/exi.js' : [ "js/dust/**/*js", "js/core/**/*js" ],
                             'min/exi.mx.js' : [ "js/mx/**/*js" ],
                             'min/exi.saxs.js' : [ "js/saxs/**/*js" ],
@@ -64,10 +64,10 @@ module.exports = function(grunt) {
                     prod : {
                         options : {},
                         files : {
-                            'min/exi.min.js' : [ 'min/exi.tools.js', 'min/exi.js', 'min/exi.mx.js', 'min/exi.saxs.js', 'min/exi.em.js',
+                            'min/exi.min.js' : ['min/ispyb-client.js', 'min/exi.tools.js', 'min/exi.js', 'min/exi.mx.js', 'min/exi.saxs.js', 'min/exi.em.js',
                                     'min/exi.test.js',
                                     'min/precompiled.templates.min.js' ],
-                            'min/exi.saxs.min.js' : [ 'min/exi.js',
+                            'min/exi.saxs.min.js' : ['min/ispyb-client.js', 'min/exi.tools.js', 'min/exi.js',
                                     'min/exi.saxs.js', 'min/exi.test.js',
                                     'min/precompiled.templates.min.js' ],
                             'min/exi.tracking.min.js' : [ 'min/exi.js',

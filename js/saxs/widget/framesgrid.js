@@ -9,7 +9,7 @@ FramesGrid.prototype.getPanel = function () {
     return {
 		html : '<div id="' + this.id + '"></div>',
 		autoScroll : true
-	}
+	};
 };
 
 FramesGrid.prototype.load = function (frames) {
@@ -64,23 +64,23 @@ FramesGrid.prototype.setClickListeners = function () {
         }
         _this.onSelectionChange.notify(_this.parseSelected());
     });
-}
+};
 
 FramesGrid.prototype.select = function (domId) {
     this.selectedFrames.push(this.getFrameByDomId(domId));
     $("#" + domId).addClass('x-grid-item-selected');
-}
+};
 
 FramesGrid.prototype.deselect = function (domId) {
     var _this = this;
     _.remove(this.selectedFrames,function(o) {return o.domId == domId});
     $("#" + domId).removeClass('x-grid-item-selected');
-}
+};
 
 FramesGrid.prototype.deselectAll = function () {
     this.selectedFrames = [];
     $(".frame-cell-element").removeClass("x-grid-item-selected");
-}
+};
 
 // FramesGrid.prototype.getFileName = function (filePath) {
 //     var withExtension = filePath.substring(filePath.lastIndexOf('/')+1);
@@ -118,4 +118,4 @@ FramesGrid.prototype.parseSelected = function () {
         }
     }
     return parsed;
-}
+};

@@ -51,7 +51,7 @@ TrackingMainMenu.prototype.getShipmentItem = function() {
 		cls : 'ExiSAXSMenuToolBar',
 		icon : '../images/icon/ic_email_black_24dp.png',
 		handler : function(){
-				location.hash = "/proposal/shipping/nav"
+				location.hash = "/proposal/shipping/nav";
 		}
 	};
 };
