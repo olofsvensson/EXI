@@ -2,18 +2,14 @@ function ProteinListMainView() {
 	this.id = BUI.id();
 	
 	var _this = this;
-	 this.layout = 'fit';
-	 this.margin = 10;
-	 this.height = 800;
+	
+	
 	
 }
 
 ProteinListMainView.prototype.getToolbar = function(sessions) {
     var _this = this;
     var items = [];
-    
-    
-
     items.push(
                 {
                     xtype    : 'textfield',
@@ -40,32 +36,51 @@ ProteinListMainView.prototype.getToolbar = function(sessions) {
     });
 };
 
-ProteinListMainView.prototype.getPanel =  function(){
-	this.panel = Ext.create('Ext.panel.Panel', {				
-        tbar : this.getToolbar(),				
-		cls : 'border-grid',
-		//minHeight: 300,                
-        //width : this.width,
-        height : this.height, 
-		flex:1,
-		margin : this.margin,     
-		layout : this.layout,
-		items : [   
-                  {
-                       html : '<div style="overflow: auto;height:100%;" id="' + this.id +'_main"></div>',
-					   margin : 10,
-					   flex:1,
-					   cls : 'border-grid',
-					    height : this.height,
+ProteinListMainView.prototype.getColumns =  function(){
+	return [
+        {
 
-                  }
-           ]			
-	});
-
-	return this.panel;
+            dataIndex: 'dataCollectionGroup',
+            name: 'dataCollectionGroup',
+            flex: 1.5,
+            hidden: false,
+            renderer: function(grid, e, record) {	
+				console.log(record.data)	
+				var html = "";		
+ 
+				dust.render("proteinlistmainview.template", record.data,function(err,out){ 	
+						html = out;						
+    			});   				
+				return "<div  id=" + record.data.proteinId +">" + html +"</div>";
+			}
+	}];
 };
 
-ProteinListMainView.prototype.renderHTML = function(proteins) {              
+
+ProteinListMainView.prototype.getPanel =  function(){
+	this.store = Ext.create('Ext.data.Store', {
+            fields: ["dataCollectionGroup"]
+    });
+
+	var _this = this;
+	
+    this.panel = Ext.create('Ext.grid.Panel', {
+        border: 1,        
+        store: this.store,  
+        id: this.id,    
+		toolbar : this.getToolbar(), 
+        minHeight : 900,
+        disableSelection: true,
+        columns: this.getColumns(),
+        viewConfig: {
+            enableTextSelection: true,
+            stripeRows: false
+        }
+    });  
+    return this.panel;
+};
+
+ProteinListMainView.prototype.parseData = function(proteins) {              
     var _this = this;
 	try{
 	     proteins.sort(function (a, b) {
@@ -74,10 +89,10 @@ ProteinListMainView.prototype.renderHTML = function(proteins) {
 	}
 	catch(e){}
 
-/**
- * data looks like
- * "[60085/ID30B/2017-09-26 01:00:00,60085/ID30B/2017-09-26 01:00:00,...]
- */
+	/**
+	 * data looks like
+	 * "[60085/ID30B/2017-09-26 01:00:00,60085/ID30B/2017-09-26 01:00:00,...]
+	 */
     
 	_.forEach(proteins, function(protein) {
 		/** Sessions */
@@ -110,16 +125,15 @@ ProteinListMainView.prototype.renderHTML = function(proteins) {
 		}
 		
     });
-    dust.render("proteinlistmainview.template", proteins,function(err,out){ 		
-          $('#' + _this.id +'_main').html(out);
-    });      
+   
+	return proteins;   
 };
 
 ProteinListMainView.prototype.load = function(proteins) {
 	var _this = this;
 	this.proteins = proteins;
 	this.panel.setTitle("My Proteins");		
-	this.renderHTML(proteins);
+	this.store.loadData(this.parseData(proteins));
 };
 
 
