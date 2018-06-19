@@ -21,6 +21,7 @@ function ExiMX() {
                                     new BeamlineParameterController(),
 									new SAXSExiController(),
 									new EMDataCollectionController()
+								 
 									
 							],
 		 					headerCssClass : 'mxTitlePanel'
@@ -73,5 +74,6 @@ ExiMX.prototype.getHeader = function(){
 };
 
 ExiMX.prototype.getDataAdapter = function(args){
+	
 	return  new MxDataAdapterFactory(this.appendDataAdapterParameters(args));
 };

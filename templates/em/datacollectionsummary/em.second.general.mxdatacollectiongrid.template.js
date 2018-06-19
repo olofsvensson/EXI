@@ -34,8 +34,8 @@
                   <td>CTF</td>
                   <td>
                      <div class="progress">
-                        {@gte key=motionPercentage value=50}
-                        {@gte key=motionPercentage value=80}                            
+                        {@gte key=ctfPercentage value=50}
+                        {@gte key=ctfPercentage value=80}                            
                         <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.ctfPercentage}" aria-valuemin="0" aria-valuemax="100" style="width:{.ctfPercentage}%">{@decimal key="ctfPercentage" decimals=1}{/decimal}%</div>
                         {:else}
                         <div class="progress-bar progress-bar"   role="progressbar" aria-valuenow="{.ctfPercentage}" aria-valuemin="0" aria-valuemax="100" style="background-color:#f0ad4e;width:{.ctfPercentage}%">{@decimal key="ctfPercentage" decimals=1}{/decimal}%</div>

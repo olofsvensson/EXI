@@ -42,3 +42,17 @@ EmDataCollectionDataAdapter.prototype.getMotionCorrectionThumbnailURL = function
 EmDataCollectionDataAdapter.prototype.geCTFThumbnailURL = function(dataCollectionId, movieId){
    return this.getUrl('/{token}/proposal/{proposal}/em/datacollection/{0}/movie/{1}/ctf/thumbnail'.format([dataCollectionId, movieId]));
 };
+
+
+EmDataCollectionDataAdapter.prototype.getStatsByDataCollectionIds = function(dataCollectionIds){
+    return this.get('/{token}/proposal/{proposal}/em/datacollection/{0}/stats'.format([dataCollectionIds]));
+	
+};
+
+/**
+* @method EmDataCollectionDataAdapter
+*/
+EmDataCollectionDataAdapter.prototype.getDataCollectionViewBySessionId= function(sessionId){
+	 this.get('/{token}/proposal/{proposal}/em/datacollection/session/{0}/list'.format( [sessionId.toString()]));
+};
+
