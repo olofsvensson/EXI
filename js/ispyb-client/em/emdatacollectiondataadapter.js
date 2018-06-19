@@ -49,6 +49,10 @@ EmDataCollectionDataAdapter.prototype.getStatsByDataCollectionIds = function(dat
 	
 };
 
+EmDataCollectionDataAdapter.prototype.getSessionStats = function(sessionId){
+   return this.get('/{token}/proposal/{proposal}/em/session/{0}/stats'.format([sessionId]));
+};
+
 /**
 * @method EmDataCollectionDataAdapter
 */

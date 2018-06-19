@@ -49,6 +49,22 @@
             </tbody>
          </table>
       </div>
-     
+      <div class="col-sm-1" style="text-align:left;">
+         <table class="table">
+            <tr>
+               <td>Voltage</td>
+               <td class='column_parameter_value'>{.voltage}</td>
+            </tr>
+            <tr>
+               <td>Magnification</td>
+               <td class='column_parameter_value'>{.magnification}</td>
+            </tr>
+            <tr>
+               <td>Directory</td>
+               <td class='column_parameter_value'>{.imageDirectory}</td>
+            </tr>
+         </table>
+      </div>
+   </div>
    {/gridSquares}   
 </div>

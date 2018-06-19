@@ -298,8 +298,7 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
        return [];
    }
 
-   function getPercentrage(count, total){
-       debugger
+   function getPercentrage(count, total){       
        try{
        if (count){
            if(total){

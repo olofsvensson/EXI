@@ -53,14 +53,13 @@ EMDataCollectionController.prototype.init = function() {
 
 	Path.map("#/:proposalId/datacollection/session/:sessionId/main").to(function() {	
 			
-		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId']});
+		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId'], technique:'EM'});
 		
 		EXI.addMainPanel(mainView);
         EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
 		
-		var onSuccessProposal = function (sender,proposal) {
-			debugger			
+		var onSuccessProposal = function (sender,proposal) {			
 			if (proposal && proposal.length > 0) {
 				mainView.loadProposal(proposal[0]);
 			}
@@ -74,6 +73,16 @@ EMDataCollectionController.prototype.init = function() {
 		EXI.getDataAdapter({onSuccess : onSuccess}).em.dataCollection.getDataCollectionViewBySessionId(this.params['sessionId']);
 		
         
+		var onSuccess2 = function(sender, data){
+			 mainView.loadEMStats(data);
+    	}
+    	var onError2 = function(sender, data){
+        
+    	}
+    EXI.getDataAdapter({onSuccess:onSuccess2, onError:onError2}).em.dataCollection.getSessionStats(this.params['sessionId']);
+
+
+
 	}).enter(this.setPageBackground);
 
 

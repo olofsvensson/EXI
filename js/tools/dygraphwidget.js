@@ -24,13 +24,7 @@ function DygraphWidget(targetId, args) {
 	this.interactionModel = null;
 	this.labelsDivStyles = null;
 
-	this.ranges = [
-//	               {
-//		start : 100,
-//		end : 200,
-//		color : 'rgb(150,200,255)'
-//	}
-	               ];
+	this.ranges = [         ];
 
 	if (args != null) {
 		if (args.width != null) {
@@ -117,10 +111,10 @@ DygraphWidget.prototype.draw = function(data, colors, labels) {
 		labelsSeparateLines : true,
 		highlightCircleSize : 3,
 		strokeWidth : 1,
+		
 		customBars : this.customBars,
 		colors : colors,
-		//		scaled : this.scaled,
-		//		ranges : this.ranges,
+	
 		xlabel : this.xlabel,
 		ylabel : this.ylabel,
 		showRangeSelector : this.showRangeSelector,
