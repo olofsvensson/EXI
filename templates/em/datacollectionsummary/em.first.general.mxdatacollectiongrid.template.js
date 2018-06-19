@@ -28,15 +28,5 @@
       <td>Scanned Pixel Size</td>
       <td class='column_parameter_value'></td>
    </tr>   
-   
-    <tr>
-        <td>Voltage</td>
-        <td class='column_parameter_value'>{.voltage}</td>
-    </tr>
-    <tr>
-        <td>Magnification</td>
-        <td class='column_parameter_value'>{.magnification}</td>
-    </tr>
-           
-  
+    
 </table>
