@@ -190,6 +190,11 @@ var ExtISPyB ={
          icon : '../images/site/dev.esrf.png',
 		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
          beamlines:{
+                 EM :[
+                   { 
+                      name : "CM01"
+                   }
+            ],
             SAXS:[
 
              

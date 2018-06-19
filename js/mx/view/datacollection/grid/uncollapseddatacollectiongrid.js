@@ -14,6 +14,7 @@ UncollapsedDataCollectionGrid.prototype._getAutoprocessingStatistics = DataColle
 UncollapsedDataCollectionGrid.prototype.getColumns = DataCollectionGrid.prototype.getColumns;
 UncollapsedDataCollectionGrid.prototype.loadMagnifiers = DataCollectionGrid.prototype.loadMagnifiers;
 UncollapsedDataCollectionGrid.prototype.parseEMData = DataCollectionGrid.prototype.parseEMData;
+UncollapsedDataCollectionGrid.prototype.getArray = DataCollectionGrid.prototype.getArray;
 
 /**
 * Loads the store and load the maginifiers

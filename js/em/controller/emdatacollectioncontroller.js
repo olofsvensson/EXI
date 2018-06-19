@@ -36,4 +36,45 @@ EMDataCollectionController.prototype.init = function() {
 		EXI.getDataAdapter({onSuccess : onSuccess}).em.dataCollection.getMoviesDataByDataCollectionId(this.params['datacollectionId']);
 	}).enter(this.setPageBackground);
 
+
+	Path.map("#/em/proposal/:proposal/datacollection/session/:sessionId/main").to(function() {		
+			
+		var redirection = "#/em/datacollection/session/" + this.params['sessionId'] +"/main";				
+		/** Are we logged in yet? */
+		if (EXI.credentialManager.getConnections().length > 0){			
+			ExiGenericController.prototype.redirect( this.params['proposal'], redirection);
+		}
+		else{			
+			ExiGenericController.prototype.authenticateAndRedirect(this.params['proposal'], redirection);
+		}
+
+	}).enter(this.setPageBackground);
+
+
+	Path.map("#/:proposalId/datacollection/session/:sessionId/main").to(function() {	
+			
+		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId']});
+		
+		EXI.addMainPanel(mainView);
+        EXI.hideNavigationPanel();
+		EXI.setLoadingMainPanel(true);
+		
+		var onSuccessProposal = function (sender,proposal) {
+			debugger			
+			if (proposal && proposal.length > 0) {
+				mainView.loadProposal(proposal[0]);
+			}
+		}
+		EXI.getDataAdapter({onSuccess : onSuccessProposal}).proposal.proposal.getProposalBySessionId(this.params['sessionId']);
+
+		var onSuccess = function(sender, data){						
+		    mainView.loadCollections(data);
+		    EXI.setLoadingMainPanel(false);
+		};
+		EXI.getDataAdapter({onSuccess : onSuccess}).em.dataCollection.getDataCollectionViewBySessionId(this.params['sessionId']);
+		
+        
+	}).enter(this.setPageBackground);
+
+
 };
