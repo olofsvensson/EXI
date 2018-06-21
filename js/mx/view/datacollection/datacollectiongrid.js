@@ -336,13 +336,19 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
             
              /** Parsing grid squares */
             for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
-                
+                debugger
                 var stats = _.find(data.stats, function(o){return o.dataCollectionId == dataCollectionList[i]});
-                var motionCount =  stats.motionCorrectionCount;
-                var ctfCount =  stats.ctfCorrectionCount;                
+                var motionCount =  "";
+                var ctfCount =  "";   
+                var movieCount =  "";           
+                if (stats){
+                    var motionCount =  stats.motionCorrectionCount;
+                    var ctfCount =  stats.ctfCorrectionCount;   
+                    var movieCount =  stats.movieCount;           
+                }
                 gridSquares.push({
                     name : i + 1,
-                    movieCount :stats.movieCount,
+                    movieCount :movieCount,
                     motionCorrectionCount : motionCount,
                     ctfCount : ctfCount,
                     dataCollectionId : dataCollectionList[i],
@@ -351,8 +357,8 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
                     magnification : magnificationList[i],
                     voltage : voltageList[i],
                     startTime : startTimeList[i],
-                    motionPercentage : getPercentrage(motionCount, stats.movieCount),
-                    ctfPercentage : getPercentrage(ctfCount, stats.movieCount)
+                    motionPercentage : getPercentrage(motionCount, movieCount),
+                    ctfPercentage : getPercentrage(ctfCount, movieCount)
 
                 });
 
