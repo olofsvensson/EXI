@@ -27,5 +27,6 @@
      <tr>
       <td>Scanned Pixel Size</td>
       <td class='column_parameter_value'></td>
-   </tr>    
+   </tr>   
+    
 </table>

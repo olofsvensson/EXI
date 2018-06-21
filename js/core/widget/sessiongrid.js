@@ -47,7 +47,7 @@ SessionGrid.prototype.getDataCollectionURL = function(session) {
          return "#/saxs/proposal/" + session.Proposal_proposalCode + session.Proposal_ProposalNumber +"/session/nav/" + session.sessionId + "/session";
      } 
       if (EXI.credentialManager.getTechniqueByBeamline(session.beamLineName) == "EM"){
-         return "#/mx/proposal/" + session.Proposal_proposalCode + session.Proposal_ProposalNumber +"/datacollection/session/" + session.sessionId + "/main";     
+         return "#/em/proposal/" + session.Proposal_proposalCode + session.Proposal_ProposalNumber +"/datacollection/session/" + session.sessionId + "/main";     
      }           
      return "#/mx/proposal/" + session.Proposal_proposalCode + session.Proposal_ProposalNumber +"/datacollection/session/" + session.sessionId + "/main";     
 };

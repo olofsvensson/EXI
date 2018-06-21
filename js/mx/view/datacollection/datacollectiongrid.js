@@ -251,14 +251,18 @@ DataCollectionGrid.prototype.getColumns = function() {
                     data.workflows = [];
                 }
                 
-                /** EM technique */
-                
+                /** EM technique */                
                 data = _this.parseEMData(record.data);
 
                 dust.render(_this.template, data, function(err, out) {                                                                                           
                     html = html + out;
                 });
                 
+
+                /** If EM data we need to retrieve the statistics separately for performance issues */
+
+
+
                 return html;
 
             }
@@ -294,7 +298,7 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
        return [];
    }
 
-   function getPercentrage(count, total){
+   function getPercentrage(count, total){       
        try{
        if (count){
            if(total){
@@ -319,10 +323,10 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
             var startTimeList = getArray(data, "startTimeList");
             var magnificationList = getArray(data, "magnificationList");
             var voltageList = getArray(data, "voltageList");
-            var dataCollectionList = getArray(data, "dataCollectionIdList");                                               
+            var dataCollectionList = getArray(data, "dataCollectionIdList");       
+                                                    
 
-            function getMotionCorrectionByDataCollectionId(dataCollectionId, counts, ids ){  
-                              
+            function getMotionCorrectionByDataCollectionId(dataCollectionId, counts, ids ){                                
                 var index = _.findIndex(ids, function(o) { return o == dataCollectionId });
                 if (index > -1){
                     return counts[index];
@@ -333,11 +337,12 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
              /** Parsing grid squares */
             for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
                 
-                var motionCount =  getMotionCorrectionByDataCollectionId(dataCollectionList[i], motionCorrectionsCount, motionCorrectionDataCollectionIds);
-                var ctfCount =  getMotionCorrectionByDataCollectionId(dataCollectionList[i], ctfsCount, ctfDataCollectionIds);
+                var stats = _.find(data.stats, function(o){return o.dataCollectionId == dataCollectionList[i]});
+                var motionCount =  stats.motionCorrectionCount;
+                var ctfCount =  stats.ctfCorrectionCount;                
                 gridSquares.push({
                     name : i + 1,
-                    movieCount : moviesCount[i],
+                    movieCount :stats.movieCount,
                     motionCorrectionCount : motionCount,
                     ctfCount : ctfCount,
                     dataCollectionId : dataCollectionList[i],
@@ -346,13 +351,14 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
                     magnification : magnificationList[i],
                     voltage : voltageList[i],
                     startTime : startTimeList[i],
-                    motionPercentage : getPercentrage(motionCount, moviesCount[i]),
-                    ctfPercentage : getPercentrage(ctfCount, moviesCount[i])
+                    motionPercentage : getPercentrage(motionCount, stats.movieCount),
+                    ctfPercentage : getPercentrage(ctfCount, stats.movieCount)
 
                 });
 
+        
             }
-
+             
         }
         catch(e){
            console.log(e);
