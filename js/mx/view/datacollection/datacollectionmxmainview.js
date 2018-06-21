@@ -21,7 +21,7 @@ function DataCollectionMxMainView(args) {
     this.genericDataCollectionPanel = new MXDataCollectionGrid();
     this.energyScanGrid = new EnergyScanGrid();
     this.xfeScanGrid = new XFEScanGrid();
-    this.emStats = new EMSessionStats();
+    this.emStats = new EMSessionStats({sessionId: this.sessionId});
    
 }
 

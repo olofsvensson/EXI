@@ -73,14 +73,7 @@ EMDataCollectionController.prototype.init = function() {
 		EXI.getDataAdapter({onSuccess : onSuccess}).em.dataCollection.getDataCollectionViewBySessionId(this.params['sessionId']);
 		
         
-		var onSuccess2 = function(sender, data){
-			 mainView.loadEMStats(data);
-    	}
-    	var onError2 = function(sender, data){
-        
-    	}
-    EXI.getDataAdapter({onSuccess:onSuccess2, onError:onError2}).em.dataCollection.getSessionStats(this.params['sessionId']);
-
+	
 
 
 	}).enter(this.setPageBackground);
