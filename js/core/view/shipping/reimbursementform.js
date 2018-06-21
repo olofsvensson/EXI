@@ -95,14 +95,14 @@ ReimbForm.prototype.getDeclarationText = function(shipment, dewar){
 		this.fedexCode = shipment.sessions[0].proposalVO.code + "-" + shipment.sessions[0].proposalVO.number + "/" 
 		+ shipment.sessions[0].beamlineName + "/" + startDate;
 	}
-	boxLabel1 = '<br>By setting this parcel to reimbursed, the labels that will be generated for sending the parcel will use the ESRF FedEx account. '
+	boxLabel1 = '<br>By setting this parcel to reimbursed, the labels that will be generated for sending the parcel by courier will use the ESRF account. '
 	+ '<br>You MUST NOT use this account to ship more than the allowed number of parcels, or any other equipment for this or any other experiment. '
 	+ ' Any abuse of this account will immediately result in your proposal being refused access to the parcel reimbursement procedure, and eventually to the ESRF beamlines. '
 	+ '<br><br>' ;
 		
 	var html = 	boxLabel1 + 'For ESRF reimbursement, you MUST: '
-	+ '<br> * Copy and paste the following information into the FedEx request page'
-	+ '<br> &nbsp;&nbsp; - Account Number : '+ this.fedexAccount
+	+ '<br> * Copy and paste the following information into the courier service request form'
+	+ '<br> &nbsp;&nbsp; - FedEx Account Number : '+ this.fedexAccount
 	+ '<br> &nbsp;&nbsp; - Your Reference : '+ this.fedexCode
 	+ '<br> * Tick \"the Include a return label\" box.'
 	+ '<br> <br>Please click on the following checkbox if you agree with these conditions and you wish to have this parcel automatically reimbursed by the ESRF. '
