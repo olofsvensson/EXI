@@ -165,7 +165,7 @@ EMSessionStats.prototype.plot =  function(target, data) {
     /** Distributions */
     this.plotDygraph(target + "_resolution_distribution", this.getDistribution(resolution), "Resolution Distribution", ["", "Resolution"], true);
     this.plotDygraph(target + "_defocus_distribution", this.getDistribution(defocus), "Defocus Distribution", ["", "Defocus"], true);
-    this.plotDygraph(target + "_angle_dist", this.getDistribution(defocusDifference), "Astigmatism Distribution", ["", "Astigmatism"], true);
+    this.plotDygraph(target + "_angle_dist", this.getDistribution(angle), "Astigmatism Distribution", ["", "Astigmatism"], true);
 
 
 
