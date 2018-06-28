@@ -9,11 +9,11 @@
    </tr> 
    <tr>
       <td>Voltage</td>
-      <td class='column_parameter_value'>{.DataCollection_voltage}</td>
+      <td class='column_parameter_value'>{.DataCollection_voltage} V</td>
    </tr>
    <tr>
       <td>Spherical Aberration</td>
-      <td class='column_parameter_value'>2.7</td>
+      <td class='column_parameter_value'>2.7 mm</td>
    </tr>
    <tr>
       <td># Frames</td>
@@ -21,12 +21,12 @@
    </tr>
    <tr>
       <td>Amplitude Contrast</td>
-      <td class='column_parameter_value'>10%</td>
+      <td class='column_parameter_value'>10 %</td>
    </tr>
 
      <tr>
-      <td>Scanned Pixel Size</td>
-      <td class='column_parameter_value'></td>
+      <td>Sampling Rate</td>
+      <td class='column_parameter_value'>{.DataCollection_xBeamPix} &Acirc;/pixel</td>
    </tr>   
     
 </table>
