@@ -61,12 +61,12 @@ ParcelGrid.prototype.disableImportFromCSVButton = function() {
 ParcelGrid.prototype.enableImportFromCSVButton = function() {
 	var _this = this;
 	/** Only for managers */
-	if (EXI.credentialManager.getCredentials()[0].isManager()){
+	//if (EXI.credentialManager.getCredentials()[0].isManager()){
 		$("#" + this.id + "-import").removeClass("disabled");
 		$("#" + this.id + "-import").bind('click').click(function(sender){			
 			window.open('#/shipping/' + _this.shipment.shippingId +'/import/csv', '_blank');
 		});
-	}
+	//}
 };
 
 
