@@ -45,7 +45,7 @@ ProteinListMainView.prototype.getColumns =  function(){
             flex: 1.5,
             hidden: false,
             renderer: function(grid, e, record) {	
-				console.log(record.data)	
+				//console.log(record.data)	
 				var html = "";		
  
 				dust.render("proteinlistmainview.template", record.data,function(err,out){ 	
