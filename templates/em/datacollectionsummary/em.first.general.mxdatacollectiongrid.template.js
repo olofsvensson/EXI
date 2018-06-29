@@ -23,10 +23,10 @@
       <td>Amplitude Contrast</td>
       <td class='column_parameter_value'>10 %</td>
    </tr>
-
-     <tr>
+   {?DataCollection_xBeamPix}
+   <tr>
       <td>Sampling Rate</td>
       <td class='column_parameter_value'>{.DataCollection_xBeamPix} &Acirc;/pixel</td>
-   </tr>   
-    
+   </tr>
+   {/DataCollection_xBeamPix}
 </table>
