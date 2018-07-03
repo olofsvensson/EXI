@@ -162,8 +162,10 @@ AutoProcIntegrationGrid.prototype.getCollapseStatistics = function(data) {
                                             resolutionLimitLow 		: getValue(data.resolutionLimitLow, i,1),
                                             resolutionLimitHigh 	: getValue(data.resolutionLimitHigh, i,1),
                                             multiplicity 			: getValue(data.multiplicity, i, 1),
+                                            anomalousMultiplicity 	: getValue(data.anomalousMultiplicity, i, 1),
                                             meanIOverSigI 			: getValue(data.meanIOverSigI, i, 1),
                                             completeness 			: getValue(data.completeness, i, 1),
+                                            anomalousCompleteness 	: getValue(data.anomalousCompleteness, i, 1),
                                             rMerge 			        : getValue(data.rMerge, i, 1),
                                             ccHalf 			        : getValue(data.ccHalf, i,1),
                                             rPimWithinIPlusIMinus 	: getValue(data.rPimWithinIPlusIMinus, i,1),
@@ -204,14 +206,16 @@ AutoProcIntegrationGrid.prototype.getStatistics = function(data) {
     }
     
     var parsed = [];
-    for (var i = 0; i < type.length; i++) {       
+    for (var i = 0; i < type.length; i++) {
         parsed.push({
             type 					: type[i],
             resolutionLimitLow 		: getValue(data.resolutionLimitLow, i),
             resolutionLimitHigh 	: getValue(data.resolutionLimitHigh, i),
             multiplicity 			: getValue(data.multiplicity, i),
+            anomalousMultiplicity 	: getValue(data.anomalousMultiplicity, i),
             meanIOverSigI 			: getValue(data.meanIOverSigI, i),
             completeness 			: getValue(data.completeness, i),
+            anomalousCompleteness 	: getValue(data.anomalousCompleteness, i),
             rMerge 			        : getValue(data.rMerge, i),
             ccHalf 			        : getValue(data.ccHalf, i),
             rPimWithinIPlusIMinus 	: getValue(data.rPimWithinIPlusIMinus, i),
