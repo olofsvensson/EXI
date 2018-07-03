@@ -82,7 +82,7 @@
 		                  <span class='overallshell'>{.overall.completeness}</span><br />
 		                  <span class='innershell'>{.innerShell.completeness} </span><br />
 		                  <span class='outershell'>{.outerShell.completeness}</span>
-		              {/overall.anomalousMultiplicity}
+		              {/overall.anomalousCompleteness}
 		          {:else}
 		              <span class='overallshell'>{.overall.completeness}</span><br />
 		              <span class='innershell'>{.innerShell.completeness} </span><br />
