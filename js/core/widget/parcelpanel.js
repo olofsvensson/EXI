@@ -105,7 +105,7 @@ ParcelPanel.prototype.load = function(dewar, shipment, samples, withoutCollectio
 	$("#" + this.id + "-print-button").click(function () {
 		var dewarId = _this.dewar.dewarId;
 		var url = EXI.getDataAdapter().proposal.shipping.getDewarLabelURL(dewarId, dewarId);
-		location.href = url;
+		location.href = url;	
 		return;
 	});
 	

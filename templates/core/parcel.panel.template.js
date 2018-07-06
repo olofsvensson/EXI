@@ -39,8 +39,12 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <a id="{id}-print-button" class="btn btn-xs">
-                                        <span class="glyphicon glyphicon-print"></span> Print labels
+                                    <a id="{id}-print-button" class="btn btn-xs">                                        
+                                        {?dewar.dewarStatus}
+                                            <span class="glyphicon glyphicon-print"></span> Print labels
+                                        {:else}
+                                             <div class="alert-warning" role="alert"><span class="glyphicon glyphicon-alert"></span> Print labels</div>
+                                        {/dewar.dewarStatus}
                                     </a>
                                 </td>
                             </tr>
