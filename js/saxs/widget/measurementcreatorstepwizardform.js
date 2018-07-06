@@ -305,7 +305,7 @@ MeasurementCreatorStepWizardForm.prototype.getConcentrationMeasurementForm = fun
 			          {
 				xtype : 'numberfield',
 				id : this.id + "_cs_conc",
-				fieldLabel : 'How many unknow concentrations do you have?',
+				fieldLabel : 'How many unknown concentrations do you have?',
 				labelWidth : 300,
 				width : 500,
 				margin : "5 0 0 10",
