@@ -34,6 +34,7 @@ function ShipmentForm(args) {
 
 
 ShipmentForm.prototype.load = function(shipment,hasExportedData) {
+	
 	var _this = this;
 	this.shipment = shipment;
 	this.hasExportedData = hasExportedData;
@@ -46,6 +47,10 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	var reimbText = "";
 	var fedexCode = "";
 	var nbReimbDewars = 0;	
+
+
+	var isSendShipmentActive = !((shipment.dewarVOs.length == 0 || _.filter(shipment.dewarVOs, function(o){return o.dewarStatus == null}).length > 0));
+	
 	if (shipment){
 		if (shipment.sessions.length > 0){
 			beamlineName = shipment.sessions[0].beamlineName;
@@ -55,11 +60,21 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 		}
 	}
 		
+	/** It disables button Sent Shipment to facility if there is at least one dewar which dewarStatus is not "ready to go"  */	
+	if (shipment.dewarVOs.length == 0 || _.filter(shipment.dewarVOs, function(o){return o.dewarStatus != "ready to go"}).length > 0){
+		$("#" + _this.id + "-send-button").addClass("disabled");
+	}
+	else{
+		$("#" + _this.id + "-send-button").removeClass("disabled");
+	}
+
+
     dust.render("shipping.form.template", {id : this.id, to : toData, 
 		from : fromData, beamlineName : beamlineName, 
 		startDate : startDate, shipment : shipment, 
 		nbReimbDewars : nbReimbDewars, 
-		reimbText : reimbText, 
+		reimbText : reimbText,
+		isSendShipmentActive : isSendShipmentActive, 
 		fedexCode : fedexCode}, function(err, out){
 		html = out;
 	});
@@ -76,6 +91,15 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	$("#" + _this.id + "-send-button").unbind('click').click(function(sender){
 			_this.updateStatus(_this.shipment.shippingId, "Sent_to_ESRF");
 	});
+
+	/** It disables button Sent Shipment to facility if there is at least one dewar which dewarStatus is not "ready to go"  */	
+	if (!isSendShipmentActive){
+		$("#" + _this.id + "-send-button").addClass("disabled");
+	}
+	else{
+		$("#" + _this.id + "-send-button").removeClass("disabled");
+	}
+
 
 
 	$("#transport-history-" + this.id).html(this.dewarTrackingView.getPanel());
