@@ -10,7 +10,7 @@
     </tr> 
     <tr>
         <td>Shipment</td>
-        <td  class='column_parameter_value'>{.Shipping_shippingName}</td>
+        <td  class='column_parameter_value'><a href='#/shipping/{Shipping_shippingId}/main' target='_blank'>{.Shipping_shippingName}</a></td>
     </tr>
     <tr>
         <td>Parcel</td>
@@ -18,7 +18,7 @@
     </tr> 
      <tr>
         <td> Container / Position </td>
-        <td  class='column_parameter_value'> {.Container_code} / {.BLSample_location} </td>
+        <td  class='column_parameter_value'><a href='#/shipping/{Shipping_shippingId}/{Shipping_shippingStatus}/containerId/{Container_containerId}/edit' target='_blank'> {.Container_code} </a>/ {.BLSample_location} </td>
     </tr> 
      <tr>
         <td> Sample barcode</td>
