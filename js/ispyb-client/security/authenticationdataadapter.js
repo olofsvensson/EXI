@@ -18,6 +18,9 @@ AuthenticationDataAdapter.prototype.authenticate = function(user, password, url)
 	if (url.indexOf("192.109.31.39") != -1){
 		site = "EMBL";
 	}
+    if (url.indexOf("maxiv") != -1){
+        site = "MAXIV";
+    }
 	this.post('/authenticate?site=' + site, 
 					{
 			  			login : user,
