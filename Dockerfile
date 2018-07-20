@@ -6,12 +6,12 @@ COPY ./package.json ./
 
 COPY  . .
 
-RUN npm install && npm install -g bower grunt && \
+RUN apk update && \
+apk add git && \
+npm install && npm install -g bower grunt && \
 bower install --allow-root && \
 grunt --force && \
-grunt dev --force \
-&& apk update && \
-apk add git && \
+grunt dev --force && \
 bower list --allow-root
 
 FROM nginx:1.15.0-alpine
