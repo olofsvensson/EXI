@@ -1,0 +1,8 @@
+version: "3"
+services:
+  webserver_exi:
+    container_name: webserver_exi
+    build: ./
+    restart: always
+    ports:
+      - "8083:8083"
