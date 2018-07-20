@@ -4,14 +4,15 @@ WORKDIR /home/node/app
 
 COPY ./package.json ./
 
-
 COPY  . .
-RUN npm install && npm install -g bower grunt
-RUN bower install --allow-root 
-RUN grunt --force
-RUN grunt dev --force
-RUN apk update && apk add git 
-RUN bower list --allow-root
+
+RUN npm install && npm install -g bower grunt && \
+bower install --allow-root && \
+grunt --force && \
+grunt dev --force \
+&& apk update && \
+apk add git && \
+bower list --allow-root
 
 FROM nginx:1.15.0-alpine
 
