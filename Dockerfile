@@ -16,7 +16,7 @@ bower list --allow-root
 
 FROM nginx:1.15.0-alpine
 
-EXPOSE 8084
-
 COPY --from=build /home/node/app/ /usr/share/nginx/html
 COPY assets/nginx.conf /etc/nginx/
+
+EXPOSE 8084
