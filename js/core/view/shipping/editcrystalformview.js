@@ -35,13 +35,16 @@ EditCrystalFormView.prototype.getPanel = function() {
 
 EditCrystalFormView.prototype.load = function(crystal) {
 	var _this = this;
+	
 	this.crystal = crystal;
 	if (crystal.crystalId != null){
 		if (crystal.crystalId != "") {
-			var onSuccess = function (sender, crystalById) {
+			var onSuccess = function (sender, crystalById) {								
 				_this.crystal = crystalById;
 				_this.render();
+				_this.panel.setLoading(false);
 			}
+			this.panel.setLoading();
 			EXI.getDataAdapter({onSuccess:onSuccess}).mx.crystal.getCrystalById(crystal.crystalId);
 		} else {
 			this.render();

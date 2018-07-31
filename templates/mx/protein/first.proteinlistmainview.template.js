@@ -44,13 +44,5 @@
                     <a href='#/mx/datacollection/datacollectionid/{.DataCollectionIdList}/main'><span class="badge" style='background-color:#337ab7;'>{.DataCollectionCount}</span></a>
             {/gt}
        </td>
-   </tr>
-  <tr>
-      <td>Crystal Definitions</td>
-      <td class='column_parameter_value'>
-            {@gt key=CrystalCount value=0}        
-                     {.CrystalCount} 
-            {/gt}
-      </td>
-   </tr>  
+   </tr> 
 </table>
