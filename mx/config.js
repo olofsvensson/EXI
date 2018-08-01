@@ -258,8 +258,7 @@ var ExtISPyB ={
                ]
            }
 
-       },
-       ,
+       },       
        {
            name:'MAXIV TEST',
            icon : '../images/site/dev.esrf.png',
