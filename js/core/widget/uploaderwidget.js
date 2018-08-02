@@ -55,18 +55,15 @@ UploaderWidget.prototype.getForm = function(){
 	        text: 'Upload',
 	        handler: function() {
 	            var form = this.up('form').getForm();
-	            if(form.isValid()){
-	            	// Ext.getCmp(_this.id + "fileName").setValue(_this.getFileName());
+	            if(form.isValid()){	            	
 	                form.submit({
 	                    url: _this.url,
 	                    waitMsg: 'Uploading your file...',
 	                    success: function(fp, o) {
-//	                        Ext.Msg.alert('Success', 'Your file has been uploaded.');
 	                    	_this.window.close();
 	                    	_this.onUploaded.notify();
 	                    },
 	                    failure : function(fp, o) {
-//	                    	Ext.Msg.alert('Failure', 'Processed file "' + o.result.file + '" on the server');
 	                    	_this.window.close();
 	                    	_this.onUploaded.notify();
 	                    } });

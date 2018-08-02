@@ -111,12 +111,13 @@ SAXSExiController.prototype.routeExperiment = function() {
     var _this = this;
     
 	Path.map("#/experiment/experimentId/:experimentId/main").to(function() {
+		
         var _thisRoute = this;
         var mainView = new ExperimentMainView();
         EXI.addMainPanelWithTimer(mainView);	                    
         function loadMainExperimentView(experimentId){
         	mainView.panel.setLoading();	
-            var onSuccess = function(sender, dataCollections){			
+            var onSuccess = function(sender, dataCollections){							
                 mainView.load(dataCollections);
                 mainView.panel.setLoading(false);				
             };
@@ -161,7 +162,8 @@ SAXSExiController.prototype.routeExperiment = function() {
 	
 
 	/** Loading Experiments * */
-	Path.map("#/experiment/:key/:value/main").to(function() {		
+	Path.map("#/experiment/:key/:value/main").to(function() {	
+			
 		EXI.setLoadingMainPanel();
 		var onSuccess = function(sender, data) {
 			EXI.setLoadingMainPanel(false);
@@ -169,6 +171,7 @@ SAXSExiController.prototype.routeExperiment = function() {
 				if (data.length > 0) {
 					var mainView = null;
 					if (data[0].experimentType == "STATIC") {
+						
 						mainView = new ExperimentMainView();
 
 					}
@@ -379,7 +382,7 @@ SAXSExiController.prototype.init = function() {
                 if (selected[0].experimentType == "HPLC"){
                     location.hash = "/experiment/hplc/" + selected[0].experimentId + "/main";
                 }
-                if ((selected[0].experimentType == "STATIC")||(selected[0].experimentType == "CALIBRATION")){
+                if ((selected[0].experimentType == "STATIC")||(selected[0].experimentType == "CALIBRATION")){					
                     location.hash = "/experiment/experimentId/" + selected[0].experimentId + "/main";
                 }
                 if (selected[0].experimentType == "TEMPLATE"){

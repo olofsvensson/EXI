@@ -78,7 +78,7 @@
             <div class="container-fluid">
                <div class="row">
                   {>"general.mxdatacollectiongrid.template"  /}
-                  <div class="col-xs-12 col-md-2">
+                  <div class="col-xs-12 col-md-1  col-lg-2">
                      {@eq key=isScreeningVisible  type="boolean"  value="true"}
                      {@ne key=ScreeningOutput_indexingSuccess value=null}
                      <table class="table">
@@ -136,12 +136,12 @@
                      {/eq}  
                      {>"autoproc.mxdatacollectiongrid.template"  /}       
                   </div>
-                  <div class="col-xs-12 col-md-2">
+                  <div class="col-xs-12 col-md-4 col-lg-2">
                      <a href="{.url}" data-lightbox='{.url}' data-title="#{.runNumber} {.folder}"> 
                      <img alt="Image not found" class="img-responsive lazy"  data-src="{.urlThumbnail}" />
                      </a>                           
                   </div>
-                  <div class="col-xs-12 col-md-2">
+                  <div class="col-xs-12 col-md-4  col-lg-2">
                      <a href="{.xtal1}"  data-lightbox="{.DataCollection_dataCollectionId}" data-title="{.Protein_acronym} : {.Protein_name}">
                         {?hasAnimated}                    
                         <img id="xtal1_{.DataCollection_dataCollectionId}" alt="Image not found" class="img-responsive smalllazy animatedXtal" data-src="{.xtal1}" data-zoom-image="{.xtal1}"/>
@@ -151,7 +151,7 @@
                         {/hasAnimated}
                      </a>
                   </div>
-                  <div class="col-xs-6 col-md-2"> 
+                  <div class="col-xs-6 col-md-4  col-lg-2"> 
                      <a href="{.indicator}" data-lightbox='{.indicator}' data-title="#{.runNumber} {.folder}">
                      <img  alt="Image not found" class="img-responsive lazy"  data-src="{.indicator}"/>
                      </a> 
@@ -171,17 +171,17 @@
          <div id="experimentparameters_{.DataCollection_dataCollectionId}" class="tab-pane fade">
             <div class="container-fluid">
                <div class="row">
-                  {>"general.mxdatacollectiongrid.template"  /}
-                  <div class="col-xs-4 col-md-2">
+                    {>"general.mxdatacollectiongrid.template"  /}
+                  <div class="col-xs-6 col-sm-4 col-lg-2">
                      {>"beamline.mxdatacollectiongrid.template"  /}                             
                   </div>
-                  <div class="col-xs-4 col-md-2">
+                  <div class="col-xs-6 col-sm-4 col-lg-2">
                      {>"synchrotron.mxdatacollectiongrid.template"  /}                             
                   </div>
-                  <div class="col-xs-4 col-md-2">
+                  <div class="col-xs-6 col-sm-4 col-lg-2">
                      {>"beam.mxdatacollectiongrid.template"  /}                             
                   </div>
-                  <div class="col-xs-4 col-md-2">
+                  <div class="col-xs-6 col-sm-4 col-lg-2">
                      {>"detector.mxdatacollectiongrid.template"  /}                             
                   </div>
                </div>

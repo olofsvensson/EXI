@@ -36,5 +36,7 @@ AbinitioForm.prototype.getPanel = function() {
 /** It populates the form * */
 AbinitioForm.prototype.load = function(subtractions) {
 	this.subtractions = subtractions;
+		
+
 	this.abinitioGrid.refresh(subtractions);
 };

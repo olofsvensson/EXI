@@ -89,7 +89,9 @@ console.log(getParameterByName("map2"));
 
     V = new UM.Viewer({viewer: "viewer", hud: "hud", help: "help"});
     V.load_pdb(getParameterByName("pdb"));
-    V.load_ccp4_maps(getParameterByName("map1"), getParameterByName("map2"));
+    if (getParameterByName("map1")){
+      V.load_ccp4_maps(getParameterByName("map1"), getParameterByName("map2"));
+    }
   </script>
 </body>
 </html>
