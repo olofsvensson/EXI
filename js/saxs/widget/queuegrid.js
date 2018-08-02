@@ -203,6 +203,7 @@ QueueGrid.prototype.getImage = function(sample, name) {
 	}
 };
 
+
 QueueGrid.prototype.getColumns = function() {
 	var _this = this;
 	return [
@@ -479,10 +480,11 @@ QueueGrid.prototype.getColumns = function() {
 				renderer : function(val, y, sample) {
 					// 'fitCount', 'superposisitionCount', 'rigidbodyCount',
 					// 'abinitioCount'
+					
 					var html = "<table><tr><td style='padding-bottom: 1px;'>" + BUI.getGreenButton("Data Reduction", {
 						width : 90,
 						height : 15 }) + "</td></tr>";
-
+					
 					if (sample.data.abinitioCount > 0) {
 						html = html + "<tr><td style='padding-bottom: 1px;'>" + BUI.getGreenButton("Abinitio", {
 							width : 90,
@@ -530,6 +532,7 @@ QueueGrid.prototype.getColumns = function() {
 };
 
 QueueGrid.prototype.load = function(data) {
+	
 	if (data != null) {
 		this.key = {};
 		this.store.loadData(data, true);

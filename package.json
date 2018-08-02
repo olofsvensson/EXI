@@ -1,6 +1,6 @@
 {
   "name": "EXI",
-  "version": "5.0.0",
+  "version": "5.11",
   "description": "Extended ISPyB",
   "main": "Gruntfile.js",
   "dependencies": {

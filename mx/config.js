@@ -191,7 +191,10 @@ var ExtISPyB ={
 		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
          beamlines:{
             SAXS:[
-
+               {
+		          name : 'BM29',
+		          sampleChangerType : ''
+   	           }
              
             ],
             MX:[
