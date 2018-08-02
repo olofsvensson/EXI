@@ -39,4 +39,21 @@ ProteinController.prototype.init = function() {
 			EXI.getDataAdapter({onSuccess : onSuccessProtein}).mx.protein.getProteinByProposalId();
 	}).enter(this.setPageBackground);
 	Path.rescue(this.notFound);
+
+	
+	Path.map("#/protein/list").to(function() {
+		    EXI.clearNavigationPanel();
+			EXI.hideNavigationPanel();
+			
+			EXI.setLoadingMainPanel("Searching for proteins");
+			var main = new ProteinListMainView();
+			EXI.addMainPanel(main);			
+			var onSuccessProtein = function(sender, proteins) {				
+				main.load(proteins);
+				EXI.setLoadingMainPanel(false);
+			};
+			EXI.getDataAdapter({onSuccess : onSuccessProtein}).mx.protein.getProteinStatsByProposalId();
+	}).enter(this.setPageBackground);
+	Path.rescue(this.notFound);
+
 };
