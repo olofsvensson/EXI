@@ -18,8 +18,7 @@ AbinitioMainView.prototype.load = function(dataCollectionId) {
 	var onSuccess = function (sender, dataCollections) {        
 		if (dataCollections){
             if (dataCollections[0].Subtraction_subtractionId){
-                   var onSuccessSubtraction = function(sender, subtractions) {  
-					   debugger               
+                   var onSuccessSubtraction = function(sender, subtractions) {  					                  
                         _this.abinitioForm.load(subtractions);
                     };			
                     EXI.getDataAdapter({onSuccess : onSuccessSubtraction}).saxs.subtraction.getSubtractionsBySubtractionIdList([dataCollections[0].Subtraction_subtractionId]);	                  
