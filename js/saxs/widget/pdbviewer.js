@@ -53,33 +53,21 @@ PDBViewer.prototype.getBar = function() {
 };
 
 PDBViewer.prototype.refresh = function(models) {
-	var _this = this;
+	var _this = this;	
 	if (BUI.isWebGLEnabled()) {
 		this.models = models;
-//		var adapter = new BiosaxsDataAdapter();
+
 		_this.panel.setLoading("Rendering");
-//		adapter.onSuccess.attach(function(sender, data) {
-//			if (data.models != null){
-//				if (data.models[0] != null){
-//					document.getElementById(_this.getTextAreaId()).innerHTML = data.models[0].XYZ;
-//					if (_this.glMol == null) {
-//						_this.glMol = new GLmol(_this.id);
-//					} else {
-//						_this.glMol.loadMolecule();
-//					}
-//				}
-//			}
-//			_this.panel.setLoading(false);
-//		});
-//		adapter.onError.attach(function(sender, data) {
-//			_this.panel.setLoading("Not available");
-//		});
-//		adapter.getDataPDB(models, []);
-//		
-		var onSuccess = function(sender, data){
+		var onSuccess = function(sender, data){	
+											
 			if (data.models != null){
+				var XYZ = "";
+				for(var i=0; i< data.models.length; i++){
+					var XYZ = XYZ + data.models[i].XYZ;					
+				}
+				document.getElementById(_this.getTextAreaId()).innerHTML = XYZ;
 				if (data.models[0] != null){
-					document.getElementById(_this.getTextAreaId()).innerHTML = data.models[0].XYZ;
+					//document.getElementById(_this.getTextAreaId()).innerHTML = data.models[0].XYZ;
 					if (_this.glMol == null) {
 						_this.glMol = new GLmol(_this.id);
 					} else {
@@ -89,138 +77,15 @@ PDBViewer.prototype.refresh = function(models) {
 			}
 			_this.panel.setLoading(false);
 		};
-		
-//		adapter.onError.attach(function(sender, data) {
-//			_this.panel.setLoading("Not available");
-//		});
-//		adapter.getDataPDB(models, []);
-		EXI.getDataAdapter({onSuccess : onSuccess}).saxs.model.getPDB(models, []);
-		
-		
-		
+		EXI.getDataAdapter({onSuccess : onSuccess}).saxs.model.getPDB(models, []);						
 	} else {
 		this.webGLNotAvailable();
 	}
 };
 
-PDBViewer.prototype.getOpacity = function(text) {
-	if (text == 'Invisible') {
-		return '0';
-	}
-	if (text == 'Minimum') {
-		return '0.2';
-	}
-	if (text == 'Medium') {
-		return '0.5';
-	}
-	if (text == 'High') {
-		return '0.7';
-	}
-	return '1';
-};
-
-PDBViewer.prototype.getMenu = function(model) {
-	var _this = this;
-	function onItemCheck(comp, checked, eOpts) {
-		if (checked) {
-			var i = null;
-			if (comp.group == 'Opacity') {
-				for (i = 0; i < _this.models.length; i++) {
-					var opacity = _this.getOpacity(comp.text);
-					model.opacity = opacity;
-				}
-			}
-
-			if (comp.group == 'Radius') {
-				for (i = 0; i < _this.models.length; i++) {
-					var radius = _this.getOpacity(comp.text);
-					model.radius = radius;
-				}
-			}
-
-			_this.refresh(_this.models);
-		}
-	}
-
-	return Ext.create('Ext.menu.Menu', {
-		items : [ {
-			text : 'Opacity',
-			menu : {
-				items : [ {
-					text : 'Invisible',
-					checked : false,
-					group : 'Opacity',
-					checkHandler : onItemCheck
-				}, {
-					text : 'Minimum',
-					checked : false,
-					group : 'Opacity',
-					checkHandler : onItemCheck
-				}, {
-					text : 'Medium',
-					checked : false,
-					group : 'Opacity',
-					checkHandler : onItemCheck
-				}, {
-					text : 'High',
-					checked : false,
-					group : 'Opacity',
-					checkHandler : onItemCheck
-				}, {
-					text : 'Opaque',
-					checked : false,
-					group : 'Opacity',
-					checkHandler : onItemCheck
-				} ]
-			}
-		}
-
-		]
-	});
-};
-
-PDBViewer.prototype.getTbar = function() {
-	var _this = this;
-
-	var tb = Ext.create('Ext.toolbar.Toolbar');
-
-	var colorItems = [];
-	for (var i = 0; i < this.models.length; i++) {
-		tb.add({
-			text : this.models[i].title,
-			menu : this.getMenu(this.models[i])
-		});
-		var color = "#" + this.models[i].color.replace("0x", "");
-		colorItems.push({
-			html : "<table><tr><td width='15px'>" + BUI.getRectangleColorDIV(color, 10, 10) + "</td><td>" + this.models[i].title + "</td></table>"
-		});
-	}
-
-	tb.add({
-		xtype : 'numberfield',
-		labelWidth : 50,
-		width : 120,
-		fieldLabel : 'Radius',
-		value : 3,
-		maxValue : 10,
-		step : 0.2,
-		minValue : 0.1,
-		listeners : {
-			change : function(cmp) {
-				var radius = cmp.getValue();
-				for (var i = 0; i < _this.models.length; i++) {
-					_this.models[i].radius = radius;
-				}
-				_this.refresh(_this.models);
-			}
-		}
-	});
-	tb.add("->");
-	tb.add(colorItems);
-	return tb;
-};
 
 PDBViewer.prototype.getPanel = function() {
+	debugger
 	var _this = this;
 	this.panel = Ext.create('Ext.panel.Panel', {
 		margin : this.margin,
@@ -260,8 +125,7 @@ PDBViewer.prototype.draw = function(models) {
 		margin : 2,
 		layout : {
 			type : 'vbox'
-		},
-		tbar : this.getTbar(),
+		},	
 		width : this.width - 4,
 		height : this.height + 30,
 		items : [ {
