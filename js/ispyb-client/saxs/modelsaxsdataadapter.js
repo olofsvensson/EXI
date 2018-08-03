@@ -23,10 +23,28 @@ ModelSaxsDataAdapter.prototype.getFirByModelId = function(subtractionId, modelId
     return this.getUrl('/{token}/proposal/{proposal}/saxs/subtraction/{0}/model/{1}/fir'.format([ subtractionId,modelId ]));
 };
 
+ModelSaxsDataAdapter.prototype.getFirContentByModelId = function(subtractionId, modelId){
+    return this.get('/{token}/proposal/{proposal}/saxs/subtraction/{0}/model/{1}/fir/content'.format([ subtractionId,modelId ]));
+};
+
+
 ModelSaxsDataAdapter.prototype.getFitByModelId = function(subtractionId, modelId){
     return this.getUrl('/{token}/proposal/{proposal}/saxs/subtraction/{0}/model/{1}/fit'.format([ subtractionId,modelId ]));
 };
 
+ModelSaxsDataAdapter.prototype.getFitContentByModelId = function(subtractionId, modelId){
+    return this.get('/{token}/proposal/{proposal}/saxs/subtraction/{0}/model/{1}/fit/content'.format([ subtractionId,modelId ]));
+};
+
 ModelSaxsDataAdapter.prototype.getLogByModelId = function(subtractionId, modelId){
     return this.getUrl('/{token}/proposal/{proposal}/saxs/subtraction/{0}/model/{1}/log'.format([ subtractionId,modelId ]));
+};
+
+ModelSaxsDataAdapter.prototype.getPDB = function(models, superpositions){      
+	this.post('/{token}/proposal/{proposal}/saxs/modeling/pdb/get', {
+		models : JSON.stringify(models),
+        superpositions : JSON.stringify(superpositions)
+	});
+    
+
 };

@@ -95,7 +95,7 @@ PrimaryDataMainView.prototype.getPanel = function () {
 									this.getPrimaryReductionPanel()
 							]
 						}, {
-							title: 'Abinitio Modeling',
+							title: 'Ab Initio Modeling',
 							tabConfig: {
 								title: 'Abinitio Modeling',
 								tooltip: 'Automatic Abinitio Modeling online data analysis'
