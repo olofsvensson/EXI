@@ -62,9 +62,9 @@ module.exports = function(grunt) {
                 },
                 uglify : {
                     prod : {
-                        options : {},
+                        //options : {beautify:true},
                         files : {
-                            'min/exi.min.js' : ['min/ispyb-client.js', 'min/exi.tools.js', 'min/exi.js', 'min/exi.mx.js', 'min/exi.saxs.js', 'min/exi.em.js',
+                           'min/exi.min.js' : ['min/exi.tools.js', 'min/ispyb-client.js', 'min/exi.js', 'min/exi.mx.js', 'min/exi.saxs.js', 'min/exi.em.js',
                                     'min/exi.test.js',
                                     'min/precompiled.templates.min.js' ],
                             'min/exi.saxs.min.js' : ['min/ispyb-client.js', 'min/exi.tools.js', 'min/exi.js',
@@ -73,9 +73,7 @@ module.exports = function(grunt) {
                             'min/exi.tracking.min.js' : [ 'min/exi.js',
                                     'min/exi.tracking.js', 'min/exi.test.js',
                                     'min/precompiled.templates.min.js' ],
-                            'min/lightbox.js' : [ 'bower_components/lightbox2/dist/js/lightbox.js'
-
-                            ],
+                            'min/lightbox.js' : [ 'bower_components/lightbox2/dist/js/lightbox.js']
                         }
                     }
                 },

@@ -171,6 +171,8 @@ AbinitioForm.prototype.getDammin = function () {
 
 };
 
+
+
 AbinitioForm.prototype.getColors = function () {
 	var colors = [];
 	colors.push("0xFF6600");
