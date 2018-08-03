@@ -21,7 +21,7 @@ function PrimaryDataMainView() {
 	});
 
 	this.overviewQueueGrid = new OverviewQueueGrid({ height: 220 });
-	this.abinitioMainView = new AbinitioMainView({ height: 220 });
+	
 }
 
 
@@ -83,7 +83,7 @@ PrimaryDataMainView.prototype.getPanel = function () {
 							tabchange: function(a,b,c) {
 								if (a.activeTab.title == 'Abinitio Modeling'){
 									
-									_this.abinitioMainView.load(_this.dataCollectionId);
+								
 								}
 
 							 }
@@ -93,17 +93,6 @@ PrimaryDataMainView.prototype.getPanel = function () {
 							tooltip: 'Automatic Data Reduction',
 							items: [
 									this.getPrimaryReductionPanel()
-							]
-						}, {
-							title: 'Ab Initio Modeling',
-							tabConfig: {
-								title: 'Abinitio Modeling',
-								tooltip: 'Automatic Abinitio Modeling online data analysis'
-							},
-							items : [
-									this.abinitioMainView.getPanel()  
-							
-								
 							]
 						}]
 					}					
