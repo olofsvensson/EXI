@@ -244,5 +244,9 @@ MXDataCollectionGrid.prototype.filterBy = function(searchTerm) {
         }
     });
     Ext.getCmp(this.id + "_found").setText(filtered.length + " items found");
+	this.pdfUrl = EXI.getDataAdapter().mx.dataCollection.getReportURLByFilterParam(searchTerm);
+	this.rtfUrl = EXI.getDataAdapter().mx.dataCollection.getRtfReportURLByFilterParam(searchTerm);
+	this.pdfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getAnalysisReportURLByFilterParam(searchTerm);
+    this.rtfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getRtfAnalysisReportURLByFilterParam(searchTerm);
     return filtered;
 };
