@@ -244,5 +244,6 @@ MXDataCollectionGrid.prototype.filterBy = function(searchTerm) {
         }
     });
     Ext.getCmp(this.id + "_found").setText(filtered.length + " items found");
+	this.pdfUrl = EXI.getDataAdapter().mx.dataCollection.getReportURLByFilterParam(searchTerm);
     return filtered;
 };

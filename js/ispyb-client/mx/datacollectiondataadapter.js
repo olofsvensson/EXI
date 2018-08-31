@@ -104,6 +104,15 @@ DataCollectionDataAdapter.prototype.getReportURLBySessionId = function(sessionId
 };
 
 /**
+* This method downloads a PDF report for the session or an acronym
+* @method getReportURLBySessionIdAcronym
+*/
+DataCollectionDataAdapter.prototype.getReportURLByFilterParam = function(sessionId, filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/report/pdf'.format([sessionId, filterParam]));
+
+};
+
+/**
 * This method downloads a RTF report for the session
 * @method getRtfReportURLBySessionId
 */
