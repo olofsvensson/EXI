@@ -103,7 +103,6 @@ DataCollectionDataAdapter.prototype.getReportURLBySessionId = function(sessionId
 
 };
 
-
 /**
 * This method downloads a RTF report for the session
 * @method getRtfReportURLBySessionId
@@ -141,19 +140,19 @@ DataCollectionDataAdapter.prototype.getReportURLByFilterParam = function(filterP
 
 /**
 * This method downloads a RTF report for a filter parameter
-* @method getRtfReportURLBySessionId
+* @method getRtfReportURLByFilterParam
 */
-DataCollectionDataAdapter.prototype.getRtfReportURLByFilterParam = function(sessionId){
-   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/report/rtf'.format([sessionId]));
+DataCollectionDataAdapter.prototype.getRtfReportURLByFilterParam = function(filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/report/rtf'.format([filterParam]));
 
 };
 
 /**
 * This method downloads a PDF report for a filter parameter with analysis results
-* @method getAnalysisReportURLBySessionId
+* @method getAnalysisReportURLByFilterParam
 */
-DataCollectionDataAdapter.prototype.getAnalysisReportURLByFilterParam = function(sessionId){
-   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/analysisreport/pdf'.format([sessionId]));
+DataCollectionDataAdapter.prototype.getAnalysisReportURLByFilterParam = function(filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/analysisreport/pdf'.format([filterParam]));
 
 };
 
@@ -161,8 +160,8 @@ DataCollectionDataAdapter.prototype.getAnalysisReportURLByFilterParam = function
 * This method downloads a RTF report for a filter parameter with analysis results
 * @method getRtfAnalysisReportURLByFilterParam
 */
-DataCollectionDataAdapter.prototype.getRtfAnalysisReportURLByFilterParam = function(sessionId){
-   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/analysisreport/rtf'.format([sessionId]));
+DataCollectionDataAdapter.prototype.getRtfAnalysisReportURLByFilterParam = function(filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/analysisreport/rtf'.format([filterParam]));
 };
 
 
