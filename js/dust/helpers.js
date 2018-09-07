@@ -172,7 +172,9 @@ dust.helpers.framesColor = function(chunk, context, bodies, params) {
 };
 
 dust.helpers.fileName = function (chunk, context, bodies, params) {
-    var filePath = context.current()["filePath"];
+    
+    //var filePath = context.current()["filePath"];
+    var filePath = context.current()[params.key];
     if (filePath) {
         try{
             var withExtension = filePath.substring(filePath.lastIndexOf('/')+1);

@@ -63,9 +63,10 @@
                     <td>{@decimal key="chiSqrt" decimals=3 /}  </td>
                     <td>{@decimal key="rfactor" decimals=3 /} </td>
                     <td>{@decimal key="rg" decimals=3 /} </td>
-                    <td><a href='{.pdbURL}' target='_blank'>{.pdbFile}</a> <a href='../viewer/uglymol/index.html?pdb={.pdbURL}' target='_blank'><span class="glyphicon glyphicon-eye-open"></span></a></td>
-                    <td><a href='{.firURL}' target='_blank'>{.firFile}</a></td>
-                    <td><a href='{.logURL}' target='_blank'>{.logFile}</a></td>
+                 
+                    <td><a href='{.pdbURL}' target='_blank'>{@fileName key="pdbFile" /}</a> <a href='../viewer/uglymol/index.html?pdb={.pdbURL}' target='_blank'><span class="glyphicon glyphicon-eye-open"></span></a></td>
+                    <td><a href='{.firURL}' target='_blank'>{@fileName key="firFile" /}</a></td>
+                    <td><a href='{.logURL}' target='_blank'>{@fileName key="logFile" /}</a></td>
                 </tr>
                 {/.models}
             </table>
