@@ -241,46 +241,7 @@ var ExtISPyB ={
                }                                             
             ]
          }
-      },
-       {
-           name:'MAXIV',
-           description : 'MAX IV Laboratory',
-           icon : '../images/site/esrf.png',
-           url:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
-           exiUrl:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
-           beamlines:{
-               SAXS:[
-
-
-               ],
-               MX:[
-                   {
-                       name : "BioMAX",
-                       sampleChangerType : 'ISARA'
-                   }
-               ]
-           }
-
-       },       
-       {
-           name:'MAXIV TEST',
-           icon : '../images/site/dev.esrf.png',
-           url:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
-           exiUrl:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
-           beamlines:{
-               SAXS:[
-
-
-               ],
-               MX:[
-                   {
-                       name : "BioMAX",
-                       sampleChangerType : 'ISARA'
-                   }
-               ]
-           }
-
-       }
+      }
    ]
 };
 
