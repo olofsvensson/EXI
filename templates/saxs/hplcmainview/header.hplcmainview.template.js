@@ -1,13 +1,7 @@
-
-
-
 <div class="panel panel-primary">
   <div class="panel-heading">
-  
-    <h3>{.name} </h3>
+    {.name} 
   </div>
-  
-  
   <div class="panel-body">
     <div class="row">
         <div class="col-sm-11"> Date: {.creationDate}</div>
@@ -15,15 +9,8 @@
             <span class="glyphicon glyphicon-download" style='font-size:14px;'></span>
         </a> </div>
        
-    </div>
-
-
-   
-    
-     
+    </div> 
   </div>
-  
-  
 </div>
 
  
