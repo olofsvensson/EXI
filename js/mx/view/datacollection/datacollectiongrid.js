@@ -148,8 +148,13 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
     for ( i = 0; i < ids.length; i++) {
         result.push(parsed[ids[i]]);
     }
-    /** Rank results when anomouls is 0 */    
-    return new AutoprocessingRanker().rank(_.filter(result, {anomalous : '0'}), "spaceGroup");  
+    /** Rank results when anomalous is 0 */
+    listResultsNoanom = new AutoprocessingRanker().rank(_.filter(result, {anomalous : '0'}), "spaceGroup");
+    /** If no results, rank results when anomalous is 1 */
+    if (listResultsNoanom.length == 0) {
+        listResultsNoanom = new AutoprocessingRanker().rank(_.filter(result, {anomalous : '1'}), "spaceGroup");
+    }
+    return listResultsNoanom
     //return new AutoprocessingRanker().rank(result, "spaceGroup");  
 };
 
