@@ -5,6 +5,7 @@
 function ExperimentHeaderForm(args) {
 	this.id = BUI.id();
 	this.backgroundColor = '#FFFFFF';
+	this.onSaved = new Event(this);
 }
 
 
@@ -12,7 +13,7 @@ ExperimentHeaderForm.prototype.load = function(experiment) {
 	this.experiment = experiment;
 	Ext.getCmp(this.id + "name").setValue(experiment.name);
 	document.getElementById(this.id + "date").innerHTML = "Created on " + (experiment.creationDate);
-	Ext.getCmp(this.id + "comments").setValue(experiment.json.comments);
+	//Ext.getCmp(this.id + "comments").setValue(experiment.comments);
 };
 
 
@@ -26,13 +27,15 @@ ExperimentHeaderForm.prototype.getToolBar = function() {
 	            	_this.panel.setLoading();
 	            	var onSuccess = (function(sender){
 	            		_this.panel.setLoading(false);
+						_this.onSaved.notify();
 	            		
 	            	});
 	            	EXI.getDataAdapter({ onSuccess : onSuccess}).saxs.experiment.saveExperiment(_this.experiment.experimentId, 
-	            			Ext.getCmp(_this.id + "name").getValue(), 
-	            			Ext.getCmp(_this.id + "comments").getValue());
+					Ext.getCmp(_this.id + "name").getValue(),  _this.experiment.comments)
+	            			//Ext.getCmp(_this.id + "comments").getValue());
 	            }
-	        },
+			}
+/*,
 	        '->',
 	        Ext.create('Ext.button.Split', {
 	            text: 'Download',
@@ -48,44 +51,21 @@ ExperimentHeaderForm.prototype.getToolBar = function() {
 	                    }
 	                ]
 	            })
-	        })
+	        })*/
 	];
 };
 
 ExperimentHeaderForm.prototype.getPanel = function() {
 	this.panel = Ext.create('Ext.panel.Panel', {
 		layout : 'vbox',
-		buttons : this.getToolBar(),
-		cls : 'border-grid',
+		buttons : this.getToolBar(),	
 		items : [
-		         {
-				xtype : 'container',
-				margin : '10 0 0 20',
-				layout : 'hbox',
-				items : [ {
-					xtype : 'container',
-					layout : 'vbox',
-					items : [ {
+		        {
 								xtype : 'textfield',
 								fieldLabel : 'Name' ,
+								padding : 20,
 								id : this.id + "name"
-						}, 
-						{
-								margin : '0 0 0 100',
-								html : "<div style='color:gray;' id='" + this.id + "date';></div>"
-						},
-						 ] 
-				},
-				{
-					xtype : 'textarea',
-					fieldLabel : 'Comments',
-					margin : '0 0 10 20',
-					width : 600 ,
-					height : 80 ,
-					id : this.id + "comments"
-				}
-
-				]  }
+						}
 		] });
 	return this.panel;
 };
