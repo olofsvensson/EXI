@@ -2,8 +2,12 @@
     {#.}
         <tr>
             <td id='{.domId}' class="frame-cell-element" style="cursor:pointer">
-                <span class="unselectable-text" style="pointer-events:none;">{@fileName /}</span>{?.discarded}<span class="unselectable-text" style="color:red;pointer-events:none;"> (discarded)</span>{/.discarded}
+                <span class="unselectable-text" style="pointer-events:none;">
+                 {@fileName key="filePath"  /}
+          
+                </span>
+                {?.discarded}<span class="unselectable-text" style="color:red;pointer-events:none;"> (discarded)</span>{/.discarded}
             </td>
-        <tr>
+        <tr> 
     {/.}
 </table>
