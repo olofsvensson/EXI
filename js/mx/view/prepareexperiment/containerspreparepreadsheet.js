@@ -313,7 +313,7 @@ ContainerPrepareSpreadSheet.prototype.loadProcessingDewars = function (sampleCha
                     var groupedByContainer = _.groupBy(samples,"Container_containerId");
                     _.forEach(groupedByContainer,function(smpls, containerId){
                                                                 var type = "Spinepuck";
-                                                                if (_.maxBy(smpls,"location") > 10) {
+                                                                if (_.maxBy(smpls,"location").location > 10) {
                                                                     type = "Unipuck";  
                                                                 }
                                                                 _.map(processingContainers,function (c) {

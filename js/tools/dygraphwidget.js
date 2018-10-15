@@ -23,15 +23,10 @@ function DygraphWidget(targetId, args) {
 	this.showRangeSelector = false;
 	this.interactionModel = null;
 	this.labelsDivStyles = null;
-
-	this.ranges = [
-//	               {
-//		start : 100,
-//		end : 200,
-//		color : 'rgb(150,200,255)'
-//	}
-	               ];
-
+	this.plotter = null;
+	this.ranges = [         ];
+	this.strokeWidth = null;
+	this.drawPoints = null;
 	if (args != null) {
 		if (args.width != null) {
 			this.width = args.width;
@@ -68,6 +63,17 @@ function DygraphWidget(targetId, args) {
 		if (args.ranges != null) {
 			this.ranges = args.ranges;
 		}
+		if (args.plotter != null) {
+			this.plotter = args.plotter;
+		}
+		if (args.strokeWidth != null) {
+			this.strokeWidth = args.strokeWidth;
+		}
+		if (args.drawPoints != null) {
+			this.drawPoints = args.drawPoints;
+		}
+
+		
 
 	}
 
@@ -111,16 +117,22 @@ DygraphWidget.prototype._createHTLMWrapper = function(data, colors, labels) {
 DygraphWidget.prototype.draw = function(data, colors, labels) {
 	var _this = this;
 	this._createHTLMWrapper(data, colors, labels);
+
+
+	 
+	
 	this.dygraph = new Dygraph(this.canvasDiv, data, {
 		labels : labels,
-		labelsDiv : this.legendDiv,
+		//labelsDiv : this.legendDiv,
 		labelsSeparateLines : true,
 		highlightCircleSize : 3,
 		strokeWidth : 1,
+		 legend: 'always',
 		customBars : this.customBars,
+		drawPoints: this.drawPoints,
+		strokeWidth: this.strokeWidth,
 		colors : colors,
-		//		scaled : this.scaled,
-		//		ranges : this.ranges,
+	    plotter : this.plotter,
 		xlabel : this.xlabel,
 		ylabel : this.ylabel,
 		showRangeSelector : this.showRangeSelector,

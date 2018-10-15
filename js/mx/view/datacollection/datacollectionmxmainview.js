@@ -13,11 +13,15 @@ function DataCollectionMxMainView(args) {
         if (args.sessionId) {
             this.sessionId = args.sessionId;
         }
+         if (args.technique) {
+            this.technique = args.technique;
+        }
     }
 
     this.genericDataCollectionPanel = new MXDataCollectionGrid();
     this.energyScanGrid = new EnergyScanGrid();
     this.xfeScanGrid = new XFEScanGrid();
+    this.emStats = new EMSessionStats({sessionId: this.sessionId});
    
 }
 
@@ -26,10 +30,8 @@ DataCollectionMxMainView.prototype.getPanel = MainView.prototype.getPanel;
 DataCollectionMxMainView.prototype.getContainer = function() {
     var _this = this;
     
-    this.container = Ext.create('Ext.tab.Panel', {   
-    minHeight : 900,    
-    padding : "5 40 0 5",
-    items: [ {
+    var items = [
+        {
                     title: 'Data Collections',
                     cls : 'border-grid',
                     id : this.id + "_dataCollectionTab",                        
@@ -37,24 +39,46 @@ DataCollectionMxMainView.prototype.getContainer = function() {
                         
                         this.genericDataCollectionPanel.getPanel()
                     ]
-            }, 
-            {
+         }
+    ];
+    if (this.technique == 'EM'){        
+        items.push({
+                    title: 'Stats',
+                    cls : 'border-grid',
+                    id : this.id + "_statsTab",
+                    items:[
+                            this.emStats.getPanel()
+                    ]
+
+        });
+    }
+    else{
+        items.push({
                     title: 'Energy Scans',
                     cls : 'border-grid',
                     id : this.id + "_energyTab",
                     items:[
                             this.energyScanGrid.getPanel()
                     ]
-            },
-            {
+
+        });
+        items.push({
                     title: 'Fluorescence Spectra',
                     id : this.id + "_xfeTab",
                     cls : 'border-grid',                         
                     items:[
                         this.xfeScanGrid.getPanel()
                     ]
-            }
-        ],
+
+        });
+
+
+    }
+    
+    this.container = Ext.create('Ext.tab.Panel', {   
+    minHeight : 900,    
+    padding : "5 40 0 5",
+    items:  items,
         listeners: {
             afterrender: function(panel){
                 var bar = panel.tabBar;
@@ -113,6 +137,18 @@ DataCollectionMxMainView.prototype.loadProposal = function (proposal) {
         location.href = "#/welcome/manager/proposal/"+ proposal.Proposal_proposalCode + proposal.Proposal_proposalNumber +"/main";
     });
 }
+
+DataCollectionMxMainView.prototype.loadEMStats = function(data) {  
+    if (data){
+        if (data.length > 0){            
+            this.emStats.load(data);
+            return;
+            }
+        }
+        
+    Ext.getCmp(this.id + "_xfeTab").setDisabled(true);
+};
+
 
 DataCollectionMxMainView.prototype.loadCollections = function(dataCollections) {
 	var data = _.filter(dataCollections, function(u) {

@@ -753,7 +753,7 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
             { text :'Exp.<br /> Type', id : 'experimentKind', column : {
                                                                         width : 90,  
                                                                         type: 'dropdown',																		
-                                                                        source: [ "", "MXPressE", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
+                                                                        source: [ "", "MXPressE", "MXPressF", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
                                                                     }
             }, 
            { text :'Aimed <br />Resolution', id :'Aimed Resolution',column : {width : 60, renderer:numericParameterRenderer}},

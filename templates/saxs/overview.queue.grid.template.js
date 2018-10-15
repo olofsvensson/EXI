@@ -161,7 +161,7 @@
                                         <tr>
                                             <td>
                                                 {?dataReduction}
-                                                    <a onclick="window.open('#/saxs/datacollection/dataCollectionId/{.MeasurementToDataCollection_dataCollectionId}/primaryviewer','_blank');window.close();return false">
+                                                    <a target='_blank' href='#/saxs/datacollection/dataCollectionId/{.MeasurementToDataCollection_dataCollectionId}/primaryviewer'>
                                                     <button class="btn-green" type="submit" style="font-size:9px;width:90px; height:15px">
                                                     <span class="glyphicon glyphicon-ok" style="color:black;"></span>
                                                 {:else}
@@ -170,7 +170,8 @@
                                                     <span class="glyphicon glyphicon-remove" style="color:black;"></span>
                                                 {/dataReduction}
                                                     <span class="submit-text" style="color:black;"> Data Reduction</span>
-                                                </button></a>
+                                                    </button>
+                                                </a>
                                             </td>
                                         </tr>
                                         <tr>
@@ -179,17 +180,15 @@
                                                     <a href="#/saxs/datacollection/dataCollectionId/{.MeasurementToDataCollection_dataCollectionId}/abinitio" target='_blank' >
                                                         <button class="btn-green" style="font-size:9px;width:90px; height:15px">
                                                         <span class="glyphicon glyphicon-ok" style="color:black;"></span>
-                                                        <span class="submit-text" style="color:black;"> Abinitio</span>
-                                                    </a>
+                                                        <span class="submit-text" style="color:black;"> Ab Initio</span>                                                   
                                                 {:else}
                                                     <a>
                                                         <button class="btn-blue" style="font-size:9px;width:90px; height:15px">
                                                         <span class="glyphicon glyphicon-remove" style="color:black;"></span>
-                                                        <span class="submit-text" style="color:black;"> Abinitio</span>
-                                                    </a>
-                                                {/SubtractionToAbInitioModel_abinitioId}
-                                                   
-                                                </button></a> 
+                                                        <span class="submit-text" style="color:black;"> Ab Initio</span>                                                   
+                                                {/SubtractionToAbInitioModel_abinitioId}                                                   
+                                                    </button>
+                                                </a> 
                                             </td>
                                         </tr>
                                         <tr>

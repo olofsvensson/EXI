@@ -44,7 +44,7 @@ WizardWidget.prototype.getButtons = function(step, onNext, onBack) {
 				_this.forms[_this.step].reload();
 			}
 		}, "->", {
-			text : 'Finish',
+			text : 'Next',
 			handler : function() {
 				_this.forms[_this.step].onWizardFinished.attach(function(sender, result) {
 					_this.onFinished.notify(result);

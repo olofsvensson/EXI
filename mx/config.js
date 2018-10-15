@@ -190,8 +190,16 @@ var ExtISPyB ={
          icon : '../images/site/dev.esrf.png',
 		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
          beamlines:{
+                 EM :[
+                   { 
+                      name : "CM01"
+                   }
+            ],
             SAXS:[
-
+               {
+		          name : 'BM29',
+		          sampleChangerType : ''
+   	           }
              
             ],
             MX:[
@@ -234,6 +242,10 @@ var ExtISPyB ={
             ]
          }
       }
+<<<<<<< HEAD
+ 
+=======
+>>>>>>> 1b21def14ff5f342e491d703399140b452d71f30
    ]
 };
 
