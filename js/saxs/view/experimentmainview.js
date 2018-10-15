@@ -42,8 +42,8 @@ ExperimentMainView.prototype.getToolBar = function() {
     var _this = this;
     function onMenuClicked(widget){
         if (_this.activePanel != widget){
-            _this.activePanel = widget;
-			_this.load(_this.dataCollections);
+            _this.activePanel = widget;			
+			_this.load(_this.dataCollections, _this.experimentId );
         }
     }
 
@@ -91,9 +91,11 @@ ExperimentMainView.prototype.getPanel = function() {
 	return this.panel;
 };
 
-ExperimentMainView.prototype.load = function(dataCollections) {
+ExperimentMainView.prototype.load = function(dataCollections, experimentId) {
+	this.experimentId = experimentId;
 	this.dataCollections = dataCollections;
 	this.panel.removeAll();
 	this.panel.insert(this.activePanel.getPanel());
-	this.activePanel.load(dataCollections);	
+	debugger
+	this.activePanel.load(dataCollections, this.experimentId);	
 };

@@ -118,7 +118,7 @@ SAXSExiController.prototype.routeExperiment = function() {
         function loadMainExperimentView(experimentId){
         	mainView.panel.setLoading();	
             var onSuccess = function(sender, dataCollections){							
-                mainView.load(dataCollections);
+                mainView.load(dataCollections, _thisRoute.params['experimentId']);
                 mainView.panel.setLoading(false);				
             };
             EXI.getDataAdapter({onSuccess : onSuccess}).saxs.dataCollection.getDataCollectionsByExperiment(_thisRoute.params['experimentId']);

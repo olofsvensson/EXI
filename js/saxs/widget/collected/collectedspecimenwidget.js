@@ -164,7 +164,7 @@ CollectedSpecimenWidget.prototype.getContainerLayoutConfiguration = function(dat
 };
 
 
-CollectedSpecimenWidget.prototype.load = function(dataCollections){
+CollectedSpecimenWidget.prototype.load = function(dataCollections, experimentId){
     
 	this.dataCollections = _.uniqBy(dataCollections,"Specimen_specimenId");
 	
@@ -206,7 +206,7 @@ CollectedSpecimenWidget.prototype.load = function(dataCollections){
    	
 	/** Load data **/
 	this.specimenGrid.refresh(this.dataCollections);
-	this.samplePlateGroupWidget.refresh(this.dataCollections);
+	this.samplePlateGroupWidget.refresh(this.dataCollections, experimentId);
 	
 	
 };
