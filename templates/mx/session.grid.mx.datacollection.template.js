@@ -46,7 +46,7 @@
             </td>
             <td style="text-align:center;" class="mxsessiongridheader">
                Collects
-            </td>
+            </td> 
             <td style="text-align:center;" class="saxssessiongridheader">
                Calibration
             </td>
@@ -78,7 +78,12 @@
                     <a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk={.expSessionPk}" class='btn btn-xs'><span class='glyphicon glyphicon-list-alt'></span></a>
                   {/expSessionPk}            
             </td>
-            <td> <a href='{.dataCollectionURL}'>              
+            <td> <a href='{.dataCollectionURL}'>
+               <?BLSession_protectedData>
+                    {@eq key=BLSession_protectedData value="OK"}
+                            <span class="glyphicon glyphicon-lock" ></span>
+                    {/eq}
+               </BLSession_protectedData>                              
                <a href='{.dataCollectionURL}'>{.Proposal_proposalCode}{.Proposal_ProposalNumber}</a>
             </td>
             <td> {.beamLineOperator}</td>
