@@ -165,6 +165,7 @@ PrimaryDataMainView.prototype.load = function (dataCollectionId) {
 								domId: subtraction.subtractionId + 'SampleAverage',
 								type: 'SampleAverage'
 							});
+							debugger
 							_this.framesGrid.load(allFrames);
 						} else {
 							_this.framesGrid.load(null);
