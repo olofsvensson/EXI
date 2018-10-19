@@ -95,7 +95,6 @@ ExperimentMainView.prototype.load = function(dataCollections, experimentId) {
 	this.experimentId = experimentId;
 	this.dataCollections = dataCollections;
 	this.panel.removeAll();
-	this.panel.insert(this.activePanel.getPanel());
-	debugger
+	this.panel.insert(this.activePanel.getPanel());	
 	this.activePanel.load(dataCollections, this.experimentId);	
 };

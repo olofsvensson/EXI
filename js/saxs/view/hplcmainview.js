@@ -155,9 +155,12 @@ HPLCMainView.prototype.getContainer = function() {
 		 margin : 10,
 		 handler: function() {
 			 var header = new ExperimentHeaderForm();
-			 header.onSaved.attach(function(sender){
+			 header.onSaved.attach(function(sender, newName){
 				 _this.window.close();
-				 _this.load(_this.experimentId);
+				 
+				 if (document.getElementById("work-around-name-edit")){
+					 document.getElementById("work-around-name-edit").innerHTML = newName;
+				 }
 			 });
 			 _this.window =  Ext.create('Ext.window.Window', {
 				title: 'Edit',
