@@ -58,6 +58,64 @@
 		       <td >
 		          {@eq key=v_datacollection_summary_phasing_anomalous type="boolean" value="true"}
 		              {?overall.anomalousMultiplicity}
+		                 {?overall.multiplicity}
+		                     {?overall.completeness}
+			                      <span class='overallshell'>{.overall.multiplicity}</span><br />
+			                      <span class='innershell'>{.innerShell.multiplicity} </span><br />
+			                      <span class='outershell'>{.outerShell.multiplicity}</span>
+		                      {:else}
+		                          <span class='overallshell'></span><br />
+		                          <span class='innershell'></span><br />
+		                          <span class='outershell'></span>
+		 		              {/overall.completeness}
+		 		          {:else}
+	                          <span class='overallshell'></span><br />
+	                          <span class='innershell'></span><br />
+	                          <span class='outershell'></span>
+			              {/overall.multiplicity}
+	 		          {:else}
+                          <span class='overallshell'></span><br />
+                          <span class='innershell'></span><br />
+                          <span class='outershell'></span>
+                      {/overall.anomalousMultiplicity}
+                  {:else}
+	                  <span class='overallshell'>{.overall.multiplicity}</span><br />
+	                  <span class='innershell'>{.innerShell.multiplicity} </span><br />
+	                  <span class='outershell'>{.outerShell.multiplicity}</span>
+                  {/eq}
+		       </td>
+		       <td > 
+		          {@eq key=v_datacollection_summary_phasing_anomalous type="boolean" value="true"}
+		              {?overall.anomalousCompleteness}
+		                 {?overall.multiplicity}
+	                     {?overall.completeness}
+		                      <span class='overallshell'>{.overall.multiplicity}</span><br />
+		                      <span class='innershell'>{.innerShell.multiplicity} </span><br />
+		                      <span class='outershell'>{.outerShell.multiplicity}</span>
+	                      {:else}
+	                          <span class='overallshell'></span><br />
+	                          <span class='innershell'></span><br />
+	                          <span class='outershell'></span>
+	 		              {/overall.completeness}
+	 		          {:else}
+                          <span class='overallshell'></span><br />
+                          <span class='innershell'></span><br />
+                          <span class='outershell'></span>
+		              {/overall.multiplicity}
+ 		          {:else}
+                      <span class='overallshell'></span><br />
+                      <span class='innershell'></span><br />
+                      <span class='outershell'></span>
+                      {/overall.anomalousCompleteness}
+                   {:else}
+	                  <span class='overallshell'>{.overall.completeness}</span><br />
+	                  <span class='innershell'>{.innerShell.completeness} </span><br />
+	                  <span class='outershell'>{.outerShell.completeness}</span>
+                  {/eq}
+		       </td>
+		       <td >
+		          {@eq key=v_datacollection_summary_phasing_anomalous type="boolean" value="true"}
+	                  {?overall.anomalousMultiplicity}
 		                  <span class='overallshell'>{.overall.anomalousMultiplicity}</span><br />
 		                  <span class='innershell'>{.innerShell.anomalousMultiplicity} </span><br />
 		                  <span class='outershell'>{.outerShell.anomalousMultiplicity}</span>
@@ -66,29 +124,29 @@
 		                  <span class='innershell'>{.innerShell.multiplicity} </span><br />
 		                  <span class='outershell'>{.outerShell.multiplicity}</span>
 		              {/overall.anomalousMultiplicity}
-		          {:else}
-		              <span class='overallshell'>{.overall.multiplicity}</span><br />
-		              <span class='innershell'>{.innerShell.multiplicity} </span><br />
-		              <span class='outershell'>{.outerShell.multiplicity}</span>
-		          {/eq}
+                  {:else}
+	                  <span class='overallshell'>{.overall.anomalousMultiplicity}</span><br />
+	                  <span class='innershell'>{.innerShell.anomalousMultiplicity} </span><br />
+	                  <span class='outershell'>{.outerShell.anomalousMultiplicity}</span>
+	              {/eq}
 		       </td>
-		       <td > 
+		       <td >
 		          {@eq key=v_datacollection_summary_phasing_anomalous type="boolean" value="true"}
 		              {?overall.anomalousCompleteness}
-		                  <span class='overallshell'>{.overall.anomalousCompleteness}</span><br />
-		                  <span class='innershell'>{.innerShell.anomalousCompleteness} </span><br />
-		                  <span class='outershell'>{.outerShell.anomalousCompleteness}</span>
-		              {:else}
+	                      <span class='overallshell'>{.overall.anomalousCompleteness}</span><br />
+	                      <span class='innershell'>{.innerShell.anomalousCompleteness} </span><br />
+	                      <span class='outershell'>{.outerShell.anomalousCompleteness}</span>
+			          {:else}
 		                  <span class='overallshell'>{.overall.completeness}</span><br />
 		                  <span class='innershell'>{.innerShell.completeness} </span><br />
 		                  <span class='outershell'>{.outerShell.completeness}</span>
 		              {/overall.anomalousCompleteness}
-		          {:else}
-		              <span class='overallshell'>{.overall.completeness}</span><br />
-		              <span class='innershell'>{.innerShell.completeness} </span><br />
-		              <span class='outershell'>{.outerShell.completeness}</span>
-		          {/eq}
-		        </td>
+                  {:else}
+	                  <span class='overallshell'>{.overall.anomalousCompleteness}</span><br />
+	                  <span class='innershell'>{.innerShell.anomalousCompleteness} </span><br />
+	                  <span class='outershell'>{.outerShell.anomalousCompleteness}</span>
+	              {/eq}
+		       </td>
 		       <td >
 		            <span class='overallshell'>{.overall.meanIOverSigI}</span><br />
 		            <span class='innershell'>{.innerShell.meanIOverSigI} </span><br />

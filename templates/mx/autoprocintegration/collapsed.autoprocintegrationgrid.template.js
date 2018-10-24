@@ -18,6 +18,8 @@
                   <th>Resolution (&#197;)</th>
                   <th>Multiplicity</th>
                   <th>Completeness %</th> 
+                  <th>Anomalous<br>multiplicity</th>
+                  <th>Anomalous<br>completeness %</th> 
                   <th>&#60;I/Sigma&#62;</th>
                   <th>Rmeas</th> 
                   <th>Rmerge</th>
