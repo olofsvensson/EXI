@@ -171,8 +171,9 @@ dust.helpers.framesColor = function(chunk, context, bodies, params) {
     
 };
 
-dust.helpers.fileName = function (chunk, context, bodies, params) {
-    var filePath = context.current()["filePath"];
+dust.helpers.fileName = function (chunk, context, bodies, params) {    
+    debugger
+    var filePath = context.current()[params.key];
     if (filePath) {
         try{
             var withExtension = filePath.substring(filePath.lastIndexOf('/')+1);
@@ -186,7 +187,7 @@ dust.helpers.fileName = function (chunk, context, bodies, params) {
     return chunk;
 }
 
-dust.helpers.formatDate = function (chunk, context, bodies, params) {
+dust.helpers.formatDate = function (chunk, context, bodies, params) {    
     if (params.date) {       
             if (params.format != null) {
                 try {

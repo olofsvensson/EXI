@@ -129,6 +129,41 @@ DataCollectionDataAdapter.prototype.getRtfAnalysisReportURLBySessionId = functio
    return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/session/{0}/analysisreport/rtf'.format([sessionId]));
 };
 
+/**
+* This method downloads a PDF report for a filter parameter
+* @method getReportURLByFilterParam
+*/
+DataCollectionDataAdapter.prototype.getReportURLByFilterParam = function(filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/report/pdf'.format([filterParam]));
+
+};
+
+/**
+* This method downloads a RTF report for a filter parameter
+* @method getRtfReportURLByFilterParam
+*/
+DataCollectionDataAdapter.prototype.getRtfReportURLByFilterParam = function(filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/report/rtf'.format([filterParam]));
+
+};
+
+/**
+* This method downloads a PDF report for a filter parameter with analysis results
+* @method getAnalysisReportURLByFilterParam
+*/
+DataCollectionDataAdapter.prototype.getAnalysisReportURLByFilterParam = function(filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/analysisreport/pdf'.format([filterParam]));
+
+};
+
+/**
+* This method downloads a RTF report for a filter parameter with analysis results
+* @method getRtfAnalysisReportURLByFilterParam
+*/
+DataCollectionDataAdapter.prototype.getRtfAnalysisReportURLByFilterParam = function(filterParam){
+   return this.getUrl('/{token}/proposal/{proposal}/mx/datacollection/filterParam/{0}/analysisreport/rtf'.format([filterParam]));
+};
+
 
 
 

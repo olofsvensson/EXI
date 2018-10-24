@@ -222,8 +222,10 @@ ProposalManager.prototype.getProposalById = function(proposalId) {
 /**
 * @method getStockSolutions
 */
-ProposalManager.prototype.getStockSolutions = function() {
-	return this.get()[0].stockSolutions;
+ProposalManager.prototype.getStockSolutions = function() {	
+	if (this.get()[0]){
+		return this.get()[0].stockSolutions;
+	}
 };
 
 /**

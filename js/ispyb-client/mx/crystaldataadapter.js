@@ -19,6 +19,29 @@ CrystalDataAdapter.prototype.getCrystalsByProposalId= function(){
 };
 
 /**
+* @method getSaveStructureURL
+*/
+CrystalDataAdapter.prototype.getSaveStructureURL= function(crystalid){
+return this.getUrl('/{token}/proposal/{proposal}/mx/crystal/{0}/structure/save'.format([crystalid]));
+};
+
+/**
+* @method removeStructure
+*/
+CrystalDataAdapter.prototype.removeStructure= function(crystalid, structureId){
+return this.get('/{token}/proposal/{proposal}/mx/crystal/{0}/structure/{1}/delete'.format([crystalid, structureId]));
+};
+  
+
+
+/**
+* @method getCrystalsByProteinId
+*/
+CrystalDataAdapter.prototype.getCrystalsByProteinId= function(proteinId){
+     this.get('/{token}/proposal/{proposal}/mx/crystal/proteinid/{0}/list'.format([proteinId.toString()]));
+};
+
+/**
 * @method getCrystalById
 */
 CrystalDataAdapter.prototype.getCrystalById= function(crystalId){

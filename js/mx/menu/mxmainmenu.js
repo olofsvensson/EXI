@@ -19,12 +19,20 @@ MXMainMenu.prototype.getMenuItems = function() {
 	return [
 		this.getHomeItem(),
 		this.getShipmentItem(),
-		{
-                text : this._convertToHTMLWhiteSpan("Proteins and Crystals"),
+		/*{
+                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
-                disabled : true,
+                disabled : false,
                 menu : this.getProteinCrystalsMenu() 
 	    	},
+			{
+                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
+                cls : 'ExiSAXSMenuToolBar',
+                disabled : false,
+                handler : function(){
+                    location.hash = "#/protein/list";
+                }
+	    	},*/
 	    	{
                 text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
                 cls : 'ExiSAXSMenuToolBar',
@@ -110,12 +118,12 @@ MXMainMenu.prototype.getOnlineDataAnalisysMenu = function() {
  
 
 MXMainMenu.prototype.getProteinCrystalsMenu = function() {
-	function onItemCheck(item, checked) {
+	/*function onItemCheck(item, checked) {
 		if (item.text == "My Crystals") {
 			location.hash = "/crystal/nav";
 		}
 		if (item.text == "My Proteins") {
-			location.hash = "/protein/nav";
+			location.hash = "/protein/list";
 		}
 		if (item.text == "Puck") {
 			location.hash = "/puck/nav";
@@ -126,6 +134,7 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 			{
 				text : 'My Crystals',
 				icon : '../images/icon/macromolecule.png',
+				disabled : true,
 				handler : onItemCheck 
 			},
 			{
@@ -135,9 +144,10 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 			},
 			{
 				text : 'Puck',
+				disabled : true,
 				icon : '../images/icon/testtube.png',
 				handler : onItemCheck 
 			}
 		] 
-	});
+	});*/
 };

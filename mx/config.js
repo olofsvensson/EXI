@@ -196,7 +196,10 @@ var ExtISPyB ={
                    }
             ],
             SAXS:[
-
+               {
+		          name : 'BM29',
+		          sampleChangerType : ''
+   	           }
              
             ],
             MX:[
@@ -277,7 +280,7 @@ var ExtISPyB ={
                ]
            }
 
-       }
+      }
    ]
 };
 
