@@ -139,9 +139,43 @@ HPLCMainView.prototype.getSecondaryContainer = function() {
                     
                 ] };
 };
-
+/*
+Ext.create('Ext.window.Window', {
+    title: 'Edit',
+    height: 600,
+    width: 600,
+    layout: 'fit',
+    items: [new ExperimentHeaderForm().getPanel()]
+}).show();
+*/
 HPLCMainView.prototype.getContainer = function() {
-    
+	var _this = this;
+   	var button = Ext.create('Ext.Button', {
+    	text: 'Edit',
+		 margin : 10,
+		 handler: function() {
+			 var header = new ExperimentHeaderForm();
+			 header.onSaved.attach(function(sender, newName){
+				 _this.window.close();
+				 
+				 if (document.getElementById("work-around-name-edit")){
+					 document.getElementById("work-around-name-edit").innerHTML = newName;
+				 }
+			 });
+			 _this.window =  Ext.create('Ext.window.Window', {
+				title: 'Edit',
+				height: 300,
+				width: 400,
+				layout: 'fit',
+				items: [header.getPanel()]
+			}).show();
+			
+			var onSuccess = function(sender, data){
+				header.load(data[0]);
+			}
+			EXI.getDataAdapter({onSuccess : onSuccess}).saxs.experiment.getExperimentById(_this.experimentId);
+		 } 
+	}); 
 	return {
 		xtype : 'container',
         margin : 10,
@@ -149,9 +183,10 @@ HPLCMainView.prototype.getContainer = function() {
             
             {
               html : '<div id="' + this.id +'header"></div>',
-              margin : 10 ,
-              height : 160 
+              margin : 10,
+              height : 130 
             },
+			button,
             {
               html : ' <div class="panel panel-primary"><div class="panel-heading">Data Collection</div></div>',
               margin : 10 ,
@@ -230,12 +265,11 @@ HPLCMainView.prototype.load = function(experimentId) {
                         hdf5 : data[0].Experiment_dataAcquisitionFilePath,
                         url : EXI.getDataAdapter().saxs.hplc.getDownloadHDF5URL(data[0].Experiment_experimentId)
                     }
-                    
+                    _this.name =  data[0].Experiment_name;
                     /** Renedering header */
                      var html = "";
                      
-                    dust.render("header.hplcmainview.template", header, function(err, out) {
-                                                                                                                                        
+                    dust.render("header.hplcmainview.template", header, function(err, out) {                                                                                                                                        
                         html = html + out;
                     });
                     $('#' + _this.id + "header").html(html);

@@ -191,6 +191,8 @@ SamplePlateGroupWidget.prototype.getPlatesContainer = function(experiment){
 		}
 	} 
 	div.appendChild(table);
+
+
 	return div.innerHTML;
 };
 
@@ -224,18 +226,31 @@ SamplePlateGroupWidget.prototype._refreshBbar = function(){
 	}
 };
 
-SamplePlateGroupWidget.prototype.refresh = function(experiment){
-	this.experiment = experiment;
-	this.samplePlateWidgets = [];
+SamplePlateGroupWidget.prototype.refresh = function(experiment, experimentId ){
+	var _this = this;
+	if (experimentId){
+		var onSuccess = function(sender, experiment){
+			
+			_this.experiment = new Experiment(experiment[0]);
+			_this.samplePlateWidgets = [];
 
-	if (document.getElementById(this.id + "_container") != null){
-		document.getElementById(this.id + "_container").innerHTML = "";
-		document.getElementById(this.id + "_container").innerHTML = this.getPlatesContainer(experiment);
-		this.drawPlates(experiment);
+			if (document.getElementById(_this.id + "_container") != null){
+				document.getElementById(_this.id + "_container").innerHTML = "";				
+				document.getElementById(_this.id + "_container").innerHTML = _this.getPlatesContainer(_this.experiment);
+				_this.drawPlates(_this.experiment);
+				_this.panel.setLoading(false);
+			}
+
+			/** We refrsh also the bbar  but it could not exist yet* */
+			_this._refreshBbar();
+		}
+		
+		this.panel.setLoading();
+		EXI.getDataAdapter({onSuccess : onSuccess}).saxs.experiment.getExperimentById(experimentId);
+		
 	}
 
-	/** We refrsh also the bbar  but it could not exist yet* */
-	this._refreshBbar();	
+		
 	
 
 };

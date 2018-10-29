@@ -159,7 +159,6 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
 };
 
 
-
 DataCollectionGrid.prototype.getColumns = function() {
     var _this = this;
 
@@ -196,8 +195,7 @@ DataCollectionGrid.prototype.getColumns = function() {
                     }
                 }
                 catch(e){}
-               
-               
+                              
                 
                 /** For crystal */
                 data.xtal1 = EXI.getDataAdapter().mx.dataCollection.getCrystalSnapshotByDataCollectionId(record.data.DataCollection_dataCollectionId, 1);
@@ -256,9 +254,11 @@ DataCollectionGrid.prototype.getColumns = function() {
                     data.workflows = [];
                 }
                 
+
                 /** EM technique */                
                 data = _this.parseEMData(record.data);
-
+ 
+                
                 dust.render(_this.template, data, function(err, out) {                                                                                           
                     html = html + out;
                 });
