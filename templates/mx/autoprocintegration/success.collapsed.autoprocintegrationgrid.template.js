@@ -39,12 +39,8 @@
 		       </td>
 		       <td >{.v_datacollection_summary_phasing_autoproc_space_group}</td>
 		      
-		       <td >{@decimal key="v_datacollection_summary_phasing_cell_a" decimals=1}{/decimal}</td>
-		       <td >{@decimal key="v_datacollection_summary_phasing_cell_b" decimals=1}{/decimal}</td>
-		       <td >{@decimal key="v_datacollection_summary_phasing_cell_c" decimals=1}{/decimal}</td>
-		       <td >{@decimal key="v_datacollection_summary_phasing_cell_alpha" decimals=1}{/decimal}</td>
-		       <td >{@decimal key="v_datacollection_summary_phasing_cell_beta" decimals=1}{/decimal}</td>
-		       <td >{@decimal key="v_datacollection_summary_phasing_cell_gamma" decimals=1}{/decimal}</td>
+		       <td >{@decimal key="v_datacollection_summary_phasing_cell_a" decimals=1}{/decimal}<br>{@decimal key="v_datacollection_summary_phasing_cell_b" decimals=1}{/decimal}<br>{@decimal key="v_datacollection_summary_phasing_cell_c" decimals=1}{/decimal}</td>
+		       <td >{@decimal key="v_datacollection_summary_phasing_cell_alpha" decimals=1}{/decimal}<br>{@decimal key="v_datacollection_summary_phasing_cell_beta" decimals=1}{/decimal}<br>{@decimal key="v_datacollection_summary_phasing_cell_gamma" decimals=1}{/decimal}</td>
 		       <td>
 		          <span class='overallshell'>Overall</span><br />
 		          <span class='innershell'>Inner</span><br />

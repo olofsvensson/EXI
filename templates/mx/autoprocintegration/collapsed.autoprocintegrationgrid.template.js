@@ -8,12 +8,8 @@
                   <th></th>
                   <th>Pipeline</th>
                   <th>SpaceGroup</th>
-                  <th>a (&#197;)</th>
-                  <th> b (&#197;)</th>
-                  <th> c (&#197;)</th>
-                  <th>&#x3B1; (&deg)</th>
-                  <th>&beta; (&deg)</th>
-                  <th>&gamma; (&deg)</th>
+                  <th>a,b,c (&#197;)</th>
+                  <th>&#x3B1;,&beta;,&gamma; (&deg)</th>
                   <th>Shell</th> 
                   <th>Resolution (&#197;)</th>
                   <th>Multiplicity</th>
