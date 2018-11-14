@@ -14,7 +14,8 @@
                                 <th style='color:gray'>Program</th>
                                 <th style='color:gray'>Method</th>
                                 <th style='color:gray'>Resolution</th>
-                                             
+                                <th style='color:gray'>Electron density MR</th>
+                                <th style='color:gray'>Electron density REFINE</th>
                             </tr>
                 </thead> 
                 <tbody>
@@ -67,7 +68,16 @@
                                         <td>{.PhasingProgramRun_phasingPrograms} </td>
                                         <td>{.PhasingStep_method} </td>
                                         <td>{.PhasingStep_highRes} - {.PhasingStep_lowRes} </td>
-                                             
+                                        {#listUglyMol}
+                                        {@eq key="{.}" value=""}
+                                        <td></td>
+                                        {:else}
+                                        <td>                                            
+                                             <a><a target="_blank" href='{.}' ><span style='font-size: 1em;' class="glyphicon glyphicon-eye-open"  ></span></a> 
+                                        </td>
+                                        {/eq}
+                                        {/listUglyMol}                                                                                        
+
                                     </tr> 
                                  {/metrics}
                             {/.parsed} 
