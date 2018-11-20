@@ -138,7 +138,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                        var statisticsValues = _.map(steps, "statisticsValue");
                        for (var z=0; z < steps.length; z++){   
                             var toBePushed =  steps[z];
-                            
+                            var listUglyMol = [];
                             /**
                              * This adds the phasing plots into the dictionary looking for them from the previous steps
                              */
@@ -168,7 +168,6 @@ PhasingGridView.prototype.printHTML = function(target) {
 	                            }
                             } else if (step == "REFINEMENT") {
                                 var pdbFileId = -1;
-                                var listUglyMol = [];
                                 var mapsArr = steps[z].map.split(",");
                                 var pdbsArr = steps[z].pdb.split(",");
                                 if ("mapFileName" in steps[z]) {
@@ -210,14 +209,15 @@ PhasingGridView.prototype.printHTML = function(target) {
                                         var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[indexFOFC_REFINE]);
                                         listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2);
                                     }
-                                } else {
-                                    listUglyMol.push("");
-                                    listUglyMol.push("");
-                                }
-                                toBePushed["listUglyMol"] = listUglyMol;
+                                } 
                             }
                             /** It will add only the files coming from these steps */
-                            toBePushed["downloadFilesUrl"] = EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(parseDownloadAttachments(steps[z]));                                                                            
+                            toBePushed["downloadFilesUrl"] = EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(parseDownloadAttachments(steps[z]));
+                            if (listUglyMol.length == 0) {
+                                listUglyMol.push("");
+                                listUglyMol.push("");
+                            }
+                            toBePushed["listUglyMol"] = listUglyMol;
                             node["metrics"].push(toBePushed);                         
                        }                                            
                    }     
