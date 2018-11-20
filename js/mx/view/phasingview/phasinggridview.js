@@ -171,15 +171,23 @@ PhasingGridView.prototype.printHTML = function(target) {
                                 var listUglyMol = [];
                                 var mapsArr = steps[z].map.split(",");
                                 var pdbsArr = steps[z].pdb.split(",");
-                                var mapFileNamesArr = steps[z].mapFileName.split(",");
-                                for (var i = 0; i < mapFileNamesArr.length; i++) {
-                                    mapFileNamesArr[i] = mapFileNamesArr[i].slice(0, -4)
-                                }
-                                var pdbFileNamesArr = steps[z].pdbFileName.split(",");
-                                for (var i = 0; i < pdbFileNamesArr.length; i++) {
-                                    if (pdbFileNamesArr[i] == "refined.pdb") {
-                                        pdbFileId = pdbsArr[i];
+                                if ("mapFileName" in steps[z]) {
+                                    var mapFileNamesArr = steps[z].mapFileName.split(",");
+                                    for (var i = 0; i < mapFileNamesArr.length; i++) {
+                                        mapFileNamesArr[i] = mapFileNamesArr[i].slice(0, -4)
                                     }
+                                } else {
+                                    var mapFileNamesArr = [];
+                                }
+                                if ("pdbFileName" in steps[z]) {
+                                    var pdbFileNamesArr = steps[z].pdbFileName.split(",");
+                                    for (var i = 0; i < pdbFileNamesArr.length; i++) {
+                                        if (pdbFileNamesArr[i] == "refined.pdb") {
+                                            pdbFileId = pdbsArr[i];
+                                        }
+                                    }
+                                } else {
+                                    var pdbFileNamesArr = [];
                                 }
                                 if (pdbFileId != -1) {
                                     index2FOFC_MR = mapFileNamesArr.indexOf("2FOFC_MR");
