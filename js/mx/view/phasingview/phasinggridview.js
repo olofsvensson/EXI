@@ -167,7 +167,8 @@ PhasingGridView.prototype.printHTML = function(target) {
 	                                }
 	                            }
                             } else if (step == "REFINEMENT") {
-                                var pdbFileId = -1;
+                                var refinedPdbFileId = -1;
+                                var mrPdbFileId = -1;
                                 var mapsArr = steps[z].map.split(",");
                                 var pdbsArr = steps[z].pdb.split(",");
                                 if ("mapFileName" in steps[z]) {
@@ -182,29 +183,33 @@ PhasingGridView.prototype.printHTML = function(target) {
                                     var pdbFileNamesArr = steps[z].pdbFileName.split(",");
                                     for (var i = 0; i < pdbFileNamesArr.length; i++) {
                                         if (pdbFileNamesArr[i] == "refined.pdb") {
-                                            pdbFileId = pdbsArr[i];
+                                            refinedPdbFileId = pdbsArr[i];
+                                        } else if (pdbFileNamesArr[i] == "MR.pdb") {
+                                            mrPdbFileId = pdbsArr[i];
                                         }
                                     }
                                 } else {
                                     var pdbFileNamesArr = [];
                                 }
-                                if (pdbFileId != -1) {
+                                if (mrPdbFileId != -1) {
                                     index2FOFC_MR = mapFileNamesArr.indexOf("2FOFC_MR");
                                     indexFOFC_MR = mapFileNamesArr.indexOf("FOFC_MR");
-                                    index2FOFC_REFINE = mapFileNamesArr.indexOf("2FOFC_REFINE");
-                                    indexFOFC_REFINE = mapFileNamesArr.indexOf("FOFC_REFINE");
                                     if ( (index2FOFC_MR == -1) || (indexFOFC_MR) == -1) {
                                         listUglyMol.push("");
                                     } else {
-                                        var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( pdbFileId );
+                                        var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mrPdbFileId );
                                         var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[index2FOFC_MR]);
                                         var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[indexFOFC_MR]);
                                         listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2);
                                     }
+                                } 
+                                if (refinedPdbFileId != -1) {
+                                    index2FOFC_REFINE = mapFileNamesArr.indexOf("2FOFC_REFINE");
+                                    indexFOFC_REFINE = mapFileNamesArr.indexOf("FOFC_REFINE");
                                     if ( (index2FOFC_REFINE == -1) || (indexFOFC_REFINE == -1) ) {
                                         listUglyMol.push("");
                                     } else {
-                                        var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( pdbFileId );
+                                        var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( refinedPdbFileId );
                                         var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[index2FOFC_REFINE]);
                                         var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[indexFOFC_REFINE]);
                                         listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2);
