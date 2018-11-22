@@ -151,7 +151,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                             if (steps[z].metric){                                                        
                                 toBePushed = getMetrics(steps[z]);
                             }  
-                            if (step == "MODEL_BUILDING") { 
+                            if (step == "MODELBUILDING") { 
 	                            /* Opening uglymol with:
 	                                    1) pdb file
 	                                    2) map1 as first map file
