@@ -246,9 +246,11 @@ CSVPuckFormView.prototype.csvToArray = function(csvContent) {
         if (allTextLines){
             if (allTextLines.length > 0){
                 var lines = [];
-                for (var i=0; i<allTextLines.length -1; i++) {
-                    var line = allTextLines[i].split(',');                                        
-                    lines.push(line);
+                for (var i=0; i<allTextLines.length -1; i++) {					
+					if (!allTextLines[i].trim().startsWith("#")){
+                    	var line = allTextLines[i].split(',');                                        
+                    	lines.push(line);
+					}
                 }
                 return lines;        
             }
