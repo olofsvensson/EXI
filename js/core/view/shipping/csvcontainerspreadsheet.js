@@ -307,7 +307,7 @@ CSVContainerSpreadSheet.prototype.getParcels = function() {
 			preferredBeamDiameter 	: _this.emptyToNull(row["Beam Diameter"]),
 			numberOfPositions	 	: _this.emptyToNull(row["Number Of positions"]),
 			axisRange	 			: _this.emptyToNull(row["axisRange"]),
-			
+			minOscWidth				: _this.emptyToNull(row["minOscWidth"])
 
 
 		};		
@@ -775,6 +775,7 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 
             { text :'SMILES', id :'Smiles', column : {width : 60}}, 
 			{ text :'Tot Rot. <br />Angle', id :'axisRange',column : {width : 60, renderer:numericParameterRenderer}},
+			{ text :'Min Osc.<br />Angle', id :'minOscWidth',column : {width : 60, renderer:numericParameterRenderer}},
 			{ text :'Observed <br />Resolution', id :'Observed Resolution',column : {width : 60, renderer:numericParameterRenderer}},
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
