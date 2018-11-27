@@ -249,6 +249,7 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
 						diffraction.radiationSensitivity, 
 						sample.smiles, 
 						diffraction.axisRange,
+						diffraction.minOscWidth,
 						getValue(diffraction["observedResolution"]),  
 						sample.comments
                     ]
@@ -336,7 +337,8 @@ ContainerSpreadSheet.prototype.getHeader = function() {
             }, 
             { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 80}}, 
             { text :'Smiles', id :'Smiles', column : {width : 140}}, 
-			{ text :'Tot Rot. <br />Angle', id :'axisRange',column : {width : 60}},		
+			{ text :'Tot Rot. <br />Angle', id :'axisRange',column : {width : 60}},
+			{ text :'Min Osc.<br />Angle', id :'minOscWidth',column : {width : 60}},		
             { text :'Observed <br />resolution', id : 'Pre-observed resolution', column : {width : 80}}, 
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
@@ -423,6 +425,8 @@ ContainerSpreadSheet.prototype.getPuck = function() {
 		sample["diffractionPlanVO"]["experimentKind"]= rows[i]["Experiment Type"];
 		sample["diffractionPlanVO"]["numberOfPositions"]= this.convertToNumberIfNotEmpty(rows[i]["Number Of positions"]);
 		sample["diffractionPlanVO"]["axisRange"]= rows[i]["axisRange"];
+
+		sample["diffractionPlanVO"]["minOscWidth"]= rows[i]["minOscWidth"];		
 	
 		aux.push(sample);
 		
