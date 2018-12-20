@@ -113,9 +113,9 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                 xtype: 'tbseparator'
             },
              {                     
-                        text: "<span class='glyphicon glyphicon-download-alt'> PDF</span>",
+                        text: "<span class='glyphicon glyphicon-download-alt'> PDF summary</span>",
                         id : 'pdfBtn',
-                        tooltip: 'Download Session Report',                                              
+                        tooltip: 'Download Session Summary Report',                                              
                         margin: '2 0 2 5',
                         handler : function(){
                             if (_this.pdfUrl != null){
@@ -124,13 +124,35 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                         }
                     },
              {                     
-                        text: "<span class='glyphicon glyphicon-download-alt'> RTF</span>",
+                        text: "<span class='glyphicon glyphicon-download-alt'> RTF summary</span>",
                         id : 'rtfBtn',
-                        tooltip: 'Download Session Report as RTF',                                              
+                        tooltip: 'Download Session Summary Report as RTF',                                              
                         margin: '2 0 2 5',
                         handler : function(){
                             if (_this.rtfUrl != null){
                                 location.href = _this.rtfUrl;                             
+                            }
+                        }
+                    },
+					{                     
+                        text: "<span class='glyphicon glyphicon-download-alt'> PDF analysis</span>",
+                        id : 'pdfBtn2',
+                        tooltip: 'Download Session Analysis Report',                                              
+                        margin: '2 0 2 5',
+                        handler : function(){
+                            if (_this.pdfAnalysisUrl != null){
+                                location.href = _this.pdfAnalysisUrl;                             
+                            }
+                        }
+                    },
+             {                     
+                        text: "<span class='glyphicon glyphicon-download-alt'> RTF analysis</span>",
+                        id : 'rtfBtn2',
+                        tooltip: 'Download Session Analysis Report as RTF',                                              
+                        margin: '2 0 2 5',
+                        handler : function(){
+                            if (_this.rtfAnalysisUrl != null){
+                                location.href = _this.rtfAnalysisUrl;                             
                             }
                         }
                     },
