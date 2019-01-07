@@ -53,6 +53,37 @@ var ExtISPyB ={
          }
       },
       {
+          name:'MAXIV',
+          url:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          exiUrl:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          beamlines:{
+              SAXS:[
+               ],
+              MX:[
+                  {
+                      name : "BioMAX",
+                      sampleChangerType : 'ISARA'
+                  }
+              ]
+          }
+
+      },
+      {
+          name:'MAXIV TEST',
+          url:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          exiUrl:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          beamlines:{
+              SAXS:[
+              ],
+              MX:[
+                  {
+                      name : "BioMAX",
+                      sampleChangerType : 'ISARA'
+                  }
+              ]
+          }
+     },
+     {
          name:'Local',
          url:'http://pc593.embl.fr:8080/ispyb-ws/rest',
          exiUrl:'http://pc593.embl.fr:8080/extispyb-ws/rest'
