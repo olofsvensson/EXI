@@ -86,7 +86,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                             var values = phasingStep.statisticsValue.split(",");                            
                             for (var j = 0; j < singleMetric.length; j++) {   
                                     /* Spaces are replaced by _ to be used on the templates */                        
-                                    phasingStep[singleMetric[j].replace(/ /g, '_')] = values[j];                           
+                                    phasingStep[singleMetric[j].trim().replace(/ /g, '_')] = values[j];                           
                             }
                     } 
                     if (phasingStep.png){
@@ -169,8 +169,11 @@ PhasingGridView.prototype.printHTML = function(target) {
                             } else if (step == "REFINEMENT") {
                                 var refinedPdbFileId = -1;
                                 var mrPdbFileId = -1;
+                                var peaksFileId = -1;
+                                var blobFileId = -1;
                                 var mapsArr = steps[z].map.split(",");
                                 var pdbsArr = steps[z].pdb.split(",");
+                                var csvsArr = steps[z].csv.split(",");
                                 if ("mapFileName" in steps[z]) {
                                     var mapFileNamesArr = steps[z].mapFileName.split(",");
                                     for (var i = 0; i < mapFileNamesArr.length; i++) {
@@ -191,6 +194,18 @@ PhasingGridView.prototype.printHTML = function(target) {
                                 } else {
                                     var pdbFileNamesArr = [];
                                 }
+                                if ("csvFileName" in steps[z]) {
+                                    var csvFileNamesArr = steps[z].csvFileName.split(",");
+                                    for (var i = 0; i < csvFileNamesArr.length; i++) {
+                                        if (csvFileNamesArr[i] == "peaks.csv") {
+                                            peaksFileId = csvsArr[i];
+                                        } else if (pdbFileNamesArr[i] == "blobs.csv") {
+                                            blobFileId = csvsArr[i];
+                                        }
+                                    }
+                                } else {
+                                    var csvFileNamesArr = [];
+                                }
                                 if (mrPdbFileId != -1) {
                                     index2FOFC_MR = mapFileNamesArr.indexOf("2FOFC_MR");
                                     indexFOFC_MR = mapFileNamesArr.indexOf("FOFC_MR");
@@ -200,7 +215,8 @@ PhasingGridView.prototype.printHTML = function(target) {
                                         var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mrPdbFileId );
                                         var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[index2FOFC_MR]);
                                         var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[indexFOFC_MR]);
-                                        listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2);
+                                        var peaks = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId(peaksFileId);
+                                        listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2 + '&peaks=' + peaks);
                                     }
                                 } 
                                 if (refinedPdbFileId != -1) {
@@ -212,7 +228,8 @@ PhasingGridView.prototype.printHTML = function(target) {
                                         var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( refinedPdbFileId );
                                         var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[index2FOFC_REFINE]);
                                         var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[indexFOFC_REFINE]);
-                                        listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2);
+                                        var peaks = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId(peaksFileId);
+                                        listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2 + '&peaks=' + peaks);
                                     }
                                 } 
                             }

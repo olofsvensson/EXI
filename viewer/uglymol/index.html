@@ -86,12 +86,16 @@
 console.log(getParameterByName("pdb"));
 console.log(getParameterByName("map1"));
 console.log(getParameterByName("map2"));
+console.log(getParameterByName("peaks"));
 
     V = new UM.Viewer({viewer: "viewer", hud: "hud", help: "help"});
     V.load_pdb(getParameterByName("pdb"));
     if (getParameterByName("map1")){
       V.load_ccp4_maps(getParameterByName("map1"), getParameterByName("map2"));
     }
+    if (getParameterByName("peaks")){
+        V.load_peaks(getParameterByName("peaks"), function(data){});
+      }  
   </script>
 </body>
 </html>
