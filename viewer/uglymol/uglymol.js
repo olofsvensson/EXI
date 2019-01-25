@@ -3196,6 +3196,7 @@ Viewer.prototype.KEYBOARD_HELP = [
   'Shift+P = permalink',
   '(Shift+)space = next res.',
   'Shift+F = full screen',
+  '(Shift+)E = cycle through peaks',
 ].join('\n');
 
 Viewer.prototype.ABOUT_HELP =
@@ -3248,6 +3249,10 @@ Viewer.prototype.set_common_key_bindings = function () {
   };
   // d
   kb[68] = function () { this.change_slab_width_by(-0.1); };
+  // e
+  kb[69] = function (evt) { 
+	  evt.shiftKey ? this.cycle_peaks(-1) : this.cycle_peaks(1); 
+  };
   // f
   kb[70] = function (evt) {
     evt.shiftKey ? this.toggle_full_screen() : this.change_slab_width_by(0.1);
@@ -3642,6 +3647,48 @@ Viewer.prototype.set_view = function (options) {
   var frag = parse_url_fragment();
   if (frag.zoom) this.camera.zoom = frag.zoom;
   this.recenter(frag.xyz || (options && options.center), frag.eye, 1);
+};
+
+//Load the peaks
+Viewer.prototype.load_peaks = function (peaksUrl, callback) {
+var self = this;
+this.load_file(peaksUrl, {binary: false}, function (req) {
+	
+	self.peaks = req.responseText.split("\n").slice(1, req.responseText.split("\n").length).map(
+			function(row){ return row.split(",").map(
+					function(col){ return parseFloat(col)}
+					);}
+			);
+	self.peakIndex = -1;
+	if (callback) callback();
+  });
+};
+
+Viewer.prototype.cycle_peaks = function (direction) {
+	if (self.peakIndex === -1) {
+		self.peakIndex = 0;
+	} else {
+		this.peakIndex = this.peakIndex + direction
+		if (this.peakIndex > this.peaks.length - 2) {
+			this.peakIndex = 0;
+		} else if (this.peakIndex < 0) {
+			this.peakIndex = this.peaks.length - 2;
+		}
+	};
+	var peakXYZ = this.peaks[this.peakIndex].slice(0,3);
+	this.controls.go_to(peakXYZ, null, null, 60. / auto_speed);
+	var text = this.peaks[this.peakIndex][3].toString();
+	var is_shown = (this.peakIndex in this.labels);
+	if (! is_shown) {
+	  var label = makeLabel(text, {
+	    pos: peakXYZ,
+	    font: this.config.label_font,
+	    color: '#' + this.config.colors.fg.getHexString(),
+	    win_size: this.window_size,
+	  });
+	  this.labels[this.peakIndex] = label;
+	  this.scene.add(label);
+	};
 };
 
 // Load molecular model from PDB file and centers the view
