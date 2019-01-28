@@ -137,11 +137,18 @@ SessionGrid.prototype.getToolbar = function(sessions) {
                      _this.renderHTML(filtered);
     };
     
-    for (var i =0; i<EXI.credentialManager.getBeamlines().length; i++){        
+    var beamlines = _.filter(EXI.credentialManager.getBeamlines(), function(beamline){
+        if (EXI.credentialManager.getCredentials()[0].isManager()) {
+            return beamline;
+        } else if ((beamline.ghost == null) || ! beamline.ghost) {
+            return beamline;
+        }
+    });
+    for (var i =0; i< beamlines.length; i++){        
         items.push({           
                 xtype: 'checkbox',
-                boxLabel : EXI.credentialManager.getBeamlines()[i].name,
-                name : EXI.credentialManager.getBeamlines()[i].name,
+                boxLabel : beamlines[i].name,
+                name : beamlines[i].name,
                 handler : myHandler 
             
         });
