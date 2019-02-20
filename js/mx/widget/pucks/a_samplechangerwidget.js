@@ -87,6 +87,86 @@ SampleChangerWidget.prototype.createPucks = function (puckType, n, initAlpha, di
 };
 
 /**
+* Create certain types of pucks following ISARA design
+*
+* @method createPucksISARA
+* @param {Integer} puckType The type of puck ("Unipuck", "Spinepuck", "Puck")
+* @param {Integer} n The number of pucks
+* @param {Double} initAlpha Initial angle where to start to add pucks
+* @param {Double} dist The distance to the center of the puck where the cells are positioned
+* @param {Double} marginPercent Factor to control the separation between cells
+* @param {Object} args Extra information for add pucks like a second row of pucks by defining a dAlpha and a new dist
+*/
+//SampleChangerWidget.prototype.createPucksISARA = function (puckType, n, initAlpha, dist, marginPercent, args) {
+SampleChangerWidget.prototype.createPucksISARA = function (puckType, n) {
+	this.pucks[puckType] = [];
+	for (var i =0; i< n; i++){
+		var puckIndex = i + 1;
+		var puckId = this.id + "-" + puckIndex + "-1";
+		var cx = 0;
+		var cy = 0;
+		var init_x_odd = 35;
+		var init_x_even = 15;
+		var init_y = 40;
+		var puckIndex = i + 1;
+		var index = 0;
+		if (puckIndex<=5) {
+				index = puckIndex % 5;
+				cy=init_y;
+				if (index == 0){
+					cx = init_x_even +(45 * 5);
+				} else {
+					cx = init_x_even +(45 * (index));
+				}
+		} else if (puckIndex >5 && puckIndex <= 11) {
+				index = (puckIndex-5) % 6;
+				cy=init_y + 50;
+				if (index == 0){
+					cx = init_x_odd +(45 * 5);
+				} else {
+					cx = init_x_odd +(45 * (index-1));
+				}
+		} else if (puckIndex >11 && puckIndex <= 16) {
+				index = (puckIndex-11) % 5;
+				cy=init_y + 100;
+				if (index == 0){
+					cx = init_x_even +(45 * 5);
+				} else {
+					cx = init_x_even +(45 * index);
+				}
+		} else if (puckIndex >16 && puckIndex <= 22) {
+				index = (puckIndex-16) % 6;
+				cy=init_y + 150;
+				if (index == 0){
+					cx = init_x_odd +(45 * 5);
+				} else {
+					cx = init_x_odd +(45 * (index-1));
+				}
+		} else if (puckIndex >22 && puckIndex <= 27) {
+				index = (puckIndex-22) % 5;
+				cy=init_y + 200;
+				if (index == 0){
+					cx = init_x_even +(45 * 5);
+				} else {
+					cx = init_x_even +(45 * index);
+				}
+		} else if (puckIndex >27 && puckIndex <= 29) {
+				index = (puckIndex-27) % 2;
+				cy=init_y + 250;
+				if (index == 0){
+					cx = init_x_odd + 140;
+				} else {
+					cx = init_x_odd +95;
+				}
+		}
+	
+		
+		var rad = 20;
+		this.pucks[puckType].push(new PuckWidgetContainer({puckType : puckType, id : puckId, mainRadius : rad, xMargin : cx , yMargin : cy, isLoading : this.isLoading}));
+	}
+};
+
+/**
 * Returns the index used in the id of each puck using a linear equation given two points
 *
 * @method getPuckIndexFromAngle
@@ -144,6 +224,7 @@ SampleChangerWidget.prototype.getPanel = function () {
 * @return {Array} An array of the pucks that couldn't be loaded
 */
 SampleChangerWidget.prototype.loadSamples = function (samples, containerIdsMap) {
+	debugger;
 	var pucksToBeLoaded = {};
 	var errorPucks = [];
 	for (sampleIndex in samples) {
@@ -459,6 +540,7 @@ SampleChangerWidget.prototype.removeClassToAllPucks = function (className) {
 * @return An object containing the puckData of the filled pucks indexed by the idLocation
 */
 SampleChangerWidget.prototype.getPuckData = function () {
+	debugger;
 	var filledPucks = this.getAllFilledPucks();
 	var puckData = {};
     for (puckContainerIndex in filledPucks) {

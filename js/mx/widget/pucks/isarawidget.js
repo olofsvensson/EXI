@@ -1,136 +1,81 @@
 /**
-* This class extends the SampleChangerWidget class for a FlexHCD
+* This class extends the SampleChangerWidget class for a ISARA
 *
-* @class FlexHCDWidget
+* @class ISARAWidget
 * @constructor
 */
 function ISARAWidget (args) {
 	
 	SampleChangerWidget.call(this,args);
-	
+	debugger;
 	this.name = 'ISARA';
-	this.sampleChangerCapacity = 24;
-	this.initAlpha = -7*2*Math.PI/16;
+	this.sampleChangerCapacity = 29;
 	this.data = {
         id : this.id,
 		radius : this.radius,
-		cells : 8,
+		cells : this.sampleChangerCapacity,
 		lines : [],
 		text :[]
 	};
 	
-	this.createStructure();
-	this.createPucks("Spinepuck", this.data.cells/2, -7*Math.PI/8, this.data.radius/2, 0.5, {dAlpha : Math.PI/16, dist : 3*this.data.radius/4});
-	this.createPucks("Unipuck", this.data.cells/2, -5*Math.PI/8, this.data.radius/2, 0.5, {dAlpha : Math.PI/16, dist : 3*this.data.radius/4});
+
+	this.createPucks("Spinepuck", this.data.cells);
+	//this.createPucks("Unipuck", this.data.cells);
 };
 
 
-FlexHCDWidget.prototype.blink = SampleChangerWidget.prototype.blink;
-FlexHCDWidget.prototype.getPuckIndexFromAngle = SampleChangerWidget.prototype.getPuckIndexFromAngle;
-FlexHCDWidget.prototype.createPucks = SampleChangerWidget.prototype.createPucks;
-FlexHCDWidget.prototype.getPanel = SampleChangerWidget.prototype.getPanel;
-FlexHCDWidget.prototype.load = SampleChangerWidget.prototype.load;
-FlexHCDWidget.prototype.getStructure = SampleChangerWidget.prototype.getStructure;
-FlexHCDWidget.prototype.findPuckById = SampleChangerWidget.prototype.findPuckById;
-FlexHCDWidget.prototype.getAllPucks = SampleChangerWidget.prototype.getAllPucks;
-FlexHCDWidget.prototype.render = SampleChangerWidget.prototype.render;
-FlexHCDWidget.prototype.setClickListeners = SampleChangerWidget.prototype.setClickListeners;
-FlexHCDWidget.prototype.disablePucksOfDifferentCapacity = SampleChangerWidget.prototype.disablePucksOfDifferentCapacity;
-FlexHCDWidget.prototype.allowAllPucks = SampleChangerWidget.prototype.allowAllPucks;
-FlexHCDWidget.prototype.getPuckData = SampleChangerWidget.prototype.getPuckData;
-FlexHCDWidget.prototype.getAllFilledPucks = SampleChangerWidget.prototype.getAllFilledPucks;
-FlexHCDWidget.prototype.loadSamples = SampleChangerWidget.prototype.loadSamples;
-FlexHCDWidget.prototype.emptyAllPucks = SampleChangerWidget.prototype.emptyAllPucks;
-FlexHCDWidget.prototype.enableAllPucks = SampleChangerWidget.prototype.enableAllPucks;
-FlexHCDWidget.prototype.disablePuck = SampleChangerWidget.prototype.disablePuck;
-FlexHCDWidget.prototype.enablePuck = SampleChangerWidget.prototype.enablePuck;
-FlexHCDWidget.prototype.removeClassToAllPucks = SampleChangerWidget.prototype.removeClassToAllPucks;
-FlexHCDWidget.prototype.addClassToPuck = SampleChangerWidget.prototype.addClassToPuck;
+ISARAWidget.prototype.blink = SampleChangerWidget.prototype.blink;
+ISARAWidget.prototype.getPuckIndexFromAngle = SampleChangerWidget.prototype.getPuckIndexFromAngle;
+ISARAWidget.prototype.createPucks = SampleChangerWidget.prototype.createPucksISARA;
+ISARAWidget.prototype.getPanel = SampleChangerWidget.prototype.getPanel;
+ISARAWidget.prototype.load = SampleChangerWidget.prototype.load;
+ISARAWidget.prototype.getStructure = SampleChangerWidget.prototype.getStructure;
+ISARAWidget.prototype.findPuckById = SampleChangerWidget.prototype.findPuckById;
+ISARAWidget.prototype.getAllPucks = SampleChangerWidget.prototype.getAllPucks;
+ISARAWidget.prototype.render = SampleChangerWidget.prototype.render;
+ISARAWidget.prototype.setClickListeners = SampleChangerWidget.prototype.setClickListeners;
+ISARAWidget.prototype.disablePucksOfDifferentCapacity = SampleChangerWidget.prototype.disablePucksOfDifferentCapacity;
+ISARAWidget.prototype.allowAllPucks = SampleChangerWidget.prototype.allowAllPucks;
+ISARAWidget.prototype.getPuckData = SampleChangerWidget.prototype.getPuckData;
+ISARAWidget.prototype.getAllFilledPucks = SampleChangerWidget.prototype.getAllFilledPucks;
+ISARAWidget.prototype.loadSamples = SampleChangerWidget.prototype.loadSamples;
+ISARAWidget.prototype.emptyAllPucks = SampleChangerWidget.prototype.emptyAllPucks;
+ISARAWidget.prototype.enableAllPucks = SampleChangerWidget.prototype.enableAllPucks;
+ISARAWidget.prototype.disablePuck = SampleChangerWidget.prototype.disablePuck;
+ISARAWidget.prototype.enablePuck = SampleChangerWidget.prototype.enablePuck;
+ISARAWidget.prototype.removeClassToAllPucks = SampleChangerWidget.prototype.removeClassToAllPucks;
+ISARAWidget.prototype.addClassToPuck = SampleChangerWidget.prototype.addClassToPuck;
+
 
 /**
-* Creates the particular structure of the FlexHCD
-*
-* @method createStructure
-*/
-FlexHCDWidget.prototype.createStructure = function () {
-	for (var i = 0 ; i < this.data.cells/2 ; i++){
-		var ang = i*2*Math.PI/this.data.cells;
-		var line = {
-			x1 : this.data.radius*Math.sin(ang) + this.data.radius,
-			y1 : this.data.radius*Math.cos(ang) + this.data.radius,
-			x2 : -this.data.radius*Math.sin(ang) + this.data.radius,
-			y2 : -this.data.radius*Math.cos(ang) + this.data.radius
-		};
-		this.data.lines.push(line);
-	}
-	
-	var textR = this.data.radius*0.31;
-	var textRBig = this.data.radius*0.94;
-	var dAlpha = Math.PI/16;
-	var currentNumber = 1;
-	var textSize = Math.round((15-7)*(this.data.radius-100)/(200-100) + 7);
-	for (var i = 0 ; i < this.data.cells ; i++){
-		var ang = i*2*Math.PI/this.data.cells;
-		this.data.text.push({
-			text : currentNumber,
-			x : textRBig*Math.sin(this.initAlpha + ang - dAlpha) + this.data.radius,
-			y : -textRBig*Math.cos(this.initAlpha + ang - dAlpha) + this.data.radius,
-			textSize : textSize
-		});
-		currentNumber++;
-		this.data.text.push({
-			text : currentNumber,
-			x : textRBig*Math.sin(this.initAlpha + ang + dAlpha) + this.data.radius,
-			y : -textRBig*Math.cos(this.initAlpha + ang + dAlpha) + this.data.radius,
-			textSize : textSize
-		});
-		currentNumber++;
-		this.data.text.push({
-			text : currentNumber,
-			x : textR*Math.sin(this.initAlpha + ang) + this.data.radius,
-			y : -textR*Math.cos(this.initAlpha + ang) + this.data.radius,
-			textSize : textSize
-		});
-		currentNumber++;
-	}
-};
-
-/**
-* Converts the idLocation to the corresponding location in the FlexHCD by convention
+* Converts the idLocation to the corresponding location in the ISARA by convention
 *
 * @method convertIdToSampleChangerLocation
-* @return The corresponding location in the FlexHCD by convention
+* @return The corresponding location in the ISARA by convention
 */
-FlexHCDWidget.prototype.convertIdToSampleChangerLocation = function (idLocation) {
+ISARAWidget.prototype.convertIdToSampleChangerLocation = function (idLocation) {
 	var n = Number(idLocation.split("-")[1]);
-	var i = Number(idLocation.split("-")[2]);
-	return (n-1)*3 + i;
+	return n;
 };
 
 /**
-* Converts the sample changer location in a FlexHCD to the id of the puck
+* Converts the sample changer location in a ISARA to the id of the puck
 *
 * @method convertSampleChangerLocationToId
 * @return The corresponding id of the puck in the given location
 */
-FlexHCDWidget.prototype.convertSampleChangerLocationToId = function (sampleChangerLocation) {
-	if (sampleChangerLocation <= 24 && sampleChangerLocation > 0) {
-		var n = Math.floor(sampleChangerLocation/3) + 1;
-		var i = sampleChangerLocation % 3;
-		if (i == 0){
-			n--;
-			i = 3;
-		}
-		return this.id + "-" + n + "-" + i;
+ISARAWidget.prototype.convertSampleChangerLocationToId = function (sampleChangerLocation) {
+	if (sampleChangerLocation <= 29 && sampleChangerLocation > 0) {
+		var n = sampleChangerLocation;
+		return this.id + "-" + n + "-1";
 	} else {
 		return null;
 	}
 };
 
-FlexHCDWidget.prototype.onRender = function () {
+ISARAWidget.prototype.onRender = function () {
 	//Disable the 24th puck
-	var puck24 = this.findPuckById(this.id + "-8-3");
+	/*var puck24 = this.findPuckById(this.id + "-8-3");
 	this.addClassToPuck(puck24,"puck-always-disabled");
-	puck24.addClassToCells("cell-always-disabled");
+	puck24.addClassToCells("cell-always-disabled");*/
 }
-
