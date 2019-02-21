@@ -96,6 +96,7 @@ function LoadSampleChangerView (args) {
     });
 
     this.previewPanelView.onUnloadButtonClicked.attach(function(sender){
+        debugger;
         if (_this.selectedPuck){
             _this.selectedPuck.emptyAll();
             _this.previewPuck(_this.selectedPuck.containerId, _this.selectedPuck.capacity, {
@@ -111,6 +112,7 @@ function LoadSampleChangerView (args) {
 };
 
 LoadSampleChangerView.prototype.setSelectedRow = function (row) {
+    debugger;
     this.containerListEditor.panel.getSelectionModel().select(row);
     this.selectedRowItem = $('.x-grid-item-selected')[0];
     this.selectedContainerId = -1;
@@ -159,6 +161,7 @@ LoadSampleChangerView.prototype.setSelectedRow = function (row) {
 * @return 
 */
 LoadSampleChangerView.prototype.setSelectedPuck = function (puck) {
+    debugger;
     this.selectedPuck = puck;
     $("#" + puck.id).addClass("puck-selected");
     if (puck.isEmpty){
@@ -234,6 +237,7 @@ LoadSampleChangerView.prototype.returnToSelectionStatus = function () {
 * @return 
 */
 LoadSampleChangerView.prototype.loadSampleChangerPuck = function (puck, containerId) {
+    debugger;
     if (puck.isEmpty){
         this.returnToSelectionStatus();
         var location = this.sampleChangerWidget.convertIdToSampleChangerLocation(puck.id);
@@ -258,7 +262,7 @@ LoadSampleChangerView.prototype.createSampleChangerWidget = function (sampleChan
         isLoading : false,
         beamlineName : beamlineName
     };
-    
+    debugger;
     this.sampleChangerWidget = new FlexHCDWidget(data);
     
     if (sampleChangerName == "SC3") {
@@ -279,6 +283,11 @@ LoadSampleChangerView.prototype.createSampleChangerWidget = function (sampleChan
     if (sampleChangerName == "RoboDiffHCDSC3") {                
         this.sampleChangerWidget = new RoboDiffHCDSC3Widget(data);
     }
+
+    if (sampleChangerName == "ISARA") {       
+        this.sampleChangerWidget = new ISARAWidget(data);
+    }
+
 
 
 

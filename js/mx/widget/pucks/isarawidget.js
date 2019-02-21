@@ -54,6 +54,7 @@ ISARAWidget.prototype.addClassToPuck = SampleChangerWidget.prototype.addClassToP
 * @return The corresponding location in the ISARA by convention
 */
 ISARAWidget.prototype.convertIdToSampleChangerLocation = function (idLocation) {
+	debugger;
 	var n = Number(idLocation.split("-")[1]);
 	return n;
 };
