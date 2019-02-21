@@ -20,7 +20,7 @@ COPY  . .
 #bower list --allow-root
 
 RUN apk update && \
-apk add git 
+apk add git && \ 
 npm install
 
 FROM nginx:1.15.0-alpine
