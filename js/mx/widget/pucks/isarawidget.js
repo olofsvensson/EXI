@@ -19,8 +19,8 @@ function ISARAWidget (args) {
 	};
 	
 
-	this.createPucks("Spinepuck", this.data.cells);
-	//this.createPucks("Unipuck", this.data.cells);
+	//this.createPucks("Spinepuck", this.data.cells);
+	this.createPucks("Unipuck", this.data.cells);
 };
 
 
@@ -74,7 +74,13 @@ ISARAWidget.prototype.convertSampleChangerLocationToId = function (sampleChanger
 };
 
 ISARAWidget.prototype.onRender = function () {
-	//Disable the 24th puck
+	//Disable the pucks 13, 14, 15 ,18 ,19 ,20 ,21, 24, 25, 26
+	var puckIds = [13, 14, 15 ,18 ,19 ,20 ,21, 24, 25, 26];
+	for (i = 0; i < puckIds.length; i++) {
+		var puck = this.findPuckById(this.id +"-" +puckIds[i] +"-1");
+		this.addClassToPuck(puck,"puck-always-disabled");
+		puck.addClassToCells("cell-always-disabled");
+	}
 	/*var puck24 = this.findPuckById(this.id + "-8-3");
 	this.addClassToPuck(puck24,"puck-always-disabled");
 	puck24.addClassToCells("cell-always-disabled");*/

@@ -8,7 +8,8 @@ COPY  . .
 
 RUN apk update && \
 apk add git && \
-npm install && npm install -g bower grunt && \
+npm install && npm install -g bower --allow-root && \
+npm install -g grunt && \
 bower install --allow-root && \
 bower install lodash --allow-root && \
 bower install zeroclipboard --allow-root && \
