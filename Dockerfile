@@ -24,14 +24,16 @@ apk add git && \
 npm install
 
 RUN npm install --global bower  && \
+    npm install --global grunt && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
-RUN bower install
+RUN bower install && \
+    bower list
 
 RUN npm install grunt --save-dev
 
-RUN grunt && \
-    grunt dev
+RUN grunt  --force && \
+    grunt dev --force
 
 FROM nginx:1.15.0-alpine
 
