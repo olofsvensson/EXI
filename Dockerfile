@@ -21,10 +21,14 @@ COPY  . .
 
 RUN apk update && \
 apk add git && \ 
-npm install -dd
+npm install
 
 RUN npm install -g bower grunt-cli && \
     echo '{ "allow_root": true }' > /root/.bowerrc
+    
+RUN bower install
+RUN grunt && \
+    grunt dev
 
 FROM nginx:1.15.0-alpine
 
