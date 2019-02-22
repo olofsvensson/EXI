@@ -23,6 +23,8 @@ RUN apk update && \
 apk add git && \ 
 npm install
 
+RUN grunt
+
 FROM nginx:1.15.0-alpine
 
 COPY --from=build /home/node/app/ /usr/share/nginx/html
