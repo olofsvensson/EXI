@@ -26,9 +26,10 @@ npm install
 RUN npm install --global bower  && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
-RUN npm install --global grunt-cli
-
 RUN bower install
+
+RUN npm install grunt --save-dev
+
 RUN grunt && \
     grunt dev
 
