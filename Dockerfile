@@ -23,9 +23,11 @@ RUN apk update && \
 apk add git && \ 
 npm install
 
-RUN npm install bower grunt-cli --save-dev && \
+RUN npm install --global bower  && \
     echo '{ "allow_root": true }' > /root/.bowerrc
-    
+
+RUN npm install --global grunt-cli
+
 RUN bower install
 RUN grunt && \
     grunt dev
