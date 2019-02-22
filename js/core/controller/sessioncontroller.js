@@ -33,10 +33,8 @@ SessionController.prototype.init = function() {
            
             EXI.addMainPanel(mainView);
             
-            var onSuccess = function(sender, data){
-          
-                 mainView.load(EXI.proposalManager.getSessions());
-         
+            var onSuccess = function(sender, data){          
+                 mainView.load(EXI.proposalManager.getSessions());         
                  EXI.setLoadingMainPanel(false);    
             };
             EXI.setLoadingMainPanel();
