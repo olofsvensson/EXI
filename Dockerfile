@@ -23,6 +23,9 @@ RUN apk update && \
 apk add git && \ 
 npm install -dd
 
+RUN npm install -g bower grunt-cli && \
+    echo '{ "allow_root": true }' > /root/.bowerrc
+
 FROM nginx:1.15.0-alpine
 
 COPY --from=build /home/node/app/ /usr/share/nginx/html
