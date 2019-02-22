@@ -30,6 +30,8 @@ RUN npm install --global bower  && \
 RUN bower install && \
     bower list
 
+RUN npm install grunt --save-dev
+
 RUN grunt  --force && \
     grunt dev --force
 
