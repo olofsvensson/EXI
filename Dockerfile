@@ -23,7 +23,7 @@ RUN apk update && \
 apk add git && \ 
 npm install
 
-RUN npm install -g bower grunt-cli && \
+RUN npm install bower grunt-cli --save-dev && \
     echo '{ "allow_root": true }' > /root/.bowerrc
     
 RUN bower install
