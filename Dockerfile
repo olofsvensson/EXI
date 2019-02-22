@@ -21,9 +21,7 @@ COPY  . .
 
 RUN apk update && \
 apk add git && \ 
-npm install
-
-RUN grunt
+npm install -dd
 
 FROM nginx:1.15.0-alpine
 
