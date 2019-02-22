@@ -248,9 +248,13 @@ PrepareMainView.prototype.load = function() {
                 if (beamline.length > 0) {
                     _this.loadSampleChangerView.createSampleChangerWidget(beamline[0].sampleChangerType,beamline[0].name);
                 } else {
-                    
                     //$.notify("Warning: Unknown beamline " + beamlinesSelected[0], "warn");
-                    _this.loadSampleChangerView.createSampleChangerWidget("FlexHCD",beamlinesSelected[0]);
+                    if (EXI.credentialManager.getCredentials()[0].properties.name.indexOf("MAXIV") != -1){
+                        _this.loadSampleChangerView.createSampleChangerWidget("ISARA",beamlinesSelected[0]);
+                    } else {
+                        _this.loadSampleChangerView.createSampleChangerWidget("FlexHCD",beamlinesSelected[0]);
+                    }
+                    
                 }
                 for (var i = 1 ; i < beamlinesSelected.length ; i++){
                     var beamline = _.filter(EXI.credentialManager.getBeamlinesByTechnique("MX"),{"name":beamlinesSelected[i]});

@@ -299,7 +299,12 @@ LoadSampleChangerView.prototype.changeSampleChangerWidgetByBeamline = function (
     if (newBeamline.length > 0) {
         this.createSampleChangerWidget(newBeamline[0].sampleChangerType,newBeamline[0].name);
     } else {
-        this.createSampleChangerWidget("FlexHCD",beamlineName);
+        if (EXI.credentialManager.getCredentials()[0].properties.name.indexOf("MAXIV") != -1){
+            this.createSampleChangerWidget("ISARA",beamlineName);
+        } else {
+            this.createSampleChangerWidget("FlexHCD",beamlineName);
+        }
+        
     }
     this.widgetContainer.removeAll();
     this.load(this.containers);

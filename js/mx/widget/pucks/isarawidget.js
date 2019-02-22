@@ -7,20 +7,19 @@
 function ISARAWidget (args) {
 	
 	SampleChangerWidget.call(this,args);
-	debugger;
 	this.name = 'ISARA';
 	this.sampleChangerCapacity = 29;
 	this.data = {
         id : this.id,
 		radius : this.radius,
-		cells : this.sampleChangerCapacity,
+		cells : 1,
 		lines : [],
 		text :[]
 	};
 	
 
 	//this.createPucks("Spinepuck", this.data.cells);
-	this.createPucks("Unipuck", this.data.cells);
+	this.createPucks("Unipuck", this.sampleChangerCapacity);
 };
 
 
@@ -54,7 +53,6 @@ ISARAWidget.prototype.addClassToPuck = SampleChangerWidget.prototype.addClassToP
 * @return The corresponding location in the ISARA by convention
 */
 ISARAWidget.prototype.convertIdToSampleChangerLocation = function (idLocation) {
-	debugger;
 	var n = Number(idLocation.split("-")[1]);
 	return n;
 };

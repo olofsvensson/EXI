@@ -87,6 +87,24 @@ var ExtISPyB ={
          name:'Local',
          url:'http://pc593.embl.fr:8080/ispyb-ws/rest',
          exiUrl:'http://pc593.embl.fr:8080/extispyb-ws/rest'
+      },
+      {
+        name:'MAXIV localhost',
+        icon : '../images/site/dev.esrf.png',
+        url:'http://localhost:18080/ispyb/ispyb-ws/rest',
+        exiUrl:'http://localhost:18080/ispyb/ispyb-ws/rest',
+        beamlines:{
+            SAXS:[
+
+
+            ],
+            MX:[
+                {
+                    name : "BioMAX",
+                    sampleChangerType : 'ISARA'
+                }
+            ]
+        }
       }
    ]
 };

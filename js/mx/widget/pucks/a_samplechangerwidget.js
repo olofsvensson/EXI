@@ -92,12 +92,13 @@ SampleChangerWidget.prototype.createPucks = function (puckType, n, initAlpha, di
 * @method createPucksISARA
 * @param {Integer} puckType The type of puck ("Unipuck", "Spinepuck", "Puck")
 * @param {Integer} n The number of pucks
-* @param {Double} initAlpha Initial angle where to start to add pucks
-* @param {Double} dist The distance to the center of the puck where the cells are positioned
-* @param {Double} marginPercent Factor to control the separation between cells
-* @param {Object} args Extra information for add pucks like a second row of pucks by defining a dAlpha and a new dist
+*      *  *  *  *  *
+*    *  *  *  *  *  * 
+*      *  *  *  *  *
+*    *  *  *  *  *  * 
+*      *  *  *  *  *
+*          *  * 
 */
-//SampleChangerWidget.prototype.createPucksISARA = function (puckType, n, initAlpha, dist, marginPercent, args) {
 SampleChangerWidget.prototype.createPucksISARA = function (puckType, n) {
 	this.pucks[puckType] = [];
 	for (var i =0; i< n; i++){
@@ -160,7 +161,6 @@ SampleChangerWidget.prototype.createPucksISARA = function (puckType, n) {
 				}
 		}
 	
-		
 		var rad = 20;
 		this.pucks[puckType].push(new PuckWidgetContainer({puckType : puckType, id : puckId, mainRadius : rad, xMargin : cx , yMargin : cy, isLoading : this.isLoading}));
 	}
@@ -224,7 +224,6 @@ SampleChangerWidget.prototype.getPanel = function () {
 * @return {Array} An array of the pucks that couldn't be loaded
 */
 SampleChangerWidget.prototype.loadSamples = function (samples, containerIdsMap) {
-	debugger;
 	var pucksToBeLoaded = {};
 	var errorPucks = [];
 	for (sampleIndex in samples) {
@@ -540,7 +539,6 @@ SampleChangerWidget.prototype.removeClassToAllPucks = function (className) {
 * @return An object containing the puckData of the filled pucks indexed by the idLocation
 */
 SampleChangerWidget.prototype.getPuckData = function () {
-	debugger;
 	var filledPucks = this.getAllFilledPucks();
 	var puckData = {};
     for (puckContainerIndex in filledPucks) {
