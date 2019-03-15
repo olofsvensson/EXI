@@ -23,6 +23,11 @@ RUN apk update && \
 apk add git && \ 
 npm install
 
+RUN apk --update add git nodejs && rm -rf /var/cache/apk/* && \
+    npm install -g bower grunt-cli && \
+    echo '{ "allow_root": true }' > /root/.bowerrc
+
+RUN bower install
 RUN grunt
 
 FROM nginx:1.15.0-alpine
