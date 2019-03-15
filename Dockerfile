@@ -28,7 +28,8 @@ RUN apk --update add git nodejs && rm -rf /var/cache/apk/* && \
     echo '{ "allow_root": true }' > /root/.bowerrc
 
 RUN bower install
-RUN /usr/local/bin/grunt --force
+RUN export PATH="$PATH:/usr/local/bin"
+RUN grunt --force
 
 #RUN npm install --global bower  && \
 #    npm install --global grunt --save-dev && \
