@@ -20,14 +20,15 @@ COPY  . .
 #bower list --allow-root
 
 RUN apk update && \
-apk add git && \ 
-npm install
+	apk add git && \
+	npm install && \
+	apk --update add git nodejs && rm -rf /var/cache/apk/* && \
+	npm install -g bower grunt-cli && \
+	echo '{ "allow_root": true }' > /root/.bowerrc && \
+	npm install -D grunt && \
+	bower install
 
-RUN apk --update add git nodejs && rm -rf /var/cache/apk/* && \
-    npm install -g --save-dev bower grunt-cli grunt && \
-    echo '{ "allow_root": true }' > /root/.bowerrc && \
-    bower install && \
-    grunt --force
+RUN grunt --force
 
 FROM nginx:1.15.0-alpine
 
