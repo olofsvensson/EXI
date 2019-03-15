@@ -28,7 +28,7 @@ RUN apk update && \
 	npm install -D grunt && \
 	bower install
 
-RUN grunt --force
+RUN grunt dev --force
 
 FROM nginx:1.15.0-alpine
 
