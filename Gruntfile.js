@@ -104,15 +104,15 @@ module.exports = function(grunt) {
                         }
                     }
                 },
-                jshint : {
-                    options : {
-                        reporter : require('jshint-stylish'),
-                        jshintrc : '.jshintrc'
-                    },
-                    prod : [ 'js/core/**/*.js', 'js/mx/**/*.js',
-                            'js/saxs/**/*.js', 'js/tracking/**/*.js',
-                            'js/viewer/**/*.js' ]
-                },
+                // jshint : {
+                //     options : {
+                //         reporter : require('jshint-stylish'),
+                //         jshintrc : '.jshintrc'
+                //     },
+                //     prod : [ 'js/core/**/*.js', 'js/mx/**/*.js',
+                //             'js/saxs/**/*.js', 'js/tracking/**/*.js',
+                //             'js/viewer/**/*.js' ]
+                // },
                 plato : {
                     all : {
                         options : {
@@ -232,7 +232,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
+    // grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-plato');
     grunt.loadNpmTasks('grunt-dustjs');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
@@ -242,7 +242,7 @@ module.exports = function(grunt) {
     grunt.task.registerTask('doc', [ 'yuidoc:compile' ]);
     grunt.task
             .registerTask('report', [ 'plato:all', 'plato:saxs', 'plato:mx' ]);
-    grunt.task.registerTask('default', [ 'dustjs', 'jshint:prod',
+    grunt.task.registerTask('default', [ 'dustjs', // 'jshint:prod',
             'concat:prod', 'uglify:prod', 'cssmin:prod', 'yuidoc:compile' ]);
     grunt.task.registerTask('dev', [ 'dustjs', 'includeSource:dev',
             'cssmin:prod', 'wiredep' ]);
