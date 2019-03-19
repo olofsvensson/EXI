@@ -27,7 +27,7 @@ RUN apk update && \
 	bower install
 
 RUN grunt
-RUN mkdir dist && mv mx min dependency images tracking fonts reports bower_components dist
+RUN mkdir dist && mv mx min dependency images tracking fonts css dev saxs reports viewer bower_components dist
 
 FROM nginx:1.15.0-alpine
 
