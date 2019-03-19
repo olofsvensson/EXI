@@ -51,3 +51,7 @@ local.properties
 
 # development
 mx/config-localhost.js
+
+# Files left by MacOS
+.DS_Store
+

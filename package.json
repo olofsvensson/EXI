@@ -1,6 +1,6 @@
 {
   "name": "EXI",
-  "version": "5.11",
+  "version": "5.11.0",
   "description": "Extended ISPyB",
   "main": "Gruntfile.js",
   "dependencies": {
@@ -9,9 +9,7 @@
     "grunt-contrib-yuidoc": "^1.0.0",
     "grunt-debian-package": "^0.1.11",
     "grunt-dustjs": "^1.3.0",
-    "html-to-pdf": "^0.1.11"
-  },
-  "devDependencies": {
+    "html-to-pdf": "^0.1.11",
     "grunt": "^0.4.5",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-concat": "^0.5.1",
