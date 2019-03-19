@@ -2,9 +2,7 @@ FROM node:9.11.2-alpine AS build
 
 WORKDIR /home/node/app
 
-COPY ./package.json ./
-
-COPY  . .
+COPY . .
 
 #RUN apk update && \
 #apk add git && \
@@ -21,18 +19,19 @@ COPY  . .
 
 RUN apk update && \
 	apk add git && \
-	npm install && \
 	apk --update add git nodejs && rm -rf /var/cache/apk/* && \
 	npm install -g bower grunt-cli && \
 	echo '{ "allow_root": true }' > /root/.bowerrc && \
 	npm install -D grunt && \
+	npm install && \
 	bower install
 
-RUN grunt dev --force
+RUN grunt
+RUN mkdir dist && mv mx min dependency images dist
 
 FROM nginx:1.15.0-alpine
 
-COPY --from=build /home/node/app/ /usr/share/nginx/html
+COPY --from=build /home/node/app/dist /usr/share/nginx/html
 COPY assets/nginx.conf /etc/nginx/
 
 EXPOSE 8084
