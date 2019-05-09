@@ -123,7 +123,7 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                             }
                         }
                     },
-             {                     
+					{                     
                         text: "<span class='glyphicon glyphicon-download-alt'> RTF summary</span>",
                         id : 'rtfBtn',
                         tooltip: 'Download Session Summary Report as RTF',                                              
@@ -156,6 +156,18 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                             }
                         }
                     },
+				{                     
+                        text: "<span class='glyphicon glyphicon-envelope'> Send Report</span>",
+                        id : 'sendPdfBtn',
+                        tooltip: 'Send Session Summary Report as PDF',                                              
+                        margin: '1 0 1 2',
+                        handler : function(){
+                            if (_this.sendPdfUrl != null){
+                                location.href = _this.sendPdfUrl;                             
+                            }
+                        }
+                    },
+
             '->',
             {
                 html: '<span class="glyphicon glyphicon-download-alt"></span> Best results',
@@ -244,6 +256,7 @@ MXDataCollectionGrid.prototype.load = function(dataCollectionGroup) {
         this.rtfUrl = EXI.getDataAdapter().mx.dataCollection.getRtfReportURLBySessionId(sessionId);
 		this.pdfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getAnalysisReportURLBySessionId(sessionId);
         this.rtfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getRtfAnalysisReportURLBySessionId(sessionId);
+		this.sendPdfUrl = EXI.getDataAdapter().mx.dataCollection.sendPdfReport(sessionId);
     }
 };
 
