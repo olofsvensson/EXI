@@ -106,7 +106,16 @@ MXManagerMenu.prototype.getManagerMenu = function() {
 
 			scatteringForm.load(scatteringData);
 			scatteringForm.show();
-		}
+		} else if (item.text == "Datacollection Statistics") {
+            var datacollectionForm = new DatacollectionForm();
+
+            var keys = ["Datasets", "Samples"];
+
+            var datacollectionData = {title : "Datacollection", keys : keys};
+
+            datacollectionForm.load(datacollectionData);
+            datacollectionForm.show();
+        }
 	}
 
 	return Ext.create('Ext.menu.Menu', {
@@ -121,7 +130,13 @@ MXManagerMenu.prototype.getManagerMenu = function() {
 										icon : '../images/icon/ic_insert_chart_black_36dp.png',
 										handler: onItemCheck,
 										disabled : false
-									}
+									},
+									{
+                                        text: 'Datacollection Statistics',
+                                        icon : '../images/icon/ic_insert_chart_black_36dp.png',
+                                        handler: onItemCheck,
+                                        disabled : false
+                                    }
 								]
 							}
 					}
