@@ -32,6 +32,8 @@ MXDataCollectionGrid.prototype.getPanel = function(dataCollectionGroup) {
 
 MXDataCollectionGrid.prototype.getToolBar = function() {
     var _this = this;
+	
+	//var proposalCode = this.proposal.Proposal_proposalCode;
 
     function onMenuClicked(widget) {        
         if (_this.activePanel != widget) {
@@ -42,9 +44,7 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                 _this.reloadData(_this.dataCollectionGroup);
             }
         }
-    }
-
-    
+    }   
 
     return Ext.create('Ext.toolbar.Toolbar', {
         width: 500,
@@ -155,12 +155,21 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                                 location.href = _this.rtfAnalysisUrl;                             
                             }
                         }
-                    },
-				{                     
+                },
+					{                     
                         text: "<span class='glyphicon glyphicon-envelope'> Send Report</span>",
                         id : 'sendPdfBtn',
                         tooltip: 'Send Session Summary Report as PDF',                                              
                         margin: '1 0 1 2',
+						hidden: true,
+/**						function(){
+                            if (_this.proposalCode == 'FX'){
+                                false;                             
+                            } else {
+							true;
+							}
+                        },
+**/
                         handler : function(){
                             if (_this.sendPdfUrl != null){
                                 location.href = _this.sendPdfUrl;                             
