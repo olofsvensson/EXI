@@ -12,6 +12,8 @@ var ExtISPyB ={
          icon : '../images/site/esrf.png',
          url:'https://ispyb.esrf.fr/ispyb/ispyb-ws/rest',
          exiUrl:'https://ispyb.esrf.fr/ispyb/ispyb-ws/rest',
+         siteName:'ESRF',
+         defaultSampleChanger: 'FlexHCD',
          beamlines:{
             SAXS:[
               { 
@@ -71,6 +73,8 @@ var ExtISPyB ={
          url:'https://ispyb-valid.esrf.fr/ispyb/ispyb-ws/rest',
          icon : '../images/site/dev.esrf.png',
          exiUrl:'https://ispyb-valid.esrf.fr/ispyb/ispyb-ws/rest',
+         siteName:'ESRF',
+         defaultSampleChanger: 'FlexHCD',
          beamlines:{
             SAXS:[
                {
@@ -130,6 +134,8 @@ var ExtISPyB ={
          url:'http://lindemaria:8080/ispyb/ispyb-ws/rest',
          icon : '../images/site/dev.esrf.png',
 		 exiUrl:'http://lindemaria:8080/ispyb/ispyb-ws/rest',
+		 siteName:'ESRF',
+         defaultSampleChanger: 'FlexHCD',
          beamlines:{
             SAXS:[
                {
@@ -189,6 +195,8 @@ var ExtISPyB ={
          url:'http://localhost:8080/ispyb/ispyb-ws/rest',
          icon : '../images/site/dev.esrf.png',
 		 exiUrl:'http://localhost:8080/ispyb/ispyb-ws/rest',
+		 siteName:'ESRF',
+         defaultSampleChanger: 'FlexHCD',
          beamlines:{
                  EM :[
                    { 
@@ -248,6 +256,8 @@ var ExtISPyB ={
            icon : '../images/site/esrf.png',
            url:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
            exiUrl:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
+           siteName:'MAXIV',
+           defaultSampleChanger: 'ISARA',
            beamlines:{
                SAXS:[
 
@@ -267,6 +277,8 @@ var ExtISPyB ={
            icon : '../images/site/dev.esrf.png',
            url:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
            exiUrl:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
+           siteName:'MAXIV',
+           defaultSampleChanger: 'ISARA',
            beamlines:{
                SAXS:[
 
