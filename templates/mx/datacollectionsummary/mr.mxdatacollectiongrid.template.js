@@ -8,12 +8,15 @@
                                 
                                 <th><abbr title="Phasing Step">PHASING</abbr></th>
                               
-                                 <th><abbr title="Model Building Step">REFINEMENT</abbr></th>
+                                <th><abbr title="Model Building Step">REFINEMENT</abbr></th>
+                                <th>MR directory<br>(< 30 days)</th>       
                                 <th>Download</th>       
                                 <th style='color:gray'></th>                                                       
                                 <th style='color:gray'>Program</th>
                                 <th style='color:gray'>Method</th>
                                 <th style='color:gray'>Resolution</th>
+                                <th style='color:gray'>Start Rw / Rf</th>
+                                <th style='color:gray'>Final Rw / Rf</th>
                                 <th style='color:gray'>Electron density MR</th>
                                 <th style='color:gray'>Electron density REFINE</th>
                             </tr>
@@ -52,6 +55,26 @@
                                                 {/eq}
                                             {/eq}
                                         </td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm" data-toggle="modal" data-target="#myModal{.dataCollectionId}"><span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span></button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="myModal{.dataCollectionId}" role="dialog">
+                                                <div class="modal-dialog">
+                                                    <!-- Modal content-->
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                        <h4 class="modal-title">MR directory - available up to 30 days</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>{.PhasingProgramRun_phasingDirectory}</p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td >   
                                             {@eq key=$idx value=0}                     
                                                 <a href='{.downloadFilesUrl}' ><span style='font-size: 1.5em;' class="glyphicon glyphicon-download " ></span></a>
@@ -67,7 +90,9 @@
                             
                                         <td>{.PhasingProgramRun_phasingPrograms} </td>
                                         <td>{.PhasingStep_method} </td>
-                                        <td>{.PhasingStep_highRes} - {.PhasingStep_lowRes} </td>
+                                        <td>{@decimal key="PhasingStep_highRes" decimals=1}{/decimal} - {@decimal key="PhasingStep_lowRes" decimals=1}{/decimal}</td>
+                                        <td>{@decimal key="Start_R-work" decimals=2}{/decimal} / {@decimal key="Start_R-free" decimals=2}{/decimal}</td>                               
+                                        <td>{@decimal key="Final_R-work" decimals=2}{/decimal} / {@decimal key="Final_R-free" decimals=2}{/decimal}</td>                               
                                         {#listUglyMol}
                                         {@eq key="{.}" value=""}
                                         <td></td>
