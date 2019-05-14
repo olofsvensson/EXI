@@ -485,3 +485,7 @@ LoadSampleChangerView.prototype.previewPuck = function (containerId, capacity, d
     this.verticalPanel.add(this.previewPanelView.getPanel());
     this.previewPanelView.load(containerId, capacity, data, instructionsButtonText);
 };
+
+LoadSampleChangerView.prototype.hidePanel = function () {
+    this.previewPanelView.panel.hidden = true;
+}
