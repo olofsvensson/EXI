@@ -9,12 +9,22 @@ function MXDataCollectionGrid(args) {
 
     /** DATACOLLECTION, DATACOLLECTION_COLLAPSED, PLATES_VIEW */
     this.renderingType = 'DATACOLLECTION';
-
+	this.hideSendReport = true;
+	
     this.uncollapsedDataCollectionGrid = new UncollapsedDataCollectionGrid();
     this.collapsedDataCollectionGrid = new CollapsedDataCollectionGrid();
     this.containersDataCollectionGrid = new ContainersDataCollectionGrid();
 
-    this.activePanel = this.uncollapsedDataCollectionGrid;
+    this.activePanel = this.uncollapsedDataCollectionGrid;	
+
+	if (args) {
+        if (args.proposal) {
+            this.proposal = args.proposal;
+			if (this.proposal.substring(0,2).toLowerCase() == 'fx'){
+				this.hideSendReport = false
+			}
+        }
+	}
 }
 
 MXDataCollectionGrid.prototype.getPanel = function(dataCollectionGroup) {
@@ -26,6 +36,7 @@ MXDataCollectionGrid.prototype.getPanel = function(dataCollectionGroup) {
         tbar: this.getToolBar(),
         items: [_this.activePanel.getPanel(dataCollectionGroup)]
     });
+	
 
     return this.panel;
 };
@@ -157,19 +168,11 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                         }
                 },
 					{                     
-                        text: "<span class='glyphicon glyphicon-envelope'> Send Report</span>",
+                        text: "<span class='glyphicon glyphicon-envelope'> Send Report </span>",
                         id : 'sendPdfBtn',
                         tooltip: 'Send Session Summary Report as PDF',                                              
                         margin: '1 0 1 2',
-						hidden: true,
-/**						function(){
-                            if (_this.proposalCode == 'FX'){
-                                false;                             
-                            } else {
-							true;
-							}
-                        },
-**/
+						hidden: _this.hideSendReport,
                         handler : function(){
                             if (_this.sendPdfUrl != null){
                                 location.href = _this.sendPdfUrl;                             
@@ -267,6 +270,7 @@ MXDataCollectionGrid.prototype.load = function(dataCollectionGroup) {
         this.rtfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getRtfAnalysisReportURLBySessionId(sessionId);
 		this.sendPdfUrl = EXI.getDataAdapter().mx.dataCollection.sendPdfReport(sessionId);
     }
+		
 };
 
 /**
