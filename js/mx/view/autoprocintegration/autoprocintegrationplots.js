@@ -68,6 +68,8 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
     
     var autoProcIntegrationId = [];
     var spaceGroups = [];
+    debugger;
+    autoprocProgram = "";
     for (var i = 0; i < data.length; i++) {
         if (data[i].v_datacollection_summary_phasing_autoProcProgramId){
             autoProcIntegrationId.push(data[i].AutoProcIntegration_autoProcIntegrationId);
@@ -77,8 +79,10 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
             }
             spg += " - " + data[i].v_datacollection_processingPrograms;
             spaceGroups.push(spg);
+            autoprocProgram = data[i].v_datacollection_processingPrograms;
         }
     }
+
     
     var annoCorrPlotter = new AutoProcIntegrationCurvePlotter({
         height : 250,
@@ -126,10 +130,18 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
     $("#cc2").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer({valueRange : [0,110]});
         curveViewer.show();
-        curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleCC2(autoProcIntegrationId),"CC/2 vs Resolution",["Resolution"].concat(spaceGroups));
+        if (autoprocProgram == "fastdp"){
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getFastDPCC2(autoProcIntegrationId),"CC/2 vs Resolution",["Resolution"].concat(spaceGroups));
+        } else {
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleCC2(autoProcIntegrationId),"CC/2 vs Resolution",["Resolution"].concat(spaceGroups));
+        }
     });
-    $("#cc2").html(cc2Plotter.getHTML());                         
-    cc2Plotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleCC2(autoProcIntegrationId));
+    $("#cc2").html(cc2Plotter.getHTML());
+    if (autoprocProgram == "fastdp"){
+        cc2Plotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getFastDPCC2(autoProcIntegrationId));
+    } else {
+        cc2Plotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleCC2(autoProcIntegrationId));
+    }
 	            
     var rFactorPlotter = new AutoProcIntegrationCurvePlotter({
                         height : 250,
@@ -144,9 +156,18 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
     $("#rfactor").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer({valueRange : [0,null] });
         curveViewer.show();
-        curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleRfactor(autoProcIntegrationId),"Rfactor vs Resolution",["Resolution"].concat(spaceGroups));
-    });                        
-    rFactorPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleRfactor(autoProcIntegrationId));
+        if (autoprocProgram == "fastdp"){
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getFastDPRfactor(autoProcIntegrationId),"Rfactor vs Resolution",["Resolution"].concat(spaceGroups));
+        } else {
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleRfactor(autoProcIntegrationId),"Rfactor vs Resolution",["Resolution"].concat(spaceGroups));
+        }
+    });
+    if (autoprocProgram == "fastdp"){
+        rFactorPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getFastDPRfactor(autoProcIntegrationId));
+    } else {
+        rFactorPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleRfactor(autoProcIntegrationId));
+    }
+
     
         /** Rfactor */
     var completenessPlotter = new AutoProcIntegrationCurvePlotter({
@@ -162,9 +183,17 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
     $("#completeness").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer({valueRange : [0,100] });
         curveViewer.show();
-        curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleCompleteness(autoProcIntegrationId),"Completeness vs Resolution",["Resolution"].concat(spaceGroups));
-    });         
-    completenessPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleCompleteness(autoProcIntegrationId));
+        if (autoprocProgram == "fastdp"){
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getFastDPCompleteness(autoProcIntegrationId),"Completeness vs Resolution",["Resolution"].concat(spaceGroups));
+        } else {
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleCompleteness(autoProcIntegrationId),"Completeness vs Resolution",["Resolution"].concat(spaceGroups));
+        }
+    });
+    if (autoprocProgram == "fastdp"){
+        completenessPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getFastDPCompleteness(autoProcIntegrationId));
+    } else {
+        completenessPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleCompleteness(autoProcIntegrationId));
+    }
     
     var isigmaPlotter = new AutoProcIntegrationCurvePlotter({
         height :250,
@@ -178,8 +207,16 @@ AutoProcIntegrationPlots.prototype.load = function(data) {
     $("#sigmaI").unbind('click').click(function(sender){
         var curveViewer = new CurveViewer({valueRange : [0,null] });
         curveViewer.show();
-        curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleISigma(autoProcIntegrationId),"I/SigmaI vs Resolution",["Resolution"].concat(spaceGroups));
+        if (autoprocProgram == "fastdp"){
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getFastDPISigma(autoProcIntegrationId),"I/SigmaI vs Resolution",["Resolution"].concat(spaceGroups));
+        } else {
+            curveViewer.load(autoProcIntegrationId,EXI.getDataAdapter().mx.autoproc.getXScaleISigma(autoProcIntegrationId),"I/SigmaI vs Resolution",["Resolution"].concat(spaceGroups));
+        }
     }); 
-    $("#sigmaI").html(isigmaPlotter.getHTML());                         
-    isigmaPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleISigma(autoProcIntegrationId));             
+    $("#sigmaI").html(isigmaPlotter.getHTML());
+    if (autoprocProgram == "fastdp"){
+        isigmaPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getFastDPISigma(autoProcIntegrationId));
+    } else {
+        isigmaPlotter.loadUrl(EXI.getDataAdapter().mx.autoproc.getXScaleISigma(autoProcIntegrationId));
+    }
 };
