@@ -23,9 +23,6 @@ MxDataCollectionController.prototype.notFound = ExiGenericController.prototype.n
 MxDataCollectionController.prototype.init = function() {
 	var _this = this;
 	var listView;	
-    
-	
-
 	Path.map("#/mx/datacollection/protein_acronym/:acronmys/main").to(function() {
 		var mainView = new DataCollectionMxMainView();
 		EXI.addMainPanel(mainView);
@@ -39,7 +36,8 @@ MxDataCollectionController.prototype.init = function() {
 	
 	Path.map("#/mx/proposal/:proposal/datacollection/session/:sessionId/main").to(function() {		
 			
-		var redirection = "#/mx/datacollection/session/" + this.params['sessionId'] +"/main";				
+		var redirection = "#/mx/datacollection/session/" + this.params['sessionId'] +"/main";	
+		this.proposal = this.params['proposal'];	
 		/** Are we logged in yet? */
 		if (EXI.credentialManager.getConnections().length > 0){			
 			ExiGenericController.prototype.redirect( this.params['proposal'], redirection);
@@ -52,18 +50,13 @@ MxDataCollectionController.prototype.init = function() {
 
 
 	Path.map("#/mx/datacollection/session/:sessionId/main").to(function() {	
-			
-		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId']});
+	
+		var proposals = EXI.credentialManager.getCredentials()[0].activeProposals;		
+		var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId'], proposal : proposals[0]});
 		EXI.addMainPanel(mainView);
         EXI.hideNavigationPanel();
 		EXI.setLoadingMainPanel(true);
-		var onSuccessProposal = function (sender,proposal) {			
-			if (proposal && proposal.length > 0) {
-				mainView.loadProposal(proposal[0]);
-			}
-		}
-		EXI.getDataAdapter({onSuccess : onSuccessProposal}).proposal.proposal.getProposalBySessionId(this.params['sessionId']);
-
+		
 		var onSuccess = function(sender, data){						
 		    mainView.loadCollections(data);
 		    EXI.setLoadingMainPanel(false);
@@ -100,7 +93,7 @@ MxDataCollectionController.prototype.init = function() {
 
     Path.map("#/mx/datacollection/datacollectionid/:datacollectionid/main").to(function() {		
 		
-			var mainView = new DataCollectionMxMainView();
+			var mainView = new DataCollectionMxMainView({sessionId : this.params['sessionId'], proposal : this.params['proposal']});
 			EXI.addMainPanel(mainView);
 			EXI.hideNavigationPanel();
 			EXI.setLoadingMainPanel(true);

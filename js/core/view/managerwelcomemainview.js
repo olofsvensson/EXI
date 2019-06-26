@@ -291,7 +291,7 @@ ManagerWelcomeMainView.prototype.load = function(username) {
   this.username = username;  
   /** By default for users we load all the sessions and managers only sessions that occurs today */
   if (this.isUser(username)){
-    this.loadSessionsByProposal(username);  
+    this.loadSessionsByUsername(username);  
     /** set active proposal */
     this.activeProposal(username);
   }
@@ -307,15 +307,16 @@ ManagerWelcomeMainView.prototype.load = function(username) {
 *
 * @method loadSessions
 */
-ManagerWelcomeMainView.prototype.loadSessionsByProposal = function(username) {
+ManagerWelcomeMainView.prototype.loadSessionsByUsername = function(username) {
     this.username = username;
     var _this = this;
     this.panel.setLoading(true);
     function onSuccess(sender, data){
-       _this.displaySessions(data, " sessions for proposal " + username);
+       _this.displaySessions(data, " sessions for user " + username);
        _this.panel.setLoading(false);
     }
-    EXI.getDataAdapter({onSuccess:onSuccess}).proposal.session.getSessionsByProposal(username);
+    //EXI.getDataAdapter({onSuccess:onSuccess}).proposal.session.getSessionsByProposal(username);
+    EXI.getDataAdapter({onSuccess:onSuccess}).proposal.session.getSessionsByToken();
 };
 
 

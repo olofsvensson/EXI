@@ -19,12 +19,7 @@ MXMainMenu.prototype.getMenuItems = function() {
 	return [
 		this.getHomeItem(),
 		this.getShipmentItem(),
-		/*{
-                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
-                cls : 'ExiSAXSMenuToolBar',
-                disabled : false,
-                menu : this.getProteinCrystalsMenu() 
-	    	},
+	
 			{
                 text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
@@ -32,7 +27,7 @@ MXMainMenu.prototype.getMenuItems = function() {
                 handler : function(){
                     location.hash = "#/protein/list";
                 }
-	    	},*/
+	    	},
 	    	{
                 text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
                 cls : 'ExiSAXSMenuToolBar',

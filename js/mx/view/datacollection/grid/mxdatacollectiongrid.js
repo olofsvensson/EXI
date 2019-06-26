@@ -9,12 +9,22 @@ function MXDataCollectionGrid(args) {
 
     /** DATACOLLECTION, DATACOLLECTION_COLLAPSED, PLATES_VIEW */
     this.renderingType = 'DATACOLLECTION';
-
+	this.hideSendReport = true;
+	
     this.uncollapsedDataCollectionGrid = new UncollapsedDataCollectionGrid();
     this.collapsedDataCollectionGrid = new CollapsedDataCollectionGrid();
     this.containersDataCollectionGrid = new ContainersDataCollectionGrid();
 
-    this.activePanel = this.uncollapsedDataCollectionGrid;
+    this.activePanel = this.uncollapsedDataCollectionGrid;	
+
+	if (args) {
+        if (args.proposal) {
+            this.proposal = args.proposal;
+			if (this.proposal.substring(0,2).toLowerCase() == 'fx'){
+				this.hideSendReport = false
+			}
+        }
+	}
 }
 
 MXDataCollectionGrid.prototype.getPanel = function(dataCollectionGroup) {
@@ -26,12 +36,15 @@ MXDataCollectionGrid.prototype.getPanel = function(dataCollectionGroup) {
         tbar: this.getToolBar(),
         items: [_this.activePanel.getPanel(dataCollectionGroup)]
     });
+	
 
     return this.panel;
 };
 
 MXDataCollectionGrid.prototype.getToolBar = function() {
     var _this = this;
+	
+	//var proposalCode = this.proposal.Proposal_proposalCode;
 
     function onMenuClicked(widget) {        
         if (_this.activePanel != widget) {
@@ -42,9 +55,7 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                 _this.reloadData(_this.dataCollectionGroup);
             }
         }
-    }
-
-    
+    }   
 
     return Ext.create('Ext.toolbar.Toolbar', {
         width: 500,
@@ -113,9 +124,9 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                 xtype: 'tbseparator'
             },
              {                     
-                        text: "<span class='glyphicon glyphicon-download-alt'> PDF</span>",
+                        text: "<span class='glyphicon glyphicon-download-alt'> PDF summary</span>",
                         id : 'pdfBtn',
-                        tooltip: 'Download Session Report',                                              
+                        tooltip: 'Download Session Summary Report',                                              
                         margin: '2 0 2 5',
                         handler : function(){
                             if (_this.pdfUrl != null){
@@ -123,10 +134,10 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                             }
                         }
                     },
-             {                     
-                        text: "<span class='glyphicon glyphicon-download-alt'> RTF</span>",
+					{                     
+                        text: "<span class='glyphicon glyphicon-download-alt'> RTF summary</span>",
                         id : 'rtfBtn',
-                        tooltip: 'Download Session Report as RTF',                                              
+                        tooltip: 'Download Session Summary Report as RTF',                                              
                         margin: '2 0 2 5',
                         handler : function(){
                             if (_this.rtfUrl != null){
@@ -134,6 +145,41 @@ MXDataCollectionGrid.prototype.getToolBar = function() {
                             }
                         }
                     },
+					{                     
+                        text: "<span class='glyphicon glyphicon-download-alt'> PDF analysis</span>",
+                        id : 'pdfBtn2',
+                        tooltip: 'Download Session Analysis Report',                                              
+                        margin: '2 0 2 5',
+                        handler : function(){
+                            if (_this.pdfAnalysisUrl != null){
+                                location.href = _this.pdfAnalysisUrl;                             
+                            }
+                        }
+                    },
+             {                     
+                        text: "<span class='glyphicon glyphicon-download-alt'> RTF analysis</span>",
+                        id : 'rtfBtn2',
+                        tooltip: 'Download Session Analysis Report as RTF',                                              
+                        margin: '2 0 2 5',
+                        handler : function(){
+                            if (_this.rtfAnalysisUrl != null){
+                                location.href = _this.rtfAnalysisUrl;                             
+                            }
+                        }
+                },
+					{                     
+                        text: "<span class='glyphicon glyphicon-envelope'> Send Report </span>",
+                        id : 'sendPdfBtn',
+                        tooltip: 'Send Session Summary Report as PDF',                                              
+                        margin: '1 0 1 2',
+						hidden: _this.hideSendReport,
+                        handler : function(){
+                            if (_this.sendPdfUrl != null){
+                                location.href = _this.sendPdfUrl;                             
+                            }
+                        }
+                    },
+
             '->',
             {
                 html: '<span class="glyphicon glyphicon-download-alt"></span> Best results',
@@ -222,7 +268,9 @@ MXDataCollectionGrid.prototype.load = function(dataCollectionGroup) {
         this.rtfUrl = EXI.getDataAdapter().mx.dataCollection.getRtfReportURLBySessionId(sessionId);
 		this.pdfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getAnalysisReportURLBySessionId(sessionId);
         this.rtfAnalysisUrl = EXI.getDataAdapter().mx.dataCollection.getRtfAnalysisReportURLBySessionId(sessionId);
+		this.sendPdfUrl = EXI.getDataAdapter().mx.dataCollection.sendPdfReport(sessionId);
     }
+		
 };
 
 /**

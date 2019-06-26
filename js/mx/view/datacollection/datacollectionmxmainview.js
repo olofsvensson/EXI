@@ -16,9 +16,12 @@ function DataCollectionMxMainView(args) {
          if (args.technique) {
             this.technique = args.technique;
         }
+		if (args.proposal) {
+            this.proposal = args.proposal;
+        }
     }
-
-    this.genericDataCollectionPanel = new MXDataCollectionGrid();
+	
+    this.genericDataCollectionPanel = new MXDataCollectionGrid({proposal : this.proposal});
     this.energyScanGrid = new EnergyScanGrid();
     this.xfeScanGrid = new XFEScanGrid();
     this.emStats = new EMSessionStats({sessionId: this.sessionId});

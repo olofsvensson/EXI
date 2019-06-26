@@ -86,7 +86,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                             var values = phasingStep.statisticsValue.split(",");                            
                             for (var j = 0; j < singleMetric.length; j++) {   
                                     /* Spaces are replaced by _ to be used on the templates */                        
-                                    phasingStep[singleMetric[j].replace(/ /g, '_')] = values[j];                           
+                                    phasingStep[singleMetric[j].trim().replace(/ /g, '_')] = values[j];                           
                             }
                     } 
                     if (phasingStep.png){
@@ -138,7 +138,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                        var statisticsValues = _.map(steps, "statisticsValue");
                        for (var z=0; z < steps.length; z++){   
                             var toBePushed =  steps[z];
-                            
+                            var listUglyMol = [];
                             /**
                              * This adds the phasing plots into the dictionary looking for them from the previous steps
                              */
@@ -151,24 +151,95 @@ PhasingGridView.prototype.printHTML = function(target) {
                             if (steps[z].metric){                                                        
                                 toBePushed = getMetrics(steps[z]);
                             }  
-                            
-                            /* Opening uglymol with:
-                                    1) pdb file
-                                    2) map1 as first map file
-                                    3) map2 as second map file
-                                    */           
-                            var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( steps[z].pdb);                            
-                           
-                            if ( steps[z].map != null){
+                            if (step == "MODELBUILDING") { 
+	                            /* Opening uglymol with:
+	                                    1) pdb file
+	                                    2) map1 as first map file
+	                                    3) map2 as second map file
+	                                    */           
+	                            var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( steps[z].pdb);                            
+	                            if ( steps[z].map != null){
+	                                var mapsArr = steps[z].map.split(",");
+	                                if (mapsArr.length == 2){
+	                                    var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[0]);
+	                                    var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[1]);                                
+	                                    toBePushed["uglymol"] = '../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2;
+	                                }
+	                            }
+                            } else if (step == "REFINEMENT") {
+                                var refinedPdbFileId = -1;
+                                var mrPdbFileId = -1;
+                                var peaksFileId = -1;
+                                var blobFileId = -1;
                                 var mapsArr = steps[z].map.split(",");
-                                if (mapsArr.length == 2){
-                                    var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[0]);
-                                    var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[1]);                                
-                                    toBePushed["uglymol"] = '../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2;
+                                var pdbsArr = steps[z].pdb.split(",");
+                                var csvsArr = steps[z].csv.split(",");
+                                if ("mapFileName" in steps[z]) {
+                                    var mapFileNamesArr = steps[z].mapFileName.split(",");
+                                    for (var i = 0; i < mapFileNamesArr.length; i++) {
+                                        mapFileNamesArr[i] = mapFileNamesArr[i].slice(0, -4)
+                                    }
+                                } else {
+                                    var mapFileNamesArr = [];
                                 }
-                            }  
+                                if ("pdbFileName" in steps[z]) {
+                                    var pdbFileNamesArr = steps[z].pdbFileName.split(",");
+                                    for (var i = 0; i < pdbFileNamesArr.length; i++) {
+                                        if (pdbFileNamesArr[i] == "refined.pdb") {
+                                            refinedPdbFileId = pdbsArr[i];
+                                        } else if (pdbFileNamesArr[i] == "MR.pdb") {
+                                            mrPdbFileId = pdbsArr[i];
+                                        }
+                                    }
+                                } else {
+                                    var pdbFileNamesArr = [];
+                                }
+                                if ("csvFileName" in steps[z]) {
+                                    var csvFileNamesArr = steps[z].csvFileName.split(",");
+                                    for (var i = 0; i < csvFileNamesArr.length; i++) {
+                                        if (csvFileNamesArr[i] == "peaks.csv") {
+                                            peaksFileId = csvsArr[i];
+                                        } else if (pdbFileNamesArr[i] == "blobs.csv") {
+                                            blobFileId = csvsArr[i];
+                                        }
+                                    }
+                                } else {
+                                    var csvFileNamesArr = [];
+                                }
+                                if (mrPdbFileId != -1) {
+                                    index2FOFC_MR = mapFileNamesArr.indexOf("2FOFC_MR");
+                                    indexFOFC_MR = mapFileNamesArr.indexOf("FOFC_MR");
+                                    if ( (index2FOFC_MR == -1) || (indexFOFC_MR) == -1) {
+                                        listUglyMol.push("");
+                                    } else {
+                                        var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mrPdbFileId );
+                                        var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[index2FOFC_MR]);
+                                        var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[indexFOFC_MR]);
+                                        var peaks = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId(peaksFileId);
+                                        listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2 + '&peaks=' + peaks);
+                                    }
+                                } 
+                                if (refinedPdbFileId != -1) {
+                                    index2FOFC_REFINE = mapFileNamesArr.indexOf("2FOFC_REFINE");
+                                    indexFOFC_REFINE = mapFileNamesArr.indexOf("FOFC_REFINE");
+                                    if ( (index2FOFC_REFINE == -1) || (indexFOFC_REFINE == -1) ) {
+                                        listUglyMol.push("");
+                                    } else {
+                                        var pdbUrl = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( refinedPdbFileId );
+                                        var mapUrl1 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[index2FOFC_REFINE]);
+                                        var mapUrl2 = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId( mapsArr[indexFOFC_REFINE]);
+                                        var peaks = EXI.getDataAdapter().mx.phasing.downloadPhasingFilesByPhasingAttachmentId(peaksFileId);
+                                        listUglyMol.push('../viewer/uglymol/index.html?pdb=' + pdbUrl + '&map1=' + mapUrl1 + '&map2=' + mapUrl2 + '&peaks=' + peaks);
+                                    }
+                                } 
+                            }
                             /** It will add only the files coming from these steps */
-                            toBePushed["downloadFilesUrl"] = EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(parseDownloadAttachments(steps[z]));                                                                            
+                            toBePushed["downloadFilesUrl"] = EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(parseDownloadAttachments(steps[z]));
+                            if (listUglyMol.length == 0) {
+                                listUglyMol.push("");
+                                listUglyMol.push("");
+                            }
+                            toBePushed["listUglyMol"] = listUglyMol;
                             node["metrics"].push(toBePushed);                         
                        }                                            
                    }     
@@ -185,6 +256,10 @@ PhasingGridView.prototype.printHTML = function(target) {
                         node = getNodeByPhasingStep(node, stepsBySpaceGroup, "MODELBUILDING");
                }
                else{
+                   if (_.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "REFINEMENT"}) != null){
+                       node = getNodeByPhasingStep(node, stepsBySpaceGroup, "REFINEMENT");                                  
+                   }
+                   else{                            
                    /** There is no model building the we parse the phasing*/
                     if (_.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "PHASING"}) != null){
                        node = getNodeByPhasingStep(node, stepsBySpaceGroup, "PHASING");
@@ -193,10 +268,6 @@ PhasingGridView.prototype.printHTML = function(target) {
                         if (_.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "SUBSTRUCTUREDETERMINATION"}) != null){ 
                             node = getNodeByPhasingStep(node, stepsBySpaceGroup, "SUBSTRUCTUREDETERMINATION"); 
                         }
-                        else{                            
-                             if (_.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "REFINEMENT"}) != null){                                  
-                                 node = getNodeByPhasingStep(node, stepsBySpaceGroup, "REFINEMENT");                                  
-                             }
                              else{
                                  node = getNodeByPhasingStep(node, stepsBySpaceGroup, "PREPARE");        
                             }

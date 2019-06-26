@@ -166,6 +166,15 @@
                      {/SpaceGroupModelResolvedByPhasing}
                   </div>
                </div>
+               <div class="container-fluid" style="padding-bottom: 10px;">
+                   <div class="col-xs-12 col-md-12">
+                      {?SpaceGroupModelResolvedByMr}
+                      <div class="alert alert-success" style='font-size:14px;'>
+                         Automatic MR appears to have worked with the space group {.SpaceGroupModelResolvedByMr} 
+                      </div>
+                      {/SpaceGroupModelResolvedByMr}
+                   </div>
+                </div>
             </div>
          </div>
          <div id="experimentparameters_{.DataCollection_dataCollectionId}" class="tab-pane fade">

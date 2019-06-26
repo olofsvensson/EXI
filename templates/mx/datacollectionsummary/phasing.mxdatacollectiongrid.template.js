@@ -121,9 +121,9 @@
                                         <td>{.PhasingStep_highRes} - {.PhasingStep_lowRes} </td>
                                         <td>{.PhasingStep_solventContent} </td>                                                               
                                         <td>{@decimal key="Chain_Count" decimals=0}{/decimal}  </td>
-                                        <td>{@decimal key="_Residues_Count" decimals=0}{/decimal} </td>                     
-                                        <td>{@decimal key="_Average_Fragment_Length" decimals=0}{/decimal} </td>
-                                        <td>{@decimal key="_CC_of_partial_model" decimals=2}{/decimal}</td>                               
+                                        <td>{@decimal key="Residues_Count" decimals=0}{/decimal} </td>                     
+                                        <td>{@decimal key="Average_Fragment_Length" decimals=0}{/decimal} </td>
+                                        <td>{@decimal key="CC_of_partial_model" decimals=2}{/decimal}</td>                               
                                         <td>                                            
                                                 {?uglymol}
                                                     <a><a target="_blank" href='{.uglymol}' ><span style='font-size: 1em;' class="glyphicon glyphicon-eye-open"  ></span></a> 
