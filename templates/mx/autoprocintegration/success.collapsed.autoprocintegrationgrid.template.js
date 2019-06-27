@@ -85,9 +85,9 @@
 		              {?overall.anomalousCompleteness}
 		                 {?overall.multiplicity}
 	                     {?overall.completeness}
-		                      <span class='overallshell'>{.overall.multiplicity}</span><br />
-		                      <span class='innershell'>{.innerShell.multiplicity} </span><br />
-		                      <span class='outershell'>{.outerShell.multiplicity}</span>
+		                      <span class='overallshell'>{.overall.completeness}</span><br />
+		                      <span class='innershell'>{.innerShell.completeness} </span><br />
+		                      <span class='outershell'>{.outerShell.completeness}</span>
 	                      {:else}
 	                          <span class='overallshell'></span><br />
 	                          <span class='innershell'></span><br />
