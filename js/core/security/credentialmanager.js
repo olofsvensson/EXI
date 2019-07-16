@@ -188,3 +188,4 @@ CredentialManager.prototype.setActiveProposal = function(username, proposal){
 	}
 };
 
+
