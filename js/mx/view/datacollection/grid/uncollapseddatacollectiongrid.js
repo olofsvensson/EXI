@@ -66,7 +66,14 @@ UncollapsedDataCollectionGrid.prototype.displayDataCollectionTab = function(targ
        
         _.forEach(data, function(value) {
             // URL to image quality indicators
-            value.urlImageQualityIndicators = EXI.getDataAdapter().mx.dataCollection.getQualityIndicatorPlot(value.dataCollectionId);
+            value.showQILink = true;
+            if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+                value.urlImageQualityIndicators = "../images/white_square.png";
+                value.showQILink = false;
+            }else {
+                value.urlImageQualityIndicators = EXI.getDataAdapter().mx.dataCollection.getQualityIndicatorPlot(value.dataCollectionId);
+            }
+
             // Result from auto-processing>                     
             
             value.onlineresults = UncollapsedDataCollectionGrid.prototype._getAutoprocessingStatistics(value);
