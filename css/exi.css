@@ -1241,6 +1241,12 @@ img.small {
 
 }
 
+.logoImageLarge {
+	width: 70px;
+	height: 30px
+
+}
+
 .toolbarPanel {
 	background-color: #207a7a;
 }
