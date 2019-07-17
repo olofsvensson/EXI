@@ -14,6 +14,12 @@ function CaseForm(args) {
 			this.showTitle = args.showTitle;
 		}
 	}
+
+	this.transportCostLabel = "Transport Value";
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+        this.transportCostLabel = "Transport Value (SEK)";
+    }
+
 	this.onSaved = new Event(this);
 }
 
@@ -102,7 +108,7 @@ CaseForm.prototype.getPanel = function(dewar, hideReimb) {
 						width : 500,
 						labelWidth : 200,
 						margin : '10 0 0 0',
-						fieldLabel : 'Transport Value',
+						fieldLabel :  this.transportCostLabel,
 						id : this.id + 'dewar_transportValue'
 					},
 					{
