@@ -110,7 +110,7 @@ CredentialManager.prototype.getDefaultSampleChanger = function(){
 */
 CredentialManager.prototype.getSiteName = function(){
 	var connections = this.getConnections();
-    var siteName = connections[0].siteName;
+    var siteName = connections[0].site;
 	return siteName;
 };
 
