@@ -258,7 +258,6 @@ LoadSampleChangerView.prototype.createSampleChangerWidget = function (sampleChan
         isLoading : false,
         beamlineName : beamlineName
     };
-    
     this.sampleChangerWidget = new FlexHCDWidget(data);
     
     if (sampleChangerName == "SC3") {
@@ -280,6 +279,11 @@ LoadSampleChangerView.prototype.createSampleChangerWidget = function (sampleChan
         this.sampleChangerWidget = new RoboDiffHCDSC3Widget(data);
     }
 
+    if (sampleChangerName == "ISARA") {       
+        this.sampleChangerWidget = new ISARAWidget(data);
+    }
+
+
 
 
     return this.sampleChangerWidget;
@@ -290,7 +294,12 @@ LoadSampleChangerView.prototype.changeSampleChangerWidgetByBeamline = function (
     if (newBeamline.length > 0) {
         this.createSampleChangerWidget(newBeamline[0].sampleChangerType,newBeamline[0].name);
     } else {
-        this.createSampleChangerWidget("FlexHCD",beamlineName);
+        if (EXI.credentialManager.getCredentials()[0].properties.name.indexOf("MAXIV") != -1){
+            this.createSampleChangerWidget("ISARA",beamlineName);
+        } else {
+            this.createSampleChangerWidget("FlexHCD",beamlineName);
+        }
+        
     }
     this.widgetContainer.removeAll();
     this.load(this.containers);
@@ -476,3 +485,7 @@ LoadSampleChangerView.prototype.previewPuck = function (containerId, capacity, d
     this.verticalPanel.add(this.previewPanelView.getPanel());
     this.previewPanelView.load(containerId, capacity, data, instructionsButtonText);
 };
+
+LoadSampleChangerView.prototype.hidePanel = function () {
+    this.previewPanelView.panel.hidden = true;
+}

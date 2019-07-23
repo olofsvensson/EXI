@@ -5,12 +5,18 @@ function ContainerTypeComboBox(args) {
     this.labelWidth = 200;
     this.width = 500;
     this.initDisabled = false;
-
-    this.data = [
-                    {"type":"SPINE", "capacity":10},
-                    {"type":"UNIPUCK", "capacity":16},
-                    {"type":"PLATE", "capacity":96}
-                ]
+    debugger;
+    if (EXI.credentialManager.getBeamlines()[0].name == "BioMAX") {
+        this.data = [
+                        {"type":"UNIPUCK", "capacity":16}
+                    ]
+    } else {
+        this.data = [
+                        {"type":"SPINE", "capacity":10},
+                        {"type":"UNIPUCK", "capacity":16},
+                        {"type":"PLATE", "capacity":96}
+                    ]
+    }
 
     if (args) {
         if (args.label) {
@@ -40,6 +46,11 @@ ContainerTypeComboBox.prototype.getPanel = function () {
         data : this.data
     });
 
+    var defaultContainerType = "SPINE";
+    if (EXI.credentialManager.getBeamlines()[0].name == "BioMAX") {
+        defaultContainerType = "UNIPUCK";
+    }
+
     this.panel = Ext.create('Ext.form.ComboBox', {
         layout:'fit',
         margin : '5 0 5 5',
@@ -48,7 +59,7 @@ ContainerTypeComboBox.prototype.getPanel = function () {
         labelStyle: 'padding:5px',
         labelWidth : this.labelWidth,
         displayField: 'type',
-        value:'SPINE',
+        value:defaultContainerType,
         width: this.width,
         disabled : this.initDisabled
     });
