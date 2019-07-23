@@ -33,7 +33,7 @@ function ContainerPrepareSpreadSheet(args){
 */
 ContainerPrepareSpreadSheet.prototype.getPanel = function() {
     var _this = this;
-
+    debugger;
     this.store = Ext.create('Ext.data.Store', {
         storeId:'spreadSheedStore',
         fields:['shippingName', 'shippingId', 'barCode', 'parcelName', 'containerCode', 'containerType', 'sampleCount', 'beamlineName','beamlineCombo','sampleChangerLocation','dewarId','containerId','capacity'],
@@ -41,6 +41,7 @@ ContainerPrepareSpreadSheet.prototype.getPanel = function() {
     });
 
     this.panel = Ext.create('Ext.grid.Panel', {
+        
         title: 'Loaded or to be Loaded on MxCube',
         buttons: [
                             {
@@ -201,7 +202,12 @@ ContainerPrepareSpreadSheet.prototype.getPanel = function() {
                 renderer : function(value, metaData, record, rowIndex){
                     if (record.data.sampleChangerLocation){
                         if (record.data.sampleChangerLocation != ""){
-                            return  Math.floor((record.data.sampleChangerLocation - 1) /3) +1 ;
+                            if (record.data.beamlineName == "BioMAX"){
+                                return  1 ;
+                            } else {
+                                return  Math.floor((record.data.sampleChangerLocation - 1) /3) +1 ;
+                            }
+                            
                             
                         }
                     }
@@ -216,8 +222,12 @@ ContainerPrepareSpreadSheet.prototype.getPanel = function() {
                 tdCls: 'scl-cell',
                 renderer : function(value, metaData, record, rowIndex){
                     if (record.data.sampleChangerLocation){
-                        if (record.data.sampleChangerLocation != ""){                           
-                            return ((record.data.sampleChangerLocation - 1)  %3) + 1;
+                        if (record.data.sampleChangerLocation != ""){
+                            if (record.data.beamlineName == "BioMAX"){                       
+                                return record.data.sampleChangerLocation;
+                            } else {
+                                return ((record.data.sampleChangerLocation - 1)  %3) + 1;
+                            }
                         }                        
                     }
                      return record.data.sampleChangerLocation;
@@ -424,6 +434,7 @@ ContainerPrepareSpreadSheet.prototype.load = function(containers, sampleChangerW
 * @return
 */
 ContainerPrepareSpreadSheet.prototype.updateSampleChangerLocation = function (containerId, location) {
+    debugger;
     var _this = this;
     var recordsByContainerId = this.getRowsByContainerId(containerId);
 

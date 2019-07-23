@@ -104,6 +104,15 @@ DataCollectionDataAdapter.prototype.getReportURLBySessionId = function(sessionId
 };
 
 /**
+* This method sends by email the PDF report for the session
+* @method sendPdfReport
+*/
+DataCollectionDataAdapter.prototype.sendPdfReport = function(sessionId){
+    var url = ('/{token}/proposal/{proposal}/mx/datacollection/session/{0}/report/send/pdf'.format([sessionId]));
+	return this.getUrl(url);
+};
+
+/**
 * This method downloads a RTF report for the session
 * @method getRtfReportURLBySessionId
 */

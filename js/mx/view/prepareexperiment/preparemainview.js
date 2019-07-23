@@ -240,7 +240,7 @@ PrepareMainView.prototype.load = function() {
         
         EXI.getDataAdapter({onSuccess : onSuccessProposal, onError:onError}).proposal.dewar.getDewarsByProposal();
     } else if (this.currentStep == 2) {
-        var onSuccessProposal = function(sender, containers) {     
+        var onSuccessProposal = function(sender, containers) {
             _this.containers = containers;
             var beamlinesSelected = _.uniq(_.map(_.filter(_this.containers, function(e){return e.shippingStatus == "processing";}),'beamlineLocation'));
             if (beamlinesSelected.length > 0) {
@@ -248,16 +248,17 @@ PrepareMainView.prototype.load = function() {
                 if (beamline.length > 0) {
                     _this.loadSampleChangerView.createSampleChangerWidget(beamline[0].sampleChangerType,beamline[0].name);
                 } else {
-                    
-                    //$.notify("Warning: Unknown beamline " + beamlinesSelected[0], "warn");
-                    _this.loadSampleChangerView.createSampleChangerWidget("FlexHCD",beamlinesSelected[0]);
+                    _this.loadSampleChangerView.createSampleChangerWidget(EXI.credentialManager.getDefaultSampleChanger(), "");
+                    _this.loadSampleChangerView.hidePanel();
                 }
                 for (var i = 1 ; i < beamlinesSelected.length ; i++){
                     var beamline = _.filter(EXI.credentialManager.getBeamlinesByTechnique("MX"),{"name":beamlinesSelected[i]});
-                    if (beamline.length == 0) {                        
+                    if (beamline.length == 0) {
                         //$.notify("Warning: Unknown beamline " + beamlinesSelected[i], "warn");
                     }
                 }
+            } else {
+                _this.loadSampleChangerView.createSampleChangerWidget(EXI.credentialManager.getDefaultSampleChanger(), "");
             }
             _this.container.add(_this.loadSampleChangerView.getPanel());
             _this.loadSampleChangerView.load();

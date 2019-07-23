@@ -35,3 +35,29 @@ StatisticsDataAdapter.prototype.getStatisticsByDate = function(type,startDate,en
 StatisticsDataAdapter.prototype.getStatisticsByDateAndBeamline = function(type,startDate,endDate,beamline){
 	return this.getUrl('/{token}/stats/autoprocstatistics/{0}/{1}/{2}/csv?beamlinenames={3}'.format( [type,startDate,endDate,beamline]));                                                    
 };
+
+
+/**
+* It retrieves the statistics url between the given dates
+* @method getDatacollectionStatisticsByDate
+* @param {String} imageslimit
+* @param {String} startDate
+* @param {String} endDate
+* @param {String} testproposals
+*/
+StatisticsDataAdapter.prototype.getDatacollectionStatisticsByDate = function(imageslimit,startDate,endDate,testproposals){
+	return this.getUrl('/{token}/stats/datacollectionstatistics/{0}/{1}/{2}/0/csv?testproposals={3}'.format( [imageslimit,startDate,endDate,testproposals]));
+};
+
+/**
+* It retrieves the statistics url between the given dates for the given beamline
+* @method getDatacollectionStatisticsByDateAndBeamline
+* @param {String} imageslimit
+* @param {String} startDate
+* @param {String} endDate
+* @param {String} testproposals
+* @param {String} beamline
+*/
+StatisticsDataAdapter.prototype.getDatacollectionStatisticsByDateAndBeamline = function(imageslimit,startDate,endDate,testproposals,beamline){
+	return this.getUrl('/{token}/stats/datacollectionstatistics/{0}/{1}/{2}/{3}/csv?testproposals={4}'.format( [imageslimit,startDate,endDate,beamline,testproposals]));
+};

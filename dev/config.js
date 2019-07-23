@@ -43,6 +43,8 @@ var ExtISPyB ={
          name:'EMBL',
          url:'http://192.109.31.39/ispyb/ispyb-ws/rest',
          exiUrl:'http://pc593.embl.fr:8080/extispyb-ws/rest',
+         siteName:'EMBL',
+         defaultSampleChanger: 'ISARA',
          beamlines:{
             SAXS:[
                'P12'
@@ -53,9 +55,60 @@ var ExtISPyB ={
          }
       },
       {
+          name:'MAXIV',
+          url:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          exiUrl:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          beamlines:{
+              SAXS:[
+               ],
+              MX:[
+                  {
+                      name : "BioMAX",
+                      sampleChangerType : 'ISARA'
+                  }
+              ]
+          }
+
+      },
+      {
+          name:'MAXIV TEST',
+          url:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          exiUrl:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
+          beamlines:{
+              SAXS:[
+              ],
+              MX:[
+                  {
+                      name : "BioMAX",
+                      sampleChangerType : 'ISARA'
+                  }
+              ]
+          }
+     },
+     {
          name:'Local',
          url:'http://pc593.embl.fr:8080/ispyb-ws/rest',
          exiUrl:'http://pc593.embl.fr:8080/extispyb-ws/rest'
+      },
+      {
+        name:'MAXIV localhost',
+        icon : '../images/site/dev.esrf.png',
+        url:'http://localhost:18080/ispyb/ispyb-ws/rest',
+        exiUrl:'http://localhost:18080/ispyb/ispyb-ws/rest',
+        siteName:'MAXIV',
+        defaultSampleChanger: 'ISARA',
+        beamlines:{
+            SAXS:[
+
+
+            ],
+            MX:[
+                {
+                    name : "BioMAX",
+                    sampleChangerType : 'ISARA'
+                }
+            ]
+        }
       }
    ]
 };

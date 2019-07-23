@@ -89,6 +89,30 @@ CredentialManager.prototype.getBeamlines = function(){
 	return beamlines;
 };
 
+/**
+*  Returns the default sample changer
+*
+* @method getDefaultSampleChanger
+* @return
+*/
+CredentialManager.prototype.getDefaultSampleChanger = function(){
+	var connections = this.getConnections();
+    var sc = connections[0].defaultSampleChanger;
+	return sc;
+};
+
+
+/**
+*  Returns the site name
+*
+* @method getSiteName
+* @return
+*/
+CredentialManager.prototype.getSiteName = function(){
+	var connections = this.getConnections();
+    var siteName = connections[0].siteName;
+	return siteName;
+};
 
 /**
 *  Returns an array with the name of all the beamlines of the selected technique
@@ -117,6 +141,8 @@ CredentialManager.prototype.getConnections = function(){
 					url : credentials[i].url,
 					exiUrl : credentials[i].exiUrl,
 					token : credentials[i].token,
+					site : credentials[i].properties.siteName,
+                    defaultSampleChanger : credentials[i].properties.defaultSampleChanger,
 					beamlines : credentials[i].properties.beamlines,
 					proposal : credentials[i].activeProposals[j] });
 			}
@@ -127,6 +153,8 @@ CredentialManager.prototype.getConnections = function(){
 					url : credentials[i].url,
 					exiUrl : credentials[i].exiUrl,
 					token : credentials[i].token,
+					site : credentials[i].properties.siteName,
+                    defaultSampleChanger : credentials[i].properties.defaultSampleChanger,
 					beamlines : credentials[i].properties.beamlines,
 					proposal : null
 				});
@@ -159,4 +187,5 @@ CredentialManager.prototype.setActiveProposal = function(username, proposal){
 		}
 	}
 };
+
 
