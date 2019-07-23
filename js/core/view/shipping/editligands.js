@@ -1,12 +1,9 @@
-function EditCrystalStructure(args) {
+function EditLigands(args) {
 	this.id = BUI.id();
 
 	this.width = 600;
 	this.height = 500;
 	this.showTitle = true;
-
-	this.types =  ["PDB", "FASTA"];
-	this.label = "Group Name";
 	if (args != null) {
 		if (args.showTitle != null) {
 			this.showTitle = args.showTitle;
@@ -17,18 +14,12 @@ function EditCrystalStructure(args) {
 		if (args.height != null) {
 			this.height = args.height;
 		}
-		if (args.types != null) {
-			this.types = args.types;
-		}
-		if (args.label != null) {
-			this.label = args.label;
-		}
 	}
 
 	this.onSaved = new Event(this);
 };
 
-EditCrystalStructure.prototype.getPanel = function () {
+EditLigands.prototype.getPanel = function () {
 
 	this.panel = Ext.create("Ext.panel.Panel", {
 		items: [{
@@ -42,22 +33,12 @@ EditCrystalStructure.prototype.getPanel = function () {
 	return this.panel;
 };
 
-/**
- * Crystal might be null and then it is store as proposal
- */
-EditCrystalStructure.prototype.load = function (crystal) {
+EditLigands.prototype.load = function (crystal) {
+	var _this = this;
 
-	if (crystal){
-		this.crystal = crystal;	
-		
-		this.crystal.url = EXI.getDataAdapter().mx.crystal.getSaveStructureURL(this.crystal.crystalId);
-	}
-	else{
-		this.crystal = {};
-		this.crystal.url = EXI.getDataAdapter().proposal.proposal.saveStructure();
-	}
-	this.crystal.label = this.label;
-	this.crystal.types = this.types;
+	this.crystal = crystal;
+	
+	this.crystal.url = EXI.getDataAdapter().mx.crystal.getSaveStructureURL(this.crystal.crystalId);
 	dust.render("structure.crystal.edit.form.template", this.crystal, function (err, out) {
 		html = out;
 	}); 
@@ -68,25 +49,19 @@ EditCrystalStructure.prototype.load = function (crystal) {
 
 
 
-EditCrystalStructure.prototype.save = function () {
+EditLigands.prototype.save = function () {
 	var _this = this;	
 	$("#structure-form").submit(function (e) {		
 		e.preventDefault();
 		/** Setting the filename */
 		$("#structure-fileName").val($("#structure-input-file").val().split('\\').pop());
-		var formData = new FormData(this);	
-		_this.panel.setLoading();
-		
+		var formData = new FormData(this);		
 		$.ajax({
 			url: this.action,
 			type: 'POST',
 			data: formData,
 			success: function (data) {
-				_this.onSaved.notify(data);
-				_this.panel.setLoading(false);
-			},
-			error : function(error){
-				alert("There was an error in the server");
+				_this.onSaved.notify();
 			},
 			cache: false,
 			contentType: false,

@@ -25,20 +25,19 @@ MXManagerMenu.prototype.getMenuItems = function() {
     	this.getShipmentItem(),
     	{
                 text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
-                cls : 'ExiSAXSMenuToolBar',
-                disabled : false,
+				cls : 'ExiSAXSMenuToolBar',				               
                 handler : function(){
                     location.hash = "/mx/prepare/main";
                 
-				}
+				} 
 		},
 		{
-                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
+                text : this._convertToHTMLWhiteSpan("Samples <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
-                disabled : false,
-                handler : function(){
+				menu : this.getProteinCrystalsMenu() 
+                /*handler : function(){
                     location.hash = "#/protein/list";
-                }
+                }*/
 	    },
 		{
 				text : this._convertToHTMLWhiteSpan("Data Explorer"),
@@ -91,6 +90,45 @@ MXManagerMenu.prototype.getMenuItems = function() {
 	];
 };
 
+
+
+MXManagerMenu.prototype.getProteinCrystalsMenu = function() {
+	var _this = this;
+	function onItemCheck(item, checked) {
+		if (item.text == "Autoproc Scaling Statistics") {
+			var scatteringForm = new ScatteringForm();
+
+			var keys = ["ISA", "rPimWithinIPlusIMinus","anomalousMultiplicity","multiplicity","resolutionLimitLow","ccHalf",
+			"strategySubWedgeOrigId","completeness","rMerge","anomalous","meanIOverSigI","ccAno","autoProcScalingId",
+			"nTotalObservations","sigAno","rMeasWithinIPlusIMinus","anomalousCompleteness","resolutionLimitHigh",
+			"fractionalPartialBias","rMeasAllIPlusIMinus","nTotalUniqueObservations","rPimAllIPlusIMinus"];
+
+			var scatteringData = {title : "AutoprocIntegrator", keys : keys};
+
+			scatteringForm.load(scatteringData);
+			scatteringForm.show();
+		}
+	}
+
+	return Ext.create('Ext.menu.Menu', {
+		items : [
+					{
+						text 	: 'Proteins & Crystals',						
+						handler : function(){
+                    		location.hash = "#/protein/list";
+                		}
+					},
+					{
+						text : 'Ligands',
+						icon : '../images/icon/macromolecule.png',
+						handler : function(){
+                    		location.hash = "#/ligands/list";
+                		}
+					}
+			] 
+	});
+};
+
 MXManagerMenu.prototype.getManagerMenu = function() {
 	var _this = this;
 	function onItemCheck(item, checked) {
@@ -118,7 +156,7 @@ MXManagerMenu.prototype.getManagerMenu = function() {
 								items: [
 									{
 										text: 'Autoproc Scaling Statistics',
-										icon : '../images/icon/ic_insert_chart_black_36dp.png',
+										//icon : '../images/icon/ic_insert_chart_black_36dp.png',
 										handler: onItemCheck,
 										disabled : false
 									}

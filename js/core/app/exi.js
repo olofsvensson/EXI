@@ -67,6 +67,7 @@ function Exi(args) {
 	
 	this.credentialManager.onActiveProposalChanged.attach(function(sender){
 		_this.mainMenu.populateCredentialsMenu();
+		
 	});
 	
 
