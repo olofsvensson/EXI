@@ -251,7 +251,8 @@ ContainerSpreadSheet.prototype.getSamplesData = function(puck) {
 						diffraction.axisRange,
 						diffraction.minOscWidth,
 						getValue(diffraction["observedResolution"]),  
-						sample.comments
+						sample.comments,
+						sample.structureStage
                     ]
                 );
         }
@@ -340,7 +341,14 @@ ContainerSpreadSheet.prototype.getHeader = function() {
 			{ text :'Tot Rot. <br />Angle', id :'axisRange',column : {width : 60}},
 			{ text :'Min Osc.<br />Angle', id :'minOscWidth',column : {width : 60}},		
             { text :'Observed <br />resolution', id : 'Pre-observed resolution', column : {width : 80}}, 
-            { text :'Comments', id :'Comments', column : {width : 200}}
+			{ text :'Comments', id :'Comments', column : {width : 200}},
+			{ text :'Ligands', id : 'Ligands', column : {
+				width : 100,  
+				type: 'autocomplete',
+				filter: 'true',
+				source: this.getLigandsGroupName()
+			}
+			}
             ];
 
     
@@ -390,6 +398,9 @@ ContainerSpreadSheet.prototype.getPuck = function() {
 		sample["smiles"] = rows[i]["Smiles"];
 		sample["location"]= rows[i]["location"];
 		sample["comments"] = rows[i]["Comments"];
+
+		sample["structureStage"] = rows[i]["Ligands"];
+
         var proteins = [];
 		if (sample["crystalVO"] == null){
 			sample["crystalVO"] = {};
@@ -446,6 +457,10 @@ ContainerSpreadSheet.prototype.getProteinsByAcronym = function(acronym) {
 		this.proteins[acronym] = EXI.proposalManager.getProteinByAcronym(acronym);
 	}
 	return this.proteins[acronym];
+};
+
+ContainerSpreadSheet.prototype.getLigandsGroupName = function() {
+	return _.concat([""], _.uniq(_.map(EXI.proposalManager.getLigands(), function(o) {return o.groupName})));
 };
 
 /**

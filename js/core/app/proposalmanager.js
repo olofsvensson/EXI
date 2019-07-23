@@ -243,6 +243,13 @@ ProposalManager.prototype.getCrystals = function() {
 };
 
 /**
+* @method getLigands
+*/
+ProposalManager.prototype.getLigands = function() {
+	return this.get()[0].ligands;
+};
+
+/**
 * @method getProteinByAcronym
 */
 ProposalManager.prototype.getProteinByAcronym = function(acronym) {

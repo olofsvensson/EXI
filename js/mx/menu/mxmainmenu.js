@@ -15,7 +15,10 @@ MXMainMenu.prototype.getHelpMenu = MainMenu.prototype.getHelpMenu;
 MXMainMenu.prototype.getShipmentItem = MainMenu.prototype.getShipmentItem;
 MXMainMenu.prototype.getDataExplorerMenu = MainMenu.prototype.getDataExplorerMenu;
 
+   
+
 MXMainMenu.prototype.getMenuItems = function() {
+
 	return [
 		this.getHomeItem(),
 		this.getShipmentItem(),
@@ -26,7 +29,7 @@ MXMainMenu.prototype.getMenuItems = function() {
                 disabled : false,
                 handler : function(){
                     location.hash = "#/protein/list";
-                }
+				}
 	    	},
 	    	{
                 text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
