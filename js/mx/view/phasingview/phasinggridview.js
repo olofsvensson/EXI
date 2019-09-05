@@ -171,9 +171,21 @@ PhasingGridView.prototype.printHTML = function(target) {
                                 var mrPdbFileId = -1;
                                 var peaksFileId = -1;
                                 var blobFileId = -1;
-                                var mapsArr = steps[z].map.split(",");
-                                var pdbsArr = steps[z].pdb.split(",");
-                                var csvsArr = steps[z].csv.split(",");
+                                if (steps[z].map != null) {
+                                	var mapsArr = steps[z].map.split(",");
+                                } else {
+                                	var mapsArr = [];
+                                }
+                                if (steps[z].pdb != null) {
+                                	var pdbsArr = steps[z].pdb.split(",");
+                                } else {
+                                	var pdbsArr = [];
+                                }
+                                if (steps[z].csv != null) {
+                                	var csvsArr = steps[z].csv.split(",");
+                                } else {
+                                	var csvsArr = [];
+                                }
                                 if ("mapFileName" in steps[z]) {
                                     var mapFileNamesArr = steps[z].mapFileName.split(",");
                                     for (var i = 0; i < mapFileNamesArr.length; i++) {
@@ -194,7 +206,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                                 } else {
                                     var pdbFileNamesArr = [];
                                 }
-                                if ("csvFileName" in steps[z]) {
+                                if ("csvFileName" in steps[z] && steps[z].csvFileName != null) {
                                     var csvFileNamesArr = steps[z].csvFileName.split(",");
                                     for (var i = 0; i < csvFileNamesArr.length; i++) {
                                         if (csvFileNamesArr[i] == "peaks.csv") {
