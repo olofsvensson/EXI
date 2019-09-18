@@ -55,6 +55,10 @@ SessionGrid.prototype.getDataCollectionURL = function(session) {
 
 SessionGrid.prototype.renderHTML = function(sessions) {              
     var _this = this;
+    session.showAForm = 1;
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+        session.showAForm = 0;
+    }
     dust.render("session.grid.mx.datacollection.template", sessions,function(err,out){ 
           $('#' + _this.id +'_main').html(out);
     });      

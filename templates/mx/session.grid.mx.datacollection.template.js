@@ -74,9 +74,11 @@
             <td> <a href='{.dataCollectionURL}'>{@formatDate date=BLSession_startDate format="DD-MM-YYYY" /}</a></td>
             <td> <a href='{.dataCollectionURL}'>{.beamLineName}</a></td>
             <td>
-                 {?expSessionPk}
-                    <a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk={.expSessionPk}" class='btn btn-xs'><span class='glyphicon glyphicon-list-alt'></span></a>
-                  {/expSessionPk}            
+                 {eq key=showAForm value=1}
+                     {?expSessionPk}
+                        <a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk={.expSessionPk}" class='btn btn-xs'><span class='glyphicon glyphicon-list-alt'></span></a>
+                     {/expSessionPk}
+                 {/eq}
             </td>
             <td> <a href='{.dataCollectionURL}'>
                <?BLSession_protectedData>
