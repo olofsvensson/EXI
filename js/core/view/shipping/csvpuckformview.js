@@ -167,12 +167,17 @@ CSVPuckFormView.prototype.save = function() {
 CSVPuckFormView.prototype.getWarningPanelsHTML = function() {	
 	/** Warning HTML */
 	var html = "";
+	var showOnlyUnipuckMessageValue = false;
+	if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+	    showOnlyUnipuckMessageValue = true;
+    }
 	dust.render("csvpuckformview.template", 
 					{
 								uniquenessParcelPanelId			: this.uniquenessParcelPanelId,
 								acceptedContainerListPanelId 	: this.acceptedContainerListPanelId,
 								uniquenessContainerNamelPanelId : this.uniquenessContainerNamelPanelId,
-								uniquenessSampleNamePanelId 	: this.uniquenessSampleNamePanelId
+								uniquenessSampleNamePanelId 	: this.uniquenessSampleNamePanelId,
+								showOnlyUnipuckMessage          : showOnlyUnipuckMessageValue
 					}, 
 					function(err, out) {						
                     	html = out;

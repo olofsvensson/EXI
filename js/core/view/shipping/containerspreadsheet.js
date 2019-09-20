@@ -279,70 +279,89 @@ ContainerSpreadSheet.prototype.getHeader = function() {
 			td.innerHTML = value;
 		}
 	}
-    header = [
-          
-           /* { text : 'Parcel', 	id: 'parcel', column : {width : 40}}, 
-			{ text : 'Container', 	id: 'container', column : {width : 40}}, 
-			{ text : 'Type', 	id: 'position', column : {width : 40}}, */
-			{ text : '#', 	id: 'position', column : {width : 20}}, 
-            { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
-                                                                                        width : 80,
-                                                                                        type: 'autocomplete',
-                                                                                        filter: 'true',
-                                                                                        source: this.getAcronyms()
-                                                                                    }
-            }, 
-            { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}}, 
-            { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},  
-            { text :'Crystal Form', id : 'Crystal Form',column : {
-                                                                        width : 230,
-                                                                        type: 'autocomplete',
-                                                                        filter: 'false',
-																		strict: 'false',
-                                                                        source: function(query, process) {
-                                                                            var colIndex = _this.getColumnIndex("Protein Acronym");																			
-                                                                            var protein = EXI.proposalManager.getProteinByAcronym(this.instance.getDataAtCell(this.row,colIndex));
-																			
-                                                                            if (protein.length > 0){				
-																				var crystals = _this.getCrystalInfoByProtein(protein[0]);																																				
-                                                                                process(crystals);
-                                                                            } else {
-                                                                                process([]);
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+
+        header = [
+
+               /* { text : 'Parcel', 	id: 'parcel', column : {width : 40}},
+                { text : 'Container', 	id: 'container', column : {width : 40}},
+                { text : 'Type', 	id: 'position', column : {width : 40}}, */
+                { text : '#', 	id: 'position', column : {width : 20}},
+                { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
+                                                                                            width : 80,
+                                                                                            type: 'autocomplete',
+                                                                                            filter: 'true',
+                                                                                            source: this.getAcronyms()
+                                                                                        }
+                },
+                { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}},
+                { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},
+                { text :'Comments', id :'Comments', column : {width : 200}}
+                ];
+    } else {
+        header = [
+               /* { text : 'Parcel', 	id: 'parcel', column : {width : 40}},
+                { text : 'Container', 	id: 'container', column : {width : 40}},
+                { text : 'Type', 	id: 'position', column : {width : 40}}, */
+                { text : '#', 	id: 'position', column : {width : 20}},
+                { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
+                                                                                            width : 80,
+                                                                                            type: 'autocomplete',
+                                                                                            filter: 'true',
+                                                                                            source: this.getAcronyms()
+                                                                                        }
+                },
+                { text :'Sample<br /> Name', id :'Sample Name', column : {width : 120}},
+                { text :'Pin <br />BarCode', id : 'Pin BarCode', column : {width : 60}},
+                { text :'Crystal Form', id : 'Crystal Form',column : {
+                                                                            width : 230,
+                                                                            type: 'autocomplete',
+                                                                            filter: 'false',
+                                                                            strict: 'false',
+                                                                            source: function(query, process) {
+                                                                                var colIndex = _this.getColumnIndex("Protein Acronym");
+                                                                                var protein = EXI.proposalManager.getProteinByAcronym(this.instance.getDataAtCell(this.row,colIndex));
+
+                                                                                if (protein.length > 0){
+                                                                                    var crystals = _this.getCrystalInfoByProtein(protein[0]);
+                                                                                    process(crystals);
+                                                                                } else {
+                                                                                    process([]);
+                                                                                }
                                                                             }
                                                                         }
-                                                                    }
-                                                                }, 
-			{ text :'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>', id :'editCrystalForm', column : {width : 30, renderer: editCrystalFormRenderer, editor : false, readOnly: true}},
-			
-            
-            { text :'Exp.<br /> Type', id : 'Experiment Type', column : {
-                                                                        width : 100,  
-                                                                        type: 'autocomplete',
-                                                                        filter: 'true',
-                                                                        source: [ "", "MXPressE","MXPressF", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
-                                                                    }
-            }, 
-			{ text :'Aimed<br /> resolution',  id :'Aimed resolution', column : {width : 60}}, 
-            { text :'Required<br /> resolution',  id :'Needed resolution', column : {width : 60}}, 
-            { text :'Beam <br />Diameter', id :'Pref. Diameter',column : {width : 60}}, 
-            { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 80}}, 
-            { text :'Aimed<br /> multiplicity', id :'Aimed multiplicity', column : {width : 60}}, 
-            { text :'Aimed<br /> Completeness', id :'Aimed Completeness', column : {width : 80}},            
-			{ text :'Forced <br /> Space G.', id : 'Space Group', column : {
-                                                                        width : 55,  
-                                                                        type: 'autocomplete',
-                                                                        filter: 'true',
-																		source: _.concat([""], ExtISPyB.spaceGroups)
-                                                                    }
-            }, 
-            { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 80}}, 
-            { text :'Smiles', id :'Smiles', column : {width : 140}}, 
-			{ text :'Tot Rot. <br />Angle', id :'axisRange',column : {width : 60}},
-			{ text :'Min Osc.<br />Angle', id :'minOscWidth',column : {width : 60}},		
-            { text :'Observed <br />resolution', id : 'Pre-observed resolution', column : {width : 80}}, 
-            { text :'Comments', id :'Comments', column : {width : 200}}
-            ];
+                                                                    },
+                { text :'<span class="glyphicon glyphicon-edit" aria-hidden="true"></span>', id :'editCrystalForm', column : {width : 30, renderer: editCrystalFormRenderer, editor : false, readOnly: true}},
 
+
+                { text :'Exp.<br /> Type', id : 'Experiment Type', column : {
+                                                                            width : 100,
+                                                                            type: 'autocomplete',
+                                                                            filter: 'true',
+                                                                            source: [ "", "MXPressE","MXPressF", "MXPressO", "MXPressI", "MXPressE_SAD", "MXScore", "MXPressM", "MXPressP", "MXPressP_SAD" ]
+                                                                        }
+                },
+                { text :'Aimed<br /> resolution',  id :'Aimed resolution', column : {width : 60}},
+                { text :'Required<br /> resolution',  id :'Needed resolution', column : {width : 60}},
+                { text :'Beam <br />Diameter', id :'Pref. Diameter',column : {width : 60}},
+                { text :'Number of<br /> positions', id :'Number Of positions', column : {width : 80}},
+                { text :'Aimed<br /> multiplicity', id :'Aimed multiplicity', column : {width : 60}},
+                { text :'Aimed<br /> Completeness', id :'Aimed Completeness', column : {width : 80}},
+                { text :'Forced <br /> Space G.', id : 'Space Group', column : {
+                                                                            width : 55,
+                                                                            type: 'autocomplete',
+                                                                            filter: 'true',
+                                                                            source: _.concat([""], ExtISPyB.spaceGroups)
+                                                                        }
+                },
+                { text :'Radiation<br /> Sensitivity', id :'Radiation Sensitivity', column : {width : 80}},
+                { text :'Smiles', id :'Smiles', column : {width : 140}},
+                { text :'Tot Rot. <br />Angle', id :'axisRange',column : {width : 60}},
+                { text :'Min Osc.<br />Angle', id :'minOscWidth',column : {width : 60}},
+                { text :'Observed <br />resolution', id : 'Pre-observed resolution', column : {width : 80}},
+                { text :'Comments', id :'Comments', column : {width : 200}}
+                ];
+    }
     
 
     return header;
