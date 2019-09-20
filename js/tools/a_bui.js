@@ -1018,19 +1018,32 @@ var BIOSAXS_COMBOMANAGER = {
 				width = args.width;
 			}
 		}
-		
-		var storageLocations = Ext.create('Ext.data.Store', {
-		    fields: ['value', 'name'],
-		    data : [
-		        {"value":"N/A", "name":"N/A"},
-		        {"value":"-80", "name":"-80"},
-		        {"value":"-20", "name":"-20"},
-		        {"value":"+4", "name":"+4"},
-		        {"value":"Room Temperature", "name":"Room Temperature"}
-		    ]
-		});
+		var storageLocations;
+		var fieldLabelValue = 'Storage Condition';
+		if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+            storageLocations = Ext.create('Ext.data.Store', {
+                fields: ['value', 'name'],
+                data : [
+                    {"value":"Dry shipper", "name":"Dry Shipper"},
+                    {"value":"Others", "name":"Others"}
+                ]
+            });
+            fieldLabelValue = 'Type';
+		} else {
+		    storageLocations = Ext.create('Ext.data.Store', {
+                fields: ['value', 'name'],
+                data : [
+                    {"value":"N/A", "name":"N/A"},
+                    {"value":"-80", "name":"-80"},
+                    {"value":"-20", "name":"-20"},
+                    {"value":"+4", "name":"+4"},
+                    {"value":"Room Temperature", "name":"Room Temperature"}
+                ]
+            });
+		}
+
 		this.storageLocationComboBox = Ext.create('Ext.form.ComboBox', {
-		    fieldLabel: 'Storage Condition',
+		    fieldLabel: fieldLabelValue,
 		    store: storageLocations,
 		    queryMode: 'local',
 		    labelWidth : labelWidth,

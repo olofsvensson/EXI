@@ -122,8 +122,11 @@ CaseForm.prototype.getPanel = function(dewar, hideReimb) {
 						id : this.id + 'dewar_comments'
 					},
 			]}]			
-		});	
+		});
 
+if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+    Ext.getCmp(this.id + 'dewar_transportValue').hide();
+}
 	this.refresh(dewar);
 	return this.panel;
 };
