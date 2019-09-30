@@ -6,7 +6,7 @@ function ContainerTypeComboBox(args) {
     this.width = 500;
     this.initDisabled = false;
     debugger;
-    if (EXI.credentialManager.getBeamlines()[0].name == "BioMAX") {
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
         this.data = [
                         {"type":"UNIPUCK", "capacity":16}
                     ]

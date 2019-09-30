@@ -211,9 +211,13 @@ CSVPuckFormView.prototype.getPanel = function() {
 
 CSVPuckFormView.prototype.getContainer = function() {
     var html = "";
-    
+    var siteName = "";
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+        siteName = "MAXIV";
+    }
     dust.render("csvimportmainview.template", {
-        id: "file_" + this.id
+        id: "file_" + this.id,
+        siteName: siteName
     }, function(err, out) {
         html = out;
     });
