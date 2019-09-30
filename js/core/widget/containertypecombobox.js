@@ -47,7 +47,7 @@ ContainerTypeComboBox.prototype.getPanel = function () {
     });
 
     var defaultContainerType = "SPINE";
-    if (EXI.credentialManager.getBeamlines()[0].name == "BioMAX") {
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
         defaultContainerType = "UNIPUCK";
     }
 
