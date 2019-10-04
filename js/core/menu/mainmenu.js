@@ -183,21 +183,38 @@ MainMenu.prototype.getShipmentItem = function() {
 		menu : Ext.create('Ext.menu.Menu', {
 			items : [ 
 						{
+						    id   : 'biosax_item',
 							text : 'BioSAXS',
 							icon : '../images/icon/macromolecule.png',
 							menu: getBiosaxsMenu()
 						}, 
 						{
+						    id   : 'addresses_item',
 							text : 'Manage shipping addresses',
 							icon : '../images/icon/contacts.png',
 							menu : getLabContactsMenu() 
 						}, 
 						{
+						    id   : 'shipments_item',
 							text : 'Shipments',
 							icon : '../images/icon/shipping.png',
 							menu : getShipmentsMenu() 
 						} 
-					] })
+					],
+					 listeners : {
+                                     'beforeshow' : function(menu) {
+                                         if (EXI.credentialManager.hasActiveProposal()) {
+                                            Ext.getCmp('biosax_item').enable();
+                                            Ext.getCmp('addresses_item').enable();
+                                            Ext.getCmp('shipments_item').enable();
+                                         } else {
+                                            Ext.getCmp('biosax_item').disable();
+                                            Ext.getCmp('addresses_item').disable();
+                                            Ext.getCmp('shipments_item').disable();
+                                         }
+                                     }
+                                 }
+	    })
 	};
 
 };
@@ -257,16 +274,16 @@ MainMenu.prototype.getProteinsAndCrystalsMenu = function() {
                 ],
                  listeners : {
                                  'beforeshow' : function(menu) {
-                                     if (EXI.proposalManager.getProposals().length == 0) {
-                                        Ext.getCmp('add_proteins_item').disable();
-                                        Ext.getCmp('list_proteins_item').disable();
-                                     } else {
-                                        Ext.getCmp('list_proteins_item').enable();
+                                     if (EXI.credentialManager.hasActiveProposal()) {
+                                     Ext.getCmp('list_proteins_item').enable();
                                         if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
                                             Ext.getCmp('add_proteins_item').enable();
                                         } else {
                                             Ext.getCmp('add_proteins_item').disable();
                                         }
+                                     } else {
+                                        Ext.getCmp('add_proteins_item').disable();
+                                        Ext.getCmp('list_proteins_item').disable();
                                      }
                                  }
                              }
@@ -294,10 +311,10 @@ MainMenu.prototype.getDataExplorerMenu = function() {
 		] ,
 		listeners : {
             'beforeshow' : function(menu) {
-                if (EXI.proposalManager.getProposals().length == 0) {
-					Ext.getCmp('calendar_item').disable();
-				} else {
+                if (EXI.credentialManager.hasActiveProposal()) {
 					Ext.getCmp('calendar_item').enable();
+				} else {
+					Ext.getCmp('calendar_item').disable();
 				}
             }
         }

@@ -130,6 +130,17 @@ CredentialManager.prototype.getBeamlinesByTechnique = function(technique){
 	return beamlines;
 };
 
+CredentialManager.prototype.hasActiveProposal = function(){
+	var credentials = this.getCredentials();
+	var result = false;
+    for (var i = 0; i < credentials.length; i++) {
+        if (credentials[i].activeProposals.length > 0){
+            result = true;
+        }
+	}
+	return result;
+};
+
 CredentialManager.prototype.getConnections = function(){
 	var credentials = this.getCredentials();
 	var connectors = [];
