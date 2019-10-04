@@ -26,6 +26,13 @@ ProteinDataAdapter.prototype.getProteinStatsByProposalId= function(){
 	 this.get('/{token}/proposal/{proposal}/mx/protein/stats');
 };
 
+/**
+* @method saveProtein
+*/
+ProteinDataAdapter.prototype.saveProtein= function(protein){
+	 this.post(('/{token}/proposal/{proposal}/mx/protein/save'), protein);;
+};
+
 
 
 

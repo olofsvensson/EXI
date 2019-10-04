@@ -17,7 +17,7 @@ MXManagerMenu.prototype.getPreparationMenu = ManagerMenu.prototype.getPreparatio
 MXManagerMenu.prototype.getDataReductionMenu = ManagerMenu.prototype.getDataReductionMenu;
 MXManagerMenu.prototype.getDataExplorerMenu = ManagerMenu.prototype.getDataExplorerMenu;
 MXManagerMenu.prototype.getOnlineDataAnalisysMenu = ManagerMenu.prototype.getOnlineDataAnalisysMenu;
-MXManagerMenu.prototype.getProteinCrystalsMenu = MXMainMenu.prototype.getProteinCrystalsMenu;
+MXManagerMenu.prototype.getProteinsAndCrystalsMenu = MXMainMenu.prototype.getProteinsAndCrystalsMenu;
 
 MXManagerMenu.prototype.getMenuItems = function() {	    		
 	return [	
@@ -36,10 +36,8 @@ MXManagerMenu.prototype.getMenuItems = function() {
                 text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
                 disabled : false,
-                handler : function(){
-                    location.hash = "#/protein/list";
-                }
-	    },
+                menu : this.getProteinsAndCrystalsMenu()
+        },
 		{
 				text : this._convertToHTMLWhiteSpan("Data Explorer"),
 				cls : 'ExiSAXSMenuToolBar',

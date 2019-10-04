@@ -47,6 +47,8 @@ MainMenu.prototype.getHomeItem = function() {
 	};
 };
 
+
+
 MainMenu.prototype.getShipmentItem = function() { 
 	var _this = this;
 
@@ -198,6 +200,78 @@ MainMenu.prototype.getShipmentItem = function() {
 					] })
 	};
 
+};
+
+MainMenu.prototype.getProteinsAndCrystalsMenu = function() {
+		function onItemCheck(item, checked) {
+			if (item.text == "Add new Protein") {
+				var proteinEditForm = new ProteinEditForm({width : 600, height : 700});
+
+				proteinEditForm.onSaved.attach(function (sender, protein) {
+					window.close();
+					//location.hash = "#/protein/" + protein.proteinId + "/main";
+					location.hash = "/protein/list";
+				});
+
+				var window = Ext.create('Ext.window.Window', {
+                                title : 'Protein',
+                                height : 500,
+                                width : 700,
+                                padding : '10 10 10 10',
+                                modal : true,
+                                layout : 'fit',
+                                items : [ proteinEditForm.getPanel() ],
+                                buttons : [ {
+                                        text : 'Save',
+                                        handler : function() {
+                                            proteinEditForm.saveProtein();
+                                        }
+                                    }, {
+                                        text : 'Cancel',
+                                        handler : function() {
+                                            window.close();
+                                        }
+                                    } ]
+                            }).show();
+
+				proteinEditForm.load();
+			} else if (item.text == "List") {
+				location.hash = "/protein/list";
+			}
+        }
+
+        var menu = Ext.create('Ext.menu.Menu', {
+                items : [
+                            {
+                                id : 'add_proteins_item',
+                                text : 'Add new Protein',
+                                icon : '../images/icon/add.png',
+                                handler : onItemCheck,
+                                disabled : true
+                            }, {
+                                id : 'list_proteins_item',
+                                text : 'List',
+                                icon : '../images/icon/ic_list_black_24dp.png',
+                                handler : onItemCheck
+                            }
+                ],
+                 listeners : {
+                                 'beforeshow' : function(menu) {
+                                     if (EXI.proposalManager.getProposals().length == 0) {
+                                        Ext.getCmp('add_proteins_item').disable();
+                                        Ext.getCmp('list_proteins_item').disable();
+                                     } else {
+                                        Ext.getCmp('list_proteins_item').enable();
+                                        if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+                                            Ext.getCmp('add_proteins_item').enable();
+                                        } else {
+                                            Ext.getCmp('add_proteins_item').disable();
+                                        }
+                                     }
+                                 }
+                             }
+        });
+        return menu;
 };
 
 MainMenu.prototype.getDataExplorerMenu = function() {

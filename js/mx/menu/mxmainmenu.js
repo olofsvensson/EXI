@@ -13,30 +13,27 @@ MXMainMenu.prototype.setText = MainMenu.prototype.setText;
 MXMainMenu.prototype.getHomeItem = MainMenu.prototype.getHomeItem;
 MXMainMenu.prototype.getHelpMenu = MainMenu.prototype.getHelpMenu;
 MXMainMenu.prototype.getShipmentItem = MainMenu.prototype.getShipmentItem;
+MXMainMenu.prototype.getProteinsAndCrystalsMenu = MainMenu.prototype.getProteinsAndCrystalsMenu;
 MXMainMenu.prototype.getDataExplorerMenu = MainMenu.prototype.getDataExplorerMenu;
 
 MXMainMenu.prototype.getMenuItems = function() {
 	return [
 		this.getHomeItem(),
 		this.getShipmentItem(),
-	
-			{
-                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
-                cls : 'ExiSAXSMenuToolBar',
-                disabled : false,
-                handler : function(){
-                    location.hash = "#/protein/list";
-                }
-	    	},
-	    	{
-                text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
-                cls : 'ExiSAXSMenuToolBar',
-                disabled : false,
-                handler : function(){
-                    location.hash = "/mx/prepare/main";
-                }
-	    	},
-        	{
+        {
+            text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
+            cls : 'ExiSAXSMenuToolBar',
+            menu : this.getProteinsAndCrystalsMenu()
+        },
+        {
+            text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
+            cls : 'ExiSAXSMenuToolBar',
+            disabled : false,
+            handler : function(){
+                location.hash = "/mx/prepare/main";
+            }
+        },
+        {
 			text : this._convertToHTMLWhiteSpan("Data Explorer"),
 			cls : 'ExiSAXSMenuToolBar',
 			menu : this.getDataExplorerMenu() 

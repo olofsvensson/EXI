@@ -89,7 +89,11 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	}
 
 	$("#" + _this.id + "-send-button").unbind('click').click(function(sender){
-			_this.updateStatus(_this.shipment.shippingId, "Sent_to_ESRF");
+	        if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+			    _this.updateStatus(_this.shipment.shippingId, "Sent_to_MAXIV");
+			} else {
+			    _this.updateStatus(_this.shipment.shippingId, "Sent_to_ESRF");
+			}
 	});
 
 	/** It disables button Sent Shipment to facility if there is at least one dewar which dewarStatus is not "ready to go"  */	
@@ -103,7 +107,7 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 
 
 	$("#transport-history-" + this.id).html(this.dewarTrackingView.getPanel());
-	
+
 	this.panel.doLayout();
 	this.attachCallBackAfterRender();
 };

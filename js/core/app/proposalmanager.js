@@ -236,6 +236,13 @@ ProposalManager.prototype.getProteins = function() {
 };
 
 /**
+* @method getProteinById
+*/
+ProposalManager.prototype.getProteinById = function(proteinId) {
+	return _.find(this.getProteins(), function(o) { return o.proteinId == proteinId; });
+};
+
+/**
 * @method getCrystals
 */
 ProposalManager.prototype.getCrystals = function() {
@@ -254,9 +261,9 @@ ProposalManager.prototype.getProteinByAcronym = function(acronym) {
 */
 ProposalManager.prototype.getCrystalsByAcronym = function(acronym) {
 	return _.filter(this.getCrystals(), 
-						function(o) { 
-								if (o.proteinVO == null) {return false;} 
-								else {return o.proteinVO.acronym == acronym;} 
+						function(o) {
+								if (o.proteinVO == null) {return false;}
+								else {return o.proteinVO.acronym == acronym;}
 						}
 	);
 };
