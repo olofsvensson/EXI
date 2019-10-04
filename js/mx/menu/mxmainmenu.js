@@ -109,7 +109,7 @@ MXMainMenu.prototype.getOnlineDataAnalisysMenu = function() {
 };
  
 
-MXMainMenu.prototype.getProteinCrystalsMenu = function() {
+//MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 	/*function onItemCheck(item, checked) {
 		if (item.text == "My Crystals") {
 			location.hash = "/crystal/nav";
@@ -142,4 +142,4 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 			}
 		] 
 	});*/
-};
+//};

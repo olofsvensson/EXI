@@ -135,7 +135,11 @@ CredentialManager.prototype.hasActiveProposal = function(){
 	var result = false;
     for (var i = 0; i < credentials.length; i++) {
         if (credentials[i].activeProposals.length > 0){
-            result = true;
+            for (var j = 0; j < credentials[i].activeProposals.length; j++) {
+                if (credentials[i].activeProposals[j] != credentials[i].username){
+                    result = true;
+                }
+            }
         }
 	}
 	return result;

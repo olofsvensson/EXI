@@ -275,7 +275,7 @@ MainMenu.prototype.getProteinsAndCrystalsMenu = function() {
                  listeners : {
                                  'beforeshow' : function(menu) {
                                      if (EXI.credentialManager.hasActiveProposal()) {
-                                     Ext.getCmp('list_proteins_item').enable();
+                                        Ext.getCmp('list_proteins_item').enable();
                                         if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
                                             Ext.getCmp('add_proteins_item').enable();
                                         } else {
