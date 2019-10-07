@@ -38,6 +38,15 @@ ShippingDataAdapter.prototype.saveShipment = function(shipment ){
 	this.post('/{token}/proposal/{proposal}/shipping/save', shipment);
 };
 
+ShippingDataAdapter.prototype.removeShipment = function(shipment ){
+	this.get('/{token}/proposal/{proposal}/shipping/{0}/remove'.format([shipment.shippingId]));
+};
+
+ShippingDataAdapter.prototype.getDataCollections = function(shippingId ){
+debugger;
+	this.get('/{token}/proposal/{proposal}/shipping/{0}/datacollecitons/list'.format([shippingId]));
+};
+
 ShippingDataAdapter.prototype.addPuck = function(shippingId, dewarId){
 	this.get('/{token}/proposal/{proposal}/shipping/{0}/dewar/{1}/puck/add'.format([shippingId, dewarId]));
 };
