@@ -35,9 +35,8 @@ function ShipmentForm(args) {
 
 ShipmentForm.prototype.hasDataCollections = function(shipment) {
     var _this = this;
-    debugger;
+
     var onSuccess = function(sender, shipments) {
-        debugger;
         if (shipments.length > 0){
             return true;
         } else {
@@ -49,7 +48,7 @@ ShipmentForm.prototype.hasDataCollections = function(shipment) {
             // cannot be deleted, an error occurred
             return true;
     };
-debugger;
+
     EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.shipping.getDataCollections(shipment.shippingId);
 }
 
@@ -106,8 +105,8 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 			_this.edit();
 		});
 		if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
-		debugger;
-		if (!this.hasDataCollections(shipment)){
+
+		    if (!this.hasDataCollections(shipment) && shipment.shippingStatus != "processing"){
 		        $("#" + _this.id + "-delete-button").prop('disabled',false);
 		    }
 		}
@@ -174,7 +173,7 @@ ShipmentForm.prototype.getPanel = function() {
 };
 
 ShipmentForm.prototype.delete = function() {
-    debugger;
+
     var _this = this;
     var onDeleteSuccess = function(sender, shipment) {
         _this.refresh.notify(shipment);

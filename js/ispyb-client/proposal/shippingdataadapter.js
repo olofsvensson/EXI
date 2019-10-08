@@ -43,7 +43,6 @@ ShippingDataAdapter.prototype.removeShipment = function(shipment ){
 };
 
 ShippingDataAdapter.prototype.getDataCollections = function(shippingId ){
-debugger;
 	this.get('/{token}/proposal/{proposal}/shipping/{0}/datacollecitons/list'.format([shippingId]));
 };
 
