@@ -19,9 +19,12 @@ COPY . .
 
 RUN apk update && \
 	apk add git && \
-	apk add ca-certificates  && \
-	apk --update add git nodejs && rm -rf /var/cache/apk/* && \
-	npm install -g bower grunt-cli && \
+	apk add ca-certificates  
+RUN rm -rf /var/cache/apk/*
+RUN apk --update add git
+RUN apk --update add nodejs 
+#RUN rm -rf /var/cache/apk/* && \
+RUN npm install -g bower grunt-cli && \
 	echo '{ "allow_root": true }' > /root/.bowerrc && \
 	npm install -D grunt && \
 	npm install && \
