@@ -48,57 +48,6 @@ ProteinEditForm.prototype.getPanel = function() {
 	return this.panel;
 };
 
-/*ProteinEditForm.prototype.saveProtein = function() {
-	var _this = this;
-
-	var name = $("#" + this.id + "-name").val();
-	var acronym = $("#" + this.id + "-acronym").val();
-
-	var proteinId = null;
-	if (this.protein) {
-		proteinId = this.protein.proteinId;
-	}
-
-	if (name == null) {
-		BUI.showError("Protein name is mandatory");
-		return;
-	}
-
-	if (acronym == null) {
-        BUI.showError("Protein acronym is mandatory");
-        return;
-    }
-
-
-	var protein = (EXI.proposalManager.getLabcontactById(proteinId));
-	var json = {
-		proteinId : proteinId,
-		name : $("#" + this.id + "-name").val(),
-		acronym : $("#" + this.id + "-acronym").val()
-	};
-
-	var onSuccess = function(sender, protein) {
-		_this.panel.setLoading(false);
-		_this.onSaved.notify(protein);
-	};
-
-	// Cheking params //
-	if (json.name == "") {
-		BUI.showError("Name field is mandatory");
-		return;
-	}
-
-	if (json.acronym == "") {
-    		BUI.showError("Acronym field is mandatory");
-    		return;
-    }
-
-	this.panel.setLoading();
-	EXI.getDataAdapter({onSuccess : onSuccess}).mx.protein.saveProtein(json);
-}*/
-
-///////////////
-
 ProteinEditForm.prototype.saveProtein = function() {
     var _this = this;
 	var protein = this.getProtein();
@@ -120,16 +69,19 @@ ProteinEditForm.prototype.saveProtein = function() {
         BUI.showError("Protein acronym is mandatory");
         return;
     }
+
     var json = {
 		proteinId : proteinId,
 		name : this.protein.name,
 		acronym : this.protein.acronym
+
 	};
 	var onSuccess = function (sender,protein) {
             _this.onSaved.notify(protein);
     }
     //this.panel.setLoading();
     EXI.getDataAdapter({onSuccess : onSuccess}).mx.protein.saveProtein(json);
+
 };
 
 ProteinEditForm.prototype.getProtein = function () {
