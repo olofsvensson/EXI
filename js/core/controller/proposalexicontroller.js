@@ -63,5 +63,24 @@ ProposalExiController.prototype.init = function() {
 			EXI.addMainPanel(mainView);
 			mainView.load(this.params['containerId']);
 		}).enter(this.setPageBackground);
+
+		
+		Path.map("#/ligands/list").to(function() {
+		
+			EXI.clearNavigationPanel();
+			EXI.hideNavigationPanel();
+			
+			EXI.setLoadingMainPanel("Searching for ligands");
+			var main = new LigandsMainView();
+			EXI.addMainPanel(main);			
+			var onSuccessProtein = function(sender, ligands) {								
+				main.load(ligands);
+				EXI.setLoadingMainPanel(false);
+			};
+			EXI.getDataAdapter({onSuccess : onSuccessProtein}).proposal.proposal.getLigandsByProposalId();
+		}).enter(this.setPageBackground);
+
+		
+
 		
 };

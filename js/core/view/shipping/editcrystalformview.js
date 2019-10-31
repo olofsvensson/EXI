@@ -62,6 +62,7 @@ EditCrystalFormView.prototype.render = function () {
     var html = "";
 	var crystalName = "";
 	
+	
     dust.render("crystal.edit.form.template", this.crystal, function(err, out){
 		html = out;
 	});

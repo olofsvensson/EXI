@@ -28,6 +28,14 @@ ProposalDataAdapter.prototype.synchSMIS= function(){
 	this.get('/{token}/proposal/{proposal}/update'.format([]));
 };
 
+ProposalDataAdapter.prototype.getLigandsByProposalId= function(){
+	this.get('/{token}/proposal/{proposal}/ligands/list');
+};
+
+ProposalDataAdapter.prototype.saveStructure= function(){
+	return this.getUrl('/{token}/proposal/{proposal}/structure/save');
+};
+
 ProposalDataAdapter.prototype.update= function(){
 	if (EXI != null){
 		if (EXI.proposalManager != null){

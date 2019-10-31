@@ -54,6 +54,11 @@ ProteinController.prototype.init = function() {
 			};
 			EXI.getDataAdapter({onSuccess : onSuccessProtein}).mx.protein.getProteinStatsByProposalId();
 	}).enter(this.setPageBackground);
+
+		
+
+
+
 	Path.rescue(this.notFound);
 
 };
