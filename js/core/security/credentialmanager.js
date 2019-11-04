@@ -146,12 +146,13 @@ CredentialManager.prototype.hasActiveProposal = function(){
 };
 
 CredentialManager.prototype.isUserAllowedAddProtein = function(){
+debugger;
     var connectors = this.getConnections();
     var result = false;
-
+    var cred = this.getCredentials()[0];
     for (var i = 0; i < connectors.length; i++) {
-        for (var j = 0; j < connectors[i].allow_add_proteins_roles; i++) {
-            if (this.getCredentials()[0].hasRole(credentials[i].allow_add_proteins_roles[j])){
+        for (var j = 0; j < connectors[i].allow_add_proteins_roles.length; j++) {
+            if (cred.hasRole(connectors[i].allow_add_proteins_roles[j])){
                 result = true;
             }
         }
