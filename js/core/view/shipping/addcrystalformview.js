@@ -1,4 +1,4 @@
-function EditCrystalFormView (args) {
+function AddCrystalFormView (args) {
     this.id = BUI.id();
 
     this.width = 600;
@@ -19,7 +19,7 @@ function EditCrystalFormView (args) {
 	this.onSaved = new Event(this);
 };
 
-EditCrystalFormView.prototype.getPanel = function() {
+AddCrystalFormView.prototype.getPanel = function() {
 
 	this.panel = Ext.create("Ext.panel.Panel",{
 		items :	[{
@@ -33,37 +33,32 @@ EditCrystalFormView.prototype.getPanel = function() {
 	return this.panel;
 };
 
-EditCrystalFormView.prototype.load = function(crystal) {
+AddCrystalFormView.prototype.load = function(proteinId) {
 	var _this = this;
-	
-	this.crystal = crystal;
-	if (crystal.crystalId != null){
-		if (crystal.crystalId != "") {
-			var onSuccess = function (sender, crystalById) {								
-				_this.crystal = crystalById;
-				_this.render();
-				_this.panel.setLoading(false);
-			}
-			this.panel.setLoading();
-			EXI.getDataAdapter({onSuccess:onSuccess}).mx.crystal.getCrystalById(crystal.crystalId);
-		} else {
-			this.render();
-		}
-	} else {
-		$('#' + this.id).hide().html("<div id='" + this.id + "-error' style='margin:30px;'><h4>There was an error loading the crystal</h4></div>").fadeIn('fast');
-		this.panel.doLayout();
-	}
+	this.crystal = {
+                        cellA       :   0,
+                        cellB       :   0,
+                        cellC       :   0,
+                        cellAlpha   :   0,
+                        cellBeta    :   0,
+                        cellGamma   :   0,
+                        comments	:	""
+                    };
+    this.crystal.proteinVO = {
+                                proteinId   :   proteinId
+    };
+    this.render();
 }
 
-EditCrystalFormView.prototype.render = function () {
+AddCrystalFormView.prototype.render = function () {
 	var _this = this;
+
     this.crystal.spaceGroups = ExtISPyB.spaceGroups;
-	this.crystal.id = this.id;
+    this.crystal.id = this.id;
     var html = "";
 	var crystalName = "";
-	
-	
-    dust.render("crystal.edit.form.template", this.crystal, function(err, out){
+
+	dust.render("crystal.add.form.template", this.crystal, function(err, out){
 		html = out;
 	});
 	
@@ -78,7 +73,7 @@ EditCrystalFormView.prototype.render = function () {
 
 };
 
-EditCrystalFormView.prototype.save = function () {
+AddCrystalFormView.prototype.save = function () {
 	var _this = this;
     var crystal = {
                     spaceGroup  :   $("#" + this.id + "-space-group").val(),
@@ -107,7 +102,6 @@ EditCrystalFormView.prototype.save = function () {
 			_this.onSaved.notify(newCrystal);
 			_this.panel.setLoading(false);
 		}
-		
 		EXI.getDataAdapter({onSuccess : onSaved}).mx.crystal.save(this.crystal.proteinVO.proteinId, this.crystal.crystalId, 
 																	this.crystalName, crystal.spaceGroup, crystal.cellA, crystal.cellB, crystal.cellC, 
 																	crystal.cellAlpha, crystal.cellBeta, crystal.cellGamma, crystal.comments);
@@ -116,7 +110,7 @@ EditCrystalFormView.prototype.save = function () {
 	}
 };
 
-EditCrystalFormView.prototype.setCellValuesBySpaceGroup = function (spaceGroup) {
+AddCrystalFormView.prototype.setCellValuesBySpaceGroup = function (spaceGroup) {
 	var _this = this;
 	var onSuccess = function (sender, geometryClass) {
 		var alpha = "";
@@ -203,7 +197,7 @@ EditCrystalFormView.prototype.setCellValuesBySpaceGroup = function (spaceGroup) 
 	EXI.getDataAdapter({onSuccess : onSuccess}).mx.crystal.getGeometryclassBySpacegroup(spaceGroup);
 }
 
-EditCrystalFormView.prototype.manageCellValueUpdate = function (id, value) {
+AddCrystalFormView.prototype.manageCellValueUpdate = function (id, value) {
 	if (value != "") {
 		$(id).prop('disabled', true);
 		$(id).val(value);

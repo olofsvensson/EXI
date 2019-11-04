@@ -17,62 +17,63 @@ MXManagerMenu.prototype.getPreparationMenu = ManagerMenu.prototype.getPreparatio
 MXManagerMenu.prototype.getDataReductionMenu = ManagerMenu.prototype.getDataReductionMenu;
 MXManagerMenu.prototype.getDataExplorerMenu = ManagerMenu.prototype.getDataExplorerMenu;
 MXManagerMenu.prototype.getOnlineDataAnalisysMenu = ManagerMenu.prototype.getOnlineDataAnalisysMenu;
-MXManagerMenu.prototype.getProteinsAndCrystalsMenu = MXMainMenu.prototype.getProteinsAndCrystalsMenu;
+MXManagerMenu.prototype.getProteinCrystalsMenu = MainMenu.prototype.getProteinCrystalsMenu;
 
-MXManagerMenu.prototype.getMenuItems = function() {	    		
-	return [	
+MXManagerMenu.prototype.getMenuItems = function() {
+	return [
     	this.getHomeItem(),
     	this.getShipmentItem(),
     	{
                 text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
-                cls : 'ExiSAXSMenuToolBar',
-                disabled : false,
+				cls : 'ExiSAXSMenuToolBar',
                 handler : function(){
                     location.hash = "/mx/prepare/main";
-                
+
 				}
 		},
 		{
-                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
+                text : this._convertToHTMLWhiteSpan("Samples <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
-                disabled : false,
-                menu : this.getProteinsAndCrystalsMenu()
-        },
+				menu : this.getProteinCrystalsMenu()
+                /*handler : function(){
+                    location.hash = "#/protein/list";
+                }*/
+	    },
 		{
 				text : this._convertToHTMLWhiteSpan("Data Explorer"),
 				cls : 'ExiSAXSMenuToolBar',
 				hidden : this.isHidden,
-				menu : this.getDataExplorerMenu() 
+				menu : this.getDataExplorerMenu()
 		},
 
         {
 			text : this._convertToHTMLWhiteSpan("Manager"),
 			cls : 'ExiSAXSMenuToolBar',
-			menu : this.getManagerMenu() 
+			menu : this.getManagerMenu()
 		},
 		{
 			text : this._convertToHTMLWhiteSpan("Help"),
 			cls : 'ExiSAXSMenuToolBar',
-			menu : this.getHelpMenu() 
-		}, 		 
-		
+			menu : this.getHelpMenu()
+		},
+
 		{
 			text : this._convertToHTMLWhiteSpan("<button type='button' class='btn btn-default'> <span class='glyphicon glyphicon-refresh'></span> SMIS</button>"),
-			cls : 'ExiSAXSMenuToolBar',			
+			cls : 'ExiSAXSMenuToolBar',
 			handler : function(){
 				EXI.setLoadingMainPanel("Synch is running");
-				var onSuccess = function(sender, data){					
+				var onSuccess = function(sender, data){
 					EXI.setLoadingMainPanel(false);
 				}
-				var onError = function(sender,data){										
+				var onError = function(sender,data){
 					EXI.setLoadingMainPanel(false);
 				}
-				
+
 				EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.proposal.synchSMIS();
-				
+
 			}
 		},
-		'->', 
+		'->',
 		{
 			xtype : 'textfield',
 			name : 'field1',
@@ -83,11 +84,12 @@ MXManagerMenu.prototype.getMenuItems = function() {
 					if (e.getKey() == e.ENTER) {
 						location.hash = "/mx/datacollection/protein_acronym/" + field.getValue() + "/main";
 					}
-				} 
-			} 
+				}
+			}
 		}
 	];
 };
+
 
 MXManagerMenu.prototype.getManagerMenu = function() {
 	var _this = this;
@@ -104,16 +106,7 @@ MXManagerMenu.prototype.getManagerMenu = function() {
 
 			scatteringForm.load(scatteringData);
 			scatteringForm.show();
-		} else if (item.text == "Datacollection Statistics") {
-            var datacollectionForm = new DatacollectionForm();
-
-            var keys = ["Datasets", "Samples"];
-
-            var datacollectionData = {title : "Datacollection", keys : keys};
-
-            datacollectionForm.load(datacollectionData);
-            datacollectionForm.show();
-        }
+		}
 	}
 
 	return Ext.create('Ext.menu.Menu', {
@@ -121,23 +114,24 @@ MXManagerMenu.prototype.getManagerMenu = function() {
 					{
 						text : 'Statistics',
 						icon : '../images/icon/ic_insert_chart_black_36dp.png',
-						menu : {       
+						menu : {
 								items: [
 									{
 										text: 'Autoproc Scaling Statistics',
-										icon : '../images/icon/ic_insert_chart_black_36dp.png',
+										//icon : '../images/icon/ic_insert_chart_black_36dp.png',
 										handler: onItemCheck,
 										disabled : false
 									},
-									{
-                                        text: 'Datacollection Statistics',
-                                        icon : '../images/icon/ic_insert_chart_black_36dp.png',
-                                        handler: onItemCheck,
-                                        disabled : false
-                                    }
+                                    {
+                                         text: 'Datacollection Statistics',
+                                         //icon : '../images/icon/ic_insert_chart_black_36dp.png',
+                                         handler: onItemCheck,
+                                         disabled : false
+                                     }
+
 								]
 							}
 					}
-			] 
+			]
 	});
 };

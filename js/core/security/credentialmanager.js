@@ -145,6 +145,22 @@ CredentialManager.prototype.hasActiveProposal = function(){
 	return result;
 };
 
+CredentialManager.prototype.isUserAllowedAddProtein = function(){
+debugger;
+    var connectors = this.getConnections();
+    var result = false;
+    var cred = this.getCredentials()[0];
+    for (var i = 0; i < connectors.length; i++) {
+        for (var j = 0; j < connectors[i].allow_add_proteins_roles.length; j++) {
+            if (cred.hasRole(connectors[i].allow_add_proteins_roles[j])){
+                result = true;
+            }
+        }
+    }
+
+    return result;
+}
+
 CredentialManager.prototype.getConnections = function(){
 	var credentials = this.getCredentials();
 	var connectors = [];
@@ -159,6 +175,7 @@ CredentialManager.prototype.getConnections = function(){
 					site : credentials[i].properties.siteName,
                     defaultSampleChanger : credentials[i].properties.defaultSampleChanger,
 					beamlines : credentials[i].properties.beamlines,
+					allow_add_proteins_roles: credentials[i].properties.allow_add_proteins_roles,
 					proposal : credentials[i].activeProposals[j] });
 			}
 		}
@@ -171,6 +188,7 @@ CredentialManager.prototype.getConnections = function(){
 					site : credentials[i].properties.siteName,
                     defaultSampleChanger : credentials[i].properties.defaultSampleChanger,
 					beamlines : credentials[i].properties.beamlines,
+					allow_add_proteins_roles: credentials[i].properties.allow_add_proteins_roles,
 					proposal : null
 				});
 		}

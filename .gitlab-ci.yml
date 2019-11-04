@@ -12,7 +12,7 @@ build_image:
 build_image_test:
   stage: build
   script:
-    - docker build . -t docker.maxiv.lu.se/exi-test
+    - docker build . -t docker.maxiv.lu.se/exi-test:$CI_COMMIT_SHA -t docker.maxiv.lu.se/exi-test:latest
     - docker push docker.maxiv.lu.se/exi-test
   except:
     - master

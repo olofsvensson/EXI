@@ -1,12 +1,15 @@
+
 <form action="{.url}" method="post" id="structure-form" enctype="multipart/form-data" style='margin:20px;'>
     <div class="form-group">
-        <label for="formGroupExampleInput">Group Name</label>
+        <label for="formGroupExampleInput">{.label}</label>
         <input name="groupName" type="text" class="form-control" id="structure-group-name" placeholder="Items with same name will be grouped together">
   </div>
         <label for="sel1">Type:</label>
         <select name="type" class="form-control" id="structure-type">
-            <option>PDB</option>
-            <option>FASTA</option>
+            {#types}
+                <option>{.}</option>
+            {/types}
+           
         </select>
         <br />
         <label for="exampleInputFile">File input</label>

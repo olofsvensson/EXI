@@ -23,6 +23,14 @@ Credential.prototype._checkRole = function(role) {
 	return JSON.stringify(this.roles).toLowerCase().indexOf(role) != -1;
 };
 
+Credential.prototype.getRoles = function() {
+	return this.roles;
+};
+
+Credential.prototype.hasRole = function(role) {
+	return this._checkRole(role);
+};
+
 /**
  * Checks if it has not expired yet
  */

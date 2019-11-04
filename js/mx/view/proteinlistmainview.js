@@ -149,17 +149,57 @@ ProteinListMainView.prototype.displayCrystalTab = function (target, proteinId) {
 	var _this = this;
 	this.targetCrystalTab = target;
 	this.crystalTabProteinId = proteinId;
-	
 	var onSuccess = function (sender, data) {		
-		var html = "";		
+		var html = "";
 		dust.render("crystal.proteinlistmainview.template", data, function (err, out) {
 			html = html + out;
 		});
+
 		$(target).html(html);
 
-		/** Edit button for crystal form and new structure*/
+        if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+            $(".crystal-add").show();
+        } else {
+            $(".crystal-add").hide();
+        }
+
+		/** Add and Edit buttons for crystal form and new structure*/
 		function clickEvents() {
-			/** Edit */
+		    /** Add */
+            if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+                $(".crystal-add").bind('click').click(function (sender) {
+                    //var crystalId = sender.target.getAttribute("id");
+                    var addCrystalForm = new AddCrystalFormView();
+                    var window = Ext.create('Ext.window.Window', {
+                        title: 'Add Crystal Form',
+                        height: 460,
+                        width: 600,
+                        modal: true,
+                        closable: false,
+                        layout: 'fit',
+                        items: [addCrystalForm.getPanel()],
+                        buttons: [{
+                            text: 'Save',
+                            handler: function () {
+                                addCrystalForm.onSaved.attach(function(sender, data){
+                                    /** Reload tables */
+                                    _this.displayCrystalTab(_this.targetCrystalTab, _this.crystalTabProteinId);
+                                    window.close();
+                                });
+                                addCrystalForm.save();
+                            }
+                        }, {
+                            text: 'Cancel',
+                            handler: function () {
+                                window.close();
+                            }
+                        }]
+                    }).show();
+                    addCrystalForm.load(proteinId);
+                });
+            }
+
+		    /** Edit */
 			$(".crystal-edit").bind('click').click(function (sender) {
 				var crystalId = sender.target.getAttribute("id");
 				var editCrystalForm = new EditCrystalFormView();
@@ -224,7 +264,6 @@ ProteinListMainView.prototype.displayCrystalTab = function (target, proteinId) {
 				var crystal = _.find(EXI.proposalManager.getCrystals(), function (o) { return o.crystalId == parseFloat(crystalId); })				
 				editCrystalStructure.load(crystal);
 			});
-
 
 			$(".remove-structure").bind('click').click(function (sender) {
 				var structureId = sender.target.getAttribute("id");

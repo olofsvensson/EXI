@@ -13,52 +13,57 @@ MXMainMenu.prototype.setText = MainMenu.prototype.setText;
 MXMainMenu.prototype.getHomeItem = MainMenu.prototype.getHomeItem;
 MXMainMenu.prototype.getHelpMenu = MainMenu.prototype.getHelpMenu;
 MXMainMenu.prototype.getShipmentItem = MainMenu.prototype.getShipmentItem;
-MXMainMenu.prototype.getProteinsAndCrystalsMenu = MainMenu.prototype.getProteinsAndCrystalsMenu;
+MXMainMenu.prototype.getProteinCrystalsMenu = MainMenu.prototype.getProteinCrystalsMenu;
 MXMainMenu.prototype.getDataExplorerMenu = MainMenu.prototype.getDataExplorerMenu;
 
+
+
 MXMainMenu.prototype.getMenuItems = function() {
+
 	return [
 		this.getHomeItem(),
 		this.getShipmentItem(),
-        {
-            text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
-            cls : 'ExiSAXSMenuToolBar',
-            menu : this.getProteinsAndCrystalsMenu()
-        },
-        {
-            text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
-            cls : 'ExiSAXSMenuToolBar',
-            disabled : false,
-            handler : function(){
-                location.hash = "/mx/prepare/main";
-            }
-        },
-        {
+
+			{
+                text : this._convertToHTMLWhiteSpan("Proteins and Crystals <sub style='font-size:10px;color:orange'>NEW</sub>"),
+                cls : 'ExiSAXSMenuToolBar',
+                disabled : false,
+                menu : this.getProteinCrystalsMenu()
+	    	},
+	    	{
+                text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
+                cls : 'ExiSAXSMenuToolBar',
+                disabled : false,
+                handler : function(){
+                    location.hash = "/mx/prepare/main";
+                }
+	    	},
+        	{
 			text : this._convertToHTMLWhiteSpan("Data Explorer"),
 			cls : 'ExiSAXSMenuToolBar',
-			menu : this.getDataExplorerMenu() 
+			menu : this.getDataExplorerMenu()
 		},
 		{
 			text : this._convertToHTMLWhiteSpan("Offline Data Analysis"),
 			cls : 'ExiSAXSMenuToolBar',
             disabled : true,
-			menu : this.getOnlineDataAnalisysMenu() 
-		}, 
-		
+			menu : this.getOnlineDataAnalisysMenu()
+		},
+
 		{
 			text : this._convertToHTMLWhiteSpan("<button type='button' class='btn btn-default'> <span class='glyphicon glyphicon-refresh'></span> SMIS</button>"),
-			cls : 'ExiSAXSMenuToolBar',			
+			cls : 'ExiSAXSMenuToolBar',
 			handler : function(){
 				EXI.setLoadingMainPanel("Synch is running");
-				var onSuccess = function(sender, data){					
+				var onSuccess = function(sender, data){
 					EXI.setLoadingMainPanel(false);
 				}
-				var onError = function(sender,data){										
+				var onError = function(sender,data){
 					EXI.setLoadingMainPanel(false);
 				}
-				
+
 				EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.proposal.synchSMIS();
-				
+
 			}
 		},
 		'->',
@@ -72,8 +77,8 @@ MXMainMenu.prototype.getMenuItems = function() {
 					if (e.getKey() == e.ENTER) {
 						location.hash = "/mx/datacollection/protein_acronym/" + field.getValue() + "/main";
 					}
-				} 
-			} 
+				}
+			}
 		}
 	];
 };
@@ -107,9 +112,9 @@ MXMainMenu.prototype.getOnlineDataAnalisysMenu = function() {
 				handler : onItemCheck }
 		] });
 };
- 
 
-//MXMainMenu.prototype.getProteinCrystalsMenu = function() {
+
+MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 	/*function onItemCheck(item, checked) {
 		if (item.text == "My Crystals") {
 			location.hash = "/crystal/nav";
@@ -122,24 +127,24 @@ MXMainMenu.prototype.getOnlineDataAnalisysMenu = function() {
 		}
 	}
 	return Ext.create('Ext.menu.Menu', {
-		items : [ 
+		items : [
 			{
 				text : 'My Crystals',
 				icon : '../images/icon/macromolecule.png',
 				disabled : true,
-				handler : onItemCheck 
+				handler : onItemCheck
 			},
 			{
 				text : 'My Proteins',
 				icon : '../images/icon/testtube.png',
-				handler : onItemCheck 
+				handler : onItemCheck
 			},
 			{
 				text : 'Puck',
 				disabled : true,
 				icon : '../images/icon/testtube.png',
-				handler : onItemCheck 
+				handler : onItemCheck
 			}
-		] 
+		]
 	});*/
-//};
+};

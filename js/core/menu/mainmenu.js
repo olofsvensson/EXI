@@ -219,7 +219,7 @@ MainMenu.prototype.getShipmentItem = function() {
 
 };
 
-MainMenu.prototype.getProteinsAndCrystalsMenu = function() {
+MainMenu.prototype.getProteinCrystalsMenu = function() {
 		function onItemCheck(item, checked) {
 			if (item.text == "Add new Protein") {
 				var proteinEditForm = new ProteinEditForm({width : 600, height : 700});
@@ -254,7 +254,9 @@ MainMenu.prototype.getProteinsAndCrystalsMenu = function() {
 				proteinEditForm.load();
 			} else if (item.text == "List") {
 				location.hash = "/protein/list";
-			}
+			} else if (item.text == "Ligands") {
+                location.hash = "#/ligands/list";
+            }
         }
 
         var menu = Ext.create('Ext.menu.Menu', {
@@ -270,13 +272,19 @@ MainMenu.prototype.getProteinsAndCrystalsMenu = function() {
                                 text : 'List',
                                 icon : '../images/icon/ic_list_black_24dp.png',
                                 handler : onItemCheck
+                            }, {
+                                id : 'ligands_item',
+                                text : 'Ligands',
+                                icon : '../images/icon/macromolecule.png',
+                                handler : onItemCheck
                             }
                 ],
                  listeners : {
                                  'beforeshow' : function(menu) {
                                      if (EXI.credentialManager.hasActiveProposal()) {
                                         Ext.getCmp('list_proteins_item').enable();
-                                        if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+                                        Ext.getCmp('ligands_item').enable();
+                                        if (EXI.credentialManager.isUserAllowedAddProtein()){
                                             Ext.getCmp('add_proteins_item').enable();
                                         } else {
                                             Ext.getCmp('add_proteins_item').disable();
@@ -284,6 +292,7 @@ MainMenu.prototype.getProteinsAndCrystalsMenu = function() {
                                      } else {
                                         Ext.getCmp('add_proteins_item').disable();
                                         Ext.getCmp('list_proteins_item').disable();
+                                        Ext.getCmp('ligands_item').disable();
                                      }
                                  }
                              }
