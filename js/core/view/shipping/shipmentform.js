@@ -175,8 +175,23 @@ ShipmentForm.prototype.getPanel = function() {
 ShipmentForm.prototype.delete = function() {
 
     var _this = this;
-    var onDeleteSuccess = function(sender, shipment) {
-        _this.refresh.notify(shipment);
+    var onDeleteSuccess = function() {
+        if (EXI.credentialManager.getCredentials() != null){
+            if (EXI.credentialManager.getCredentials().length > 0){
+                var username = EXI.credentialManager.getCredentials()[0].username;
+                var credential = EXI.credentialManager.getCredentialByUserName(username);
+                if (credential.isManager()){
+                    location.hash = "/welcome/manager/" + username + "/main";
+                }
+                else{
+                    location.hash = "/welcome/user/" + username + "/main";
+                }
+            }
+            else{
+                BUI.showError("You should sign up");
+            }
+        }
+
     };
     var onError = function(data){
         EXI.setError(data);
