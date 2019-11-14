@@ -167,12 +167,17 @@ CSVPuckFormView.prototype.save = function() {
 CSVPuckFormView.prototype.getWarningPanelsHTML = function() {	
 	/** Warning HTML */
 	var html = "";
+	var showOnlyUnipuckMessageValue = false;
+	if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+	    showOnlyUnipuckMessageValue = true;
+    }
 	dust.render("csvpuckformview.template", 
 					{
 								uniquenessParcelPanelId			: this.uniquenessParcelPanelId,
 								acceptedContainerListPanelId 	: this.acceptedContainerListPanelId,
 								uniquenessContainerNamelPanelId : this.uniquenessContainerNamelPanelId,
-								uniquenessSampleNamePanelId 	: this.uniquenessSampleNamePanelId
+								uniquenessSampleNamePanelId 	: this.uniquenessSampleNamePanelId,
+								showOnlyUnipuckMessage          : showOnlyUnipuckMessageValue
 					}, 
 					function(err, out) {						
                     	html = out;
@@ -206,9 +211,13 @@ CSVPuckFormView.prototype.getPanel = function() {
 
 CSVPuckFormView.prototype.getContainer = function() {
     var html = "";
-    
+    var siteName = "";
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+        siteName = "MAXIV";
+    }
     dust.render("csvimportmainview.template", {
-        id: "file_" + this.id
+        id: "file_" + this.id,
+        siteName: siteName
     }, function(err, out) {
         html = out;
     });

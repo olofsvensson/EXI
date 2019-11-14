@@ -2,7 +2,8 @@
    <table class="table">
       <thead class="table-fixed ">
        <tr>
-            <td colspan='5' style="text-align:center;" class="sessiogridtechnique">
+
+            <td colspan='5' style="text-align:center;" class="sessiogridtechnique no-proposal-title">
                
             </td>
             <td colspan='5' style="text-align:center;" class="sessiogridtechnique">
@@ -25,9 +26,13 @@
             <td>
                Beamline
             </td>
-            <td >A-form</td>{!a-form!}
+            <td class='sessiongrid-a-form-header'>A-form</td>{!a-form!}
+
             <td>
                Proposal
+            </td>
+            <td class='sessiongrid-a-form-header2'>
+                Title
             </td>
             <td>
                Local Contact
@@ -73,10 +78,12 @@
          {/gt}
             <td> <a href='{.dataCollectionURL}'>{@formatDate date=BLSession_startDate format="DD-MM-YYYY" /}</a></td>
             <td> <a href='{.dataCollectionURL}'>{.beamLineName}</a></td>
-            <td>
-                 {?expSessionPk}
-                    <a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk={.expSessionPk}" class='btn btn-xs'><span class='glyphicon glyphicon-list-alt'></span></a>
-                  {/expSessionPk}            
+            <td class='sessiongrid-a-form'>
+                 {@eq key=showAForm value=true}
+                     {?expSessionPk}
+                        <a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk={.expSessionPk}" class='btn btn-xs'><span class='glyphicon glyphicon-list-alt'></span></a>
+                     {/expSessionPk}
+                 {/eq}
             </td>
             <td> <a href='{.dataCollectionURL}'>
                <?BLSession_protectedData>
@@ -85,6 +92,15 @@
                     {/eq}
                </BLSession_protectedData>                              
                <a href='{.dataCollectionURL}'>{.Proposal_proposalCode}{.Proposal_ProposalNumber}</a>
+            </td>
+            <td class='sessiongrid-a-form-header2' style='color: gray !important;'>
+                <?BLSession_protectedData>
+                {.Proposal_title}
+            </td>
+            {@eq key=BLSession_protectedData value="OK"}
+                    <span class="glyphicon glyphicon-lock" ></span>
+            {/eq}
+            </BLSession_protectedData>
             </td>
             <td> {.beamLineOperator}</td>
             <td class="mxsessiongridcell">

@@ -19,15 +19,19 @@ COPY . .
 
 RUN apk update && \
 	apk add git && \
-	apk --update add git nodejs && rm -rf /var/cache/apk/* && \
-	npm install -g bower grunt-cli && \
+	apk add ca-certificates  
+RUN rm -rf /var/cache/apk/*
+RUN apk --update add git
+RUN apk --update add nodejs 
+#RUN rm -rf /var/cache/apk/* && \
+RUN npm install -g bower grunt-cli && \
 	echo '{ "allow_root": true }' > /root/.bowerrc && \
 	npm install -D grunt && \
 	npm install && \
 	bower install
 
-RUN grunt
-RUN mkdir dist && mv mx min dependency images tracking fonts css dev saxs reports viewer bower_components index.html dist
+RUN grunt --force
+RUN mkdir dist && mv mx min dependency images tracking fonts css csv dev saxs reports viewer bower_components index.html dist
 
 FROM nginx:1.15.0-alpine
 

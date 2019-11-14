@@ -47,6 +47,11 @@
          <button id="{id}-edit-button" class="btn btn-primary btn-md" style="margin-left:10px;height:40px;" disabled>Edit</button>
       </div>
    </div>
+   <div class="col-md-1" style="padding:0px">
+         <div class="form-group row" style="margin:5px">
+            <button id="{id}-delete-button" class="btn btn-primary btn-md" style="margin-left:10px;height:40px;" disabled>Delete</button>
+         </div>
+      </div>
 </div>
 
 

@@ -4,14 +4,29 @@ before_script:
 build_image:
   stage: build
   script:
-    - docker build . -t docker.maxiv.lu.se/exi-test
-    - docker push docker.maxiv.lu.se/exi-test
+    - docker build . -t docker.maxiv.lu.se/exi-prod
+    - docker push docker.maxiv.lu.se/exi-prod
   only:
+    - master
+    
+build_image_test:
+  stage: build
+  script:
+    - docker build . -t docker.maxiv.lu.se/exi-test:$CI_COMMIT_SHA -t docker.maxiv.lu.se/exi-test:latest
+    - docker push docker.maxiv.lu.se/exi-test
+  except:
     - master
 
 deploy_image:
   stage: deploy
   script:
-  - 'curl -H "Authorization: Bearer $AWX_TOKEN" -XPOST https://ansible.maxiv.lu.se/api/v2/job_templates/23/launch/'
+  - 'curl -H "Authorization: Bearer $AWX_TOKEN" -XPOST https://ansible.maxiv.lu.se/api/v2/job_templates/110/launch/'
   only:
+    - master
+    
+deploy_image_test:
+  stage: deploy
+  script:
+  - 'curl -H "Authorization: Bearer $AWX_TOKEN" -XPOST https://ansible.maxiv.lu.se/api/v2/job_templates/23/launch/'
+  except:
     - master

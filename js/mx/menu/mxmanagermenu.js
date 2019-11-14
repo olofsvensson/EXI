@@ -17,24 +17,24 @@ MXManagerMenu.prototype.getPreparationMenu = ManagerMenu.prototype.getPreparatio
 MXManagerMenu.prototype.getDataReductionMenu = ManagerMenu.prototype.getDataReductionMenu;
 MXManagerMenu.prototype.getDataExplorerMenu = ManagerMenu.prototype.getDataExplorerMenu;
 MXManagerMenu.prototype.getOnlineDataAnalisysMenu = ManagerMenu.prototype.getOnlineDataAnalisysMenu;
-MXManagerMenu.prototype.getProteinCrystalsMenu = MXMainMenu.prototype.getProteinCrystalsMenu;
+MXManagerMenu.prototype.getProteinCrystalsMenu = MainMenu.prototype.getProteinCrystalsMenu;
 
-MXManagerMenu.prototype.getMenuItems = function() {	    		
-	return [	
+MXManagerMenu.prototype.getMenuItems = function() {
+	return [
     	this.getHomeItem(),
     	this.getShipmentItem(),
     	{
                 text : this._convertToHTMLWhiteSpan("Prepare Experiment"),
-				cls : 'ExiSAXSMenuToolBar',				               
+				cls : 'ExiSAXSMenuToolBar',
                 handler : function(){
                     location.hash = "/mx/prepare/main";
-                
-				} 
+
+				}
 		},
 		{
                 text : this._convertToHTMLWhiteSpan("Samples <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
-				menu : this.getProteinCrystalsMenu() 
+				menu : this.getProteinCrystalsMenu()
                 /*handler : function(){
                     location.hash = "#/protein/list";
                 }*/
@@ -43,37 +43,37 @@ MXManagerMenu.prototype.getMenuItems = function() {
 				text : this._convertToHTMLWhiteSpan("Data Explorer"),
 				cls : 'ExiSAXSMenuToolBar',
 				hidden : this.isHidden,
-				menu : this.getDataExplorerMenu() 
+				menu : this.getDataExplorerMenu()
 		},
 
         {
 			text : this._convertToHTMLWhiteSpan("Manager"),
 			cls : 'ExiSAXSMenuToolBar',
-			menu : this.getManagerMenu() 
+			menu : this.getManagerMenu()
 		},
 		{
 			text : this._convertToHTMLWhiteSpan("Help"),
 			cls : 'ExiSAXSMenuToolBar',
-			menu : this.getHelpMenu() 
-		}, 		 
-		
+			menu : this.getHelpMenu()
+		},
+
 		{
 			text : this._convertToHTMLWhiteSpan("<button type='button' class='btn btn-default'> <span class='glyphicon glyphicon-refresh'></span> SMIS</button>"),
-			cls : 'ExiSAXSMenuToolBar',			
+			cls : 'ExiSAXSMenuToolBar',
 			handler : function(){
 				EXI.setLoadingMainPanel("Synch is running");
-				var onSuccess = function(sender, data){					
+				var onSuccess = function(sender, data){
 					EXI.setLoadingMainPanel(false);
 				}
-				var onError = function(sender,data){										
+				var onError = function(sender,data){
 					EXI.setLoadingMainPanel(false);
 				}
-				
+
 				EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.proposal.synchSMIS();
-				
+
 			}
 		},
-		'->', 
+		'->',
 		{
 			xtype : 'textfield',
 			name : 'field1',
@@ -84,50 +84,12 @@ MXManagerMenu.prototype.getMenuItems = function() {
 					if (e.getKey() == e.ENTER) {
 						location.hash = "/mx/datacollection/protein_acronym/" + field.getValue() + "/main";
 					}
-				} 
-			} 
+				}
+			}
 		}
 	];
 };
 
-
-
-MXManagerMenu.prototype.getProteinCrystalsMenu = function() {
-	var _this = this;
-	function onItemCheck(item, checked) {
-		if (item.text == "Autoproc Scaling Statistics") {
-			var scatteringForm = new ScatteringForm();
-
-			var keys = ["ISA", "rPimWithinIPlusIMinus","anomalousMultiplicity","multiplicity","resolutionLimitLow","ccHalf",
-			"strategySubWedgeOrigId","completeness","rMerge","anomalous","meanIOverSigI","ccAno","autoProcScalingId",
-			"nTotalObservations","sigAno","rMeasWithinIPlusIMinus","anomalousCompleteness","resolutionLimitHigh",
-			"fractionalPartialBias","rMeasAllIPlusIMinus","nTotalUniqueObservations","rPimAllIPlusIMinus"];
-
-			var scatteringData = {title : "AutoprocIntegrator", keys : keys};
-
-			scatteringForm.load(scatteringData);
-			scatteringForm.show();
-		}
-	}
-
-	return Ext.create('Ext.menu.Menu', {
-		items : [
-					{
-						text 	: 'Proteins & Crystals',						
-						handler : function(){
-                    		location.hash = "#/protein/list";
-                		}
-					},
-					{
-						text : 'Ligands',
-						icon : '../images/icon/macromolecule.png',
-						handler : function(){
-                    		location.hash = "#/ligands/list";
-                		}
-					}
-			] 
-	});
-};
 
 MXManagerMenu.prototype.getManagerMenu = function() {
 	var _this = this;
@@ -152,17 +114,24 @@ MXManagerMenu.prototype.getManagerMenu = function() {
 					{
 						text : 'Statistics',
 						icon : '../images/icon/ic_insert_chart_black_36dp.png',
-						menu : {       
+						menu : {
 								items: [
 									{
 										text: 'Autoproc Scaling Statistics',
 										//icon : '../images/icon/ic_insert_chart_black_36dp.png',
 										handler: onItemCheck,
 										disabled : false
-									}
+									},
+                                    {
+                                         text: 'Datacollection Statistics',
+                                         //icon : '../images/icon/ic_insert_chart_black_36dp.png',
+                                         handler: onItemCheck,
+                                         disabled : false
+                                     }
+
 								]
 							}
 					}
-			] 
+			]
 	});
 };

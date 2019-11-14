@@ -47,6 +47,8 @@ MainMenu.prototype.getHomeItem = function() {
 	};
 };
 
+
+
 MainMenu.prototype.getShipmentItem = function() { 
 	var _this = this;
 
@@ -181,23 +183,121 @@ MainMenu.prototype.getShipmentItem = function() {
 		menu : Ext.create('Ext.menu.Menu', {
 			items : [ 
 						{
+						    id   : 'biosax_item',
 							text : 'BioSAXS',
 							icon : '../images/icon/macromolecule.png',
 							menu: getBiosaxsMenu()
 						}, 
 						{
+						    id   : 'addresses_item',
 							text : 'Manage shipping addresses',
 							icon : '../images/icon/contacts.png',
 							menu : getLabContactsMenu() 
 						}, 
 						{
+						    id   : 'shipments_item',
 							text : 'Shipments',
 							icon : '../images/icon/shipping.png',
 							menu : getShipmentsMenu() 
 						} 
-					] })
+					],
+					 listeners : {
+                                     'beforeshow' : function(menu) {
+                                         if (EXI.credentialManager.hasActiveProposal()) {
+                                            Ext.getCmp('biosax_item').enable();
+                                            Ext.getCmp('addresses_item').enable();
+                                            Ext.getCmp('shipments_item').enable();
+                                         } else {
+                                            Ext.getCmp('biosax_item').disable();
+                                            Ext.getCmp('addresses_item').disable();
+                                            Ext.getCmp('shipments_item').disable();
+                                         }
+                                     }
+                                 }
+	    })
 	};
 
+};
+
+MainMenu.prototype.getProteinCrystalsMenu = function() {
+		function onItemCheck(item, checked) {
+			if (item.text == "Add new Protein") {
+				var proteinEditForm = new ProteinEditForm({width : 600, height : 700});
+
+				proteinEditForm.onSaved.attach(function (sender, protein) {
+					window.close();
+					//location.hash = "#/protein/" + protein.proteinId + "/main";
+					location.hash = "/protein/list";
+				});
+
+				var window = Ext.create('Ext.window.Window', {
+                                title : 'Protein',
+                                height : 500,
+                                width : 700,
+                                padding : '10 10 10 10',
+                                modal : true,
+                                layout : 'fit',
+                                items : [ proteinEditForm.getPanel() ],
+                                buttons : [ {
+                                        text : 'Save',
+                                        handler : function() {
+                                            proteinEditForm.saveProtein();
+                                        }
+                                    }, {
+                                        text : 'Cancel',
+                                        handler : function() {
+                                            window.close();
+                                        }
+                                    } ]
+                            }).show();
+
+				proteinEditForm.load();
+			} else if (item.text == "List") {
+				location.hash = "/protein/list";
+			} else if (item.text == "Ligands") {
+                location.hash = "#/ligands/list";
+            }
+        }
+
+        var menu = Ext.create('Ext.menu.Menu', {
+                items : [
+                            {
+                                id : 'add_proteins_item',
+                                text : 'Add new Protein',
+                                icon : '../images/icon/add.png',
+                                handler : onItemCheck,
+                                disabled : true
+                            }, {
+                                id : 'list_proteins_item',
+                                text : 'List',
+                                icon : '../images/icon/ic_list_black_24dp.png',
+                                handler : onItemCheck
+                            }, {
+                                id : 'ligands_item',
+                                text : 'Ligands',
+                                icon : '../images/icon/macromolecule.png',
+                                handler : onItemCheck
+                            }
+                ],
+                 listeners : {
+                                 'beforeshow' : function(menu) {
+                                     if (EXI.credentialManager.hasActiveProposal()) {
+                                        Ext.getCmp('list_proteins_item').enable();
+                                        Ext.getCmp('ligands_item').enable();
+                                        if (EXI.credentialManager.isUserAllowedAddProtein()){
+                                            Ext.getCmp('add_proteins_item').enable();
+                                        } else {
+                                            Ext.getCmp('add_proteins_item').disable();
+                                        }
+                                     } else {
+                                        Ext.getCmp('add_proteins_item').disable();
+                                        Ext.getCmp('list_proteins_item').disable();
+                                        Ext.getCmp('ligands_item').disable();
+                                     }
+                                 }
+                             }
+        });
+        return menu;
 };
 
 MainMenu.prototype.getDataExplorerMenu = function() {
@@ -220,10 +320,10 @@ MainMenu.prototype.getDataExplorerMenu = function() {
 		] ,
 		listeners : {
             'beforeshow' : function(menu) {
-                if (EXI.proposalManager.getProposals().length == 0) {
-					Ext.getCmp('calendar_item').disable();
-				} else {
+                if (EXI.credentialManager.hasActiveProposal()) {
 					Ext.getCmp('calendar_item').enable();
+				} else {
+					Ext.getCmp('calendar_item').disable();
 				}
             }
         }

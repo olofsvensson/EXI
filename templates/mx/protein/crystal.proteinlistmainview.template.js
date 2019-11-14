@@ -1,7 +1,8 @@
 <br />
 <div class="container-fluid containerWithScroll" >
     <div class="row">
-        <div class="col-xs-12 col-md-12">        
+        <div class="col-xs-12 col-md-12">
+            <button class="btn btn-primary btn-xs crystal-add">Add</button>
             <table class="table" style='border:1px solid #f5f5f5;'>
               <thead>
                
@@ -21,7 +22,7 @@
                 </thead>
                  <tbody>
             {#.}               
-                 <tr>          
+                 <tr>
                     <td><button class="btn btn-primary btn-xs crystal-edit" id={.crystalId}>Edit</button></td>
                     <td>{.spaceGroup}</td>
                     <td>{.cellA}</td>

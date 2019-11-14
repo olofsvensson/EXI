@@ -27,6 +27,7 @@ function ContainerParcelPanel(args) {
     this.width = 2*this.data.mainRadius + 20;
     this.container = new ContainerWidget(this.data);
 
+    debugger;
 	if (args != null) {
         if (args.height != null) {
 			this.height = args.height;
@@ -130,7 +131,7 @@ ContainerParcelPanel.prototype.load = function (samples) {
     if (samples != null && samples.length > 0){
         if (this.data.puckType == "Puck") {
             _.map(samples,function (s) {s.location = parseInt(s.BLSample_location)});
-            if (_.maxBy(samples,"location").location > 10) {
+            if (_.maxBy(samples,"location").location > 10 || EXI.credentialManager.getSiteName().startsWith("MAXIV")) {
                 this.data.puckType = "Unipuck";
                 this.container = this.createContainer(this.data);
             }

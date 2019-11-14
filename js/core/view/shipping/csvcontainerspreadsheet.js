@@ -41,10 +41,16 @@ function CSVContainerSpreadSheet(args){
 	this.proposalSamples = [];
 
 	/** Controlled list of values */
+	if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
 	this.containerTypeControlledList = [
-											{ name:"Unipuck", capacity: 16 },
-											{ name:"SPINEpuck", capacity:10 }
+											{ name:"Unipuck", capacity: 16 }
 										];
+    } else {
+    this.containerTypeControlledList = [
+    											{ name:"Unipuck", capacity: 16 },
+    											{ name:"SPINEpuck", capacity:10 }
+    										];
+    }
 	/** dewars names that already exist on this shipment. This object is supposed to be a SET */
 	this.dewarNameControlledList = new Set();
 	this.containerNameControlledList = new Set();
@@ -132,7 +138,7 @@ CSVContainerSpreadSheet.prototype.isDataValid = function() {
 			isValid = false;
 		}
 		/** Are protein + sample Names unique */
-		var proteinName = data[i][this.PROTEINACRONYM_INDEX];	
+		var proteinName = data[i][this.PROTEINACRONYM_INDEX];
 		var sampleName = data[i][this.SAMPLENAME_INDEX];
 		var key = proteinName + "__" + sampleName;
 		if (keySampleName[key] == null){
@@ -572,9 +578,9 @@ CSVContainerSpreadSheet.prototype.isParcelNameValid = function(parcelName) {
 CSVContainerSpreadSheet.prototype.isSampleNameValid = function(sampleName, proteinName) {			
 	if ((sampleName == undefined)||(sampleName == "")){					
 			return false;		
-	}	
+	}
 	var protein = this.getProteinByAcronym(proteinName);
-	if (protein){		
+	if (protein){
 		var conflicts = this.puckValidator.checkSampleNames([sampleName], [protein.proteinId], null, this.proposalSamples);
 		if (conflicts){
 			if (conflicts.length > 0){
@@ -715,9 +721,33 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 			td.innerHTML = value;										
 	}
 
+	if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+        header = [
+            // { text :'', id :'crystalId', column : {width : 100}},
+            { text : 'Parcel  <br /> Name', 	id: 'parcel', column : {width : 80, renderer: parcelDisplayCell}},
+			{ text : 'Container <br /> Name', 	id: 'containerCode', column : {width : 80, renderer: containerNameParameterRenderer}},
+			{ text : 'Container <br />Type', 	id: 'containerType', column : {width : 80,
+																				type: 'dropdown',
+																				source : this._getContainerTypeControlledListNames(),
+																				renderer: containerTypeParameterRenderer}},
+			{ text : '#', 	id: 'position', column : {width : 20, renderer: samplePositionParameterRenderer}},
+            { text :'Protein <br />Acronym', id :'Protein Acronym', 	column :  {
+                                                                                        width : 80,
+                                                                                        type: 'dropdown',
+																						renderer: proteinParameterRenderer,
+                                                                                        source: this.getAcronyms()
+                                                                                    }
+            },
+            { text :'Sample<br /> Name', id :'Sample Name', column : {
+																		width : 120,
+																	  	renderer: sampleParameterRenderer
+			}},
+            { text :'Pin <br />Barcode', id : 'Pin BarCode', column : {width : 60}},
+            { text :'Comments', id :'Comments', column : {width : 200}}
+            ];
+	} else {
 	 
-	 
-    header = [
+        header = [
             // { text :'', id :'crystalId', column : {width : 100}}, 
             { text : 'Parcel  <br /> Name', 	id: 'parcel', column : {width : 80, renderer: parcelDisplayCell}}, 
 			{ text : 'Container <br /> Name', 	id: 'containerCode', column : {width : 80, renderer: containerNameParameterRenderer}}, 
@@ -779,6 +809,7 @@ CSVContainerSpreadSheet.prototype.getHeader = function() {
 			{ text :'Observed <br />Resolution', id :'Observed Resolution',column : {width : 60, renderer:numericParameterRenderer}},
             { text :'Comments', id :'Comments', column : {width : 200}}
             ];
+    }
 
     
 

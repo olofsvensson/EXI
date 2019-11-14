@@ -14,7 +14,13 @@
             <span class="help-block">
                 <span class="glyphicons glyphicons-question-sign"></span> Do you need help? Click 
                 <a target='_blank' href='https://github.com/ispyb/EXI/wiki/Fill-shipment-from-CSV'>here.</a> 
-                Examples can be found here:  <a target='_blank' href='../csv/example3.csv'>example.csv</a>
+                Examples can be found here:
+                {@eq key=siteName value="MAXIV"}
+                    <a target='_blank' href='../csv/example3_MAXIV.csv'>
+                {:else}
+                    <a target='_blank' href='../csv/example3.csv'>
+                {/eq}
+                example.csv</a>
             </span>
             
         </div>           

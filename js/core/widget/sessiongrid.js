@@ -55,9 +55,25 @@ SessionGrid.prototype.getDataCollectionURL = function(session) {
 
 SessionGrid.prototype.renderHTML = function(sessions) {              
     var _this = this;
+    for(var i=0; i < sessions.length; i++){
+        _.merge(sessions[i],{"showAForm" : true});
+        if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+            sessions[i].Proposal_title = _.truncate(sessions[i].Proposal_title, {'length': 25 });
+            sessions[i].showAForm = false;
+        }
+    }
+
     dust.render("session.grid.mx.datacollection.template", sessions,function(err,out){ 
           $('#' + _this.id +'_main').html(out);
-    });      
+    });
+    var html_code = $('#' + _this.id +'_main').html();
+    if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+          html_code += "<script>$(document).ready(function(){$('.sessiongrid-a-form-header').hide(); $('.sessiongrid-a-form').hide();$('sessiongrid-a-form-header2').show(); /*$('.no-proposal-title').attr('colspan', 4);*/});</script>";
+
+    } else {
+            html_code += "<script>$(document).ready(function(){$('sessiongrid-a-form-header2').hide();});</script>";
+    }
+    $('#' + _this.id +'_main').html(html_code);
 };
 
 SessionGrid.prototype.getSumDataCollections = function(session) {   

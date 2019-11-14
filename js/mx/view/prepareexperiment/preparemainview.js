@@ -33,7 +33,12 @@ function PrepareMainView(args) {
             _this.loadSampleChangerView.sampleChangerName = "";
             _this.save("sampleChangerName","");     
             if (dewar.shippingStatus == "processing"){
-                _this.updateStatus(dewar.shippingId, "at_ESRF");
+                if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+                    _this.updateStatus(dewar.shippingId, "at_MAXIV");
+                } else {
+                    _this.updateStatus(dewar.shippingId, "at_ESRF");
+                }
+
             } 
             if (dewar.shippingStatus != "processing"){
                 _this.updateStatus(dewar.shippingId, "processing");
