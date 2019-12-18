@@ -487,5 +487,7 @@ LoadSampleChangerView.prototype.previewPuck = function (containerId, capacity, d
 };
 
 LoadSampleChangerView.prototype.hidePanel = function () {
-    this.previewPanelView.panel.hidden = true;
+    if (this.previewPanelView.panel){
+        this.previewPanelView.panel.hidden = true;
+    }
 }
