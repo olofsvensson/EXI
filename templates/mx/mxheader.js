@@ -11,7 +11,8 @@
         </span></span>
   </div>
   <div id="center"></div>
-  <div style='float:right;width:120px;' id="logos">
+  <div style='float:right;width:180px;' id="logos">
+        <img class="logoImageLarge" src="../images/logo_MAXIV.png" />
         <img class="logoImage" src="../images/logo_EMBL.png" />
         <img class="logoImage" src="../images/logo_ESRF.png" />
   </div>

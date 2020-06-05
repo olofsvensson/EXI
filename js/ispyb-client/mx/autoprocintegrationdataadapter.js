@@ -165,3 +165,34 @@ AutoProcIntegrationDataAdapter.prototype.getPhasingByAutoproccesingIds = functio
 	 this.get('/{token}/proposal/{proposal}/mx/autoprocintegration/autoprocintegrationid/{0}/phasing'.format( [autoProcListId.toString()]));
 };
 
+/**
+* It gets the URL for getting the CC2 of FastDP by a list autoprocintegration Id
+* @method getFastDPCC2
+*/
+AutoProcIntegrationDataAdapter.prototype.getFastDPCC2= function(autoProcIntegrationIdList){
+	return this.getUrl('/{token}/proposal/{proposal}/mx/autoprocintegration/{0}/fastdp/cc2'.format( [autoProcIntegrationIdList.toString()]));
+};
+
+/**
+* It gets the URL for getting the ISigma of XScale by a list autoprocintegration Id
+* @method getFastDPISigma
+*/
+AutoProcIntegrationDataAdapter.prototype.getFastDPISigma= function(autoProcIntegrationIdList){
+	return this.getUrl('/{token}/proposal/{proposal}/mx/autoprocintegration/{0}/fastdp/isigma'.format( [autoProcIntegrationIdList.toString()]));
+};
+
+/**
+* It gets the URL for getting the completeness of XScale by a list autoprocintegration Id
+* @method getFastDPCompleteness
+*/
+AutoProcIntegrationDataAdapter.prototype.getFastDPCompleteness= function(autoProcIntegrationIdList){
+	return this.getUrl('/{token}/proposal/{proposal}/mx/autoprocintegration/{0}/fastdp/completeness'.format( [autoProcIntegrationIdList.toString()]));
+};
+
+/**
+* It gets the URL for getting the RFactor of XScale by a list autoprocintegration Id
+* @method getFastDPRfactor
+*/
+AutoProcIntegrationDataAdapter.prototype.getFastDPRfactor= function(autoProcIntegrationIdList){
+	return this.getUrl('/{token}/proposal/{proposal}/mx/autoprocintegration/{0}/fastdp/rfactor'.format( [autoProcIntegrationIdList.toString()]));
+};

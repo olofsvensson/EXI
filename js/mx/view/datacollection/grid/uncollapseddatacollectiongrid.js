@@ -66,7 +66,14 @@ UncollapsedDataCollectionGrid.prototype.displayDataCollectionTab = function(targ
        
         _.forEach(data, function(value) {
             // URL to image quality indicators
-            value.urlImageQualityIndicators = EXI.getDataAdapter().mx.dataCollection.getQualityIndicatorPlot(value.dataCollectionId);
+            value.showQILink = true;
+            if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+                value.urlImageQualityIndicators = "../images/white_square.png";
+                value.showQILink = false;
+            }else {
+                value.urlImageQualityIndicators = EXI.getDataAdapter().mx.dataCollection.getQualityIndicatorPlot(value.dataCollectionId);
+            }
+
             // Result from auto-processing>                     
             
             value.onlineresults = UncollapsedDataCollectionGrid.prototype._getAutoprocessingStatistics(value);
@@ -236,8 +243,21 @@ UncollapsedDataCollectionGrid.prototype.displaySampleTab = function(target, data
          console.log(dc);
          var crystalSnapShotDIV = "sa_" + dataCollectionId + "_crystal_snapshots";
          if ($("#" + crystalSnapShotDIV)){
-             var html = "";    
-         
+            var html = "";
+            dc.showXtal2 = 1;
+            dc.showXtal3 = 1;
+            dc.showXtal4 = 1;
+            if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+                if (dc.DataCollection_xtalSnapshotFullPath2 == null){
+                    dc.showXtal2 = 0;
+                }
+                if (dc.DataCollection_xtalSnapshotFullPath3 == null){
+                    dc.showXtal3 = 0;
+                }
+                if (dc.DataCollection_xtalSnapshotFullPath4 == null){
+                    dc.showXtal4 = 0;
+                }
+            }
             dust.render("crystalsnapshots.sample.mxdatacollectiongrid.template",  dc, function(err, out) {
                         html = html + out;
             });

@@ -59,8 +59,6 @@ var ExtISPyB ={
           url:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
           exiUrl:'https://ispyb.maxiv.lu.se/ispyb/ispyb-ws/rest',
           beamlines:{
-              SAXS:[
-               ],
               MX:[
                   {
                       name : "BioMAX",
@@ -75,8 +73,6 @@ var ExtISPyB ={
           url:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
           exiUrl:'https://ispyb-test.maxiv.lu.se/ispyb/ispyb-ws/rest',
           beamlines:{
-              SAXS:[
-              ],
               MX:[
                   {
                       name : "BioMAX",
@@ -93,15 +89,11 @@ var ExtISPyB ={
       {
         name:'MAXIV localhost',
         icon : '../images/site/dev.esrf.png',
-        url:'http://localhost:18080/ispyb/ispyb-ws/rest',
-        exiUrl:'http://localhost:18080/ispyb/ispyb-ws/rest',
+        url:'http://localhost:38080/ispyb/ispyb-ws/rest',
+        exiUrl:'http://localhost:38080/ispyb/ispyb-ws/rest',
         siteName:'MAXIV',
         defaultSampleChanger: 'ISARA',
         beamlines:{
-            SAXS:[
-
-
-            ],
             MX:[
                 {
                     name : "BioMAX",

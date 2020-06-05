@@ -33,6 +33,25 @@ function ShipmentForm(args) {
 
 
 
+ShipmentForm.prototype.hasDataCollections = function(shipment) {
+    var _this = this;
+
+    var onSuccess = function(sender, shipments) {
+        if (shipments.length > 0){
+            return true;
+        } else {
+            return false;
+        }
+    };
+    var onError = function(data){
+            EXI.setError(data);
+            // cannot be deleted, an error occurred
+            return true;
+    };
+
+    EXI.getDataAdapter({onSuccess : onSuccess, onError : onError}).proposal.shipping.getDataCollections(shipment.shippingId);
+}
+
 ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 	
 	var _this = this;
@@ -85,11 +104,25 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 		$("#" + _this.id + "-edit-button").unbind('click').click(function(sender){
 			_this.edit();
 		});
+		if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+
+		    if (!this.hasDataCollections(shipment) && shipment.shippingStatus != "processing"){
+		        $("#" + _this.id + "-delete-button").prop('disabled',false);
+		    }
+		}
+
+		$("#" + _this.id + "-delete-button").unbind('click').click(function(sender){
+            _this.delete();
+        });
 	
 	}
 
 	$("#" + _this.id + "-send-button").unbind('click').click(function(sender){
-			_this.updateStatus(_this.shipment.shippingId, "Sent_to_ESRF");
+	        if (EXI.credentialManager.getSiteName().startsWith("MAXIV")){
+			    _this.updateStatus(_this.shipment.shippingId, "Sent_to_MAXIV");
+			} else {
+			    _this.updateStatus(_this.shipment.shippingId, "Sent_to_ESRF");
+			}
 	});
 
 	/** It disables button Sent Shipment to facility if there is at least one dewar which dewarStatus is not "ready to go"  */	
@@ -103,7 +136,7 @@ ShipmentForm.prototype.load = function(shipment,hasExportedData) {
 
 
 	$("#transport-history-" + this.id).html(this.dewarTrackingView.getPanel());
-	
+
 	this.panel.doLayout();
 	this.attachCallBackAfterRender();
 };
@@ -137,6 +170,36 @@ ShipmentForm.prototype.getPanel = function() {
 	});
 
 	return this.panel;
+};
+
+ShipmentForm.prototype.delete = function() {
+
+    var _this = this;
+    var onDeleteSuccess = function() {
+        if (EXI.credentialManager.getCredentials() != null){
+            if (EXI.credentialManager.getCredentials().length > 0){
+                var username = EXI.credentialManager.getCredentials()[0].username;
+                var credential = EXI.credentialManager.getCredentialByUserName(username);
+                if (credential.isManager()){
+                    location.hash = "/welcome/manager/" + username + "/main";
+                }
+                else{
+                    location.hash = "/welcome/user/" + username + "/main";
+                }
+            }
+            else{
+                BUI.showError("You should sign up");
+            }
+        }
+
+    };
+    var onError = function(data){
+        EXI.setError(data);
+    };
+    if (_this.shipment){
+        EXI.getDataAdapter({onSuccess : onDeleteSuccess, onError : onError}).proposal.shipping.removeShipment(_this.shipment);
+    }
+
 };
 
 ShipmentForm.prototype.edit = function(dewar) {

@@ -13,7 +13,7 @@ LigandsMainView.prototype.getToolbar = function (sessions) {
 			handler : function(){								
 				var editLigands = new EditCrystalStructure(
 					{
-						types : ["PDB", "MOL2", "CIF", "CIF_LIBRARY"],
+						types : ["PDB", "MOL2", "CIF", "CIF_LIBRARY", "SDF"],
 						label : "Cocktail Name"
 					}
 				);
