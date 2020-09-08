@@ -31,14 +31,14 @@ MXManagerMenu.prototype.getMenuItems = function() {
                 
 				} 
 		},
-		{
+		/*{
                 text : this._convertToHTMLWhiteSpan("Samples <sub style='font-size:10px;color:orange'>NEW</sub>"),
                 cls : 'ExiSAXSMenuToolBar',
 				menu : this.getProteinCrystalsMenu() 
-                /*handler : function(){
+                handler : function(){
                     location.hash = "#/protein/list";
-                }*/
-	    },
+                }
+	    },*/
 		{
 				text : this._convertToHTMLWhiteSpan("Data Explorer"),
 				cls : 'ExiSAXSMenuToolBar',
