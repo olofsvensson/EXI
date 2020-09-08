@@ -113,7 +113,7 @@ MainMenu.prototype.getShipmentItem = function() {
 							text : 'Add new',
 							icon : '../images/icon/add.png',
 							handler : onItemCheck,
-							disabled : true
+							disabled : false
 						}, {
 							text : 'List',
 							icon : '../images/icon/ic_list_black_24dp.png',
