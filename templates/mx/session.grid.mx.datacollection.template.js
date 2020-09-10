@@ -79,29 +79,20 @@
             <td> <a href='{.dataCollectionURL}'>{@formatDate date=BLSession_startDate format="DD-MM-YYYY" /}</a></td>
             <td> <a href='{.dataCollectionURL}'>{.beamLineName}</a></td>
             <td class='sessiongrid-a-form'>
-                 {@eq key=showAForm value=true}
+                 {@eq key=showAForm value="true" type="boolean"}
                      {?expSessionPk}
-                        <a  target="_blank" href="https://wwws.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk={.expSessionPk}" class='btn btn-xs'><span class='glyphicon glyphicon-list-alt'></span></a>
+                        <a  target="_blank" href="https://smis.esrf.fr/misapps/SMISWebClient/protected/aform/manageAForm.do?action=view&currentTab=howtoTab&expSessionVO.pk={.expSessionPk}" class='btn btn-xs'><span class='glyphicon glyphicon-list-alt'></span></a>
                      {/expSessionPk}
                  {/eq}
             </td>
             <td> <a href='{.dataCollectionURL}'>
-               <?BLSession_protectedData>
-                    {@eq key=BLSession_protectedData value="OK"}
-                            <span class="glyphicon glyphicon-lock" ></span>
-                    {/eq}
-               </BLSession_protectedData>                              
-               <a href='{.dataCollectionURL}'>{.Proposal_proposalCode}{.Proposal_ProposalNumber}</a>
-            </td>
-            <td class='sessiongrid-a-form-header2' style='color: gray !important;'>
-                <?BLSession_protectedData>
-                {.Proposal_title}
-            </td>
-            {@eq key=BLSession_protectedData value="OK"}
-                    <span class="glyphicon glyphicon-lock" ></span>
-            {/eq}
-            </BLSession_protectedData>
-            </td>
+            <?BLSession_protectedData>
+                 {@eq key=BLSession_protectedData value="OK"}
+                         <span class="glyphicon glyphicon-lock" ></span>
+                 {/eq}
+            </BLSession_protectedData>                              
+            <a href='{.dataCollectionURL}'>{.Proposal_proposalCode}{.Proposal_ProposalNumber}</a>
+         </td>
             <td> {.beamLineOperator}</td>
             <td class="mxsessiongridcell">
                <div style="text-align:center;">
