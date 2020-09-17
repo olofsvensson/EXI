@@ -13,7 +13,7 @@ MXMainMenu.prototype.setText = MainMenu.prototype.setText;
 MXMainMenu.prototype.getHomeItem = MainMenu.prototype.getHomeItem;
 MXMainMenu.prototype.getHelpMenu = MainMenu.prototype.getHelpMenu;
 MXMainMenu.prototype.getShipmentItem = MainMenu.prototype.getShipmentItem;
-MXMainMenu.prototype.getProteinCrystalsMenu = MainMenu.prototype.getProteinCrystalsMenu;
+//MXMainMenu.prototype.getProteinCrystalsMenu = MainMenu.prototype.getProteinCrystalsMenu;
 MXMainMenu.prototype.getDataExplorerMenu = MainMenu.prototype.getDataExplorerMenu;
 
 
@@ -115,7 +115,7 @@ MXMainMenu.prototype.getOnlineDataAnalisysMenu = function() {
 
 
 MXMainMenu.prototype.getProteinCrystalsMenu = function() {
-	/*function onItemCheck(item, checked) {
+	function onItemCheck(item, checked) {
 		if (item.text == "My Crystals") {
 			location.hash = "/crystal/nav";
 		}
@@ -128,23 +128,23 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 	}
 	return Ext.create('Ext.menu.Menu', {
 		items : [
-			{
+			/**{
 				text : 'My Crystals',
 				icon : '../images/icon/macromolecule.png',
 				disabled : true,
 				handler : onItemCheck
-			},
+			},**/
 			{
 				text : 'My Proteins',
 				icon : '../images/icon/testtube.png',
 				handler : onItemCheck
 			},
-			{
+			/**{
 				text : 'Puck',
 				disabled : true,
 				icon : '../images/icon/testtube.png',
 				handler : onItemCheck
-			}
+			}**/
 		]
-	});*/
+	});
 };
