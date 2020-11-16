@@ -125,6 +125,10 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 		if (item.text == "Puck") {
 			location.hash = "/puck/nav";
 		}
+                if (item.text == "Ligands") {
+                        location.hash = "/ligands/list";
+                }
+
 	}
 	return Ext.create('Ext.menu.Menu', {
 		items : [
@@ -139,6 +143,13 @@ MXMainMenu.prototype.getProteinCrystalsMenu = function() {
 				icon : '../images/icon/testtube.png',
 				handler : onItemCheck
 			},
+
+			{
+                                text : 'Ligands',
+                                icon : '../images/icon/macromolecule.png',
+                                handler : onItemCheck
+                        },
+
 			/**{
 				text : 'Puck',
 				disabled : true,
