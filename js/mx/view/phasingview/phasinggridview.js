@@ -187,9 +187,11 @@ PhasingGridView.prototype.printHTML = function(target) {
                                 	var csvsArr = [];
                                 }
                                 if ("mapFileName" in steps[z]) {
-                                    var mapFileNamesArr = steps[z].mapFileName.split(",");
-                                    for (var i = 0; i < mapFileNamesArr.length; i++) {
-                                        mapFileNamesArr[i] = mapFileNamesArr[i].slice(0, -4)
+                                    if (steps[z].mapFileName){
+                                        var mapFileNamesArr = steps[z].mapFileName.split(",");
+                                        for (var i = 0; i < mapFileNamesArr.length; i++) {
+                                            mapFileNamesArr[i] = mapFileNamesArr[i].slice(0, -4)
+                                        }
                                     }
                                 } else {
                                     var mapFileNamesArr = [];
@@ -328,7 +330,7 @@ PhasingGridView.prototype.printHTML = function(target) {
         }
         
         var html = "";
-       
+        debugger
         if (_this.PhasingStep_method == "MR"){
             
             dust.render("mr.mxdatacollectiongrid.template",  {parsed : parsed, hasScroll : _this.hasScroll}, function(err, out) {
