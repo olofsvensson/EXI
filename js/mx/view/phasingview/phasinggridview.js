@@ -56,6 +56,7 @@ PhasingGridView.prototype.printHTML = function(target) {
                         spaceGroup       : spaceGroup,                                    
                         hasPhasing          : _.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "PHASING"}) != null,
                         hasRefinement       : _.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "REFINEMENT"}) != null,                
+                        hasLigandFit        : _.find(stepsBySpaceGroup, {"PhasingStep_phasingStepType" : "LIGAND_FIT"}) != null,
                         downloadCSV      : EXI.getDataAdapter().mx.phasing.getCSVPhasingFilesByPhasingAttachmentIdURL(getCSV(stepsBySpaceGroup)),
                         downloadFilesUrl : EXI.getDataAdapter().mx.phasing.getDownloadFilesByPhasingStepIdURL(getStepId(stepsBySpaceGroup))
                         
