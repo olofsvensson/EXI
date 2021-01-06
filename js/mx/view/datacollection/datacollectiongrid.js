@@ -78,7 +78,6 @@ DataCollectionGrid.prototype._getAutoprocessingStatistics = function(data) {
     var autoProcIntegrationIds = getArrayValues(data.autoProcIntegrationId);
     var anomalous = getArrayValues(data.Autoprocessing_anomalous);        
     var processingStatus = getArrayValues(data.processingStatus);
-    debugger;
     /** These arrays only will get value if there are statistics it means they did not failed */
     var autoProc_spaceGroups = getArrayValues(data.AutoProc_spaceGroups);
     var autoProcIds = getArrayValues(data.autoProcIds);
@@ -225,7 +224,7 @@ DataCollectionGrid.prototype.getColumns = function() {
                         
                     }
                 }
-                debugger;
+                
                 data.onlineresults = _this._getAutoprocessingStatistics(record.data);
                 /** Screening displayed if 'Characterization' workflow or if indexing success */ 
                 if (data.Workflow_workflowType) {
@@ -345,7 +344,6 @@ DataCollectionGrid.prototype.parseEMData =  function(data){
             
              /** Parsing grid squares */
             for (var i = 0; i < parseFloat(data.numberOfGridSquares); i++){
-                debugger
                 var stats = _.find(data.stats, function(o){return o.dataCollectionId == dataCollectionList[i]});
                 var motionCount =  "";
                 var ctfCount =  "";   
