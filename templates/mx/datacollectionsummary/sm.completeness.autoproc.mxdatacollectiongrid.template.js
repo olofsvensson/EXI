@@ -3,7 +3,7 @@
 <table class='table-sm table table-striped'>
     <thead>   
     <tr>
-        <th  style='padding:0 15px 0 15px;'>{.spaceGroup}</th>
+        <th style='padding:0 15px 0 15px;'>{.spaceGroup}</th>
         <th style='padding:0 15px 0 15px;'>Res.</th>
         <th style='padding:0 15px 0 15px;'>Completeness</th>
         <th style='padding:0 15px 0 15px;'>Rmerge</th>                    
