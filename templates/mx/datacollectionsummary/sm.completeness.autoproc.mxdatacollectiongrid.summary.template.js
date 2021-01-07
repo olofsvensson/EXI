@@ -63,7 +63,6 @@
             
         </td>
         <td style='padding:0 15px 0 15px;'>{@decimal key="outerShell.rMerge" decimals=1}{/decimal}</td>
-        </td>
     </tr>
     
         </tbody>
