@@ -330,7 +330,6 @@ PhasingGridView.prototype.printHTML = function(target) {
         }
         
         var html = "";
-        debugger
         if (_this.PhasingStep_method == "MR"){
             
             dust.render("mr.mxdatacollectiongrid.template",  {parsed : parsed, hasScroll : _this.hasScroll}, function(err, out) {
